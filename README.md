@@ -15,5 +15,5 @@ Provides a simple way to open any YouTube video in a "popout" window (similar to
 * The popout player will continue playing the video from the current position automatically
 
 ## Known Issues - To Be Fixed ASAP
-* If you navigate to a video from the YouTube homepage, search results, or from another YouTube video, the Popout link will NOT appear - **you must refresh the page of the video to trigger the script to insert the Popout link.**
+* ~~If you navigate to a video from the YouTube homepage, search results, or from another YouTube video, the Popout link will NOT appear~~ **Fixed in v1.1**
 * The script does not work with the [YouTube Gaming](//gaming.youtube.com/) interface (or probably any other alternate interface)
