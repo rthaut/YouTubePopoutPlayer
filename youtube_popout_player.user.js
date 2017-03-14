@@ -6,7 +6,7 @@
 // @updateURL   http://repo.ryanthaut.com/userscripts/youtube_popout_player/youtube_popout_player.meta.js
 // @downloadURL http://repo.ryanthaut.com/userscripts/youtube_popout_player/youtube_popout_player.user.js
 // @include     *//www.youtube.com/*
-// @version     1.1.0.0
+// @version     1.2.0
 // @grant       none
 // ==/UserScript==
 
@@ -14,40 +14,45 @@
 
 const DEBUG = false;
 
-var YouTubePopoutPlayer =
-{
+var YouTubePopoutPlayer = {
     defaults: {
         width: 854,
         height: 480,
         startThreshold: 5
     },
 
-    getVideoID: function() {
-        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-        var match = window.location.href.match(regExp);
+    getVideoID: function () {
+        var match = window.location.href.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(watch\?))\??v?=?([^#\&\?]*).*/);
         return (match && match[7].length == 11) ? match[7] : null;
     },
 
-    insertControls: function()
-    {
+    insertControls: function () {
+        if (DEBUG) console.group('YouTubePopoutPlayer.insertControls()');
+
+        this.insertContextMenuEntry();
+        this.insertActionButton();
+
+        if (DEBUG) console.groupEnd();
+    },
+
+    insertActionButton: function () {
         if (DEBUG) console.group('YouTubePopoutPlayer.insertControls()');
 
         var btn = document.getElementById('popout-player-button');
-        if (btn)
-        {
+        if (btn) {
             if (DEBUG) console.warn('#popout-player-button already exists', btn);
+            if (DEBUG) console.groupEnd();
             return false;
         }
 
         var target = document.getElementById('watch7-action-buttons') ||
-                     document.getElementById('watch8-secondary-actions');
-        if (!target)
-        {
+            document.getElementById('watch8-secondary-actions');
+
+        if (!target) {
             if (DEBUG) console.warn('Missing #watch7-action-buttons & #watch8-secondary-actions');
+            if (DEBUG) console.groupEnd();
             return false;
-        }
-        else
-        {
+        } else {
             if (DEBUG) console.log('Found #' + target.id, target);
         }
 
@@ -55,9 +60,20 @@ var YouTubePopoutPlayer =
         lbl.className = 'yt-uix-button-content';
         lbl.innerHTML = 'Popout';
 
+        var btnClasses = [
+            'yt-uix-button',
+            'yt-uix-button-size-default',
+            'yt-uix-button-opacity',
+            'yt-uix-button-has-icon',
+            'no-icon-markup',
+            'pause-resume-autoplay',
+            'yt-uix-tooltip',
+            'yt-uix-button-toggled'
+        ];
+
         btn = document.createElement('button');
         btn.id = 'popout-player-button';
-        btn.className = 'yt-uix-button yt-uix-button-size-default yt-uix-button-opacity yt-uix-button-has-icon no-icon-markup pause-resume-autoplay yt-uix-tooltip yt-uix-button-toggled';
+        btn.className = btnClasses.join(' ');
         btn.appendChild(lbl);
         btn.addEventListener('click', this.onClick, false);
 
@@ -67,12 +83,67 @@ var YouTubePopoutPlayer =
         if (DEBUG) console.groupEnd();
     },
 
-    insertCSS: function()
-    {
+    insertContextMenuEntry: function () {
+        if (DEBUG) console.group('YouTubePopoutPlayer.insertControls()');
+
+        var menu = document.getElementsByClassName('ytp-contextmenu')[0];
+
+        if (!menu) {
+            if (DEBUG) console.warn('Missing context menu');
+            if (DEBUG) console.groupEnd();
+            return false;
+        }
+
+        var target = menu.getElementsByClassName('ytp-panel')[0].getElementsByClassName('ytp-panel-menu')[0];
+
+        var menuItem = document.getElementById('popout-player-context-menu-item');
+        if (menuItem) {
+            if (DEBUG) console.warn('#popout-player-context-menu-item already exists', menuItem);
+            if (DEBUG) console.groupEnd();
+            return false;
+        }
+
+        menuItem = document.createElement('div');
+        menuItem.className = 'ytp-menuitem';
+        menuItem.setAttribute('aria-haspopup', false);
+        menuItem.setAttribute('role', 'menuitem');
+        menuItem.setAttribute('tabindex', 0);
+        menuItem.id = 'popout-player-context-menu-item'
+
+        var menuItemLabel = document.createElement('div');
+        menuItemLabel.className = 'ytp-menuitem-label';
+        menuItemLabel.innerHTML = 'Popout Player';
+
+        var menuItemContent = document.createElement('div');
+        menuItemContent.className = 'ytp-menuitem-content';
+
+        menuItem.appendChild(menuItemLabel);
+        menuItem.appendChild(menuItemContent);
+        menuItem.addEventListener('click', this.onClick, false);
+
+        target.appendChild(menuItem);
+        if (DEBUG) console.info('Inserting context menu entry', menuItem);
+
+        var contextMenus = document.getElementsByClassName('ytp-contextmenu');
+        var contextMenu = contextMenus[contextMenus.length - 1];
+        var contextMenuPanel = contextMenu.getElementsByClassName('ytp-panel')[0];
+        var contextMenuPanelMenu = contextMenuPanel.getElementsByClassName('ytp-panel-menu')[0];
+
+        var height = (contextMenu.offsetHeight + menuItem.offsetHeight);
+        if (DEBUG) console.info('Modifying context menu height to ' + height + 'px', contextMenu);
+
+        contextMenu.style.height = height + 'px';
+        contextMenuPanel.style.height = height + 'px';
+        contextMenuPanelMenu.style.height = height + 'px';
+
+        if (DEBUG) console.groupEnd();
+    },
+
+    insertCSS: function () {
         if (DEBUG) console.group('YouTubePopoutPlayer.insertCSS()');
 
-        var css = '';
-        css += '#popout-player-button::before { background: no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAWUlEQVQ4jb3R2w0AIAgDQDZndF0AaIEqCV+G46HZj3D3000pVqKwI1ODuqGp/oHMylJQOmGFtMHotmMQfVQLzLDsHDRYYe2VmaDASaYdVphszehxPdkzUBkX7OD4ZHHL5rYAAAAASUVORK5CYII=); background-size: auto; width: 20px; height: 20px }';
+        var iconBase64 = 'iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAWUlEQVQ4jb3R2w0AIAgDQDZndF0AaIEqCV+G46HZj3D3000pVqKwI1ODuqGp/oHMylJQOmGFtMHotmMQfVQLzLDsHDRYYe2VmaDASaYdVphszehxPdkzUBkX7OD4ZHHL5rYAAAAASUVORK5CYII=';
+        var css = '#popout-player-button::before { background: no-repeat url(data:image/png;base64,' + iconBase64 + '); background-size: auto; width: 20px; height: 20px }';
 
         if (DEBUG) console.log('css', css);
 
@@ -86,39 +157,20 @@ var YouTubePopoutPlayer =
         if (DEBUG) console.groupEnd();
     },
 
-    onClick: function(e)
-    {
+    onClick: function (e) {
         if (DEBUG) console.group('YouTubePopoutPlayer.onClick()');
-
-        var id, width, height, time;
 
         var player = new HTML5Player();
 
-        if (player.initialize())
-        {
-            if (DEBUG) console.log('HTML5 Player initialized');
+        player.initialize();
+        player.pause();
 
-            player.pause();
+        var id = player.getVideoID() || YouTubePopoutPlayer.getVideoID();
+        var width = player.getWidth() || YouTubePopoutPlayer.defaults.width;
+        var height = player.getHeight() || YouTubePopoutPlayer.defaults.height;
+        var time = player.getTime() || 0;
 
-            id = player.getVideoID();
-            width = player.getWidth();
-            height = player.getHeight();
-            time = player.getTime();
-
-            //player.remove();
-        }
-        else
-        {
-            if (DEBUG) console.log('Missing HTML5 Player');
-
-            id = YouTubePopoutPlayer.getVideoID();
-            width = YouTubePopoutPlayer.defaults.width;
-            height = YouTubePopoutPlayer.defaults.height;
-            time = 0;
-        }
-
-        if (time <= YouTubePopoutPlayer.defaults.startThreshold)
-        {
+        if (time <= YouTubePopoutPlayer.defaults.startThreshold) {
             if (DEBUG) console.info('Popout video will start from beginning');
             time = 0;
         }
@@ -128,8 +180,7 @@ var YouTubePopoutPlayer =
         if (DEBUG) console.groupEnd();
     },
 
-    popoutPlayer: function(id, width, height, time)
-    {
+    popoutPlayer: function (id, width, height, time) {
         if (DEBUG) console.group('YouTubePopoutPlayer.popoutPlayer()');
 
         if (DEBUG) console.log('id', id);
@@ -149,45 +200,48 @@ var YouTubePopoutPlayer =
         if (DEBUG) console.groupEnd();
     },
 
-    watchPageChange: function()
-    {
+    watchPageChange: function () {
         if (DEBUG) console.group('YouTubePopoutPlayer.watchPageChange()');
 
         var self = this;
 
-        var content = document.getElementById('content');
-        if (!content)
-        {
-            if (DEBUG) console.warn('Missing #content');
-            return false;
-        }
-
-        var observer = new MutationObserver(function(mutations)
-        {
-            mutations.forEach(function(mutation)
-            {
-                if (mutation.addedNodes !== null)
-                {
-                    for (var i = 0; i < mutation.addedNodes.length; i++)
-                    {
+        var observer1 = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.addedNodes !== null) {
+                    for (var i = 0; i < mutation.addedNodes.length; i++) {
                         if (mutation.addedNodes[i].id == 'watch7-container' ||
-                            mutation.addedNodes[i].id == 'watch7-main-container')
-                        {
+                            mutation.addedNodes[i].id == 'watch7-main-container') {
                             if (DEBUG) console.log('Mutation observed for #' + mutation.addedNodes[i].id, mutation);
-                            self.insertControls();
+                            self.insertActionButton();
+                            observer1.disconnect();
                             break;
                         }
                     }
                 }
             });
         });
-        observer.observe(content, {childList: true, subtree: true});
+        observer1.observe(document.body, { childList: true, subtree: true });
+
+        var observer2 = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.addedNodes !== null) {
+                    for (var i = 0; i < mutation.addedNodes.length; i++) {
+                        if (mutation.addedNodes[i].className == 'ytp-popup ytp-contextmenu') {
+                            if (DEBUG) console.log('Mutation observed for .' + mutation.addedNodes[i].className, mutation);
+                            self.insertContextMenuEntry();
+                            observer2.disconnect();
+                            break;
+                        }
+                    }
+                }
+            });
+        });
+        observer2.observe(document.body, { childList: true, subtree: true });
 
         if (DEBUG) console.groupEnd();
     },
 
-    initialize: function()
-    {
+    initialize: function () {
         if (DEBUG) console.group('YouTubePopoutPlayer.initialize()');
 
         this.insertCSS();
@@ -198,8 +252,7 @@ var YouTubePopoutPlayer =
     }
 };
 
-var HTML5Player = function()
-{
+var HTML5Player = function () {
     this.container = null;
     this.player = null;
     this.config = null;
@@ -207,25 +260,21 @@ var HTML5Player = function()
 HTML5Player.prototype = {
     constructor: HTML5Player,
 
-    pause: function()
-    {
+    pause: function () {
         if (DEBUG) console.group('HTML5Player.pause()');
 
-        if (this.player)
-        {
+        if (this.player) {
             if (DEBUG) console.log('Pausing video player', this.player);
-            this.player.pauseVideo();
+            this.player.pause();
         }
 
         if (DEBUG) console.groupEnd();
     },
 
-    remove: function()
-    {
+    remove: function () {
         if (DEBUG) console.log('HTML5Player.remove()');
 
-        if (this.container)
-        {
+        if (this.container) {
             if (DEBUG) console.log('Removing container element', this.container);
             this.container.remove();
         }
@@ -233,88 +282,63 @@ HTML5Player.prototype = {
         if (DEBUG) console.groupEnd();
     },
 
-    getVideoID: function()
-    {
+    getVideoID: function () {
         if (DEBUG) console.log('HTML5Player.getVideoID()');
 
         return this.config ? this.config.args.video_id : null;
     },
 
-    getWidth: function()
-    {
+    getWidth: function () {
         if (DEBUG) console.log('HTML5Player.getWidth()');
 
         return this.player ? this.player.clientWidth : 0;
     },
 
-    getHeight: function()
-    {
+    getHeight: function () {
         if (DEBUG) console.log('HTML5Player.getHeight()');
 
         return this.player ? this.player.clientHeight : 0;
     },
 
-    getTime: function()
-    {
+    getTime: function () {
         if (DEBUG) console.log('HTML5Player.getTime()');
 
         return this.player ? parseInt(this.player.currentTime, 10) : 0;
     },
 
-    initialize: function()
-    {
+    initialize: function () {
         if (DEBUG) console.group('HTML5Player.initialize()');
-
-        var success = true;
 
         // find the video player's container and store a reference to it
         this.container = document.getElementById('movie_player');
-        if (this.container)
-        {
+        if (this.container) {
             if (DEBUG) console.log('Found #movie_player', this.container);
-            success &= true;
-        }
-        else
-        {
-            success &= false;
         }
 
         // find the video player and store a reference to it
-        if (this.container)
-        {
+        if (this.container) {
             this.player = this.container.getElementsByTagName('video')[0];
-            if (this.player)
-            {
+            if (this.player) {
                 if (DEBUG) console.log('Found <video>', this.player);
-                success &= true;
-            }
-            else
-            {
-                success &= false;
             }
         }
 
-        // pull the config object
-        if (window.ytplayer && window.ytplayer.config)
-        {
+        // pull one of the config objects
+        if (window.ytplayer && window.ytplayer.config) {
             if (DEBUG) console.log('Found window.ytplayer.config object', window.ytplayer.config);
             this.config = window.ytplayer.config;
-            success &= true;
-        }
-        else
-        {
-            if (DEBUG) console.log('Missing window.ytplayer.config object');
-            success &= false;
+        } else if (window.yt && window.yt.config_) {
+            if (DEBUG) console.log('Found window.yt.config_ object', window.yt.config_);
+            this.config = window.yt.config_.PLAYER_CONFIG;
+        } else {
+            if (DEBUG) console.log('Missing config objects');
         }
 
-        if (DEBUG) console.log(success ? 'Successful' : 'Unsuccessful');
         if (DEBUG) console.groupEnd();
-
-        return success;
     }
 };
 
-(function() {
+(function () {
     if (DEBUG) console.log('(function() { ... })()');
     YouTubePopoutPlayer.initialize();
 })();
