@@ -205,7 +205,7 @@ var YouTubePopoutPlayer = {
 
         var self = this;
 
-        var observer1 = new MutationObserver(function (mutations) {
+        var actionBarObserver = new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
                 if (mutation.addedNodes !== null) {
                     for (var i = 0; i < mutation.addedNodes.length; i++) {
@@ -213,30 +213,29 @@ var YouTubePopoutPlayer = {
                             mutation.addedNodes[i].id == 'watch7-main-container') {
                             if (DEBUG) console.log('Mutation observed for #' + mutation.addedNodes[i].id, mutation);
                             self.insertActionButton();
-                            observer1.disconnect();
                             break;
                         }
                     }
                 }
             });
         });
-        observer1.observe(document.body, { childList: true, subtree: true });
+        actionBarObserver.observe(document.body, { childList: true, subtree: true });
 
-        var observer2 = new MutationObserver(function (mutations) {
+        var contextMenuObserver = new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
                 if (mutation.addedNodes !== null) {
                     for (var i = 0; i < mutation.addedNodes.length; i++) {
                         if (mutation.addedNodes[i].className == 'ytp-popup ytp-contextmenu') {
                             if (DEBUG) console.log('Mutation observed for .' + mutation.addedNodes[i].className, mutation);
                             self.insertContextMenuEntry();
-                            observer2.disconnect();
+                            contextMenuObserver.disconnect();
                             break;
                         }
                     }
                 }
             });
         });
-        observer2.observe(document.body, { childList: true, subtree: true });
+        contextMenuObserver.observe(document.body, { childList: true, subtree: true });
 
         if (DEBUG) console.groupEnd();
     },
@@ -255,7 +254,7 @@ var YouTubePopoutPlayer = {
 var HTML5Player = function () {
     this.container = null;
     this.player = null;
-    this.config = null;
+    this.video_id = null;
 };
 HTML5Player.prototype = {
     constructor: HTML5Player,
@@ -285,32 +284,32 @@ HTML5Player.prototype = {
     getVideoID: function () {
         if (DEBUG) console.log('HTML5Player.getVideoID()');
 
-        return this.config ? this.config.args.video_id : null;
+        return this.video_id;
     },
 
     getWidth: function () {
         if (DEBUG) console.log('HTML5Player.getWidth()');
 
-        return this.player ? this.player.clientWidth : 0;
+        return this.player ? this.player.clientWidth : null;
     },
 
     getHeight: function () {
         if (DEBUG) console.log('HTML5Player.getHeight()');
 
-        return this.player ? this.player.clientHeight : 0;
+        return this.player ? this.player.clientHeight : null;
     },
 
     getTime: function () {
         if (DEBUG) console.log('HTML5Player.getTime()');
 
-        return this.player ? parseInt(this.player.currentTime, 10) : 0;
+        return this.player ? parseInt(this.player.currentTime, 10) : null;
     },
 
     initialize: function () {
         if (DEBUG) console.group('HTML5Player.initialize()');
 
         // find the video player's container and store a reference to it
-        this.container = document.getElementById('movie_player');
+        this.container = document.getElementById('movie_player') || document.getElementById('player');
         if (this.container) {
             if (DEBUG) console.log('Found #movie_player', this.container);
         }
@@ -323,13 +322,13 @@ HTML5Player.prototype = {
             }
         }
 
-        // pull one of the config objects
+        // pull the video ID from one of the config objects
         if (window.ytplayer && window.ytplayer.config) {
             if (DEBUG) console.log('Found window.ytplayer.config object', window.ytplayer.config);
-            this.config = window.ytplayer.config;
+            this.video_id = window.ytplayer.config.args.video_id;
         } else if (window.yt && window.yt.config_) {
             if (DEBUG) console.log('Found window.yt.config_ object', window.yt.config_);
-            this.config = window.yt.config_.PLAYER_CONFIG;
+            this.video_id = window.yt.config_.PLAYER_CONFIG.args.video_id;
         } else {
             if (DEBUG) console.log('Missing config objects');
         }
