@@ -1,7 +1,7 @@
 # YouTube Popout Player - Userscript
 Provides a simple way to open any YouTube video in a "popout" window (similar to Twitch.tv)
 
-![Preview of the Popout link on a YouTube video](http://repo.ryanthaut.com/userscripts/youtube_popout_player/preview.png)
+![Preview of the Popout controls on a YouTube video](https://github.com/rthaut/YouTubePopoutPlayer/raw/develop/preview.png)
 
 ## Installation
 1. Instal [Greasemonkey](//addons.mozilla.org/en-US/firefox/addon/greasemonkey/) for Firefox or [Tampermonkey](//chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) for Chrome
@@ -9,6 +9,7 @@ Provides a simple way to open any YouTube video in a "popout" window (similar to
 3. Follow the displayed instructions from Greasemonkey or Tampermonkey to finish the installation
 
 ## Features
+* **The popout player can be opened from embedded YouTube videos via the context (right-click) menu**
 * The YouTube HTML5 player is automatically paused when clicking opening the popout player
 * The popout player window is automatically sized to match the HTML5 player (normal vs. theater mode)
 * The popout player window can be freely resized and the video will not be obscured
