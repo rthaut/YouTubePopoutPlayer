@@ -38,15 +38,35 @@ var package = require('./package.json');
 
 /* ====================  BUILD TASKS  ==================== */
 
-// tasks for cleaning the build directory
-gulp.task('clean', function () {
+// tasks for cleaning the build directories
+gulp.task('clean:userscript', function () {
+    return del(['./dist/userscript/*'])
+        .catch(function (error) {
+            console.warn(error)
+        });
+});
+gulp.task('clean:webextension', function () {
     return del(['./dist/webextension/*'])
         .catch(function (error) {
             console.warn(error)
         });
 });
+gulp.task('clean', [
+    'clean:userscript',
+    'clean:webextension'
+]);
 
-// tasks for building the WebExtension
+// task for building the userscript version
+gulp.task('build:userscript', function () {
+    return gulp.src(core)
+        .pipe(gulpIf(!DEBUG, stripDebug()))
+        .pipe(uglify({ mangle: false }))
+        .pipe(concat(package.name.replace(/\-/g, '_') + '.user.js'))
+        .pipe(header(fs.readFileSync('./banners/userscript.txt', 'utf8'), { package: package }))
+        .pipe(gulp.dest('./dist/userscript'));
+});
+
+// tasks for building the WebExtension version
 gulp.task('build:webextension:js', function () {
     return gulp.src(core)
         .pipe(concat(package.name + '.js'))
@@ -89,7 +109,7 @@ gulp.task('crx:webextension', function () {
 });
 
 // task for building everything
-gulp.task('build', ['build:webextension']);
+gulp.task('build', ['build:userscript', 'build:webextension']);
 
 // default task: cleans and builds everything
 gulp.task('default', function (callback) {
