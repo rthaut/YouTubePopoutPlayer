@@ -1,20 +1,32 @@
-# YouTube Popout Player - Userscript
-Provides a simple way to open any YouTube video in a "popout" window (similar to Twitch.tv)
+![YouTube Popout Player Promotional Image](https://raw.githubusercontent.com/rthaut/YouTubePopoutPlayer/development/resources/screenshots/preview.png)
 
-![Preview of the Popout controls on a YouTube video](https://github.com/rthaut/YouTubePopoutPlayer/raw/develop/preview.png)
+## Overview
+This extension provides a simple way to open any YouTube video (including videos embedded in other sites/pages) in a "popout" window which you can freely position and resize.
+
+* * *
 
 ## Installation
-1. Instal [Greasemonkey](//addons.mozilla.org/en-US/firefox/addon/greasemonkey/) for Firefox or [Tampermonkey](//chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) for Chrome
-2. [Click here](http://repo.ryanthaut.com/userscripts/youtube_popout_player/youtube_popout_player.user.js) to get the script
-3. Follow the displayed instructions from Greasemonkey or Tampermonkey to finish the installation
+### Mozilla Firefox
+1. Install from the official Mozilla Add-ons for Firefox: [https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/](https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/)
+1. There is no step 2
 
-## Features
-* **The popout player can be opened from embedded YouTube videos via the context (right-click) menu**
-* The YouTube HTML5 player is automatically paused when clicking opening the popout player
-* The popout player window is automatically sized to match the HTML5 player (normal vs. theater mode)
-* The popout player window can be freely resized and the video will not be obscured
-* The popout player will continue playing the video from the current position automatically
+### Google Chrome
+1. Install from the official Chrome Web Store: [https://chrome.google.com/webstore/detail/youtube-popout-player/](https://chrome.google.com/webstore/detail/youtube-popout-player/)
+1. There is no step 2
 
-## Known Issues - To Be Fixed ASAP
-* ~~If you navigate to a video from the YouTube homepage, search results, or from another YouTube video, the Popout link will NOT appear~~ **Fixed in v1.1**
-* The script does not work with the [YouTube Gaming](//gaming.youtube.com/) interface (or probably any other alternate interface)
+* * *
+
+### Legacy Userscript (Deprecated)
+**NOTE:** The userscript version of YouTube Popout Player has been deprecated in favor of the web extension versions. It is *strongly* recommended that you install a web extension instead of the userscript.
+#### For Mozilla Firefox
+1. Install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey) Add-on
+1. Restart your browser after installation
+1. Visit the [script installation URL](https://github.com/rthaut/YouTubePopoutPlayer/raw/development/dist/userscript/youtube_popout_player.user.js) and follow the prompts from Greasemonkey to complete the installation
+    - See [this wiki article](https://wiki.greasespot.net/Greasemonkey_Manual:Installing_Scripts) for help with installing userscripts in Greasemonkey
+#### For Google Chrome
+1. Install [Tampermonkey Beta](https://chrome.google.com/webstore/detail/tampermonkey-beta/gcalenpjmijncebpfijmoaglllgpjagf) Extension
+1. Restart your browser after installation
+1. Visit the [script installation URL](https://github.com/rthaut/YouTubePopoutPlayer/raw/development/dist/userscript/youtube_popout_player.user.js) and follow the prompts from Tampermonkey to complete the installation
+    - See [this FAQ entry](http://tampermonkey.net/faq.php#Q102) for help with installing userscripts in Tampermonkey
+
+* * *
