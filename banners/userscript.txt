@@ -1,0 +1,11 @@
+// ==UserScript==
+// @name        <%= package.title || package.name %>
+// @author      <%= package.author %>
+// @description <%= package.description %>
+// @version     <%= package.version %>
+// @namespace   <%= package.homepage %>
+// @updateURL   <%= package.homepage %>/raw/master/dist/userscript/<%= package.name.replace(/\-/g, '_') %>.user.js
+// @downloadURL <%= package.homepage %>/raw/master/dist/userscript/<%= package.name.replace(/\-/g, '_') %>.user.js
+// @include     http://*youtube.com/*
+// @include     https://*youtube.com/*
+// ==/UserScript==

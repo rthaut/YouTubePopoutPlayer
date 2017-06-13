@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "<%= package.title || package.name %>",
+  "version": "<%= package.version %>",
+  "description": "<%= package.description %>",
+  "homepage_url": "<%= package.homepage %>",
+  "icons": {
+    "48": "icons/icon48.png",
+    "64": "icons/icon64.png",
+    "96": "icons/icon96.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "matches": [
+        "*://*.youtube.com/*"
+      ],
+      "js": [
+        "js/<%= package.name %>.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "*://*.youtube.com/*"
+  ]
+}
