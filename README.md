@@ -11,7 +11,7 @@ This extension provides a simple way to open any YouTube video (including videos
 1. There is no step 2
 
 ### Google Chrome
-1. Install from the official Chrome Web Store: [https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp](https://chrome.google.com/webstore/detail/deviantart-filter/odlmamilbohnpnoomjclomghphbajikp)
+1. Install from the official Chrome Web Store: [https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod](https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod)
 1. There is no step 2
 
 * * *
