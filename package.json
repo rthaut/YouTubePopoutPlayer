@@ -2,13 +2,13 @@
   "name": "youtube-popout-player",
   "title": "YouTube Popout Player",
   "version": "2.0.0",
-  "description": "Provides a simple way to open any YouTube video in a \"popout\" window",
+  "description": "Provides a simple way to open any YouTube video in a popout window",
   "author": "Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com)",
   "homepage": "https://github.com/rthaut/YouTubePopoutPlayer",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rthaut/YouTubePopoutPlayer.git"
+    "url": "git://https://github.com/rthaut/YouTubePopoutPlayer.git"
   },
   "bugs": {
     "url": "https://github.com/rthaut/YouTubePopoutPlayer/issues"
