@@ -1,30 +1,21 @@
-![YouTube Popout Player Promotional Image](https://raw.githubusercontent.com/rthaut/YouTubePopoutPlayer/development/resources/screenshots/preview.png)
-
 ## Overview
 This extension provides a simple way to open any YouTube video (including videos embedded in other sites/pages) in a "popout" window which you can freely position and resize.
+
+![YouTube Popout Player Promotional Image](https://raw.githubusercontent.com/rthaut/YouTubePopoutPlayer/development/resources/screenshots/preview.png)
 
 * * *
 
 ## Installation
-### Mozilla Firefox
-1. Install from the official Mozilla Add-ons for Firefox: [https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/](https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/)
-1. There is no step 2
+| Web Browser | Information | Download Link |
+| ----------- | ----------- | ------------- |
+| Google Chrome | [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod.svg)](https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod)<br/>[![Chrome Web Store](https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod.svg)](https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod) | [Download from the Chrome Web Store](https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod) |
+| Mozilla Firefox | [![Mozilla Add-on](https://img.shields.io/amo/v/youtube-popout-player.svg)](https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/)<br/>[![Mozilla Add-on](https://img.shields.io/amo/d/youtube-popout-player.svg)](https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/) | [Download from Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/) |
 
-### Google Chrome
-1. Install from the official Chrome Web Store: [https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod](https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod)
-1. There is no step 2
 
 * * *
 
-### Legacy Userscript (Deprecated)
-**NOTE:** The userscript version of YouTube Popout Player has been deprecated in favor of the web extension versions. It is *strongly* recommended that you install a web extension instead of the userscript.
-#### For Mozilla Firefox
-1. Install the [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey) Add-on
-1. Restart your browser after installation
-1. Visit the [script installation URL](https://github.com/rthaut/YouTubePopoutPlayer/raw/development/dist/userscript/youtube_popout_player.user.js) and follow the prompts from Greasemonkey to complete the installation
-    - See [this wiki article](https://wiki.greasespot.net/Greasemonkey_Manual:Installing_Scripts) for help with installing userscripts in Greasemonkey
-#### For Google Chrome
-1. Install [Tampermonkey Beta](https://chrome.google.com/webstore/detail/tampermonkey-beta/gcalenpjmijncebpfijmoaglllgpjagf) Extension
-1. Restart your browser after installation
-1. Visit the [script installation URL](https://github.com/rthaut/YouTubePopoutPlayer/raw/development/dist/userscript/youtube_popout_player.user.js) and follow the prompts from Tampermonkey to complete the installation
-    - See [this FAQ entry](http://tampermonkey.net/faq.php#Q102) for help with installing userscripts in Tampermonkey
+## Usage
+
+When viewing any YouTube video, whether directly [YouTube](https://www.youtube.com), or embedded on any other website, you can either:
+- Right-click on the video and click the "Popout Player" option (at the bottom of the menu that is displayed)
+- Click the new icon (a square with an arrow pointing out of the corner) in the lower right corner (by the settings and fullscreen icons)
