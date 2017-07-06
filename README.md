@@ -1,20 +1,21 @@
-# YouTube Popout Player - Userscript
-Provides a simple way to open any YouTube video in a "popout" window (similar to Twitch.tv)
+## Overview
+This extension provides a simple way to open any YouTube video (including videos embedded in other sites/pages) in a "popout" window which you can freely position and resize.
 
-![Preview of the Popout controls on a YouTube video](https://github.com/rthaut/YouTubePopoutPlayer/raw/develop/preview.png)
+![YouTube Popout Player Promotional Image](https://raw.githubusercontent.com/rthaut/YouTubePopoutPlayer/master/resources/screenshots/preview.png)
+
+* * *
 
 ## Installation
-1. Instal [Greasemonkey](//addons.mozilla.org/en-US/firefox/addon/greasemonkey/) for Firefox or [Tampermonkey](//chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) for Chrome
-2. [Click here](http://repo.ryanthaut.com/userscripts/youtube_popout_player/youtube_popout_player.user.js) to get the script
-3. Follow the displayed instructions from Greasemonkey or Tampermonkey to finish the installation
+| Web Browser | Information | Download Link |
+| ----------- | ----------- | ------------- |
+| Google Chrome | [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod.svg)](https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod)<br/>[![Chrome Web Store](https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod.svg)](https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod) | [Download from the Chrome Web Store](https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod) |
+| Mozilla Firefox | [![Mozilla Add-on](https://img.shields.io/amo/v/youtube-popout-player.svg)](https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/)<br/>[![Mozilla Add-on](https://img.shields.io/amo/d/youtube-popout-player.svg)](https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/) | [Download from Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/) |
 
-## Features
-* **The popout player can be opened from embedded YouTube videos via the context (right-click) menu**
-* The YouTube HTML5 player is automatically paused when clicking opening the popout player
-* The popout player window is automatically sized to match the HTML5 player (normal vs. theater mode)
-* The popout player window can be freely resized and the video will not be obscured
-* The popout player will continue playing the video from the current position automatically
 
-## Known Issues - To Be Fixed ASAP
-* ~~If you navigate to a video from the YouTube homepage, search results, or from another YouTube video, the Popout link will NOT appear~~ **Fixed in v1.1**
-* The script does not work with the [YouTube Gaming](//gaming.youtube.com/) interface (or probably any other alternate interface)
+* * *
+
+## Usage
+
+When viewing any YouTube video, whether directly [YouTube](https://www.youtube.com), or embedded on any other website, you can either:
+- Right-click on the video and click the "Popout Player" option (at the bottom of the menu that is displayed)
+- Click the new icon (a square with an arrow pointing out of the corner) in the lower right corner (by the settings and fullscreen icons)

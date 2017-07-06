@@ -1,0 +1,30 @@
+{
+  "name": "youtube-popout-player",
+  "title": "YouTube Popout Player",
+  "version": "2.0.0",
+  "description": "Provides a simple way to open any YouTube video in a popout window",
+  "author": "Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com)",
+  "homepage": "https://github.com/rthaut/YouTubePopoutPlayer",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git://https://github.com/rthaut/YouTubePopoutPlayer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rthaut/YouTubePopoutPlayer/issues"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-crx-pack": "^1.0.1",
+    "gulp-ejs": "^3.0.1",
+    "gulp-header": "^1.8.8",
+    "gulp-if": "^2.0.2",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-uglify": "^3.0.0",
+    "gulp-zip": "^4.0.0",
+    "run-sequence": "^1.2.2",
+    "uglify-es": "^3.0.15",
+    "web-ext": "^1.9.1"
+  }
+}
