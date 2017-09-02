@@ -23,7 +23,7 @@ var zip = require('gulp-zip');
 // set to TRUE to enable console messages in JS output files
 const DEBUG = false;
 
-// all scripts directly contributing to the core deviantART Filter functionality
+// all scripts directly contributing to the core YouTube Popout Player functionality
 // order is important: base classes > custom filter classes > main class > index.js
 var core = [
     './lib/js/HTML5Player.class.js',
