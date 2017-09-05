@@ -102,7 +102,7 @@ gulp.task('build:webextension:manifest', function () {
         .pipe(gulp.dest('./dist/webextension'));
 });
 gulp.task('build:webextension:locales', function () {
-    return gulp.src(['./locales/**/*.json'])
+    return gulp.src(['./_locales/**/*.json'])
         .pipe(gulp.dest('./dist/webextension/_locales'));
 });
 gulp.task('build:webextension:icons', function () {

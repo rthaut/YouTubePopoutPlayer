@@ -18,7 +18,7 @@
         "*://*.youtube.com/*"
       ],
       "js": [
-        "js/browser-polyfill.js",
+        "js/browser-polyfill.min.js",
         "js/<%= package.name %>.js"
       ]
     }
