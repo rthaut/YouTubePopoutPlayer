@@ -75,7 +75,7 @@ gulp.task('clean:webextension', function () {
 });
 
 // task for building the userscript version
-gulp.task('build:userscript', ['clean:userscript'], function () {
+gulp.task('build:userscript', function () {
     return gulp.src(core)
         .pipe(localize({ schema: false }))
         .pipe(uglify(options.uglify))
@@ -109,7 +109,7 @@ gulp.task('build:webextension:icons', function () {
     return gulp.src(['./resources/icons/**/*.png'])
         .pipe(gulp.dest('./dist/webextension/icons'));
 });
-gulp.task('build:webextension', ['clean:webextension'], function (callback) {
+gulp.task('build:webextension', function (callback) {
     sequence(
         ['build:webextension:js', 'build:webextension:icons', 'build:webextension:locales', 'build:webextension:manifest'],
         ['zip:webextension', 'crx:webextension'],
@@ -132,11 +132,28 @@ gulp.task('crx:webextension', function () {
         .pipe(gulp.dest('./dist'))
 });
 
+// task to rebuild everything on changes to core files
+gulp.task('watch', ['build'], function () {
+    return gulp.watch(core, ['build']);
+});
+
+// task to rebuild the userscript version on changes to core files
+gulp.task('watch:userscript', ['build:userscript'], function () {
+    return gulp.watch(core, ['build:userscript']);
+});
+
+// task to rebuild the WebExtension version on changes to core files
+gulp.task('watch:webextension', ['build:webextension'], function () {
+    return gulp.watch(core, ['build:webextension']);
+});
+
 // task for cleaning everything
 gulp.task('clean', ['clean:userscript', 'clean:webextension']);
 
 // task for building everything
 gulp.task('build', ['build:userscript', 'build:webextension']);
 
-// default task: alias gulp:build
-gulp.task('default', ['build']);
+// default task: cleans and builds everything
+gulp.task('default', function (callback) {
+    sequence('clean', 'build', callback);
+});
