@@ -6,13 +6,10 @@ This extension provides a simple way to open any YouTube video (including videos
 * * *
 
 ## Installation
-### Mozilla Firefox
-1. Install from the official Mozilla Add-ons for Firefox: [https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/](https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/)
-1. There is no step 2
-
-### Google Chrome
-1. Install from the official Chrome Web Store: [https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod](https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod)
-1. There is no step 2
+| Web Browser | Information | Download Link |
+| ----------- | ----------- | ------------- |
+| Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url]<br/>[![Chrome Web Store][chrome-image-download]][chrome-url] | [Download from the Chrome Web Store][chrome-url] |
+| Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url]<br/>[![Mozilla Add-on][firefox-image-download]][firefox-url] | [Download from Mozilla Add-ons][firefox-url] |
 
 * * *
 
@@ -28,3 +25,11 @@ This extension provides a simple way to open any YouTube video (including videos
 1. Restart your browser after installation
 1. Visit the [script installation URL](https://github.com/rthaut/YouTubePopoutPlayer/raw/development/dist/userscript/youtube_popout_player.user.js) and follow the prompts from Tampermonkey to complete the installation
     - See [this FAQ entry](http://tampermonkey.net/faq.php#Q102) for help with installing userscripts in Tampermonkey
+
+
+[chrome-url]: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
+[chrome-image-download]: https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod.svg
+[chrome-image-version]: https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod.svg
+[firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
+[firefox-image-download]: https://img.shields.io/amo/d/youtube-popout-player.svg
+[firefox-image-version]: https://img.shields.io/amo/v/youtube-popout-player.svg
