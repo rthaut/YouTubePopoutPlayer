@@ -2,13 +2,14 @@ var gulp = require('gulp');
 
 var del = require('del');
 var fs = require('fs');
+var merge = require('merge-stream');
 var sequence = require('run-sequence');
 
 var concat = require('gulp-concat');
 var ejs = require("gulp-ejs")
 var gulpIf = require('gulp-if');
 var header = require('gulp-header');
-var stripDebug = require('gulp-strip-debug');
+var localize = require('gulp-browser-i18n-localize');
 
 var composer = require('gulp-uglify/composer');
 var uglify = composer(require('uglify-es'), console);
@@ -24,19 +25,40 @@ var zip = require('gulp-zip');
 const DEBUG = false;
 
 // all scripts directly contributing to the core YouTube Popout Player functionality
-// order is important: base classes > custom filter classes > main class > index.js
+// order is important: base classes > index.js
 var core = [
     './lib/js/HTML5Player.class.js',
     './lib/js/YouTubePopoutPlayer.class.js',
     './lib/js/index.js'
 ];
 
+// additional scripts used by YouTube Popout Player
+var includes = [
+    './node_modules/webextension-polyfill/dist/browser-polyfill.min.js'
+];
+
 // load in package JSON as object for variables & EJS templates
 var package = require('./package.json');
+
+// default options for various plugins
+var options = {
+    // uglify options for all non-minified JS files
+    uglify: {
+        compress: {
+            drop_console: !DEBUG
+        },
+        mangle: false,
+        output: {
+            beautify: true,
+            bracketize: true
+        }
+    }
+};
 
 
 
 /* ====================  BUILD TASKS  ==================== */
+
 
 // tasks for cleaning the build directories
 gulp.task('clean:userscript', function () {
@@ -51,16 +73,12 @@ gulp.task('clean:webextension', function () {
             console.warn(error)
         });
 });
-gulp.task('clean', [
-    'clean:userscript',
-    'clean:webextension'
-]);
 
 // task for building the userscript version
-gulp.task('build:userscript', function () {
+gulp.task('build:userscript', ['clean:userscript'], function () {
     return gulp.src(core)
-        .pipe(gulpIf(!DEBUG, stripDebug()))
-        .pipe(uglify({ mangle: false }))
+        .pipe(localize({ schema: false }))
+        .pipe(uglify(options.uglify))
         .pipe(concat(package.name.replace(/\-/g, '_') + '.user.js'))
         .pipe(header(fs.readFileSync('./banners/userscript.txt', 'utf8'), { package: package }))
         .pipe(gulp.dest('./dist/userscript'));
@@ -68,11 +86,14 @@ gulp.task('build:userscript', function () {
 
 // tasks for building the WebExtension version
 gulp.task('build:webextension:js', function () {
-    return gulp.src(core)
-        .pipe(concat(package.name + '.js'))
-        .pipe(gulpIf(!DEBUG, stripDebug()))
-        .pipe(uglify({ mangle: false }))
-        .pipe(header(fs.readFileSync('./banners/webextension.txt', 'utf8'), { package: package }))
+    return merge(
+        gulp.src(includes)
+            .pipe(gulpIf('!*.min.js', uglify({ mangle: false }))),
+        gulp.src(core)
+            .pipe(concat(package.name + '.js'))
+            .pipe(uglify(options.uglify))
+            .pipe(header(fs.readFileSync('./banners/webextension.txt', 'utf8'), { package: package }))
+    )
         .pipe(gulp.dest('./dist/webextension/js'));
 });
 gulp.task('build:webextension:manifest', function () {
@@ -80,14 +101,17 @@ gulp.task('build:webextension:manifest', function () {
         .pipe(ejs({ package: package }))
         .pipe(gulp.dest('./dist/webextension'));
 });
+gulp.task('build:webextension:locales', function () {
+    return gulp.src(['./locales/**/*.json'])
+        .pipe(gulp.dest('./dist/webextension/_locales'));
+});
 gulp.task('build:webextension:icons', function () {
     return gulp.src(['./resources/icons/**/*.png'])
         .pipe(gulp.dest('./dist/webextension/icons'));
 });
-gulp.task('build:webextension', function (callback) {
+gulp.task('build:webextension', ['clean:webextension'], function (callback) {
     sequence(
-        'clean:webextension',
-        ['build:webextension:js', 'build:webextension:icons', 'build:webextension:manifest'],
+        ['build:webextension:js', 'build:webextension:icons', 'build:webextension:locales', 'build:webextension:manifest'],
         ['zip:webextension', 'crx:webextension'],
         callback
     );
@@ -108,10 +132,11 @@ gulp.task('crx:webextension', function () {
         .pipe(gulp.dest('./dist'))
 });
 
+// task for cleaning everything
+gulp.task('clean', ['clean:userscript', 'clean:webextension']);
+
 // task for building everything
 gulp.task('build', ['build:userscript', 'build:webextension']);
 
-// default task: cleans and builds everything
-gulp.task('default', function (callback) {
-    sequence('clean', 'build', callback);
-});
+// default task: alias gulp:build
+gulp.task('default', ['build']);

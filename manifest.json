@@ -1,9 +1,10 @@
 {
   "manifest_version": 2,
-  "name": "<%= package.title || package.name %>",
+  "name": "__MSG_ExtensionName__",
   "version": "<%= package.version %>",
-  "description": "<%= package.description %>",
+  "description": "__MSG_ExtensionDescription__",
   "homepage_url": "<%= package.homepage %>",
+  "default_locale": "en",
   "icons": {
     "48": "icons/icon48.png",
     "64": "icons/icon64.png",
@@ -17,6 +18,7 @@
         "*://*.youtube.com/*"
       ],
       "js": [
+        "js/browser-polyfill.js",
         "js/<%= package.name %>.js"
       ]
     }
