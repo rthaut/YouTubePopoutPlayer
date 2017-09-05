@@ -13,6 +13,14 @@ This extension provides a simple way to open any YouTube video (including videos
 
 * * *
 
+## Usage
+
+When viewing any YouTube video, whether directly [YouTube](https://www.youtube.com), or embedded on any other website, you can either:
+- Right-click on the video and click the "Popout Player" option (at the bottom of the menu that is displayed)
+- Click the new icon (a square with an arrow pointing out of the corner) in the lower right corner (by the settings and fullscreen icons)
+
+* * *
+
 ### Legacy Userscript (Deprecated)
 **NOTE:** The userscript version of YouTube Popout Player has been deprecated in favor of the web extension versions. It is *strongly* recommended that you install a web extension instead of the userscript.
 #### For Mozilla Firefox
