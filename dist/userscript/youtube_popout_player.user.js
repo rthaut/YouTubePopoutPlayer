@@ -52,7 +52,7 @@ YouTubePopoutPlayer.prototype = {
         return result && result[1] && (id = result[1]), id;
     },
     getPLaylistIDFromURL: function(url) {
-        var id = null, result = new RegExp(/list=([^\?\&\/]{34})/).exec(url);
+        var id = null, result = new RegExp(/list=((?:WL|[^\?\&\/]{34}))/).exec(url);
         return result && result[1] && (id = result[1]), id;
     },
     insertControls: function() {
