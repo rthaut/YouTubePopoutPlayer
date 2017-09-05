@@ -1,0 +1,18 @@
+{
+  "ExtensionName": {
+    "message": "YouTube Popout Player",
+    "description": "The name of the extension."
+  },
+  "ExtensionDescription": {
+    "message": "Provides a simple way to open any YouTube video in a popout window",
+    "description": "The short description of the extension."
+  },
+  "ContextMenuEntryLabel_PopoutPlayer": {
+    "message": "Popout Player",
+    "description": "The label for the context menu entry that opens the popout player."
+  },
+  "PlayerControlsButtonTitle_PopoutPlayer": {
+    "message": "Popout Player",
+    "description": "The title for the player controls button that opens the popout player."
+  }
+}
