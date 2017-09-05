@@ -1,7 +1,7 @@
-![YouTube Popout Player Promotional Image](https://raw.githubusercontent.com/rthaut/YouTubePopoutPlayer/development/resources/screenshots/preview.png)
-
 ## Overview
 This extension provides a simple way to open any YouTube video (including videos embedded in other sites/pages) in a "popout" window which you can freely position and resize.
+
+![YouTube Popout Player Promotional Image](https://raw.githubusercontent.com/rthaut/YouTubePopoutPlayer/development/resources/screenshots/preview.png)
 
 * * *
 
