@@ -1,58 +1,62 @@
-var gulp = require('gulp');
+/* global require */
+const gulp = require('gulp');
 
-var del = require('del');
-var fs = require('fs');
-var merge = require('merge-stream');
-var sequence = require('run-sequence');
+const del = require('del');
+const fs = require('fs');
+const path = require('path');
+const merge = require('merge-stream');
+const sequence = require('run-sequence');
 
-var concat = require('gulp-concat');
-var ejs = require("gulp-ejs")
-var gulpIf = require('gulp-if');
-var header = require('gulp-header');
-var localize = require('gulp-browser-i18n-localize');
+const concat = require('gulp-concat');
+const ejs = require('gulp-ejs');
+const eslint = require('gulp-eslint');
+const gulpIf = require('gulp-if');
+const header = require('gulp-header');
+const localize = require('gulp-browser-i18n-localize');
 
-var composer = require('gulp-uglify/composer');
-var uglify = composer(require('uglify-es'), console);
+const composer = require('gulp-uglify/composer');
+const uglify = composer(require('uglify-es'), console);
 
-var crx = require('gulp-crx-pack');
-var zip = require('gulp-zip');
+const crx = require('gulp-crx-pack');
+const zip = require('gulp-zip');
 
 
 
 /* ==================== CONFIGURATION ==================== */
 
-// set to TRUE to enable console messages in JS output files
-const DEBUG = false;
-
-// all scripts directly contributing to the core YouTube Popout Player functionality
-// order is important: base classes > index.js
-var core = [
-    './lib/js/HTML5Player.class.js',
-    './lib/js/YouTubePopoutPlayer.class.js',
-    './lib/js/index.js'
-];
-
-// additional scripts used by YouTube Popout Player
-var includes = [
+// vendor libraries needed for core functionality
+const vendor = [
     './node_modules/webextension-polyfill/dist/browser-polyfill.min.js'
 ];
 
+// additional includes (custom libraries, classes, etc.)
+const includes = [
+
+];
+
 // load in package JSON as object for variables & EJS templates
-var package = require('./package.json');
+const package = require('./package.json');
 
 // default options for various plugins
-var options = {
-    // uglify options for all non-minified JS files
-    uglify: {
-        compress: {
-            drop_console: !DEBUG
+const options = {
+    // options for compiling LESS to CSS
+    'less': {
+        'paths': 'node_modules',
+        'outputStyle': 'compressed',
+        'sourceMap': false
+    },
+    // options for compressing JS files
+    'uglify': {
+        'compress': {
+            'drop_console': true
         },
-        mangle: false,
-        output: {
-            beautify: true,
-            bracketize: true
-        }
+        'mangle': true
     }
+};
+
+const _folders = {
+    'locales': './_locales',
+    'scripts': './lib/scripts'
 };
 
 
@@ -64,87 +68,111 @@ var options = {
 gulp.task('clean:userscript', function () {
     return del(['./dist/userscript/*'])
         .catch(function (error) {
-            console.warn(error)
+            console.warn(error);
         });
 });
 gulp.task('clean:webextension', function () {
     return del(['./dist/webextension/*'])
         .catch(function (error) {
-            console.warn(error)
+            console.warn(error);
         });
+});
+
+//task for linting the script files
+gulp.task('lint:scripts', function () {
+    return gulp.src(path.join(_folders.scripts, '**/*.js'))
+        .pipe(eslint({
+            'fix': true
+        }))
+        .pipe(eslint.format());
 });
 
 // task for building the userscript version
 gulp.task('build:userscript', function () {
-    return gulp.src(core)
-        .pipe(localize({ schema: false }))
+    return gulp.src(path.join(_folders.scripts, '**/*.js'))
         .pipe(uglify(options.uglify))
         .pipe(concat(package.name.replace(/\-/g, '_') + '.user.js'))
-        .pipe(header(fs.readFileSync('./banners/userscript.txt', 'utf8'), { package: package }))
+        .pipe(header(fs.readFileSync('./banners/userscript.txt', 'utf8'), {
+            'package': package
+        }))
+        .pipe(localize({
+            'schema': '/$locale/$filename.$ext'
+        }))
         .pipe(gulp.dest('./dist/userscript'));
 });
 
 // tasks for building the WebExtension version
-gulp.task('build:webextension:js', function () {
+gulp.task('build:webextension:scripts', ['lint:scripts'], function () {
     return merge(
-        gulp.src(includes)
-            .pipe(gulpIf('!*.min.js', uglify({ mangle: false }))),
-        gulp.src(core)
+            gulp.src(includes)
+            .pipe(gulpIf('!*.min.js', uglify({
+                'mangle': false
+            }))),
+            gulp.src(path.join(_folders.scripts, '**/*.js'))
             .pipe(concat(package.name + '.js'))
             .pipe(uglify(options.uglify))
-            .pipe(header(fs.readFileSync('./banners/webextension.txt', 'utf8'), { package: package }))
-    )
-        .pipe(gulp.dest('./dist/webextension/js'));
+            .pipe(header(fs.readFileSync('./banners/webextension.txt', 'utf8'), {
+                'package': package
+            }))
+        )
+        .pipe(gulp.dest('./dist/webextension/scripts'));
 });
 gulp.task('build:webextension:manifest', function () {
     return gulp.src(['./manifest.json'])
-        .pipe(ejs({ package: package }))
+        .pipe(ejs({
+            'package': package
+        }))
         .pipe(gulp.dest('./dist/webextension'));
 });
 gulp.task('build:webextension:locales', function () {
     return gulp.src(['./_locales/**/*.json'])
         .pipe(gulp.dest('./dist/webextension/_locales'));
 });
-gulp.task('build:webextension:icons', function () {
-    return gulp.src(['./resources/icons/**/*.png'])
-        .pipe(gulp.dest('./dist/webextension/icons'));
+gulp.task('build:webextension:logo', function () {
+    return gulp.src(['./resources/logo.svg'])
+        .pipe(gulp.dest('./dist/webextension'));
 });
 gulp.task('build:webextension', function (callback) {
     sequence(
-        ['build:webextension:js', 'build:webextension:icons', 'build:webextension:locales', 'build:webextension:manifest'],
-        ['zip:webextension', 'crx:webextension'],
+        ['build:webextension:scripts', 'build:webextension:logo', 'build:webextension:locales', 'build:webextension:manifest'], ['zip:webextension', 'crx:webextension'],
         callback
     );
 });
 
+gulp.task('build:vendor', function () {
+    return gulp.src(vendor)
+        .pipe(gulp.dest('./dist/vendor'));
+});
+
 // tasks for packaging the WebExtension for distribution
-gulp.task('zip:webextension', function (callback) {
+gulp.task('zip:webextension', function () {
     return gulp.src(['./dist/webextension/**/*', '!Thumbs.db'])
         .pipe(zip(package.name + '.zip'))
-        .pipe(gulp.dest('./dist'))
+        .pipe(gulp.dest('./dist'));
 });
 gulp.task('crx:webextension', function () {
     return gulp.src(['./dist/webextension', '!Thumbs.db'])
         .pipe(crx({
-            privateKey: fs.readFileSync('./certs/' + package.name + '.pem', 'utf8'),
-            filename: package.name + '.crx'
+            'privateKey': fs.readFileSync('./certs/' + package.name + '.pem', 'utf8'),
+            'filename': package.name + '.crx'
         }))
-        .pipe(gulp.dest('./dist'))
+        .pipe(gulp.dest('./dist'));
 });
 
 // task to rebuild everything on changes to core files
 gulp.task('watch', ['build'], function () {
-    return gulp.watch(core, ['build']);
+    options.uglify.drop_console = false;
+    return gulp.watch(path.join(_folders.scripts, '**/*.*'), ['build']);
 });
 
 // task to rebuild the userscript version on changes to core files
 gulp.task('watch:userscript', ['build:userscript'], function () {
-    return gulp.watch(core, ['build:userscript']);
+    return gulp.watch(path.join(_folders.scripts, '**/*.*'), ['build:userscript']);
 });
 
 // task to rebuild the WebExtension version on changes to core files
 gulp.task('watch:webextension', ['build:webextension'], function () {
-    return gulp.watch(core, ['build:webextension']);
+    return gulp.watch(path.join(_folders.scripts, '**/*.*'), ['build:webextension']);
 });
 
 // task for cleaning everything

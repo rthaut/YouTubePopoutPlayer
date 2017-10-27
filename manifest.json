@@ -6,24 +6,24 @@
   "homepage_url": "<%= package.homepage %>",
   "default_locale": "en",
   "icons": {
-    "48": "icons/icon48.png",
-    "64": "icons/icon64.png",
-    "96": "icons/icon96.png",
-    "128": "icons/icon128.png"
+    "48": "images/ogo.svg",
+    "96": "images/logo.svg"
   },
+  "permissions": [
+    "*://*.youtube.com/*",
+    "*://*.youtube-nocookie.com/"
+  ],
   "content_scripts": [
     {
       "all_frames": true,
       "matches": [
-        "*://*.youtube.com/*"
+        "*://*.youtube.com/*",
+        "*://*.youtube-nocookie.com/"
       ],
       "js": [
-        "js/browser-polyfill.min.js",
-        "js/<%= package.name %>.js"
+        "scripts/browser-polyfill.min.js",
+        "scripts/<%= package.name %>.js"
       ]
     }
-  ],
-  "permissions": [
-    "*://*.youtube.com/*"
   ]
 }
