@@ -6,8 +6,13 @@
   "homepage_url": "<%= package.homepage %>",
   "default_locale": "en",
   "icons": {
+    "16": "logo.svg",
+    "24": "logo.svg",
+    "32": "logo.svg",
     "48": "logo.svg",
-    "96": "logo.svg"
+    "64": "logo.svg",
+    "96": "logo.svg",
+    "128": "logo.svg"
   },
   "permissions": [
     "*://*.youtube.com/*",
@@ -22,7 +27,7 @@
       ],
       "js": [
         "scripts/browser-polyfill.min.js",
-        "scripts/<%= package.name %>.js"
+        "scripts/content.js"
       ]
     }
   ]

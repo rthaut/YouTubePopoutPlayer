@@ -1,17 +1,14 @@
 {
   "name": "youtube-popout-player",
   "title": "YouTube Popout Player",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Provides a simple way to open any YouTube video in a popout window",
   "author": "Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com)",
   "homepage": "https://github.com/rthaut/YouTubePopoutPlayer",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "gulp",
-    "build:webextension": "gulp build:webextension",
+    "build": "gulp build",
     "watch": "gulp watch",
-    "watch:webextension": "gulp watch:webextension",
-    "dev": "npm run build:webextension && npm run start:firefox",
     "start:firefox": "web-ext run --source-dir ./dist/webextension --browser-console"
   },
   "repository": {
@@ -28,15 +25,20 @@
     "gulp-crx-pack": "^1.0.1",
     "gulp-ejs": "^3.0.1",
     "gulp-eslint": "^4.0.0",
+    "gulp-folders": "^1.1.0",
     "gulp-header": "^1.8.8",
     "gulp-if": "^2.0.2",
+    "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "gulp-zip": "^4.0.0",
+    "rollup-stream": "^1.24.1",
     "run-sequence": "^1.2.2",
     "uglify-es": "^3.0.15",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
     "web-ext": "^1.9.1"
   },
   "dependencies": {
-    "webextension-polyfill": "^0.1.1"
+    "webextension-polyfill": "^0.2.1"
   }
 }
