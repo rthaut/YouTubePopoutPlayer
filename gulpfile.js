@@ -182,7 +182,22 @@ gulp.task('build:vendor', () => {
 
 gulp.task('dist:source', () => {
     return $.pump([
-        gulp.src(['**/*', '!node_modules', '!dist']),
+        gulp.src([
+            './.vscode/**/*',
+            './_locales/**/*',
+            './banners/**/*',
+            './lib/**/*',
+            './resources/logo.svg',
+            './.editorconfig',
+            './.eslintrc.js',
+            './LICENSE',
+            './README.md',
+            './gulpfile.js',
+            './manifest.json',
+            './package.json'
+        ], {
+            'base': './'
+        }),
         $.zip('source.zip'),
         gulp.dest('./dist'),
     ]);
