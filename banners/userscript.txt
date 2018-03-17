@@ -4,8 +4,8 @@
 // @description <%= package.description %>
 // @version     <%= package.version %>
 // @namespace   <%= package.homepage %>
-// @updateURL   <%= package.homepage %>/raw/master/dist/userscript/<%= package.name.replace(/\-/g, '_') %>.user.js
-// @downloadURL <%= package.homepage %>/raw/master/dist/userscript/<%= package.name.replace(/\-/g, '_') %>.user.js
+// @updateURL   <%= package.homepage %>/raw/master/dist/userscript/<%= package.name.replace(/\-/g, '_') %>.user.min.js
+// @downloadURL <%= package.homepage %>/raw/master/dist/userscript/<%= package.name.replace(/\-/g, '_') %>.user.min.js
 // @include     http://*youtube.com/*
 // @include     http://*youtube-nocookie.com/*
 // @include     https://*youtube.com/*
