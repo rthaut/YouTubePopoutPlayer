@@ -2,7 +2,7 @@
 // @name        YouTube Popout Player
 // @author      Ryan Thaut <rthaut@gmail.com> (http://ryanthaut.com)
 // @description Provides a simple way to open any YouTube video in a popout window
-// @version     2.1.2
+// @version     2.1.3
 // @namespace   https://github.com/rthaut/YouTubePopoutPlayer
 // @updateURL   https://github.com/rthaut/YouTubePopoutPlayer/raw/master/dist/userscript/youtube_popout_player.user.min.js
 // @downloadURL https://github.com/rthaut/YouTubePopoutPlayer/raw/master/dist/userscript/youtube_popout_player.user.min.js
@@ -13,7 +13,7 @@
 // ==/UserScript==
 /**
  * YouTube Popout Player - Provides a simple way to open any YouTube video in a popout window
- * @version v2.1.2
+ * @version v2.1.3
  * @link https://github.com/rthaut/YouTubePopoutPlayer
  * @license GPL-3.0
  */
