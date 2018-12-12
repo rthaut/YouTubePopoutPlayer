@@ -44,6 +44,7 @@
     "web-ext": "^2.5.0"
   },
   "dependencies": {
+    "del": "^3.0.0",
     "webextension-polyfill": "^0.2.1"
   }
 }

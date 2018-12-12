@@ -15,7 +15,8 @@
   },
   "permissions": [
     "*://*.youtube.com/*",
-    "*://*.youtube-nocookie.com/"
+    "*://*.youtube-nocookie.com/",
+	"storage"
   ],
   "content_scripts": [
     {
@@ -29,5 +30,8 @@
         "scripts/content.min.js"
       ]
     }
-  ]
+  ],
+  "options_ui": {
+	"page": "options.html"
+  }
 }

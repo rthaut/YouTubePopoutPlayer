@@ -125,6 +125,13 @@ gulp.task('build:manifest', () => {
     ]);
 });
 
+gulp.task('build:options', () => {
+    return $.pump([
+        gulp.src(['./options.html', './options.js']),
+        gulp.dest('./dist/webextension'),
+    ])
+});
+
 
 gulp.task('lint:scripts', () => {
     return $.pump([
@@ -269,6 +276,7 @@ gulp.task('build', [
     'build:manifest',
     'build:scripts',
     'build:vendor',
+    'build:options',
 ]);
 
 gulp.task('dist', (callback) => {
