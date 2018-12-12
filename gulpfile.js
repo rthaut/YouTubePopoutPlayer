@@ -127,7 +127,7 @@ gulp.task('build:manifest', () => {
 
 gulp.task('build:options', () => {
     return $.pump([
-        gulp.src(['./options.html', './options.js']),
+        gulp.src(['./lib/options/options.html', './lib/options/options.js']),
         gulp.dest('./dist/webextension'),
     ])
 });
