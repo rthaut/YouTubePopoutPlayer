@@ -9,7 +9,8 @@ module.exports = {
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "ecmaVersion": 8
+        "ecmaVersion": 8,
+        "sourceType": "module"
     },
     "rules": {
         "curly": ["error", "multi-line"],
