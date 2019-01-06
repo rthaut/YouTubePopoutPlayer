@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>YouTube Popout Player Options</title>
+
+        <script type="application/javascript" src="../../vendor/browser-polyfill.min.js"></script>
+
+        <link rel="stylesheet" href="../../vendor/angular-csp.css">
+        <link rel="stylesheet" href="../../vendor/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="options.css" />
+    </head>
+
+    <body>
+        <div class="container-fluid" ng-app="Options" ng-controller="OptionsCTRL">
+            <form name="OptionsForm">
+                <legend class="py-3">YouTube Popout Player Settings</legend>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Configure Popout Player Behavior
+                    </div>
+                    <div class="card-body">
+
+                        <div class="alert alert-info"><small><strong>Note</strong>: This setting is per-device. If you have YouTube Popout Player installed on multiple devices, you can configure the target for each device.</small></div>
+
+                        <fieldset class="form-group">
+                            <legend class="sr-only">Popout Player Behavior</legend>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="target" id="target-window" value="window" ng-model="options.behavior.target" ng-required>
+                                <label class="form-check-label" for="target-window">
+                                    <span>Open in a Popup Window</span>
+                                    <small class="form-text text-muted">The popout player will open in a new popup window. <strong>This is the default setting.</strong></small>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="target" id="target-tab" value="tab" ng-model="options.behavior.target" ng-required>
+                                <label class="form-check-label" for="target-tab">
+                                    <span>Open in a Tab</span>
+                                    <small class="form-text text-muted">The popout player will open in a new tab in your current browser window.</small>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Configure Popout Player Size
+                    </div>
+                    <div class="card-body" ng-hide="options.behavior.target == 'window'">
+                        <div class="alert alert-warning"><strong>Warning</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window.</div>
+                    </div>
+                    <div class="card-body" ng-show="options.behavior.target == 'window'">
+
+                        <div class="alert alert-info"><small><strong>Note</strong>: This setting is per-device. If you have YouTube Popout Player installed on multiple devices, you can configure the size for each device.</small></div>
+
+                        <fieldset class="form-group">
+                            <legend class="sr-only">Popout Player Size</legend>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="size" id="size-current" value="current" ng-model="options.size.mode" ng-required>
+                                <label class="form-check-label" for="size-current">
+                                    <span>Use Original Player Size</span>
+                                    <small class="form-text text-muted">The popout player will be sized to match the original YouTube video player. <strong>This is the default setting.</strong></small>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="size" id="size-custom" value="custom" ng-model="options.size.mode" ng-required>
+                                <label class="form-check-label" for="size-custom">
+                                    <span>Set Custom Dimensions</span>
+                                    <small class="form-text text-muted">Use this setting to specify dimensions (either in pixels or percentages) for the popout player.</small>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-row ml-3" ng-show="options.size.mode == 'custom'">
+                            <div class="form-group col-2">
+                                <label for="units">Units</label>
+                                <select class="form-control" name="units" id="units" ng-model="options.size.units" ng-required>
+                                    <option value="pixels">Pixels</option>
+                                    <option value="percentage">Percentage</option>
+                                </select>
+                            </div>
+                            <div class="form-group col">
+                                <label for="width">Width</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="width" id="width" placeholder="Width" ng-model="options.size.width" ng-required="options.size.mode == 'custom'">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" ng-show="options.size.units == 'pixels'">px</span>
+                                        <span class="input-group-text" ng-show="options.size.units == 'percentage'">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col">
+                                <label for="inputPassword4">Height</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="height" id="height" placeholder="Height" ng-model="options.size.height" ng-required="options.size.mode == 'custom'">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" ng-show="options.size.units == 'pixels'">px</span>
+                                        <span class="input-group-text" ng-show="options.size.units == 'percentage'">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                    </div>
+                </div>
+
+                <div class="form-row mt-5">
+                    <div class="col-6 offset-3">
+                        <button type="submit" class="btn btn-block btn-lg btn-primary" ng-disabled="OptionsForm.$invalid">Save Settings</button>
+                    </div>
+                </div>
+
+            </form>
+
+            <hr class="my-5" />
+            <h6>Selected Options (to Store)</h6>
+            <pre><code>{{options | json}}</code></pre>
+        </div>
+
+        <!-- dependencies -->
+        <script type="application/javascript" src="../../vendor/jquery.min.js"></script>
+        <script type="application/javascript" src="../../vendor/angular.min.js"></script>
+        <script type="application/javascript" src="../../vendor/angular-messages.min.js"></script>
+        <script type="application/javascript" src="../../vendor/angular-sanitize.min.js"></script>
+        <script type="application/javascript" src="../../vendor/bootstrap.min.js"></script>
+
+        <!-- main script for this page -->
+        <script src="options.js"></script>
+    </body>
+
+</html>

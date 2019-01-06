@@ -1,0 +1,12 @@
+body {
+    font-size: 16px;
+}
+
+fieldset p {
+    margin-top: 0;
+}
+
+label small {
+    display: inline-block;
+    text-indent: 32px;
+}

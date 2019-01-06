@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html ng-app="Options" ng-controller="OptionsCTRL">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>YouTube Popout Player Options</title>
+
+        <script type="application/javascript" src="../../vendor/browser-polyfill.min.js"></script>
+
+        <link rel="stylesheet" href="../../vendor/angular-csp.css">
+        <link rel="stylesheet" href="../../vendor/shoelace.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="options.css" />
+    </head>
+
+    <body>
+        <script type="text/ng-template" id="size-error-messages">
+            <p class="input-hint" ng-message="required">This field is required</p>
+            <p class="input-hint" ng-message="min">The value of this field is too small</p>
+            <p class="input-hint" ng-message="max">The value of this field is too large</p>
+        </script>
+
+        <form name="OptionsForm">
+
+            <fieldset>
+                <legend>Popout Player Behavior</legend>
+
+                <div class="alert alert-secondary text-small">
+                    <strong>Note</strong>: This setting is per-device. If you have YouTube Popout Player installed on multiple devices, you can configure the target for each device.
+                </div>
+
+                <div class="input-field">
+                    <label>
+                        <input type="radio" name="target" value="window" ng-model="options.behavior.target" ng-required>
+                        <span>Open in a Popup Window</span>
+                        <p class="input-hint">The popout player will open in a new popup window. <strong>This is the default setting.</strong></p>
+                    </label>
+
+                </div>
+
+                <div class="input-field">
+                    <label>
+                        <input type="radio" name="target" value="tab" ng-model="options.behavior.target" ng-required>
+                        <span>Open in a Tab</span>
+                        <p class="input-hint">The popout player will open in a new tab in your current browser window.</p>
+                    </label>
+                </div>
+
+            </fieldset>
+
+
+            <fieldset>
+                <legend>Popout Player Size</legend>
+
+                <div class="alert alert-warning text-small" ng-hide="options.behavior.target == 'window'">
+                    <strong>Warning</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window.
+                </div>
+
+                <div ng-show="options.behavior.target == 'window'">
+                    <div class="alert alert-secondary text-small">
+                        <strong>Note</strong>: This setting is per-device. If you have YouTube Popout Player installed on multiple devices, you can configure the size for each device.
+                    </div>
+
+                    <div class="input-field">
+                        <label>
+                            <input type="radio" name="size" value="current" ng-model="options.size.mode" ng-required>
+                            <span>Use Original Player Size</span>
+                            <p class="input-hint">The popout player will be sized to match the original YouTube video player. <strong>This is the default setting.</strong></p>
+                        </label>
+                    </div>
+
+                    <div class="input-field mar-b-0">
+                        <label>
+                            <input type="radio" name="size" value="custom" ng-model="options.size.mode" ng-required>
+                            <span>Set Custom Dimensions</span><br/>
+                            <p class="input-hint">Use this setting to specify dimensions (either in pixels or percentages) for the popout player.</p>
+                        </label>
+                    </div>
+
+                    <div class="container-fluid mar-t-sm" ng-show="options.size.mode == 'custom'">
+
+                        <div class="input-field mar-b-0">
+                            <div class="row">
+
+                                <div class="col">
+                                    <div class="input-field">
+                                        <label for="units">Dimension Units</label>
+                                        <select class="input-lg" name="units" id="units" ng-model="options.size.units" ng-required>
+                                            <option value="pixels">Pixels (px)</option>
+                                            <option value="percentage">Percentage (%)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col">
+                                    <div class="input-field" ng-class="{'input-invalid': OptionsForm.width.$invalid}">
+                                        <label for="width">Width</label>
+                                        <div class="input-group">
+                                            <input type="number" class="input-lg" name="width" id="width" min="0" ng-max="sizeMax('width')" placeholder="Width" ng-model="options.size.width" ng-required="options.size.mode == 'custom'">
+                                            <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
+                                        </div>
+                                        <div ng-messages="OptionsForm.width.$error" role="alert">
+                                            <div ng-messages-include="size-error-messages"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="input-field" ng-class="{'input-invalid': OptionsForm.height.$invalid}">
+                                        <label for="inputPassword4">Height</label>
+                                        <div class="input-group">
+                                            <input type="number" class="input-lg" name="height" id="height" min="0" ng-max="sizeMax('height')" placeholder="Height" ng-model="options.size.height" ng-required="options.size.mode == 'custom'">
+                                            <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
+                                        </div>
+                                        <div ng-messages="OptionsForm.height.$error" role="alert">
+                                            <div ng-messages-include="size-error-messages"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="alert alert-light text-small">Aspect Ratio: <strong>{{aspectRatio()}}</strong></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </fieldset>
+
+            <button type="submit" class="button-xl" ng-disabled="OptionsForm.$invalid">Save Settings</button>
+
+        </form>
+
+        <hr />
+        <h3>Selected Options (to Store)</h3>
+        <pre><code>{{options | json}}</code></pre>
+
+        <!-- dependencies -->
+        <script type="application/javascript" src="../../vendor/jquery.min.js"></script>
+        <script type="application/javascript" src="../../vendor/shoelace.js"></script>
+        <script type="application/javascript" src="../../vendor/angular.min.js"></script>
+        <script type="application/javascript" src="../../vendor/angular-messages.min.js"></script>
+        <script type="application/javascript" src="../../vendor/angular-sanitize.min.js"></script>
+
+        <!-- main script for this page -->
+        <script src="options.js"></script>
+    </body>
+
+</html>
