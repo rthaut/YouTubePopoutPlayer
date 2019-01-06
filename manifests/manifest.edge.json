@@ -1,0 +1,24 @@
+{
+  "author": "<%= pkg.author %>",
+
+  "minimum_edge_version": "33.14281.1000.0",
+
+  "permissions": [
+    "*://*.youtube.com/*",
+    "*://*.youtube-nocookie.com/",
+    "storage"
+  ],
+
+  "background": {
+    "persistent": true
+  },
+
+  "page_action": {
+    "default_icon": {
+      "20": "images/logo/logo-red-16.png",
+      "25": "images/logo/logo-red-16.png",
+      "30": "images/logo/logo-red-32.png",
+      "40": "images/logo/logo-red-48.png"
+    }
+  }
+}

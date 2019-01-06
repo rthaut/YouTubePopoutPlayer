@@ -1,0 +1,7 @@
+{
+  "minimum_chrome_version": "42.0",
+
+  "options_ui": {
+    "page": "pages/options/options.html"
+  }
+}
