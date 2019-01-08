@@ -1,0 +1,18 @@
+
+/**
+ * Firefox-Specific Overrides
+ * Note: these are applied to all browsers, but should match the computed values when rendered outside the Add-ons Manager
+ * TODO: Ensure this is only used for Firefox. Ideas include:
+ *   - modifying the build process to only include it for FF
+ *   - finding a selector that is only present in Firefox when the Options page is rendered inside the Add-ons Manager
+ *   - using JS to add a custom body/html class for Firefox (ideally only when inside the Add-ons Manager)
+ */
+body {
+    font-size: 16px !important;
+
+    button {
+        font-size: 16px !important;
+        line-height: 34px !important;
+        height: 36px !important;
+    }
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="Options" ng-controller="OptionsCTRL">
+<html ng-app="OptionsApp" ng-csp ng-controller="OptionsController">
 
     <head>
         <meta charset="utf-8" />
@@ -11,17 +11,11 @@
 
         <link rel="stylesheet" href="../../vendor/angular-csp.css">
         <link rel="stylesheet" href="../../vendor/shoelace.css">
-        <link rel="stylesheet" type="text/css" media="screen" href="options.css" />
     </head>
 
     <body>
-        <script type="text/ng-template" id="size-error-messages">
-            <p class="input-hint" ng-message="required">This field is required</p>
-            <p class="input-hint" ng-message="min">The value of this field is too small</p>
-            <p class="input-hint" ng-message="max">The value of this field is too large</p>
-        </script>
 
-        <form name="OptionsForm">
+        <form name="form" class="container-fluid">
 
             <fieldset>
                 <legend>Popout Player Behavior</legend>
@@ -53,11 +47,11 @@
             <fieldset>
                 <legend>Popout Player Size</legend>
 
-                <div class="alert alert-warning text-small" ng-hide="options.behavior.target == 'window'">
-                    <strong>Warning</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window.
+                <div class="alert alert-warning text-small" ng-hide="options.behavior.target === 'window'">
+                    <strong>Warning</strong>: These settings do not apply when the popout player is configured to open in a new tab in the current browser window.
                 </div>
 
-                <div ng-show="options.behavior.target == 'window'">
+                <div ng-show="options.behavior.target === 'window'">
                     <div class="alert alert-secondary text-small">
                         <strong>Note</strong>: This setting is per-device. If you have YouTube Popout Player installed on multiple devices, you can configure the size for each device.
                     </div>
@@ -78,7 +72,7 @@
                         </label>
                     </div>
 
-                    <div class="container-fluid mar-t-sm" ng-show="options.size.mode == 'custom'">
+                    <div class="container-fluid mar-t-sm" ng-show="options.size.mode === 'custom'">
 
                         <div class="input-field mar-b-0">
                             <div class="row">
@@ -98,33 +92,52 @@
                             <div class="row">
 
                                 <div class="col">
-                                    <div class="input-field" ng-class="{'input-invalid': OptionsForm.width.$invalid}">
+                                    <div class="input-field" ng-class="{'input-invalid': form.width.$invalid}">
                                         <label for="width">Width</label>
                                         <div class="input-group">
-                                            <input type="number" class="input-lg" name="width" id="width" min="0" ng-max="sizeMax('width')" placeholder="Width" ng-model="options.size.width" ng-required="options.size.mode == 'custom'">
+                                            <input type="number" class="input-lg" name="width" id="width" ng-min="sizeMin('width')" ng-max="sizeMax('width')" placeholder="Width" ng-model="options.size.width" ng-required="options.size.mode === 'custom'">
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
-                                        <div ng-messages="OptionsForm.width.$error" role="alert">
-                                            <div ng-messages-include="size-error-messages"></div>
+                                        <div ng-messages="form.width.$error" role="alert">
+                                            <p class="input-hint" ng-message="required">This field is required</p>
+                                            <p class="input-hint" ng-message="min">The value of this field cannot be less than <strong>{{sizeMin('width')}}</strong></p>
+                                            <p class="input-hint" ng-message="max">The value of this field cannot be more than <strong>{{sizeMax('width')}}</strong></p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col">
-                                    <div class="input-field" ng-class="{'input-invalid': OptionsForm.height.$invalid}">
+                                    <div class="input-field" ng-class="{'input-invalid': form.height.$invalid}">
                                         <label for="inputPassword4">Height</label>
                                         <div class="input-group">
-                                            <input type="number" class="input-lg" name="height" id="height" min="0" ng-max="sizeMax('height')" placeholder="Height" ng-model="options.size.height" ng-required="options.size.mode == 'custom'">
+                                            <input type="number" class="input-lg" name="height" id="height" ng-min="sizeMin('height')" ng-max="sizeMax('height')" placeholder="Height" ng-model="options.size.height" ng-required="options.size.mode === 'custom'">
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
-                                        <div ng-messages="OptionsForm.height.$error" role="alert">
-                                            <div ng-messages-include="size-error-messages"></div>
+                                        <div ng-messages="form.height.$error" role="alert">
+                                            <p class="input-hint" ng-message="required">This field is required</p>
+                                            <p class="input-hint" ng-message="min">The value of this field cannot be less than <strong>{{sizeMin('height')}}</strong></p>
+                                            <p class="input-hint" ng-message="max">The value of this field cannot be more than <strong>{{sizeMax('height')}}</strong></p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-12">
-                                    <div class="alert alert-light text-small">Aspect Ratio: <strong>{{aspectRatio()}}</strong></div>
+                                    <table class="table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>Current Screen Resolution</td>
+                                                <td class="text-bold" ng-bind-html="resolution"></td>
+                                            </tr>
+                                            <tr ng-show="options.size.units === 'percentage'">
+                                                <td>Popout Player Window Size</td>
+                                                <td class="text-bold" ng-bind-html="showInfo('dimensions')"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Popout Player Aspect Ratio</td>
+                                                <td class="text-bold" ng-bind-html="showInfo('aspectRatio')"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
 
                             </div>
@@ -136,13 +149,16 @@
 
             </fieldset>
 
-            <button type="submit" class="button-xl" ng-disabled="OptionsForm.$invalid">Save Settings</button>
+            <div class="row">
+                <div class="col-6">
+                    <button class="button button-block" ng-click="save()" ng-disabled="form.$invalid">Save Settings</button>
+                </div>
+                <div class="col-6">
+                    <button class="button button-block button-danger" ng-click="reset()">Reset to Defaults</button>
+                </div>
+            </div>
 
         </form>
-
-        <hr />
-        <h3>Selected Options (to Store)</h3>
-        <pre><code>{{options | json}}</code></pre>
 
         <!-- dependencies -->
         <script type="application/javascript" src="../../vendor/jquery.min.js"></script>
@@ -151,8 +167,6 @@
         <script type="application/javascript" src="../../vendor/angular-messages.min.js"></script>
         <script type="application/javascript" src="../../vendor/angular-sanitize.min.js"></script>
 
-        <!-- main script for this page -->
-        <script src="options.js"></script>
     </body>
 
 </html>
