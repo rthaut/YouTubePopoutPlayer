@@ -31,7 +31,7 @@ const YouTubePopoutPlayer = (() => {
 
             var id = this.getVideoIDFromURL(player.baseURI);
 
-            console.log('Return', id);
+            console.log('YouTubePopoutPlayer.getVideoIDFromPlayer() :: Return', id);
             console.groupEnd();
             return id;
         }
@@ -47,13 +47,13 @@ const YouTubePopoutPlayer = (() => {
             var id = null;
 
             var result = new RegExp(/(?:(?:v=)|(?:\/embed\/)|(?:\/youtu\.be\/))([^\?\&\/]{11})/).exec(url);
-            console.log(result);
+            console.log('YouTubePopoutPlayer.getVideoIDFromURL() :: RegExp Result', result);
 
             if (result && result[1]) {
                 id = result[1];
             }
 
-            console.log('Return', id);
+            console.log('YouTubePopoutPlayer.getVideoIDFromURL() :: Return', id);
             console.groupEnd();
             return id;
         }
@@ -69,13 +69,13 @@ const YouTubePopoutPlayer = (() => {
             var id = null;
 
             var result = new RegExp(/list=((?:WL|[^\?\&\/]+))/).exec(url);
-            console.log(result);
+            console.log('YouTubePopoutPlayer.getPlaylistIDFromURL() :: RegExp Result', result);
 
             if (result && result[1]) {
                 id = result[1];
             }
 
-            console.log('Return', id);
+            console.log('YouTubePopoutPlayer.getPlaylistIDFromURL() :: Return', id);
             console.groupEnd();
             return id;
         }
@@ -180,6 +180,8 @@ const YouTubePopoutPlayer = (() => {
                 return false;
             }
 
+            // TODO: use the SVG file, now that `web_accessible_resources` in the manifest permits access to the images directory?
+
             var xmlns = 'http://www.w3.org/2000/svg';
             var xlink = 'http://www.w3.org/1999/xlink';
 
@@ -230,81 +232,29 @@ const YouTubePopoutPlayer = (() => {
          * Click event handler for any of the popout player controls
          * @param {Event} event
          */
-        onClick(event) {
+        onClick() {
             console.group('YouTubePopoutPlayer.onClick()');
 
-            var player = new HTML5Player();
+            const player = new HTML5Player();
 
-            player.pause();
-
-            var id = this.getVideoIDFromPlayer(player.player) || this.getVideoIDFromURL(window.location.href);
-            var list = this.getPlaylistIDFromURL(window.location.href);
-
-            var time = player.getTime() || 0;
-            if (time <= this.defaults.startThreshold) {
-                console.info('Popout video will start from beginning');
-                time = 0;
-            }
-
-            var attrs = {};
-
-            if (list != null) {
-                attrs.list = list;
-            }
-
-            attrs.start = time;
-            attrs.autoplay = 1;
-
-            var opts = {
-                'width': player.getWidth() || this.defaults.width,
-                'height': player.getHeight() || this.defaults.height,
-                'scrollbars': 'no',
-                'toolbar': 'no'
-            };
-
-            player.pause();
-            this.popoutPlayer(id, attrs, opts);
+            browser.runtime.sendMessage({
+                'action': 'open-popout',
+                'data': {
+                    'id': this.getVideoIDFromPlayer(player.player) || this.getVideoIDFromURL(window.location.href),
+                    'list': this.getPlaylistIDFromURL(window.location.href),
+                    'time': player.getTime(),
+                    'width': player.getWidth(),
+                    'height': player.getHeight()
+                }
+            }).then(response => {
+                console.log('YouTubePopoutPlayer.onClick() :: Message Response', response);
+                player.pause();
+            }).catch(error => {
+                console.error('YouTubePopoutPlayer.onClick() :: Message Error', error);
+            });
 
             console.groupEnd();
-        }
-
-        /**
-         * Opens the specified video in a new popout window
-         * @param {String} id
-         * @param {Object} [attrs]
-         * @param {Object} [opts]
-         */
-        popoutPlayer(id, attrs, opts) {
-            console.group('YouTubePopoutPlayer.popoutPlayer()');
-
-            console.log('id', id);
-            console.log('attrs', attrs);
-            console.log('opts', opts);
-
-            var location = 'https://www.youtube.com/embed/' + id + '?';
-
-            if (attrs !== undefined) {
-                for (var attr in attrs) {
-                    location += attr + '=' + attrs[attr] + '&';
-                }
-                location = location.replace(/\&$/, ''); // trim trailing ampersand (&)
-            }
-
-            var options = '';
-            if (opts !== undefined) {
-                for (var opt in opts) {
-                    options += opt + '=' + opts[opt] + ',';
-                }
-                options = options.replace(/\,$/, ''); // trim trailing comma (,)
-            }
-
-            console.log('location', location);
-            console.log('options', options);
-
-            var popout = window.open(location, id, options);
-            console.log('Opened window', popout);
-
-            console.groupEnd();
+            return;
         }
 
         /**
