@@ -8,9 +8,10 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
+    "clean": "trash ./dist",
     "build": "gulp build",
-    "debug": "gulp debug",
-    "package": "gulp package",
+    "watch": "gulp build && gulp watch",
+    "package": "cross-env NODE_ENV=production gulp package",
     "firefox:lint": "web-ext lint --source-dir=./dist/firefox",
     "firefox:build": "web-ext build --source-dir=./dist/firefox --firefox=firefox",
     "firefox:start": "web-ext run --source-dir=./dist/firefox"
@@ -22,11 +23,18 @@
   "bugs": {
     "url": "https://github.com/rthaut/YouTubePopoutPlayer/issues"
   },
+  "dependencies": {
+    "angular": "^1.7.5",
+    "bootstrap": "^4.2.1",
+    "jquery": "^3.3.1",
+    "webextension-polyfill": "^0.2.1"
+  },
   "devDependencies": {
     "angular-messages": "^1.7.5",
     "angular-sanitize": "^1.7.5",
     "ansi-colors": "^3.2.3",
-    "del": "^3.0.0",
+    "cross-env": "^5.2.0",
+    "css-loader": "^2.1.0",
     "fancy-log": "^1.3.3",
     "gulp": "^4.0.0",
     "gulp-browser-i18n-localize": "^1.0.1",
@@ -43,19 +51,22 @@
     "gulp-svg2png": "^2.0.2",
     "gulp-uglify": "^3.0.1",
     "gulp-zip": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
     "merge-stream": "^1.0.1",
+    "mini-css-extract-plugin": "^0.5.0",
+    "node-sass": "^4.11.0",
     "pump": "^3.0.0",
+    "raw-loader": "^1.0.0",
     "rollup-stream": "^1.24.1",
+    "sass-loader": "^7.1.0",
     "shoelace-css": "^1.0.0-beta24",
+    "trash-cli": "^1.4.0",
     "uglify-es": "^3.3.9",
+    "url-loader": "^1.1.2",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
-    "web-ext": "^2.9.3"
-  },
-  "dependencies": {
-    "angular": "^1.7.5",
-    "bootstrap": "^4.2.1",
-    "jquery": "^3.3.1",
-    "webextension-polyfill": "^0.2.1"
+    "web-ext": "^2.9.3",
+    "webpack": "^4.28.3",
+    "webpack-stream": "^5.2.1"
   }
 }

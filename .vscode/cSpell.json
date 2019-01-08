@@ -12,7 +12,8 @@
         "polyfill",
         "popout",
         "userscript",
-        "webextension"
+        "webextension",
+        "webextensions"
     ],
 
     // flagWords - list of words to be always considered incorrect

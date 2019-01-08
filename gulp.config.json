@@ -23,11 +23,6 @@
     "./node_modules/webextension-polyfill/dist/browser-polyfill.min.js"
   ],
   "plugin_options": {
-    "less": {
-      "paths": "node_modules",
-      "outputStyle": "compressed",
-      "sourceMap": false
-    },
     "uglify": {
       "compress": {
         "drop_console": true
@@ -36,8 +31,10 @@
     }
   },
   "source_folders": {
-    "locales": "./_locales",
-    "manifests": "./manifests",
+    "helpers": "./src/helpers",
+    "images": "./src/images",
+    "locales": "./src/_locales",
+    "manifests": "./src/manifests",
     "pages": "./src/pages",
     "scripts": "./src/scripts"
   }

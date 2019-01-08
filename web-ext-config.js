@@ -7,7 +7,7 @@ module.exports = {
     'run': {
         'browserConsole': true,
         'startUrl': [
-            'www.youtube.com'
+            'https://www.youtube.com/'
         ]
     },
 
