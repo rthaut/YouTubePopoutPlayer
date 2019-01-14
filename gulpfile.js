@@ -52,7 +52,7 @@ function folders(dir) {
  * @param {Boolean} [fix=true] indicates if eslint should attempt to fix errors
  * @param {Boolean} [failOnError=true] indicates if eslint should fail if there are any unfixed errors
  */
-function lint(dir, fix = true, failOnError = true) {
+function lintJS(dir, fix = true, failOnError = true) {
     return $.pump([
         gulp.src(`${dir}/**/*.js`),
         $.eslint({
@@ -60,6 +60,23 @@ function lint(dir, fix = true, failOnError = true) {
         }),
         $.eslint.format(),
         $.if(failOnError, $.eslint.failOnError()),
+    ],
+    err => { if (err) $.log.error(`${$.colors.red('Function Error [\'lint\']')}: ${err.message}`); });
+}
+
+/**
+ * Lints all JSON files within the supplied directory
+ * @param {string} dir the path to the directory
+ * @param {Boolean} [failOnError=true] indicates if jsonlint should fail if there are any unfixed errors
+ */
+function lintJSON(dir, failOnError = true) {
+    return $.pump([
+        gulp.src(`${dir}/**/*.json`),
+        $.jsonlint(),
+        $.jsonlint.reporter(file => {
+            $.log.error('File ' + file.path + ' is not valid JSON.');
+        }),
+        $.if(failOnError, $.jsonlint.failOnError()),
     ],
     err => { if (err) $.log.error(`${$.colors.red('Function Error [\'lint\']')}: ${err.message}`); });
 }
@@ -146,12 +163,12 @@ gulp.task('minify', function minify() {
 // build & lint tasks, broken into components
 // ==========================================
 
-gulp.task('lint:helpers', () => {
-    return lint(cfg.source_folders.helpers, true, false);
+gulp.task('lint:helpers', function lint_helpers() {
+    return lintJS(cfg.source_folders.helpers, true, (env === 'production'));
 });
 
 
-gulp.task('build:images', () => {
+gulp.task('build:images', function build_images() {
     return $.pump([
         gulp.src([`${cfg.source_folders.images}/**/*.{png,svg}`]),
         ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/images`)),
@@ -163,7 +180,7 @@ gulp.task('build:images', () => {
 /**
  * Creates multiple resized PNG versions of the SVG logo files
  */
-gulp.task('build:logos', () => {
+gulp.task('build:logos', function build_logos() {
     //TODO: handle the icons/sizes defined in page_action.default_icon for Edge
     const manifest = JSON.parse(fs.readFileSync(`${cfg.source_folders.manifests}/manifest.shared.json`));
     const icons = manifest.icons;
@@ -183,7 +200,7 @@ gulp.task('build:logos', () => {
 });
 
 
-gulp.task('build:locales', () => {
+gulp.task('build:locales', function build_locales() {
     return $.merge(folders(cfg.source_folders.locales).map(folder => {
         return $.pump([
             gulp.src([`${cfg.source_folders.locales}/${folder}/**/*.json`]),
@@ -194,8 +211,10 @@ gulp.task('build:locales', () => {
     }));
 });
 
-
-gulp.task('build:manifest', () => {
+gulp.task('lint:manifest', function lint_manifest() {
+    return lintJSON(cfg.source_folders.manifests, (env === 'production'));
+});
+gulp.task('build:manifest', gulp.series('lint:manifest', function build_manifest() {
     return $.merge(Object.keys(cfg.supported_browsers).map(browser => {
         return $.pump([
             gulp.src([
@@ -208,11 +227,11 @@ gulp.task('build:manifest', () => {
         ],
         err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:manifest\']')}: ${err.message}`); });
     }));
-});
+}));
 
 
 gulp.task('lint:pages', function lint_pages() {
-    return lint(cfg.source_folders.pages, true, false);
+    return lintJS(cfg.source_folders.pages, true, (env === 'production'));
 });
 gulp.task('build:pages', gulp.series('lint:pages', function build_pages() {
     const config = getWebpackConfig(cfg.source_folders.pages);
@@ -225,10 +244,10 @@ gulp.task('build:pages', gulp.series('lint:pages', function build_pages() {
 }));
 
 
-gulp.task('lint:scripts', gulp.series('lint:helpers', () => {
-    return lint(cfg.source_folders.scripts, true, false);
+gulp.task('lint:scripts', gulp.series('lint:helpers', function lint_scripts() {
+    return lintJS(cfg.source_folders.scripts, true, (env === 'production'));
 }));
-gulp.task('build:scripts', gulp.series('lint:scripts', () => {
+gulp.task('build:scripts', gulp.series('lint:scripts', function build_scripts() {
     return $.merge(folders(cfg.source_folders.scripts).map(folder => {
         return $.pump([
             $.rollup({
@@ -247,7 +266,7 @@ gulp.task('build:scripts', gulp.series('lint:scripts', () => {
 
 // TODO: should this use gulp functionality instead (i.e. `gulp.src`, `gulp.dest`, etc.)?
 // TODO: should this be a prerequisite for the 'build:scripts' task?
-gulp.task('copy:scripts:vendor', done => {
+gulp.task('copy:scripts:vendor', gulp.series('build:manifest', function copy_scripts_vendor(done) {
     Object.keys(cfg.supported_browsers).map(browser => {
         const manifest = JSON.parse(fs.readFileSync(`./dist/${browser}/manifest.json`));
         let files = [];
@@ -267,21 +286,24 @@ gulp.task('copy:scripts:vendor', done => {
         files.forEach(file => {
             const src = path.resolve(file.replace('vendor/', 'node_modules/'));
             const dest = path.resolve(`./dist/${browser}/${file}`);
-            if (!fs.existsSync(dest)) {
+            if (fs.existsSync(src) && !fs.existsSync(dest)) {
                 //$.log.info(`Copying "${src}" to "${dest}"`);
+                if (!fs.existsSync(path.dirname(dest))) {
+                    fs.mkdirSync(path.dirname(dest), { 'recursive': true });
+                }
                 fs.copyFileSync(src, dest);
             }
         });
     });
 
     done();
-});
+}));
 
 
 // ========================
 // package/distribute tasks
 // ========================
-gulp.task('zip', () => {
+gulp.task('zip', function zip() {
     return $.merge(Object.keys(cfg.supported_browsers).map(browser => {
         return $.pump([
             gulp.src([`./dist/${browser}/**/*`, '!Thumbs.db']),
@@ -313,7 +335,7 @@ gulp.task('build', gulp.parallel(
     'copy:scripts:vendor'
 ));
 
-gulp.task('watch', done => {
+gulp.task('watch', function watch(done) {
     // TODO: it would be nice to only rebuild the modified files per watch, but that requires a way to pass them to the build task
     gulp.watch(`${cfg.source_folders.locales}/**/*`, gulp.task('build:locales'));
     gulp.watch(`${cfg.source_folders.manifests}/**/*`, gulp.task('build:manifest'));
