@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "angular": "^1.7.5",
+    "angular-browser-i18n": "^2.0.1",
     "bootstrap": "^4.2.1",
     "dialog-polyfill": "^0.4.10",
     "jquery": "^3.3.1",

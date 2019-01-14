@@ -7,7 +7,7 @@ import Options from '../../helpers/Options';
 import Utils from '../../helpers/utils';
 
 /* global angular */
-const app = angular.module('OptionsApp', ['ngMessages', 'ngSanitize']);
+const app = angular.module('OptionsApp', ['ngMessages', 'ngSanitize', 'browser.i18n']);
 
 app.controller('OptionsController', ['$scope', function ($scope) {
 
@@ -17,7 +17,6 @@ app.controller('OptionsController', ['$scope', function ($scope) {
 
     $scope.alerts = [];
     $scope.clearAlert = function ($index) {
-        console.log('Clearing Alert ' + $index, $scope.alerts[$index]);
         $scope.alerts.splice($index, 1);
     };
 
@@ -25,7 +24,6 @@ app.controller('OptionsController', ['$scope', function ($scope) {
      * Caches (and restores) values related to custom dimensions when changing units
      */
     $scope.cacheDimensions = function () {
-
         // create the object structure for caching dimensions
         $scope.cache.dimensions = {};
         ['pixels', 'percentage'].forEach(unit => {
@@ -136,13 +134,11 @@ app.controller('OptionsController', ['$scope', function ($scope) {
      */
     $scope.sizeUnits = function () {
         switch ($scope.options.size.units.toLowerCase()) {
-            case 'pixels':
-                return 'px';
-            case 'percentage':
-                return '%';
-            default:
-                return '?';
+            case 'pixels':      return browser.i18n.getMessage('DimensionUnitsPixelsUnitLabel');
+            case 'percentage':  return browser.i18n.getMessage('DimensionUnitsPercentageUnitLabel');
         }
+
+        return browser.i18n.getMessage('DimensionUnitsUnknownUnitLabel');
     };
 
     /**
@@ -154,8 +150,8 @@ app.controller('OptionsController', ['$scope', function ($scope) {
         switch ($scope.options.size.units.toLowerCase()) {
             case 'pixels':
                 switch (dimension.toLowerCase()) {
-                    case 'width': return parseInt(window.screen.availWidth * 0.1, 10);
-                    case 'height': return parseInt(window.screen.availHeight * 0.1, 10);
+                    case 'width':   return parseInt(window.screen.availWidth * 0.1, 10);
+                    case 'height':  return parseInt(window.screen.availHeight * 0.1, 10);
                 }
                 break;
 
@@ -174,8 +170,8 @@ app.controller('OptionsController', ['$scope', function ($scope) {
         switch ($scope.options.size.units.toLowerCase()) {
             case 'pixels':
                 switch (dimension.toLowerCase()) {
-                    case 'width': return window.screen.availWidth;
-                    case 'height': return window.screen.availHeight;
+                    case 'width':   return window.screen.availWidth;
+                    case 'height':  return window.screen.availHeight;
                 }
                 break;
 
@@ -227,9 +223,8 @@ app.controller('OptionsController', ['$scope', function ($scope) {
 
         browser.storage.local.clear().then(() => {
             $scope.options = OPTION_DEFAULTS;
-            $scope.load();
             $scope.alerts.push({
-                'message': 'All settings reset to default values',
+                'message': browser.i18n.getMessage('OptionsResetSuccessMessage'),
                 'type': 'alert-success'
             });
             $scope.closeDialog('ResetConfirmDialog');
@@ -250,13 +245,13 @@ app.controller('OptionsController', ['$scope', function ($scope) {
 
         browser.storage.local.set(_options).then(() => {
             $scope.alerts.push({
-                'message': 'All settings saved successfully',
+                'message': browser.i18n.getMessage('OptionsSaveSuccessMessage'),
                 'type': 'alert-success'
             });
         }).catch(err => {
             console.error('Failed to save settings to local storage', err);
             $scope.alerts.push({
-                'message': 'Failed to save settings: ' + err,
+                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err),
                 'type': 'alert-danger'
             });
         }).finally(() => {

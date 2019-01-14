@@ -10,25 +10,18 @@
 
     <body class="pad-y-sm pad-x-0">
 
-        <div class="alert" ng-class="alert.type" ng-repeat="alert in alerts">
-            {{alert.message}}
-            <a class="close" ng-click="clearAlert($index)">&times;</a>
-        </div>
-
         <form name="form" class="container-fluid">
 
-            <fieldset>
-                <legend>Popout Player Behavior</legend>
+            <div class="alert alert-secondary text-small" get-message="OptionsPerDeviceWarning"></div>
 
-                <div class="alert alert-secondary text-small">
-                    <strong>Note</strong>: This setting is per-device. If you have YouTube Popout Player installed on multiple devices, you can configure the target for each device.
-                </div>
+            <fieldset>
+                <legend get-message="OptionsBehaviorHeading"></legend>
 
                 <div class="input-field">
                     <label>
                         <input type="radio" name="target" value="window" ng-model="options.behavior.target" ng-required>
-                        <span>Open in a Popup Window</span>
-                        <p class="input-hint">The popout player will open in a new popup window. <strong>This is the default setting.</strong></p>
+                        <span get-message="OptionsBehaviorTargetWindowLabel"></span>
+                        <p class="input-hint" get-message="OptionsBehaviorTargetWindowDescription"></p>
                     </label>
 
                 </div>
@@ -36,8 +29,8 @@
                 <div class="input-field">
                     <label>
                         <input type="radio" name="target" value="tab" ng-model="options.behavior.target" ng-required>
-                        <span>Open in a Tab</span>
-                        <p class="input-hint">The popout player will open in a new tab in your current browser window.</p>
+                        <span get-message="OptionsBehaviorTargetTabLabel"></span>
+                        <p class="input-hint" get-message="OptionsBehaviorTargetTabDescription"></p>
                     </label>
                 </div>
 
@@ -45,30 +38,25 @@
 
 
             <fieldset>
-                <legend>Popout Player Size</legend>
+                <legend get-message="OptionsSizeHeading"></legend>
 
-                <div class="alert alert-warning text-small" ng-hide="options.behavior.target === 'window'">
-                    <strong>Warning</strong>: These settings do not apply when the popout player is configured to open in a new tab in the current browser window.
-                </div>
+                <div class="alert alert-warning text-small" ng-hide="options.behavior.target === 'window'" get-message="OptionsBehaviorTabWarning"></div>
 
                 <div ng-show="options.behavior.target === 'window'">
-                    <div class="alert alert-secondary text-small">
-                        <strong>Note</strong>: This setting is per-device. If you have YouTube Popout Player installed on multiple devices, you can configure the size for each device.
-                    </div>
 
                     <div class="input-field">
                         <label>
                             <input type="radio" name="size" value="current" ng-model="options.size.mode" ng-required>
-                            <span>Use Original Player Size</span>
-                            <p class="input-hint">The popout player will be sized to match the original YouTube video player. <strong>This is the default setting.</strong></p>
+                            <span get-message="OptionsSizeModeCurrentLabel"></span>
+                            <p class="input-hint" get-message="OptionsSizeModeCurrentDescription"></p>
                         </label>
                     </div>
 
                     <div class="input-field mar-b-0">
                         <label>
                             <input type="radio" name="size" value="custom" ng-model="options.size.mode" ng-required>
-                            <span>Set Custom Dimensions</span><br/>
-                            <p class="input-hint">Use this setting to specify dimensions (either in pixels or percentages) for the popout player.</p>
+                            <span get-message="OptionsSizeModeCustomLabel"></span><br/>
+                            <p class="input-hint" get-message="OptionsSizeModeCustomDescription"></p>
                         </label>
                     </div>
 
@@ -79,10 +67,10 @@
 
                                 <div class="col">
                                     <div class="input-field">
-                                        <label for="units">Dimension Units</label>
+                                        <label for="units" get-message="DimensionUnitsLabel"></label>
                                         <select class="input-lg" name="units" id="units" ng-model="options.size.units" ng-required>
-                                            <option value="pixels">Pixels (px)</option>
-                                            <option value="percentage">Percentage (%)</option>
+                                            <option value="pixels" get-message="DimensionUnitsPixelsOptionLabel"></option>
+                                            <option value="percentage" get-message="DimensionUnitsPercentageOptionLabel"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -93,30 +81,30 @@
 
                                 <div class="col">
                                     <div class="input-field" ng-class="{'input-invalid': form.width.$invalid}">
-                                        <label for="width">Width</label>
+                                        <label for="width" get-message="WidthLabel"></label>
                                         <div class="input-group">
-                                            <input type="number" class="input-lg" name="width" id="width" ng-min="sizeMin('width')" ng-max="sizeMax('width')" placeholder="Width" ng-model="options.size.width" ng-required="options.size.mode === 'custom'">
+                                            <input type="number" class="input-lg" name="width" id="width" ng-min="sizeMin('width')" ng-max="sizeMax('width')" placeholder="Width" ng-model="options.size.width" ng-model-options="{ debounce: 500 }" ng-required="options.size.mode === 'custom'">
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
                                         <div ng-messages="form.width.$error" role="alert">
-                                            <p class="input-hint" ng-message="required">This field is required</p>
-                                            <p class="input-hint" ng-message="min">The value of this field cannot be less than <strong>{{sizeMin('width')}}</strong></p>
-                                            <p class="input-hint" ng-message="max">The value of this field cannot be more than <strong>{{sizeMax('width')}}</strong></p>
+                                            <p class="input-hint" ng-message="required" get-message="FieldRequiredMessage"></p>
+                                            <p class="input-hint" ng-message="min" get-message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('width')}}"></p>
+                                            <p class="input-hint" ng-message="max" get-message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('width')}}"></p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col">
                                     <div class="input-field" ng-class="{'input-invalid': form.height.$invalid}">
-                                        <label for="inputPassword4">Height</label>
+                                        <label for="inputPassword4" get-message="Height"></label>
                                         <div class="input-group">
-                                            <input type="number" class="input-lg" name="height" id="height" ng-min="sizeMin('height')" ng-max="sizeMax('height')" placeholder="Height" ng-model="options.size.height" ng-required="options.size.mode === 'custom'">
+                                            <input type="number" class="input-lg" name="height" id="height" ng-min="sizeMin('height')" ng-max="sizeMax('height')" placeholder="Height" ng-model="options.size.height" ng-model-options="{ debounce: 500 }" ng-required="options.size.mode === 'custom'">
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
                                         <div ng-messages="form.height.$error" role="alert">
-                                            <p class="input-hint" ng-message="required">This field is required</p>
-                                            <p class="input-hint" ng-message="min">The value of this field cannot be less than <strong>{{sizeMin('height')}}</strong></p>
-                                            <p class="input-hint" ng-message="max">The value of this field cannot be more than <strong>{{sizeMax('height')}}</strong></p>
+                                            <p class="input-hint" ng-message="required" get-message="FieldRequiredMessage"></p>
+                                            <p class="input-hint" ng-message="min" get-message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('height')}}"></p>
+                                            <p class="input-hint" ng-message="max" get-message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('height')}}"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -125,15 +113,15 @@
                                     <table class="table-bordered">
                                         <tbody>
                                             <tr>
-                                                <td>Current Screen Resolution</td>
+                                                <td get-message="InfoCurrentScreenResolutionLabel"></td>
                                                 <td class="text-bold" ng-bind-html="resolution"></td>
                                             </tr>
                                             <tr ng-show="options.size.units === 'percentage'">
-                                                <td>Popout Player Window Size</td>
+                                                <td get-message="InfoPopoutPlayerWindowSizeLabel"></td>
                                                 <td class="text-bold" ng-bind-html="showInfo('dimensions')"></td>
                                             </tr>
                                             <tr>
-                                                <td>Popout Player Aspect Ratio</td>
+                                                <td get-message="InfoPopoutPlayerAspectRatioLabel"></td>
                                                 <td class="text-bold" ng-bind-html="showInfo('aspectRatio')"></td>
                                             </tr>
                                         </tbody>
@@ -149,12 +137,17 @@
 
             </fieldset>
 
+            <div class="alert" ng-class="alert.type" ng-repeat="alert in alerts">
+                {{alert.message}}
+                <a class="close" ng-click="clearAlert($index)">&times;</a>
+            </div>
+
             <div class="row">
                 <div class="col-6">
-                    <button class="button button-block" ng-click="save()" ng-disabled="form.$invalid">Save Settings</button>
+                    <button class="button button-block" ng-click="save()" ng-disabled="form.$invalid" get-message="ButtonSaveLabel"></button>
                 </div>
                 <div class="col-6">
-                    <button class="button button-block button-danger" ng-click="confirmReset()">Reset to Defaults</button>
+                    <button class="button button-block button-danger" ng-click="confirmReset()" get-message="ButtonResetLabel"></button>
                 </div>
             </div>
 
@@ -166,18 +159,18 @@
 
                 <div class="row">
                     <div class="col">
-                        <h3 class="mar-b-md">Confirm Settings Reset</h3>
-                        <p>This will <strong>reset all settings</strong> for YouTube Popout Player on this compouter to their default values.</p>
+                        <h3 class="mar-b-md" get-message="ConfirmSettingsResetHeading"></h3>
+                        <p get-message="ConfirmSettingsResetText"></p>
                         <hr />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
-                        <button type="button" class="button-block" ng-click="reset()">Yes, I'm sure</button>
+                        <button type="button" class="button-block" ng-click="reset()" get-message="ButtonConfirmResetLabel"></button>
                     </div>
                     <div class="col">
-                        <button type="button" class="button-block button-secondary" ng-click="cancelReset()">No, I changed my mind</button>
+                        <button type="button" class="button-block button-secondary" ng-click="cancelReset()" get-message="ButtonCancelResetLabel"></button>
                     </div>
                 </div>
 
