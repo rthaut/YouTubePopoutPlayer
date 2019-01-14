@@ -8,7 +8,12 @@
         <title>YouTube Popout Player Options</title>
     </head>
 
-    <body>
+    <body class="pad-y-sm pad-x-0">
+
+        <div class="alert" ng-class="alert.type" ng-repeat="alert in alerts">
+            {{alert.message}}
+            <a class="close" ng-click="clearAlert($index)">&times;</a>
+        </div>
 
         <form name="form" class="container-fluid">
 
@@ -149,11 +154,36 @@
                     <button class="button button-block" ng-click="save()" ng-disabled="form.$invalid">Save Settings</button>
                 </div>
                 <div class="col-6">
-                    <button class="button button-block button-danger" ng-click="reset()">Reset to Defaults</button>
+                    <button class="button button-block button-danger" ng-click="confirmReset()">Reset to Defaults</button>
                 </div>
             </div>
 
         </form>
+
+        <dialog id="ResetConfirmDialog">
+
+            <div class="container">
+
+                <div class="row">
+                    <div class="col">
+                        <h3 class="mar-b-md">Confirm Settings Reset</h3>
+                        <p>This will <strong>reset all settings</strong> for YouTube Popout Player on this compouter to their default values.</p>
+                        <hr />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="button-block" ng-click="reset()">Yes, I'm sure</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="button-block button-secondary" ng-click="cancelReset()">No, I changed my mind</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </dialog>
 
     </body>
 

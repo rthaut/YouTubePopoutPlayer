@@ -15,6 +15,12 @@ app.controller('OptionsController', ['$scope', function ($scope) {
     $scope.options = OPTION_DEFAULTS;
     $scope.resolution = window.screen.width + ' &times; ' + window.screen.height;
 
+    $scope.alerts = [];
+    $scope.clearAlert = function ($index) {
+        console.log('Clearing Alert ' + $index, $scope.alerts[$index]);
+        $scope.alerts.splice($index, 1);
+    };
+
     /**
      * Caches (and restores) values related to custom dimensions when changing units
      */
@@ -179,6 +185,39 @@ app.controller('OptionsController', ['$scope', function ($scope) {
         return 0;
     };
 
+    function initDialog(dialog) {
+        if (typeof dialogPolyfill !== 'undefined') {
+            /* global dialogPolyfill */
+            dialogPolyfill.registerDialog(dialog);
+        }
+    }
+
+    $scope.showDialog = function (id) {
+        const dialog = document.querySelector(`#${id}`);
+        initDialog(dialog);
+
+        if (!dialog.open) {
+            dialog.showModal();
+        }
+    };
+
+    $scope.closeDialog = function (id) {
+        const dialog = document.querySelector(`#${id}`);
+        initDialog(dialog);
+
+        if (dialog.open) {
+            dialog.close();
+        }
+    };
+
+    $scope.confirmReset = function () {
+        $scope.showDialog('ResetConfirmDialog');
+    };
+
+    $scope.cancelReset = function () {
+        $scope.closeDialog('ResetConfirmDialog');
+    };
+
     /**
      * Resets all options to the extension defaults
      * TODO: if this method is going to stay, it currently does NOT refresh the $scope for some reason...
@@ -186,14 +225,17 @@ app.controller('OptionsController', ['$scope', function ($scope) {
     $scope.reset = function () {
         console.log('OptionsController.clear()');
 
-        // TODO: confirm() is bad; replace with a modal
-        if (window.confirm('Are you sure you want to clear local storage?')) {
-            browser.storage.local.clear().then(() => {
-                $scope.load();
-                // TODO: alert() is bad; replace with a modal (or an alert div)
-                window.alert('Local storage cleared successfully');
+        browser.storage.local.clear().then(() => {
+            $scope.options = OPTION_DEFAULTS;
+            $scope.load();
+            $scope.alerts.push({
+                'message': 'All settings reset to default values',
+                'type': 'alert-success'
             });
-        }
+            $scope.closeDialog('ResetConfirmDialog');
+        }).finally(() => {
+            $scope.$apply();
+        });
     };
 
     /**
@@ -207,12 +249,18 @@ app.controller('OptionsController', ['$scope', function ($scope) {
         console.log('OptionsController.save() :: Options to save to Local Storage', _options);
 
         browser.storage.local.set(_options).then(() => {
-            // TODO: alert() is bad; replace with a modal (or an alert div)
-            window.alert('All settings saved to local storage');
+            $scope.alerts.push({
+                'message': 'All settings saved successfully',
+                'type': 'alert-success'
+            });
         }).catch(err => {
             console.error('Failed to save settings to local storage', err);
-            // TODO: alert() is bad; replace with a modal (or an alert div)
-            window.alert('Failed to save settings to local storage: ' + err);
+            $scope.alerts.push({
+                'message': 'Failed to save settings: ' + err,
+                'type': 'alert-danger'
+            });
+        }).finally(() => {
+            $scope.$apply();
         });
     };
 

@@ -29,6 +29,13 @@
         "dist/shoelace.css",
         "dist/shoelace.js"
       ]
+    },
+    {
+      "module": "dialog-polyfill",
+      "entry": [
+        "dialog-polyfill.css",
+        "dialog-polyfill.js"
+      ]
     }
   ],
   "production": [
@@ -60,6 +67,13 @@
       "entry": [
         "dist/shoelace.css",
         "dist/shoelace.js"
+      ]
+    },
+    {
+      "module": "dialog-polyfill",
+      "entry": [
+        "dialog-polyfill.css",
+        "dialog-polyfill.js"
       ]
     }
   ]
