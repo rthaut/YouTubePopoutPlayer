@@ -10,18 +10,6 @@
       "protocol": "ms-browser-extension://"
     }
   },
-  "vendor_files": [
-    "./node_modules/angular/angular-csp.css",
-    "./node_modules/angular/angular.min.js",
-    "./node_modules/angular-messages/angular-messages.min.js",
-    "./node_modules/angular-sanitize/angular-sanitize.min.js",
-    "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-    "./node_modules/bootstrap/dist/js/bootstrap.min.js",
-    "./node_modules/jquery/dist/jquery.min.js",
-    "./node_modules/shoelace-css/dist/shoelace.css",
-    "./node_modules/shoelace-css/dist/shoelace.js",
-    "./node_modules/webextension-polyfill/dist/browser-polyfill.min.js"
-  ],
   "plugin_options": {
     "uglify": {
       "compress": {

@@ -1,0 +1,66 @@
+{
+  "development": [
+    {
+      "module": "webextension-polyfill",
+      "entry": "dist/browser-polyfill.js"
+    },
+    {
+      "module": "jquery",
+      "entry": "dist/jquery.js"
+    },
+    {
+      "module": "angular",
+      "entry": [
+        "angular-csp.css",
+        "angular.js"
+      ]
+    },
+    {
+      "module": "angular-messages",
+      "entry": "angular-messages.js"
+    },
+    {
+      "module": "angular-sanitize",
+      "entry": "angular-sanitize.js"
+    },
+    {
+      "module": "shoelace-css",
+      "entry": [
+        "dist/shoelace.css",
+        "dist/shoelace.js"
+      ]
+    }
+  ],
+  "production": [
+    {
+      "module": "webextension-polyfill",
+      "entry": "dist/browser-polyfill.min.js"
+    },
+    {
+      "module": "jquery",
+      "entry": "dist/jquery.min.js"
+    },
+    {
+      "module": "angular",
+      "entry": [
+        "angular-csp.css",
+        "angular.min.js"
+      ]
+    },
+    {
+      "module": "angular-messages",
+      "entry": "angular-messages.min.js"
+    },
+    {
+      "module": "angular-sanitize",
+      "entry": "angular-sanitize.min.js"
+    },
+    {
+      "module": "shoelace-css",
+      "entry": [
+        "dist/shoelace.css",
+        "dist/shoelace.js"
+      ]
+    }
+  ]
+}

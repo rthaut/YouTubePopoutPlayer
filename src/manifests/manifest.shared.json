@@ -27,7 +27,7 @@
         "*://*.youtube-nocookie.com/"
       ],
       "js": [
-        "vendor/browser-polyfill.min.js",
+        "vendor/webextension-polyfill/dist/browser-polyfill.min.js",
         "scripts/content.js"
       ],
       "run_at": "document_end"
@@ -36,7 +36,7 @@
 
   "background": {
     "scripts": [
-      "vendor/browser-polyfill.min.js",
+      "vendor/webextension-polyfill/dist/browser-polyfill.min.js",
       "scripts/background.js"
     ]
   },

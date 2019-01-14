@@ -1,4 +1,7 @@
-/* global require, process */
+/* global process */
+const env = process.env.NODE_ENV || 'development';
+
+/* global require */
 const gulp = require('gulp');
 
 const pkg = require('./package.json');
@@ -10,6 +13,7 @@ const path = require('path');
 
 // webpack plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
 
 // load all plugins from package development dependencies
 const $ = require('gulp-load-plugins')({
@@ -18,7 +22,6 @@ const $ = require('gulp-load-plugins')({
     'rename': {
         'ansi-colors': 'colors',
         'fancy-log': 'log',
-        'gulp-if': 'gulpIf',
         'merge-stream': 'merge',
         'rollup-stream': 'rollup',
         'vinyl-buffer': 'buffer',
@@ -56,7 +59,7 @@ function lint(dir, fix = true, failOnError = true) {
             'fix': fix
         }),
         $.eslint.format(),
-        $.gulpIf(failOnError, $.eslint.failOnError()),
+        $.if(failOnError, $.eslint.failOnError()),
     ],
     err => { if (err) $.log.error(`${$.colors.red('Function Error [\'lint\']')}: ${err.message}`); });
 }
@@ -70,7 +73,7 @@ function getWebpackConfig(dir) {
     // NOTE: the webpack.config.js file contains basic configuration that does not require any dynamic values
     const config = require(`${dir}/webpack.config.js`);
 
-    switch (process.env.NODE_ENV) {
+    switch (env) {
         case 'production':
             config.mode = 'production';
             config.devtool = 'none';
@@ -87,18 +90,32 @@ function getWebpackConfig(dir) {
     const plugins = config.plugins || [];
 
     folders(dir).map((folder) => {
+        const entryHTML = `${dir}/${folder}/${folder}.html`;
+        const entryJS = `${dir}/${folder}/${folder}.js`;
+
         // define an entry point for each folder that has a matching .js and .html files
-        if (fs.existsSync(`${dir}/${folder}/${folder}.js`) && fs.existsSync(`${dir}/${folder}/${folder}.html`)) {
-            entry[folder] = `${dir}/${folder}/${folder}.js`;
+        if (fs.existsSync(entryJS) && fs.existsSync(entryHTML)) {
+            entry[folder] = entryJS;
 
             // one html-webpack-plugin instance is needed for each entry point, as the plugin does not support template strings
             // (see: https://github.com/jantimon/html-webpack-plugin/issues/218#issuecomment-183066602)
             plugins.push(new HtmlWebpackPlugin({
-                'template': `${dir}/${folder}/${folder}.html`,
+                'template': entryHTML,
                 'chunks': [folder],     // ensure this instance only builds when processing the corresponding folder's entry point
                 'filename': `${folder}/${folder}.html`  // equivalent to '[name]/[name].html'
             }));
+
+            // copy external/vendor files needed for each entry point
+            if (fs.existsSync(`${dir}/${folder}/externals.json`)) {
+                plugins.push(new HtmlWebpackExternalsPlugin({
+                    'externals': require(`${dir}/${folder}/externals.json`)[env],
+                    'outputPath': '../vendor',
+                    'publicPath': '../',
+                    'files': [`${folder}/${folder}.html`]
+                }));
+            }
         }
+
     });
 
     return Object.assign(config, { 'entry': entry, 'plugins': plugins });
@@ -228,12 +245,36 @@ gulp.task('build:scripts', gulp.series('lint:scripts', () => {
 }));
 
 
-gulp.task('build:vendor', () => {
-    return $.pump([
-        gulp.src(cfg.vendor_files),
-        ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/vendor`)),
-    ],
-    err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:vendor\']')}: ${err.message}`); });
+// TODO: should this use gulp functionality instead (i.e. `gulp.src`, `gulp.dest`, etc.)?
+// TODO: should this be a prerequisite for the 'build:scripts' task?
+gulp.task('copy:scripts:vendor', done => {
+    Object.keys(cfg.supported_browsers).map(browser => {
+        const manifest = JSON.parse(fs.readFileSync(`./dist/${browser}/manifest.json`));
+        let files = [];
+
+        // get list of vendor files for content scripts
+        manifest.content_scripts.forEach(script => {
+            files = files.concat(files, script.js.filter(file => file.indexOf('vendor/') === 0));
+        });
+
+        // get list of vendor files for background scripts
+        files = files.concat(files, manifest.background.scripts.filter(file => file.indexOf('vendor/') === 0));
+
+        // de-duplicate the file list
+        files = Array.from(new Set(files));
+        //$.log.info(`Vendor Files (${browser}):\n\t- ` + files.join('\n\t- '));
+
+        files.forEach(file => {
+            const src = path.resolve(file.replace('vendor/', 'node_modules/'));
+            const dest = path.resolve(`./dist/${browser}/${file}`);
+            if (!fs.existsSync(dest)) {
+                //$.log.info(`Copying "${src}" to "${dest}"`);
+                fs.copyFileSync(src, dest);
+            }
+        });
+    });
+
+    done();
 });
 
 
@@ -269,7 +310,7 @@ gulp.task('build', gulp.parallel(
     'build:manifest',
     'build:pages',
     'build:scripts',
-    'build:vendor'
+    'copy:scripts:vendor'
 ));
 
 gulp.task('watch', done => {
