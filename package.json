@@ -10,6 +10,7 @@
   "scripts": {
     "clean": "trash ./dist",
     "build": "gulp build",
+    "test": "run-s clean build firefox:lint",
     "watch": "gulp build && gulp watch",
     "package": "cross-env NODE_ENV=production gulp package",
     "firefox:lint": "web-ext lint --source-dir=./dist/firefox",
@@ -59,6 +60,7 @@
     "merge-stream": "^1.0.1",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
+    "npm-run-all": "^4.1.5",
     "pump": "^3.0.0",
     "raw-loader": "^1.0.0",
     "rollup-stream": "^1.24.1",
