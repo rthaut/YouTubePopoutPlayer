@@ -1,4 +1,7 @@
 ## Overview
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/rthaut/YouTubePopoutPlayer.svg)](https://greenkeeper.io/)
+
 This extension provides a simple way to open any YouTube video (including videos embedded in other sites/pages) in a "popout" window which you can freely position and resize.
 
 ![YouTube Popout Player Promotional Image](https://raw.githubusercontent.com/rthaut/YouTubePopoutPlayer/master/resources/screenshots/preview.png)
