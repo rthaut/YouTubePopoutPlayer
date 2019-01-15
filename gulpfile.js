@@ -15,7 +15,6 @@ const $ = require('gulp-load-plugins')({
         'gulp-browser-i18n-localize': 'localize',
         'gulp-if': 'gulpIf',
         'rollup-stream': 'rollup',
-        'run-sequence': 'sequence',
         'vinyl-buffer': 'buffer',
         'vinyl-source-stream': 'source',
     },
@@ -135,7 +134,7 @@ gulp.task('lint:scripts', () => {
         $.eslint.format(),
     ]);
 });
-gulp.task('build:scripts', ['lint:scripts'], () => {
+gulp.task('build:scripts', gulp.series('lint:scripts', () => {
     const package = require('./package.json');
     return merge(folders(_folders.scripts).map((folder) => {
         return $.pump([
@@ -165,7 +164,7 @@ gulp.task('build:scripts', ['lint:scripts'], () => {
             gulp.dest('./dist/webextension/scripts'),
         ]);
     }));
-});
+}));
 
 
 gulp.task('build:vendor', () => {
@@ -259,32 +258,31 @@ gulp.task('dist:webextension', () => {
 // primary development tasks
 // =========================
 
-gulp.task('lint', [
+gulp.task('lint', gulp.parallel(
     'lint:scripts',
-]);
+));
 
-gulp.task('build', [
+gulp.task('build', gulp.parallel(
     'build:locales',
     'build:logo',
     'build:manifest',
     'build:scripts',
     'build:vendor',
-]);
+));
 
-gulp.task('dist', (callback) => {
+gulp.task('dist', gulp.series((done) => {
     options.uglify.compress.drop_console = true;
+    done();
+}, 'clean', 'build', 'dist:userscript', 'dist:webextension'));
 
-    $.sequence('clean', 'build', 'dist:userscript', 'dist:webextension', callback);
-});
-
-gulp.task('watch', ['build'], () => {
+gulp.task('watch', gulp.series('build', () => {
     options.uglify.compress.drop_console = false;
 
     gulp.watch('./manifest.json', ['build:manifest']);
     gulp.watch('./resources/logo.svg', ['build:logo']);
     gulp.watch(path.join(_folders.locales, '/**/*'), ['build:locales']);
     gulp.watch(path.join(_folders.scripts, '/**/*.js'), ['build:scripts']);
-});
+}));
 
 // default task (alias build)
-gulp.task('default', ['build']);
+gulp.task('default', gulp.task('build'));
