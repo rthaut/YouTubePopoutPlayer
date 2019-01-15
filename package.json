@@ -8,6 +8,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "build": "gulp build",
+    "test": "gulp build && web-ext lint --source-dir=./dist/webextension",
     "watch": "gulp watch",
     "start:firefox": "web-ext run --source-dir ./dist/webextension --browser-console"
   },
@@ -19,6 +20,7 @@
     "url": "https://github.com/rthaut/YouTubePopoutPlayer/issues"
   },
   "devDependencies": {
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-browser-i18n-localize": "^1.0.0",
     "gulp-concat": "^2.6.1",
