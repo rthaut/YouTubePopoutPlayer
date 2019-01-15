@@ -30,7 +30,7 @@
     "bootstrap": "^4.2.1",
     "dialog-polyfill": "^0.4.10",
     "jquery": "^3.3.1",
-    "webextension-polyfill": "^0.2.1"
+    "webextension-polyfill": "^0.3.1"
   },
   "devDependencies": {
     "angular-messages": "^1.7.5",
@@ -43,7 +43,7 @@
     "gulp-browser-i18n-localize": "^1.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-ejs": "^3.3.0",
-    "gulp-eslint": "^4.0.2",
+    "gulp-eslint": "^5.0.0",
     "gulp-folders": "^1.1.0",
     "gulp-header": "^2.0.7",
     "gulp-if": "^2.0.2",
