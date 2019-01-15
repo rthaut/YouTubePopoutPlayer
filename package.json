@@ -8,6 +8,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "build": "gulp build",
+    "test": "gulp build && web-ext lint --source-dir=./dist/firefox",
     "watch": "gulp watch",
     "start:firefox": "web-ext run --source-dir ./dist/webextension --browser-console"
   },
