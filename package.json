@@ -21,13 +21,13 @@
   },
   "devDependencies": {
     "del": "^3.0.0",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-browser-i18n-localize": "^1.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-crx-pack": "^1.0.2",
-    "gulp-debug": "^3.2.0",
+    "gulp-debug": "^4.0.0",
     "gulp-ejs": "^3.1.2",
-    "gulp-eslint": "^4.0.2",
+    "gulp-eslint": "^5.0.0",
     "gulp-folders": "^1.1.0",
     "gulp-header": "^2.0.5",
     "gulp-if": "^2.0.2",
@@ -46,6 +46,6 @@
     "web-ext": "^2.5.0"
   },
   "dependencies": {
-    "webextension-polyfill": "^0.2.1"
+    "webextension-polyfill": "^0.3.1"
   }
 }
