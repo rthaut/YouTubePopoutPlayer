@@ -7,17 +7,60 @@ import Options from '../../helpers/Options';
 import Utils from '../../helpers/utils';
 
 /* global angular */
-const app = angular.module('OptionsApp', ['ngMessages', 'ngSanitize', 'browser.i18n']);
+const app = angular.module('OptionsApp', ['ngAnimate', 'ngMessages', 'ngSanitize', 'browser.i18n']);
 
-app.controller('OptionsController', ['$scope', function ($scope) {
+app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $timeout) {
 
     $scope.cache = {};
-    $scope.options = OPTION_DEFAULTS;
+
+    $scope.options = angular.copy(OPTION_DEFAULTS);
+
     $scope.resolution = window.screen.width + ' &times; ' + window.screen.height;
 
     $scope.alerts = [];
-    $scope.clearAlert = function ($index) {
-        $scope.alerts.splice($index, 1);
+
+    /**
+     * Removes an alert (and cancels the timeout, if applicable)
+     * @param {object} alert the alert object to remove
+     */
+    $scope.removeAlert = function (alert) {
+        const alerts = $scope.alerts.filter(a => angular.equals(a, alert));
+
+        for (const a of alerts) {
+            if (a.timeout !== undefined) {
+                $timeout.cancel(a.timeout);
+            }
+        }
+
+        $scope.alerts = $scope.alerts.filter(a => !angular.equals(a, alert));
+    };
+
+    /**
+     * Creates an alert to display inline on the form
+     * @param {string} message
+     * @param {string} type
+     * @param {boolean} dismissible
+     * @param {number} duration
+     */
+    $scope.createAlert = function(message, type = 'default', dismissible = true, duration = null) {
+        const alert = {
+            'type': type,
+            'message': message,
+            'dismissible': dismissible
+        };
+
+        if (duration !== null) {
+            duration = parseInt(duration, 10);
+            if (duration > 0) {
+                alert.duration = duration;
+                alert.timeout = $timeout($scope.removeAlert, duration * 1000, true, alert);
+            }
+        }
+
+        // clear out any existing identical alerts
+        $scope.removeAlert(alert);
+
+        $scope.alerts.push(alert);
     };
 
     /**
@@ -72,6 +115,12 @@ app.controller('OptionsController', ['$scope', function ($scope) {
     };
     $scope.load();
 
+    /**
+     * Computes the greatest common denominator for a pair of numbers
+     * @param {number} a the first number
+     * @param {number} b the second number
+     * @returns {number} the greatest common denominator
+     */
     function gcd(a, b) {
         return (b == 0) ? a : gcd(b, a % b);
     }
@@ -182,8 +231,8 @@ app.controller('OptionsController', ['$scope', function ($scope) {
     };
 
     function initDialog(dialog) {
+        /* global dialogPolyfill */
         if (typeof dialogPolyfill !== 'undefined') {
-            /* global dialogPolyfill */
             dialogPolyfill.registerDialog(dialog);
         }
     }
@@ -216,19 +265,23 @@ app.controller('OptionsController', ['$scope', function ($scope) {
 
     /**
      * Resets all options to the extension defaults
-     * TODO: if this method is going to stay, it currently does NOT refresh the $scope for some reason...
      */
     $scope.reset = function () {
-        console.log('OptionsController.clear()');
+        console.log('OptionsController.reset()');
 
-        browser.storage.local.clear().then(() => {
-            $scope.options = OPTION_DEFAULTS;
-            $scope.alerts.push({
-                'message': browser.i18n.getMessage('OptionsResetSuccessMessage'),
-                'type': 'alert-success'
-            });
-            $scope.closeDialog('ResetConfirmDialog');
+        $scope.options = angular.copy(OPTION_DEFAULTS);
+
+        // convert nested objects into top level properties
+        const _options = Options.ConvertForStorage(angular.copy($scope.options));
+        console.log('OptionsController.reset() :: Options to save to Local Storage', _options);
+
+        browser.storage.local.set(_options).then(() => {
+            $scope.createAlert(browser.i18n.getMessage('OptionsResetSuccessMessage'), 'success', true, 5);
+        }).catch(err => {
+            console.error('Failed to reset settings to default values', err);
+            $scope.createAlert(browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage'), 'danger', true);
         }).finally(() => {
+            $scope.closeDialog('ResetConfirmDialog');
             $scope.$apply();
         });
     };
@@ -244,16 +297,10 @@ app.controller('OptionsController', ['$scope', function ($scope) {
         console.log('OptionsController.save() :: Options to save to Local Storage', _options);
 
         browser.storage.local.set(_options).then(() => {
-            $scope.alerts.push({
-                'message': browser.i18n.getMessage('OptionsSaveSuccessMessage'),
-                'type': 'alert-success'
-            });
+            $scope.createAlert(browser.i18n.getMessage('OptionsSaveSuccessMessage'), 'success', true, 5);
         }).catch(err => {
             console.error('Failed to save settings to local storage', err);
-            $scope.alerts.push({
-                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err),
-                'type': 'alert-danger'
-            });
+            $scope.createAlert(browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage'), 'danger', true);
         }).finally(() => {
             $scope.$apply();
         });
