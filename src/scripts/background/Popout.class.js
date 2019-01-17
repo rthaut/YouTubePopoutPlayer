@@ -44,7 +44,16 @@ const Popout = (() => {
         },
 
         'openTab': function (url) {
+            console.group('[Background] Popout.openTab()', url);
 
+            const promise = browser.tabs.create({
+                'active': true,                // TODO: should this be configurable?
+                'url': url
+            });
+
+            console.log('[Background] Popout.openTab() :: Return [Promise]', promise);
+            console.groupEnd();
+            return promise;
         },
 
         'openWindow': async function (url, width, height) {
