@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "angular": "^1.7.5",
+    "angular-animate": "^1.7.5",
     "angular-browser-i18n": "^2.0.1",
     "angular-messages": "^1.7.5",
     "angular-sanitize": "^1.7.5",
