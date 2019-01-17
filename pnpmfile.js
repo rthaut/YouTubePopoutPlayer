@@ -1,4 +1,5 @@
-export default {
+/* global module */
+module.exports = {
     'hooks': {
         readPackage(pkg) {
             switch (pkg.name) {
