@@ -5,7 +5,7 @@ browser.browserAction.onClicked.addListener(() => {
 });
 
 browser.runtime.onMessage.addListener((message, sender) => {
-    console.group('[Background] Runtime Message', message, sender);
+    console.log('[Background] Runtime Message', message, sender);
 
     if (message.action !== undefined) {
 
@@ -13,11 +13,10 @@ browser.runtime.onMessage.addListener((message, sender) => {
             case 'open-popout': return Popout.open(message.data);
         }
 
-        console.group('[Background] Runtime Message :: Unhandled Action');
+        console.log('[Background] Runtime Message :: Unhandled Action');
         return true;
     }
 
-    console.groupEnd();
 });
 
 
