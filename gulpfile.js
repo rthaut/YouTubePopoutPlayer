@@ -123,9 +123,9 @@ function getWebpackConfig(dir) {
             }));
 
             // copy external/vendor files needed for each entry point
-            if (fs.existsSync(`${dir}/${folder}/externals.json`)) {
+            if (fs.existsSync(`${dir}/${folder}/externals.js`)) {
                 plugins.push(new HtmlWebpackExternalsPlugin({
-                    'externals': require(`${dir}/${folder}/externals.json`)[env],
+                    'externals': require(`${dir}/${folder}/externals.js`),
                     'outputPath': '../vendor',
                     'publicPath': '../',
                     'files': [`${folder}/${folder}.html`]
