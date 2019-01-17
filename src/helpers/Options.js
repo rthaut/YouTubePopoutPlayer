@@ -97,12 +97,7 @@ const Options = (() => {
             return options;
         }
 
-        // TODO: create helper method for getting an option directly from storage (with `domain` and `key` as params)?
-
-        // TODO: create helper method for getting all options directly from storage (with optional `domain` param to limit scope)?
-
         // TODO: create helper method for saving an option to storage? maybe multiple methods for both structures?
-
         // TODO: create helper method for saving all options to storage? maybe multiple methods for both structures?
     };
 
