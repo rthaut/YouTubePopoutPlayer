@@ -1,4 +1,13 @@
 {
+  "OptionsPageTitle": {
+    "message": "$NAME$ Options",
+    "placeholders": {
+      "name": {
+        "content": "YouTube Popout Player"
+      }
+    }
+  },
+
   "OptionsPerDeviceWarning": {
     "message": "<strong>Note</strong>: All settings are per-device. If you have YouTube Popout Player installed on multiple devices, you can configure settings differently for each device."
   },
