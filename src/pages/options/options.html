@@ -83,7 +83,7 @@
                                     <div class="input-field" ng-class="{'input-invalid': form.width.$invalid}">
                                         <label for="width" get-message="WidthLabel"></label>
                                         <div class="input-group">
-                                            <input type="number" class="input-lg" name="width" id="width" ng-min="sizeMin('width')" ng-max="sizeMax('width')" placeholder="Width" ng-model="options.size.width" ng-model-options="{ debounce: 500 }" ng-required="options.size.mode === 'custom'">
+                                            <input type="number" class="input-lg" name="width" id="width" ng-min="sizeMin('width')" ng-max="sizeMax('width')" placeholder="Width" ng-model="options.size.width" ng-model-options="{ debounce: 500 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')">
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
                                         <div ng-messages="form.width.$error" role="alert">
@@ -98,7 +98,7 @@
                                     <div class="input-field" ng-class="{'input-invalid': form.height.$invalid}">
                                         <label for="inputPassword4" get-message="Height"></label>
                                         <div class="input-group">
-                                            <input type="number" class="input-lg" name="height" id="height" ng-min="sizeMin('height')" ng-max="sizeMax('height')" placeholder="Height" ng-model="options.size.height" ng-model-options="{ debounce: 500 }" ng-required="options.size.mode === 'custom'">
+                                            <input type="number" class="input-lg" name="height" id="height" ng-min="sizeMin('height')" ng-max="sizeMax('height')" placeholder="Height" ng-model="options.size.height" ng-model-options="{ debounce: 500 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')">
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
                                         <div ng-messages="form.height.$error" role="alert">
