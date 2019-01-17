@@ -5,6 +5,7 @@ const HTML5Player = (() => {
      */
     class HTML5Player {
 
+        // TODO: pass an ID (or array of IDs) for the container <video> element's container
         constructor() {
             console.group('HTML5Player()');
 
@@ -61,10 +62,12 @@ const HTML5Player = (() => {
         getWidth() {
             console.group('HTML5Player.getWidth()');
 
-            console.log('Return', this.player ? this.player.clientWidth : null);
+            const width = this.player ? this.player.clientWidth : null;
+
+            console.log('Return', width);
             console.groupEnd();
 
-            return this.player ? this.player.clientWidth : null;
+            return width;
         }
 
         /**
@@ -74,10 +77,12 @@ const HTML5Player = (() => {
         getHeight() {
             console.group('HTML5Player.getHeight()');
 
-            console.log('Return', this.player ? this.player.clientHeight : null);
+            const height = this.player ? this.player.clientHeight : null;
+
+            console.log('Return', height);
             console.groupEnd();
 
-            return this.player ? this.player.clientHeight : null;
+            return height;
         }
 
         /**
@@ -87,10 +92,12 @@ const HTML5Player = (() => {
         getTime() {
             console.group('HTML5Player.getTime()');
 
-            console.log('Return', this.player ? parseInt(this.player.currentTime, 10) : null);
+            const time = this.player ? parseInt(this.player.currentTime, 10) : null;
+
+            console.log('Return', time);
             console.groupEnd();
 
-            return this.player ? parseInt(this.player.currentTime, 10) : null;
+            return time;
         }
 
     }
