@@ -5,7 +5,7 @@
 
   "permissions": [
     "*://*.youtube.com/*",
-    "*://*.youtube-nocookie.com/",
+    "*://*.youtube-nocookie.com/*",
     "storage"
   ],
 

@@ -15,7 +15,7 @@
 
   "permissions": [
     "*://*.youtube.com/*",
-    "*://*.youtube-nocookie.com/",
+    "*://*.youtube-nocookie.com/*",
     "storage"
   ],
 
@@ -24,7 +24,7 @@
       "all_frames": true,
       "matches": [
         "*://*.youtube.com/*",
-        "*://*.youtube-nocookie.com/"
+        "*://*.youtube-nocookie.com/*"
       ],
       "js": [
         "vendor/webextension-polyfill/dist/browser-polyfill.min.js",
