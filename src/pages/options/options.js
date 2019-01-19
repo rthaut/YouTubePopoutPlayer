@@ -11,17 +11,17 @@ const app = angular.module('OptionsApp', ['ngAnimate', 'ngMessages', 'ngSanitize
 
 app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $timeout) {
 
+    $scope.alerts = [];
+
     $scope.cache = {};
 
     $scope.options = angular.copy(OPTION_DEFAULTS);
 
     $scope.resolution = window.screen.width + ' &times; ' + window.screen.height;
 
-    $scope.alerts = [];
-
     /**
      * Removes an alert (and cancels the timeout, if applicable)
-     * @param {object} alert the alert object to remove
+     * @param {Object} alert the alert object to remove
      */
     $scope.removeAlert = function (alert) {
         const alerts = $scope.alerts.filter(a => angular.equals(a, alert));
@@ -64,9 +64,9 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
     };
 
     /**
-     * Caches (and restores) values related to custom dimensions when changing units
+     * Creates/reset the object structure used for caching some options within the app
      */
-    $scope.cacheDimensions = function () {
+    var resetCache = function () {
         // create the object structure for caching dimensions
         $scope.cache.dimensions = {};
         ['pixels', 'percentage'].forEach(unit => {
@@ -75,6 +75,13 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
                 'height': null
             };
         });
+    };
+
+    /**
+     * Caches (and restores) values related to custom dimensions when changing units
+     */
+    $scope.cacheDimensions = function () {
+        resetCache();
 
         $scope.$watch('options.size.width', () => {
             if ($scope.form.width.$valid) {
@@ -121,15 +128,15 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
      * @param {number} b the second number
      * @returns {number} the greatest common denominator
      */
-    function gcd(a, b) {
+    var gcd = function (a, b) {
         return (b == 0) ? a : gcd(b, a % b);
-    }
+    };
 
     /**
      * Returns size data based on the user's custom dimension settings
      * @returns {Object} width, height, and ratio values
      */
-    function getSizeData() {
+    var getSizeData = function () {
         let width = angular.copy($scope.options.size.width);
         let height = angular.copy($scope.options.size.height);
         let ratio;
@@ -148,7 +155,7 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
             'height': height,
             'ratio': ratio
         };
-    }
+    };
 
     /**
      * Used to show certain calculated properties about the custom size
@@ -230,12 +237,12 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
         return 0;
     };
 
-    function initDialog(dialog) {
+    var initDialog = function (dialog) {
         /* global dialogPolyfill */
         if (typeof dialogPolyfill !== 'undefined') {
             dialogPolyfill.registerDialog(dialog);
         }
-    }
+    };
 
     $scope.showDialog = function (id) {
         const dialog = document.querySelector(`#${id}`);
@@ -269,13 +276,9 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
     $scope.reset = function () {
         console.log('OptionsController.reset()');
 
-        $scope.options = angular.copy(OPTION_DEFAULTS);
-
-        // convert nested objects into top level properties
-        const _options = Options.ConvertForStorage(angular.copy($scope.options));
-        console.log('OptionsController.reset() :: Options to save to Local Storage', _options);
-
-        browser.storage.local.set(_options).then(() => {
+        Options.InitLocalStorageDefaults().then(() => {
+            $scope.options = angular.copy(OPTION_DEFAULTS);
+            resetCache();
             $scope.createAlert(browser.i18n.getMessage('OptionsResetSuccessMessage'), 'success', true, 5);
         }).catch(err => {
             console.error('Failed to reset settings to default values', err);
@@ -292,11 +295,7 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
     $scope.save = function () {
         console.log('OptionsController.save()');
 
-        // convert nested objects into top level properties
-        const _options = Options.ConvertForStorage(angular.copy($scope.options));
-        console.log('OptionsController.save() :: Options to save to Local Storage', _options);
-
-        browser.storage.local.set(_options).then(() => {
+        Options.SetLocalOptions(angular.copy($scope.options)).then(() => {
             $scope.createAlert(browser.i18n.getMessage('OptionsSaveSuccessMessage'), 'success', true, 5);
         }).catch(err => {
             console.error('Failed to save settings to local storage', err);
