@@ -4,6 +4,9 @@ import Utils from '../../helpers/utils';
 
 const Popout = (() => {
 
+    const WIDTH_PADDING = 16;   // TODO: find a way to calculate this (or make it configurable)
+    const HEIGHT_PADDING = 40;  // TODO: find a way to calculate this (or make it configurable)
+
     const Popout = {
 
         'open': async function ({ id, list, time, width, height }) {
@@ -75,11 +78,10 @@ const Popout = (() => {
             }
 
             const promise = browser.windows.create({
-                // 'alwaysOnTop': true,         // TODO: not supported in Firefox, maybe supported in Chrome?
-                'width': width,
-                'height': height,               // TODO: it seems this needs to account for the window's frame (title bar)
+                'width': width + WIDTH_PADDING,     // manually increasing size to account for window frame
+                'height': height + HEIGHT_PADDING,  // manually increasing size to account for window frame
                 // 'titlePreface': 'YTPP :: ',  // TODO: this should be configurable
-                'type': 'popup',                // TODO: should this be configurable?
+                'type': 'popup',
                 'url': url
             });
 
