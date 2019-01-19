@@ -1,0 +1,17 @@
+{
+    "version": "0.1",
+    "language": "en",
+    "words": [
+        "dismissible",
+        "polyfill",
+        "popout",
+        "userscript",
+        "userscripts",
+        "webextension",
+        "webextensions",
+        "youtube"
+    ],
+    "flagWords": [
+        "hte"
+    ]
+}
