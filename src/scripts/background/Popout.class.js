@@ -7,7 +7,7 @@ const Popout = (() => {
     const Popout = {
 
         'open': async function ({ id, list, time, width, height }) {
-            console.group('[Background] Popout.open()', id, list, time, width, height);
+            console.log('[Background] Popout.open()', id, list, time, width, height);
 
             const attrs = {};
 
@@ -39,12 +39,11 @@ const Popout = (() => {
             }
 
             console.log('[Background] Popout.open() :: Return [Promise]', promise);
-            console.groupEnd();
             return promise;
         },
 
         'openTab': function (url) {
-            console.group('[Background] Popout.openTab()', url);
+            console.log('[Background] Popout.openTab()', url);
 
             const promise = browser.tabs.create({
                 'active': true,                // TODO: should this be configurable?
@@ -52,15 +51,14 @@ const Popout = (() => {
             });
 
             console.log('[Background] Popout.openTab() :: Return [Promise]', promise);
-            console.groupEnd();
             return promise;
         },
 
         'openWindow': async function (url, width, height) {
-            console.group('[Background] Popout.openWindow()', url, width, height);
+            console.log('[Background] Popout.openWindow()', url, width, height);
 
             const size = await Options.GetLocalOptionsForDomain('size');
-            console.group('[Background] Popout.openWindow() :: Size Options', size);
+            console.log('[Background] Popout.openWindow() :: Size Options', size);
 
             if (size.mode.toLowerCase() === 'custom') {
                 switch (size.units.toLowerCase()) {
@@ -86,12 +84,11 @@ const Popout = (() => {
             });
 
             console.log('[Background] Popout.openWindow() :: Return [Promise]', promise);
-            console.groupEnd();
             return promise;
         },
 
         'getURL': function (id, attrs) {
-            console.group('[Background] Popout.getURL()', id, attrs);
+            console.log('[Background] Popout.getURL()', id, attrs);
 
             var url = YOUTUBE_EMBED_URL + id + '?';
 
@@ -103,7 +100,6 @@ const Popout = (() => {
             }
 
             console.log('[Background] Popout.getURL() :: Return', url);
-            console.groupEnd();
             return url;
         }
 
