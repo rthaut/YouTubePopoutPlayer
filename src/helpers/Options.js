@@ -1,6 +1,21 @@
+import { OPTION_DEFAULTS } from '../helpers/constants';
+
 const Options = (() => {
 
     const Options = {
+
+        /**
+         * Resets all options in local storage to their default values
+         * @returns {Promise}
+         */
+        'InitLocalStorageDefaults': function () {
+            console.log('Options.InitDefaults()');
+
+            return browser.storage.local.clear().then(() => {
+                const options = this.ConvertForStorage(Object.assign({}, OPTION_DEFAULTS));
+                return browser.storage.local.set(options);
+            });
+        },
 
         /**
          * Converts options in a nested structure to a flat structure
@@ -95,10 +110,24 @@ const Options = (() => {
 
             console.log('Options.GetLocalOptionsForDomain() :: Return', options);
             return options;
+        },
+
+        /**
+         * Saves the options to local storage
+         * @param {Object} options options (in a nested structure)
+         * @returns {Promise}
+         */
+        'SetLocalOptions': function (options, convertForStorage = true) {
+            console.log('Options.SetLocalOptions()', options);
+
+            if (convertForStorage) {
+                options = this.ConvertForStorage(Object.assign({}, options));
+            }
+
+            return browser.storage.local.set(options);
         }
 
         // TODO: create helper method for saving an option to storage? maybe multiple methods for both structures?
-        // TODO: create helper method for saving all options to storage? maybe multiple methods for both structures?
     };
 
     return Options;
