@@ -10,8 +10,11 @@ browser.runtime.onMessage.addListener((message, sender) => {
 
     if (message.action !== undefined) {
 
-        switch (message.action) {
-            case 'open-popout': return Popout.open(message.data);
+        switch (message.action.toLowerCase()) {
+
+            case 'open-popout':
+                return Popout.open(message.data);
+
         }
 
         console.log('[Background] Runtime Message :: Unhandled Action');
