@@ -1,28 +1,27 @@
 const HTML5Player = (() => {
 
     /**
-     * Utility class for retrieving configuration settings from the HTML5 video player
+     * Utility class for working with HTML5 video players
      */
     class HTML5Player {
 
-        // TODO: pass an ID (or array of IDs) for the container <video> element's container
-        constructor() {
+        /**
+         * HTML 5 Video Player Helper Class
+         * @param {HTMLVideoElement} video the HTML5 <video> element
+         */
+        constructor(video = null) {
             console.group('HTML5Player()');
 
-            this.container = null;
-            this.player = null;
+            if (!video) {
+                console.log('Looking for first <video> element in DOM');
 
-            // find the video player's container and store a reference to it
-            this.container = document.getElementById('movie_player') || document.getElementById('player');
-            if (this.container) {
-                console.log('Found container', this.container);
-
-                // find the video player and store a reference to it
-                this.player = this.container.getElementsByTagName('video')[0];
-                if (this.player) {
-                    console.log('Found <video> element', this.player);
+                video = document.querySelector('video');
+                if (video) {
+                    console.log('Found <video> element', video);
                 }
             }
+
+            this.video = video;
 
             console.groupEnd();
         }
@@ -33,26 +32,25 @@ const HTML5Player = (() => {
         pause() {
             console.group('HTML5Player.pause()');
 
-            if (this.player) {
-                console.log('Pausing video player', this.player);
-                this.player.pause();
+            if (this.video) {
+                console.log('Pausing video player', this.video);
+                this.video.pause();
             }
 
             console.groupEnd();
         }
 
         /**
-         * Removes the HTML5 player's parent element from the DOM
+         * Gets the HTML5 <video> element
+         * @return {HTMLVideoElement}
          */
-        remove() {
-            console.group('HTML5Player.remove()');
+        getVideo() {
+            console.group('HTML5Player.getVideo()');
 
-            if (this.container) {
-                console.log('Removing container element', this.container);
-                this.container.remove();
-            }
-
+            console.log('Return', this.video);
             console.groupEnd();
+
+            return this.video;
         }
 
         /**
@@ -62,7 +60,7 @@ const HTML5Player = (() => {
         getWidth() {
             console.group('HTML5Player.getWidth()');
 
-            const width = this.player ? this.player.clientWidth : null;
+            const width = this.video ? this.video.clientWidth : null;
 
             console.log('Return', width);
             console.groupEnd();
@@ -77,7 +75,7 @@ const HTML5Player = (() => {
         getHeight() {
             console.group('HTML5Player.getHeight()');
 
-            const height = this.player ? this.player.clientHeight : null;
+            const height = this.video ? this.video.clientHeight : null;
 
             console.log('Return', height);
             console.groupEnd();
@@ -92,7 +90,7 @@ const HTML5Player = (() => {
         getTime() {
             console.group('HTML5Player.getTime()');
 
-            const time = this.player ? parseInt(this.player.currentTime, 10) : null;
+            const time = this.video ? parseInt(this.video.currentTime, 10) : null;
 
             console.log('Return', time);
             console.groupEnd();
