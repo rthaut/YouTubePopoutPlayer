@@ -1,3 +1,4 @@
+import Options from '../../helpers/Options';
 import Popout from './Popout.class';
 
 browser.browserAction.onClicked.addListener(() => {
@@ -19,4 +20,11 @@ browser.runtime.onMessage.addListener((message, sender) => {
 
 });
 
+browser.runtime.onInstalled.addListener(details => {
+    console.log('[Background] Extension Installed', details);
 
+    if (details.reason === 'install') {
+        console.log('[Background] Extension Installed :: Initializing Defaults for Options');
+        Options.InitLocalStorageDefaults();
+    }
+});
