@@ -4,8 +4,8 @@ const Options = (() => {
 
         /**
          * Converts options in a nested structure to a flat structure
-         * @param Object options the options to convert
-         * @returns Object the converted options
+         * @param {Object} options the options to convert
+         * @returns {Object} the converted options
          */
         'ConvertForStorage': function (options) {
             console.log('Options.ConvertForStorage()', options);
@@ -29,8 +29,8 @@ const Options = (() => {
 
         /**
          * Converts options in a flat structure to a nested structure
-         * @param Object options the options to convert
-         * @returns Object the converted options
+         * @param {Object} options the options to convert
+         * @returns {Object} the converted options
          */
         'ConvertFromStorage': function (options) {
             console.log('Options.ConvertFromStorage()', options);
