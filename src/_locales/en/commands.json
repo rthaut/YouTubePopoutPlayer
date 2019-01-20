@@ -1,4 +1,9 @@
 {
+  "OpenPopoutCommandDescription": {
+    "message": "Open popout player for this YouTube video",
+    "description": "The description for the 'open-popout' extension command"
+  },
+
   "CommandListHeading": {
     "message": "Keyboard Shortcuts"
   },
