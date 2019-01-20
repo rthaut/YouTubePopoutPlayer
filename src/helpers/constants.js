@@ -27,3 +27,5 @@ export const VALID_SHORTCUT_KEYS_DESCRIPTIONS = [
     'F1-F12',
     'Comma, Period, Home, End, PageUp, PageDown, Space, Insert, Delete, Up, Down, Left, Right'
 ];
+
+export const MSG_REGEX = new RegExp(/^__MSG_(\S+)__$/, 'gi');
