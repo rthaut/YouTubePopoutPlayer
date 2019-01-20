@@ -2,7 +2,7 @@
 <html ng-app="OptionsApp" ng-csp ng-controller="OptionsController">
 
     <head>
-        <meta charset="utf-8" />
+        <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title get-message="OptionsPageTitle"></title>
@@ -10,7 +10,9 @@
 
     <body class="pad-y-sm pad-x-0">
 
-        <form name="form" class="container-fluid">
+        <!-- BEGIN SETTINGS -->
+
+        <form name="optionsForm" class="container-fluid">
 
             <div class="alert alert-secondary text-small" get-message="OptionsPerDeviceWarning"></div>
 
@@ -19,7 +21,7 @@
 
                 <div class="input-field">
                     <label>
-                        <input type="radio" name="target" value="window" ng-model="options.behavior.target" ng-required>
+                        <input type="radio" name="target" value="window" ng-model="options.behavior.target" ng-required/>
                         <span get-message="OptionsBehaviorTargetWindowLabel"></span>
                         <p class="input-hint" get-message="OptionsBehaviorTargetWindowDescription"></p>
                     </label>
@@ -28,14 +30,13 @@
 
                 <div class="input-field">
                     <label>
-                        <input type="radio" name="target" value="tab" ng-model="options.behavior.target" ng-required>
+                        <input type="radio" name="target" value="tab" ng-model="options.behavior.target" ng-required/>
                         <span get-message="OptionsBehaviorTargetTabLabel"></span>
                         <p class="input-hint" get-message="OptionsBehaviorTargetTabDescription"></p>
                     </label>
                 </div>
 
             </fieldset>
-
 
             <fieldset>
                 <legend class="text-primary" get-message="OptionsSizeHeading"></legend>
@@ -80,13 +81,13 @@
                             <div class="row">
 
                                 <div class="col">
-                                    <div class="input-field" ng-class="{'input-invalid': form.width.$invalid}">
+                                    <div class="input-field" ng-class="{'input-invalid': optionsForm.width.$invalid}">
                                         <label for="width" get-message="WidthLabel"></label>
                                         <div class="input-group">
-                                            <input type="number" class="input-lg" name="width" id="width" ng-min="sizeMin('width')" ng-max="sizeMax('width')" placeholder="Width" ng-model="options.size.width" ng-model-options="{ debounce: 500 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')">
+                                            <input type="number" class="input-lg" name="width" id="width" ng-min="sizeMin('width')" ng-max="sizeMax('width')" placeholder="Width" ng-model="options.size.width" ng-model-options="{ debounce: 500 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')"/>
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
-                                        <div ng-messages="form.width.$error" role="alert">
+                                        <div ng-messages="optionsForm.width.$error" role="alert">
                                             <p class="input-hint" ng-message="required" get-message="FieldRequiredMessage"></p>
                                             <p class="input-hint" ng-message="min" get-message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('width')}}"></p>
                                             <p class="input-hint" ng-message="max" get-message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('width')}}"></p>
@@ -95,13 +96,13 @@
                                 </div>
 
                                 <div class="col">
-                                    <div class="input-field" ng-class="{'input-invalid': form.height.$invalid}">
+                                    <div class="input-field" ng-class="{'input-invalid': optionsForm.height.$invalid}">
                                         <label for="inputPassword4" get-message="HeightLabel"></label>
                                         <div class="input-group">
-                                            <input type="number" class="input-lg" name="height" id="height" ng-min="sizeMin('height')" ng-max="sizeMax('height')" placeholder="Height" ng-model="options.size.height" ng-model-options="{ debounce: 500 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')">
+                                            <input type="number" class="input-lg" name="height" id="height" ng-min="sizeMin('height')" ng-max="sizeMax('height')" placeholder="Height" ng-model="options.size.height" ng-model-options="{ debounce: 500 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')"/>
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
-                                        <div ng-messages="form.height.$error" role="alert">
+                                        <div ng-messages="optionsForm.height.$error" role="alert">
                                             <p class="input-hint" ng-message="required" get-message="FieldRequiredMessage"></p>
                                             <p class="input-hint" ng-message="min" get-message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('height')}}"></p>
                                             <p class="input-hint" ng-message="max" get-message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('height')}}"></p>
@@ -137,35 +138,40 @@
 
             </fieldset>
 
-            <div class="fade alert alert-{{alert.type}}" ng-class="{'alert-dismissible': alert.dismissible, 'alert-timed': alert.duration}" ng-repeat="alert in alerts" style="--duration: {{alert.duration}}s">
-                <div ng-bind-html="alert.message"></div>
-                <a class="close" ng-click="removeAlert(alert)" ng-if="alert.dismissible">
-                    <span class="x">&times</span>
-                    <div class="timer-left"></div>
-                    <div class="timer-right"></div>
-                </a>
-            </div>
-
             <div class="row">
                 <div class="col-6">
-                    <button class="button button-block" ng-click="save()" ng-disabled="form.$invalid" get-message="ButtonSaveLabel"></button>
+                    <button class="button button-block" ng-click="save()" ng-disabled="optionsForm.$invalid" get-message="ButtonSaveLabel"></button>
                 </div>
                 <div class="col-6">
                     <button class="button button-block button-danger" ng-click="confirmReset()" get-message="ButtonResetLabel"></button>
                 </div>
             </div>
 
+            <div class="row mar-t-lg" ng-show="alerts && alerts.length">
+                <div class="col">
+
+                    <div class="fade alert alert-{{alert.type}}" ng-class="{'alert-dismissible': alert.dismissible, 'alert-timed': alert.duration}" ng-repeat="alert in alerts" style="--duration: {{alert.duration}}s">
+                        <div ng-bind-html="alert.message"></div>
+                        <a class="close" ng-click="removeAlert(alert)" ng-if="alert.dismissible">
+                            <span class="x">&times</span>
+                            <div class="timer-left"></div>
+                            <div class="timer-right"></div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
         </form>
 
         <dialog id="ResetConfirmDialog">
-
             <div class="container">
 
                 <div class="row">
                     <div class="col">
                         <h3 class="mar-b-md" get-message="ConfirmSettingsResetHeading"></h3>
                         <p get-message="ConfirmSettingsResetText"></p>
-                        <hr />
+                        <hr/>
                     </div>
                 </div>
 
@@ -179,8 +185,9 @@
                 </div>
 
             </div>
-
         </dialog>
+
+        <!-- END SETTINGS -->
 
     </body>
 
