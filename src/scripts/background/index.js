@@ -25,7 +25,7 @@ browser.runtime.onInstalled.addListener(details => {
     console.log('[Background] Extension Installed/Updated', details);
 
     // using the __MSG_ + messageName + __ format for Command Descriptions in the manifest.json doesn't work...
-    // so instead we explicitely update them all whenever the extension is installed or updated
+    // so instead we explicitly update them all whenever the extension is installed or updated
     // (Bugzilla Bug Report: https://bugzilla.mozilla.org/show_bug.cgi?id=1521355)
     if (['install', 'update'].includes(details.reason)) {
         InternationalizeCommandDescriptions();
@@ -72,7 +72,7 @@ function SendMessageToActiveTab(message) {
 }
 
 /**
- * Internationalizes command descriptions (if they are specified using the __MSG_ + messageName + __ format in the manfiest.json)
+ * Internationalizes command descriptions (if they are specified using the __MSG_ + messageName + __ format in the manifest.json)
  */
 async function InternationalizeCommandDescriptions() {
     const commands = await browser.commands.getAll();
