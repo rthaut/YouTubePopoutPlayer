@@ -84,12 +84,12 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
         resetCache();
 
         $scope.$watch('options.size.width', () => {
-            if ($scope.form.width.$valid) {
+            if ($scope.optionsForm.width.$valid) {
                 $scope.cache.dimensions[$scope.options.size.units].width = angular.copy($scope.options.size.width);
             }
         });
         $scope.$watch('options.size.height', () => {
-            if ($scope.form.height.$valid) {
+            if ($scope.optionsForm.height.$valid) {
                 $scope.cache.dimensions[$scope.options.size.units].height = angular.copy($scope.options.size.height);
             }
         });
