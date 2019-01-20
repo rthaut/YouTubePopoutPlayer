@@ -26,7 +26,7 @@ browser.runtime.onInstalled.addListener(details => {
 
     // using the __MSG_ + messageName + __ format for Command Descriptions in the manifest.json doesn't work...
     // so instead we explicitly update them all whenever the extension is installed or updated
-    // (Bugzilla Bug Report: https://bugzilla.mozilla.org/show_bug.cgi?id=1521355)
+    // (Bugzilla Bug Report: https://bugzilla.mozilla.org/show_bug.cgi?id=1272130)
     if (['install', 'update'].includes(details.reason)) {
         InternationalizeCommandDescriptions();
     }
