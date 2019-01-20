@@ -51,7 +51,7 @@
       "suggested_key": {
         "default": "Ctrl+Up"
       },
-      "description": "Open popout player for this YouTube video"
+      "description": "__MSG_OpenPopoutCommandDescription__"
     }
   },
 
