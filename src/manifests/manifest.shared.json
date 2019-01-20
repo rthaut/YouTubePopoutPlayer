@@ -46,6 +46,15 @@
     "default_title": "__MSG_ExtensionName__"
   },
 
+  "commands": {
+    "open-popout": {
+      "suggested_key": {
+        "default": "Ctrl+Up"
+      },
+      "description": "Open popout player for this YouTube video"
+    }
+  },
+
   "web_accessible_resources": [
     "images/*"
   ]

@@ -13,6 +13,24 @@ const YouTubePopoutPlayer = (() => {
             this.insertControls();
             this.watchPageChange();
 
+            browser.runtime.onMessage.addListener((message, sender) => {
+                console.log('[Content] YouTubePopoutPlayer Runtime Message', message, sender);
+
+                if (message.action !== undefined) {
+
+                    switch (message.action.toLowerCase()) {
+
+                        case 'open-popout-command':
+                            this.openPopout();
+                            return;
+
+                    }
+
+                    console.log('[Content] YouTubePopoutPlayer Runtime Message :: Unhandled Action');
+                    return;
+                }
+            });
+
             console.groupEnd();
         }
 
@@ -127,9 +145,10 @@ const YouTubePopoutPlayer = (() => {
 
             menuItem.appendChild(menuItemLabel);
             menuItem.appendChild(menuItemContent);
-            menuItem.addEventListener('click', function () {
-                this.onClick();
-            }.bind(this), false);
+            menuItem.addEventListener('click', event => {
+                console.log('Context Menu Item Click', event);
+                this.openPopout();
+            }, false);
 
             target.appendChild(menuItem);
             console.info('Inserting context menu entry', menuItem);
@@ -216,9 +235,10 @@ const YouTubePopoutPlayer = (() => {
             playerButton.id = 'popout-player-control-button';
             playerButton.setAttribute('title', browser.i18n.getMessage('PlayerControlsButtonTitle_PopoutPlayer'));
             playerButton.appendChild(playerButtonSVG);
-            playerButton.addEventListener('click', function () {
-                this.onClick();
-            }.bind(this), false);
+            playerButton.addEventListener('click', event => {
+                console.log('Player Controls Button Click', event);
+                this.openPopout();
+            }, false);
 
             controls.insertBefore(playerButton, fullScreenButton);
 
@@ -230,8 +250,8 @@ const YouTubePopoutPlayer = (() => {
          * Click event handler for any of the popout player controls
          * @param {Event} event
          */
-        onClick() {
-            console.log('YouTubePopoutPlayer.onClick()');
+        openPopout() {
+            console.log('YouTubePopoutPlayer.openPopout()');
 
             const container = document.getElementById('movie_player') || document.getElementById('player');
             const video = container.querySelector('video');
@@ -253,10 +273,10 @@ const YouTubePopoutPlayer = (() => {
                     'height': player.getHeight()
                 }
             }).then(response => {
-                console.log('YouTubePopoutPlayer.onClick() :: Message Response', response);
+                console.log('YouTubePopoutPlayer.openPopout() :: Message Response', response);
                 player.pause();
             }).catch(error => {
-                console.error('YouTubePopoutPlayer.onClick() :: Message Error', error);
+                console.error('YouTubePopoutPlayer.openPopout() :: Message Error', error);
             });
         }
 
