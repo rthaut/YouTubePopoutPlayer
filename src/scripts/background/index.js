@@ -39,10 +39,13 @@ browser.runtime.onMessage.addListener((message, sender) => {
             case 'open-popout':
                 return Popout.open(message.data);
 
+            case 'get-commands':
+                return browser.commands.getAll();
+
         }
 
         console.log('[Background] Runtime Message :: Unhandled Action');
-        return true;
+        return;
     }
 });
 

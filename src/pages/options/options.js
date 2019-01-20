@@ -2,14 +2,21 @@
 
 import './options.scss';
 
-import { OPTION_DEFAULTS } from '../../helpers/constants';
+import { OPTION_DEFAULTS, VALID_SHORTCUT_KEYS, VALID_SHORTCUT_KEYS_DESCRIPTIONS } from '../../helpers/constants';
 import Options from '../../helpers/Options';
 import Utils from '../../helpers/utils';
 
 /* global angular */
 const app = angular.module('OptionsApp', ['ngAnimate', 'ngMessages', 'ngSanitize', 'browser.i18n']);
 
-app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $timeout) {
+app.filter('kbdCombo', function () {
+  return function (input) {
+    input = input || '';
+    return Utils.kbdWrap(input);
+  };
+});
+
+app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', function ($scope, $timeout, kbdComboFilter) {
 
     $scope.alerts = [];
 
@@ -185,7 +192,6 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
 
     /**
      * Handles showing the size units next to the width and height input fields
-     * TODO: the return values probably need to support i18n
      * @returns {string}
      */
     $scope.sizeUnits = function () {
@@ -304,5 +310,150 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
             $scope.$apply();
         });
     };
+
+    var getCommands = function () {
+        browser.runtime.sendMessage({
+            'action': 'get-commands'
+        }).then(response => {
+            $scope.commands = response;
+        }).catch(err => {
+            console.error('Failed to retrieve extension commands', err);
+        }).finally(() => {
+            $scope.$apply();
+        });
+    };
+    getCommands();
+
+    $scope.initUpdateCommandDialog = function () {
+        const dialog = document.querySelector('#UpdateCommandDialog');
+        initDialog(dialog);
+
+        dialog.addEventListener('close', () => {
+            removeCommandUpdateKeyListener();
+            if ($scope.command !== null) {
+                $scope.command = null;
+                $scope.$apply();
+            }
+        });
+    };
+
+    var removeCommandUpdateKeyListener = function () {
+        console.log('OptionsController.removeCommandUpdateKeyListener()');
+        window.removeEventListener('keypress', updateCommandShortcut, false);
+    };
+
+    $scope.updateCommand = function (command) {
+        $scope.showDialog('UpdateCommandDialog');
+        $scope.command = command;
+
+        // ensure we don't already have an active event listener
+        removeCommandUpdateKeyListener();
+
+        window.addEventListener('keypress', updateCommandShortcut, false);
+    };
+
+    var updateCommandShortcut = async function (event) {
+        console.log('OptionsController.updateCommandShortcut()', event);
+
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+
+        if (event.stopPropagation) {
+            event.stopPropagation();
+        }
+
+        if ($scope.command === undefined || $scope.command === null) {
+            console.log('No command actively being updated');
+            removeCommandUpdateKeyListener();
+            return;
+        }
+
+        if (event.keyCode === 27) {
+            console.log('Escape key pressed');
+            removeCommandUpdateKeyListener();
+            return;
+        }
+
+        const key = event.code.replace('Key', '').replace('Arrow', '');
+        if (!VALID_SHORTCUT_KEYS.includes(key)) {
+            $scope.updateCommandError = browser.i18n.getMessage('InvalidCommandShortcutKeyPlaceholder', '<kbd>' + key + '</kbd>');
+
+            const keys = [];
+            VALID_SHORTCUT_KEYS_DESCRIPTIONS.forEach(description => {
+                if (description.includes('-')) {
+                    description = Utils.kbdWrap(description, '-', '-');
+                } else if (description.includes(', ')) {
+                    description = Utils.kbdWrap(description, ', ', ' , ');
+                }
+                keys.push(description);
+            });
+
+            $scope.updateCommandError += '<p>' + keys.join(' , ') + '</p>';
+            $scope.$apply();
+            return;
+        }
+
+        const modifiers = ['ctrl', 'alt', 'meta', 'shift'];
+        let combination = '';
+        let modifierCount = 0;
+        modifiers.forEach(modifier => {
+            if (event[modifier + 'Key']) {
+                combination += modifier + '+';
+                modifierCount++;
+            }
+        });
+
+        if (1 > modifierCount || modifierCount > 2) {
+            $scope.updateCommandError = browser.i18n.getMessage('InvalidCommandShortcutModifiers');
+            $scope.updateCommandError += '<p>' + Utils.kbdWrap(modifiers.map(Utils.TitleCase), null, ' , ') + '</p>';
+            $scope.$apply();
+            return;
+        }
+
+        combination = Utils.TitleCase(combination) + key;
+
+        try {
+            console.log(`Setting Command "${$scope.command.name}" Shortcut`, combination);
+            await browser.commands.update({
+                'name': $scope.command.name,
+                'shortcut': combination
+            });
+
+            delete $scope.updateCommandError;
+            $scope.command.shortcut = combination;
+
+            $scope.closeDialog('UpdateCommandDialog');
+            $scope.command = null;
+        } catch(err) {
+            console.error('Failed to set command shortcut', err);
+            $scope.updateCommandError = err;
+        }
+
+        $scope.$apply();
+    };
+
+    $scope.getCommandInstructionSubstitutions = function () {
+        const substitutions = [];
+
+        if ($scope.command !== undefined && $scope.command !== null) {
+            substitutions.push($scope.command.description);
+            substitutions.push(kbdComboFilter($scope.command.shortcut));
+        }
+
+        return substitutions;
+    };
+
+    $scope.$on('$destroy', function () {
+        // cancel all ongoing alert timers
+        for (const alert of $scope.alerts) {
+            if (alert.timeout !== undefined) {
+                $timeout.cancel(alert.timeout);
+            }
+        }
+
+        // remove the command update keypress event listener
+        removeCommandUpdateKeyListener();
+    });
 
 }]);

@@ -1,0 +1,55 @@
+{
+  "OpenPopoutCommandDescription": {
+    "message": "Open popout player for this YouTube video",
+    "description": "The description for the 'open-popout' extension command"
+  },
+
+  "CommandListHeading": {
+    "message": "Keyboard Shortcuts"
+  },
+
+  "CommandListSaveHelpText": {
+    "message": "When changing any of the following keyboard shortcuts, you do <strong>not</strong> need to save settings; the new shortcut is applied automatically."
+  },
+
+  "CommandListDescriptionColumnHeading": {
+    "message": "Description"
+  },
+
+  "CommandListShortcutColumnHeading": {
+    "message": "Shortcut"
+  },
+
+  "CommandListUpdateCommandLabel": {
+    "message": "Change"
+  },
+
+  "UpdateCommandHeading": {
+    "message": "Update Keyboard Shortcut"
+  },
+
+  "UpdateCommandInstructionsPlaceholder": {
+    "message": "<p>Press a new keyboard shortcut for the \"$COMMAND$\" command, or press <kbd>Esc</kbd> to cancel.</p><p>Valid keyboard shortcuts include one or two modifier keys and one regular key.<p><hr/><p>The current keyboard shortcut is: $SHORTCUT$</p>",
+    "placeholders": {
+      "command": {
+        "content": "$1"
+      },
+      "shortcut": {
+        "content": "$2"
+      }
+    }
+  },
+
+  "InvalidCommandShortcutKeyPlaceholder": {
+    "message": "<p><strong>Unsupported Shortcut Key</strong></p><p>The $KEY$ key is not a valid key for keyboard shortcuts. Please use one of the following keys:</p>",
+    "placeholders": {
+      "key": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "InvalidCommandShortcutModifiers": {
+    "message": "<p><strong>Unsupported Shortcut Modifier(s)</strong></p><p>Shortcut combinations must have either one (1) or two (2) modifier keys. The following are valid modifier keys:<p>"
+  }
+}

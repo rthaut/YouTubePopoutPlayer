@@ -189,6 +189,55 @@
 
         <!-- END SETTINGS -->
 
+        <hr/>
+
+        <!-- BEGIN COMMANDS -->
+
+        <form class="container-fluid">
+
+            <fieldset ng-show="commands && commands.length">
+                <legend class="text-primary" get-message="CommandListHeading"></legend>
+
+                <p class="text-small" get-message="CommandListSaveHelpText"></p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th get-message="CommandListDescriptionColumnHeading"></th>
+                            <th get-message="CommandListShortcutColumnHeading"></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="command in commands">
+                            <td>{{command.description}}</td>
+                            <td class="text-nowrap" ng-bind-html="command.shortcut | kbdCombo"></td>
+                            <td><a href ng-click="updateCommand(command)" get-message="CommandListUpdateCommandLabel"></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </fieldset>
+
+        </form>
+
+        <dialog id="UpdateCommandDialog" ng-init="initUpdateCommandDialog()">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col">
+                        <h3 class="mar-b-md" get-message="UpdateCommandHeading"></h3>
+                        <p get-message="UpdateCommandInstructionsPlaceholder" substitutions="{{getCommandInstructionSubstitutions()}}"></p>
+                        <hr ng-show="updateCommandError"/>
+                        <div class="alert alert-danger" ng-show="updateCommandError" ng-bind-html="updateCommandError"></div>
+                    </div>
+                </div>
+
+            </div>
+        </dialog>
+
+        <!-- END COMMANDS -->
+
     </body>
 
 </html>

@@ -13,3 +13,17 @@ export const OPTION_DEFAULTS = {
         'height': 480
     },
 };
+
+export const VALID_SHORTCUT_KEYS = [
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',
+    'Comma', 'Period', 'Home', 'End', 'PageUp', 'PageDown', 'Space', 'Insert', 'Delete', 'Up', 'Down', 'Left', 'Right'
+];
+
+export const VALID_SHORTCUT_KEYS_DESCRIPTIONS = [
+    'A-Z',
+    '0-9',
+    'F1-F12',
+    'Comma, Period, Home, End, PageUp, PageDown, Space, Insert, Delete, Up, Down, Left, Right'
+];
