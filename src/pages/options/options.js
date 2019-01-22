@@ -282,7 +282,7 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
     $scope.reset = function () {
         console.log('OptionsController.reset()');
 
-        Options.InitLocalStorageDefaults().then(() => {
+        Options.InitLocalStorageDefaults(true).then(() => {
             $scope.options = angular.copy(OPTION_DEFAULTS);
             resetCache();
             $scope.createAlert(browser.i18n.getMessage('OptionsResetSuccessMessage'), 'success', true, 5);
