@@ -34,6 +34,9 @@ browser.runtime.onInstalled.addListener(details => {
     if (details.reason === 'install') {
         console.log('[Background] Extension Installed :: Initializing Defaults for Options');
         Options.InitLocalStorageDefaults();
+    } else if (details.reason === 'update') {
+        console.log('[Background] Extension Updated :: Initializing Defaults for New Options');
+        Options.InitLocalStorageDefaults(false);
     }
 });
 
