@@ -14,6 +14,9 @@ const Popout = (() => {
 
             const attrs = {};
 
+            // custom flag for determining if the embedded player is playing within a popout window/tab
+            attrs.popout = 1;
+
             if (list != null) {
                 attrs.list = list;
             }
