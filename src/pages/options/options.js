@@ -280,6 +280,7 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
             $scope.options = angular.copy(OPTION_DEFAULTS);
             resetCache();
             $scope.createAlert(browser.i18n.getMessage('OptionsResetSuccessMessage'), 'success', true, 5);
+            $scope.optionsForm.$setPristine();
         }).catch(err => {
             console.error('Failed to reset settings to default values', err);
             $scope.createAlert(browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage'), 'danger', true);
@@ -297,6 +298,7 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
 
         Options.SetLocalOptions(angular.copy($scope.options)).then(() => {
             $scope.createAlert(browser.i18n.getMessage('OptionsSaveSuccessMessage'), 'success', true, 5);
+            $scope.optionsForm.$setPristine();
         }).catch(err => {
             console.error('Failed to save settings to local storage', err);
             $scope.createAlert(browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage'), 'danger', true);

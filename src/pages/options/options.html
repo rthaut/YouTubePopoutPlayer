@@ -140,7 +140,7 @@
 
             <div class="row">
                 <div class="col-6">
-                    <button class="button button-block" ng-click="save()" ng-disabled="optionsForm.$invalid" get-message="ButtonSaveLabel"></button>
+                    <button class="button button-block" ng-class="{'button-light': optionsForm.$pristine}" ng-click="save()" ng-disabled="optionsForm.$pristine || optionsForm.$invalid" get-message="ButtonSaveLabel"></button>
                 </div>
                 <div class="col-6">
                     <button class="button button-block button-danger" ng-click="confirmReset()" get-message="ButtonResetLabel"></button>
