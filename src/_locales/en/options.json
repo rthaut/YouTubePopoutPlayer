@@ -1,0 +1,153 @@
+{
+  "OptionsPageTitle": {
+    "message": "$NAME$ Options",
+    "placeholders": {
+      "name": {
+        "content": "YouTube Popout Player"
+      }
+    }
+  },
+
+  "OptionsPerDeviceWarning": {
+    "message": "<strong>Note</strong>: All settings are per-device. If you have YouTube Popout Player installed on multiple devices, you can configure settings differently for each device."
+  },
+
+  "OptionsBehaviorTabWarning": {
+    "message": "<strong>Warning</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window."
+  },
+
+  "OptionsBehaviorHeading": {
+    "message": "Popout Player Behavior"
+  },
+
+  "OptionsBehaviorTargetWindowLabel": {
+    "message": "Open in a Popup Window"
+  },
+  "OptionsBehaviorTargetWindowDescription": {
+    "message": "The popout player will open in a new popup window. <strong>This is the default setting.</strong>"
+  },
+
+  "OptionsBehaviorTargetTabLabel": {
+    "message": "Open in a Tab"
+  },
+  "OptionsBehaviorTargetTabDescription": {
+    "message": "The popout player will open in a new tab in your current browser window."
+  },
+
+  "OptionsSizeHeading": {
+    "message": "Popout Player Size"
+  },
+
+  "OptionsSizeModeCurrentLabel": {
+    "message": "Use Original Player Size"
+  },
+  "OptionsSizeModeCurrentDescription": {
+    "message": "The popout player will be sized to match the original YouTube video player. <strong>This is the default setting.</strong>"
+  },
+
+  "OptionsSizeModeCustomLabel": {
+    "message": "Set Custom Dimensions"
+  },
+  "OptionsSizeModeCustomDescription": {
+    "message": "Use this setting to specify dimensions (either in pixels or percentages) for the popout player."
+  },
+
+  "DimensionUnitsLabel": {
+    "message": "Dimension Units"
+  },
+
+  "DimensionUnitsPixelsOptionLabel": {
+    "message": "Pixels (px)"
+  },
+  "DimensionUnitsPercentageOptionLabel": {
+    "message": "Percentage (%)"
+  },
+
+  "DimensionUnitsPixelsUnitLabel": {
+    "message": "px"
+  },
+  "DimensionUnitsPercentageUnitLabel": {
+    "message": "%"
+  },
+  "DimensionUnitsUnknownUnitLabel": {
+    "message": "?"
+  },
+
+  "WidthLabel": {
+    "message": "Width"
+  },
+  "HeightLabel": {
+    "message": "Height"
+  },
+
+  "InfoCurrentScreenResolutionLabel": {
+    "message": "Current Screen Resolution"
+  },
+  "InfoPopoutPlayerWindowSizeLabel": {
+    "message": "Popout Player Window Size"
+  },
+  "InfoPopoutPlayerAspectRatioLabel": {
+    "message": "Popout Player Aspect Ratio"
+  },
+
+  "FieldRequiredMessage": {
+    "message": "This field is required"
+  },
+  "FieldMinValuePlaceholderMessage": {
+    "message": "The value of this field cannot be less than <strong>$VALUE$</strong>",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "FieldMaxValuePlaceholderMessage": {
+    "message": "The value of this field cannot be more than <strong>$VALUE$</strong>",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "ButtonSaveLabel": {
+    "message": "Save Settings"
+  },
+  "ButtonResetLabel": {
+    "message": "Reset to Defaults"
+  },
+
+  "ConfirmSettingsResetHeading": {
+    "message": "Confirm Settings Reset"
+  },
+  "ConfirmSettingsResetText": {
+    "message": "Are you sure you want to <strong>reset your settings</strong>? If you continue, all settings for $NAME$ on this device will be restored to their default values.",
+    "placeholders": {
+      "name": {
+        "content": "YouTube Popout Player"
+      }
+    }
+  },
+
+  "ButtonConfirmResetLabel": {
+    "message": "Yes, I'm sure"
+  },
+  "ButtonCancelResetLabel": {
+    "message": "No, I changed my mind"
+  },
+
+  "OptionsResetSuccessMessage": {
+    "message": "All settings reset to default values"
+  },
+  "OptionsSaveSuccessMessage": {
+    "message": "All settings saved successfully"
+  },
+  "OptionsSaveErrorPlaceholderMessage": {
+    "message": "Failed to save settings: $ERROR$",
+    "placeholders": {
+      "error": {
+        "content": "$1"
+      }
+    }
+  }
+}

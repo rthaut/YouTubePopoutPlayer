@@ -1,0 +1,29 @@
+{
+  "supported_browsers": {
+    "firefox": {
+      "protocol": "moz-extension://"
+    },
+    "chrome": {
+      "protocol": "chrome-extension://"
+    },
+    "edge": {
+      "protocol": "ms-browser-extension://"
+    }
+  },
+  "plugin_options": {
+    "uglify": {
+      "compress": {
+        "drop_console": true
+      },
+      "mangle": true
+    }
+  },
+  "source_folders": {
+    "helpers": "./src/helpers",
+    "images": "./src/images",
+    "locales": "./src/_locales",
+    "manifests": "./src/manifests",
+    "pages": "./src/pages",
+    "scripts": "./src/scripts"
+  }
+}

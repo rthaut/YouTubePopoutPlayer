@@ -1,57 +1,37 @@
+/* global process */
+const env = process.env.NODE_ENV || 'development';
+
 /* global require */
 const gulp = require('gulp');
 
+const pkg = require('./package.json');
+const cfg = require('./gulp.config.json');
+
 // additional native gulp packages
-const del = require('del');
 const fs = require('fs');
 const path = require('path');
-const merge = require('merge-stream');
+
+// webpack plugins
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
 
 // load all plugins from package development dependencies
 const $ = require('gulp-load-plugins')({
     'scope': ['devDependencies'],
     'pattern': ['*'],
     'rename': {
-        'gulp-browser-i18n-localize': 'localize',
-        'gulp-if': 'gulpIf',
+        'ansi-colors': 'colors',
+        'fancy-log': 'log',
+        'merge-stream': 'merge',
         'rollup-stream': 'rollup',
         'vinyl-buffer': 'buffer',
         'vinyl-source-stream': 'source',
     },
     'postRequireTransforms': {
-        'uglify': function (uglify) {
-            return uglify = require('gulp-uglify/composer')(require('uglify-es'), console);
-        }
+        'print': print => print.default,
+        'uglify': uglify => require('gulp-uglify/composer')(require('uglify-es'), console)
     }
 });
-
-
-
-/* ==================== CONFIGURATION ==================== */
-
-// vendor libraries needed for core functionality
-const vendor = [
-    './node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
-];
-
-// default options for various plugins
-const options = {
-    // options for compressing JS files
-    'uglify': {
-        'compress': {
-            'drop_console': true
-        },
-        'mangle': true,
-        'output': {
-            'comments': 'some'
-        }
-    }
-};
-
-const _folders = {
-    'locales': './_locales',
-    'scripts': './lib/scripts',
-};
 
 
 
@@ -59,22 +39,123 @@ const _folders = {
 
 /**
  * Get the names of all immediate folders within the supplied directory
- * @param {string} dir - the path to the directory
- * @returns {string[]} - the names of immediate folders within the directory
+ * @param {string} dir  the path to the directory
+ * @returns {string[]} the names of immediate folders within the directory
  */
 function folders(dir) {
     return fs.readdirSync(dir).filter(file => fs.statSync(path.join(dir, file)).isDirectory());
+}
+
+/**
+ * Lints all JavaScript files within the supplied directory
+ * @param {string} dir the path to the directory
+ * @param {Boolean} [fix=true] indicates if eslint should attempt to fix errors
+ * @param {Boolean} [failOnError=true] indicates if eslint should fail if there are any unfixed errors
+ */
+function lintJS(dir, fix = true, failOnError = true) {
+    return $.pump([
+        gulp.src(`${dir}/**/*.js`),
+        $.eslint({
+            'fix': fix
+        }),
+        $.eslint.format(),
+        $.if(failOnError, $.eslint.failOnError()),
+    ],
+    err => { if (err) $.log.error(`${$.colors.red('Function Error [\'lint\']')}: ${err.message}`); });
+}
+
+/**
+ * Lints all JSON files within the supplied directory
+ * @param {string} dir the path to the directory
+ * @param {Boolean} [failOnError=true] indicates if jsonlint should fail if there are any unfixed errors
+ */
+function lintJSON(dir, failOnError = true) {
+    return $.pump([
+        gulp.src(`${dir}/**/*.json`),
+        $.jsonlint(),
+        $.jsonlint.reporter(file => {
+            $.log.error('File ' + file.path + ' is not valid JSON.');
+        }),
+        $.if(failOnError, $.jsonlint.failOnError()),
+    ],
+    err => { if (err) $.log.error(`${$.colors.red('Function Error [\'lint\']')}: ${err.message}`); });
+}
+
+/**
+ * Returns a configuration object for webpack for the supplied directory
+ * @param {string} dir the path to a directory
+ * @returns {Object} a webpack config
+ */
+function getWebpackConfig(dir) {
+    // NOTE: the webpack.config.js file contains basic configuration that does not require any dynamic values
+    const config = require(`${dir}/webpack.config.js`);
+
+    switch (env) {
+        case 'production':
+            config.mode = 'production';
+            config.devtool = 'none';
+            break;
+
+        case 'development':
+        default:
+            config.mode = 'development';
+            config.devtool = 'inline-source-map';
+            break;
+    }
+
+    const entry = config.entry || {};
+    const plugins = config.plugins || [];
+
+    folders(dir).map((folder) => {
+        const entryHTML = `${dir}/${folder}/${folder}.html`;
+        const entryJS = `${dir}/${folder}/${folder}.js`;
+
+        // define an entry point for each folder that has a matching .js and .html files
+        if (fs.existsSync(entryJS) && fs.existsSync(entryHTML)) {
+            entry[folder] = entryJS;
+
+            // one html-webpack-plugin instance is needed for each entry point, as the plugin does not support template strings
+            // (see: https://github.com/jantimon/html-webpack-plugin/issues/218#issuecomment-183066602)
+            plugins.push(new HtmlWebpackPlugin({
+                'template': entryHTML,
+                'chunks': [folder],     // ensure this instance only builds when processing the corresponding folder's entry point
+                'filename': `${folder}/${folder}.html`  // equivalent to '[name]/[name].html'
+            }));
+
+            // copy external/vendor files needed for each entry point
+            if (fs.existsSync(`${dir}/${folder}/externals.js`)) {
+                plugins.push(new HtmlWebpackExternalsPlugin({
+                    'externals': require(`${dir}/${folder}/externals.js`),
+                    'outputPath': '../vendor',
+                    'publicPath': '../',
+                    'files': [`${folder}/${folder}.html`]
+                }));
+            }
+        }
+
+    });
+
+    return Object.assign(config, { 'entry': entry, 'plugins': plugins });
 }
 
 
 
 /* ====================  BUILD TASKS  ==================== */
 
-gulp.task('clean', () => {
-    return del(['./dist/*'])
-        .catch((error) => {
-            console.error(error);
-        });
+gulp.task('minify', function minify() {
+    return $.pump([
+        $.merge([
+            $.pump([
+                gulp.src(['./dist/*/scripts/*.js']),
+                $.uglify(cfg.plugin_options.uglify),
+            ]),
+        ]),
+        $.header(fs.readFileSync('./src/banner.txt', 'utf8'), {
+            'pkg': pkg
+        }),
+        gulp.dest('./dist')
+    ],
+    err => { if (err) $.log.error(`${$.colors.red('Task Error [\'minify\']')}: ${err.message}`); });
 });
 
 
@@ -82,175 +163,155 @@ gulp.task('clean', () => {
 // build & lint tasks, broken into components
 // ==========================================
 
+gulp.task('lint:helpers', function lint_helpers() {
+    return lintJS(cfg.source_folders.helpers, true, (env === 'production'));
+});
 
-gulp.task('build:locales', () => {
-    return merge(folders(_folders.locales).map((folder) => {
-        return $.pump([
-            gulp.src(path.join(_folders.locales, folder, '**/*.json')),
-            $.mergeJson({
-                'fileName': 'messages.json'
-            }),
-            gulp.dest(path.join('./dist/webextension/_locales', folder)),
-        ]);
-    }));
+
+gulp.task('build:images', function build_images() {
+    return $.pump([
+        gulp.src([`${cfg.source_folders.images}/**/*.{png,svg}`]),
+        ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/images`)),
+    ],
+    err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:images\']')}: ${err.message}`); });
 });
 
 
 /**
  * Creates multiple resized PNG versions of the SVG logo files
  */
-gulp.task('build:logo', () => {
-    const manifest = require('./manifest.json');
+gulp.task('build:logos', function build_logos() {
+    //TODO: handle the icons/sizes defined in page_action.default_icon for Edge
+    const manifest = JSON.parse(fs.readFileSync(`${cfg.source_folders.manifests}/manifest.shared.json`));
     const icons = manifest.icons;
-    return merge(Object.keys(icons).map((size) => {
+    return $.merge(Object.keys(icons).map(size => {
+        const file = path.basename(icons[size], '.png').replace(/\-\d+/, '');
         return $.pump([
-            gulp.src(['./resources/logo.svg']),
-            $.svg2png({ 'width': size, 'height': size }),
-            $.rename(icons[size]),
-            gulp.dest('./dist/webextension'),
-        ]);
+            gulp.src([`${cfg.source_folders.images}/logo/${file}.svg`]),
+            $.svg2png({
+                'width': size,
+                'height': size
+            }),
+            $.rename(icons[size]),  // the name includes the relative path structure (from the manifest to the icon)
+            ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}`)),
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:logos\']')}: ${err.message}`); });
     }));
 });
 
 
-gulp.task('build:manifest', () => {
-    return $.pump([
-        gulp.src(['./manifest.json']),
-        $.ejs({
-            'package': require('./package.json')
-        }),
-        $.rename('manifest.json'),
-        gulp.dest('./dist/webextension'),
-    ]);
-});
-
-
-gulp.task('lint:scripts', () => {
-    return $.pump([
-        gulp.src(path.join(_folders.scripts, '**/*.js')),
-        $.eslint({
-            'fix': true
-        }),
-        $.eslint.format(),
-    ]);
-});
-gulp.task('build:scripts', gulp.series('lint:scripts', () => {
-    const package = require('./package.json');
-    return merge(folders(_folders.scripts).map((folder) => {
+gulp.task('build:locales', function build_locales() {
+    return $.merge(folders(cfg.source_folders.locales).map(folder => {
         return $.pump([
-            // use rollup to generate a single file from all of the includes
-            $.rollup({
-                'input': path.join(_folders.scripts, folder, 'index.js'),
-                'format': 'iife',
-                'name': package.title.replace(/\s/g, '')
-            }),
-            $.source(folder + '.js'),
-            $.buffer(),
+            gulp.src([`${cfg.source_folders.locales}/${folder}/**/*.json`]),
+            $.mergeJson({ 'fileName': 'messages.json' }),
+            ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/_locales/${folder}`)),
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:locales\']')}: ${err.message}`); });
+    }));
+});
 
-            // insert the header
-            $.header(fs.readFileSync('./banners/webextension.txt', 'utf8'), {
-                'package': package
-            }),
-
-            // output the non-minified version now
-            gulp.dest('./dist/webextension/scripts'),
-
-            // output the minified version appended with ".min"
-            $.uglify(options.uglify),
-
-            $.rename({
-                'suffix': '.min'
-            }),
-            gulp.dest('./dist/webextension/scripts'),
-        ]);
+gulp.task('lint:manifest', function lint_manifest() {
+    return lintJSON(cfg.source_folders.manifests, (env === 'production'));
+});
+gulp.task('build:manifest', gulp.series('lint:manifest', function build_manifest() {
+    return $.merge(Object.keys(cfg.supported_browsers).map(browser => {
+        return $.pump([
+            gulp.src([
+                `${cfg.source_folders.manifests}/manifest.shared.json`,
+                `${cfg.source_folders.manifests}/manifest.${browser}.json`,
+            ]),
+            $.mergeJson({ 'fileName': 'manifest.json' }),
+            $.ejs({ 'pkg': pkg }),
+            gulp.dest(`./dist/${browser}`),
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:manifest\']')}: ${err.message}`); });
     }));
 }));
 
 
-gulp.task('build:vendor', () => {
-    return $.pump([
-        gulp.src(vendor),
-        gulp.dest('./dist/webextension/vendor'),
-    ]);
+gulp.task('lint:pages', function lint_pages() {
+    return lintJS(cfg.source_folders.pages, true, (env === 'production'));
 });
+gulp.task('build:pages', gulp.series('lint:pages', function build_pages() {
+    const config = getWebpackConfig(cfg.source_folders.pages);
+
+    return $.pump([
+        $.webpackStream(config, $.webpack),
+        ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/pages`)),
+    ],
+    err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:pages\']')}: ${err.message}`); });
+}));
+
+
+gulp.task('lint:scripts', gulp.series('lint:helpers', function lint_scripts() {
+    return lintJS(cfg.source_folders.scripts, true, (env === 'production'));
+}));
+gulp.task('build:scripts', gulp.series('lint:scripts', function build_scripts() {
+    return $.merge(folders(cfg.source_folders.scripts).map(folder => {
+        return $.pump([
+            $.rollup({
+                'input': `${cfg.source_folders.scripts}/${folder}/index.js`,
+                'format': 'iife',
+                'name': pkg.title.replace(/\s/g, '')
+            }),
+            $.source(folder + '.js'),
+            $.buffer(),
+            ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/scripts`)),
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'build:scripts\']')}: ${err.message}`); });
+    }));
+}));
+
+
+// TODO: should this use gulp functionality instead (i.e. `gulp.src`, `gulp.dest`, etc.)?
+// TODO: should this be a prerequisite for the 'build:scripts' task?
+gulp.task('copy:scripts:vendor', gulp.series('build:manifest', function copy_scripts_vendor(done) {
+    Object.keys(cfg.supported_browsers).map(browser => {
+        const manifest = JSON.parse(fs.readFileSync(`./dist/${browser}/manifest.json`));
+        let files = [];
+
+        // get list of vendor files for content scripts
+        manifest.content_scripts.forEach(script => {
+            files = files.concat(files, script.js.filter(file => file.indexOf('vendor/') === 0));
+        });
+
+        // get list of vendor files for background scripts
+        files = files.concat(files, manifest.background.scripts.filter(file => file.indexOf('vendor/') === 0));
+
+        // de-duplicate the file list
+        files = Array.from(new Set(files));
+        //$.log.info(`Vendor Files (${browser}):\n\t- ` + files.join('\n\t- '));
+
+        files.forEach(file => {
+            const src = path.resolve(file.replace('vendor/', 'node_modules/'));
+            const dest = path.resolve(`./dist/${browser}/${file}`);
+            if (fs.existsSync(src) && !fs.existsSync(dest)) {
+                //$.log.info(`Copying "${src}" to "${dest}"`);
+                if (!fs.existsSync(path.dirname(dest))) {
+                    fs.mkdirSync(path.dirname(dest), { 'recursive': true });
+                }
+                fs.copyFileSync(src, dest);
+            }
+        });
+    });
+
+    done();
+}));
 
 
 // ========================
 // package/distribute tasks
 // ========================
-
-gulp.task('dist:source', () => {
-    return $.pump([
-        gulp.src([
-            './.vscode/**/*',
-            './_locales/**/*',
-            './banners/**/*',
-            './lib/**/*',
-            './resources/logo.svg',
-            './.editorconfig',
-            './.eslintrc.js',
-            './LICENSE',
-            './README.md',
-            './gulpfile.js',
-            './manifest.json',
-            './package.json'
-        ], {
-            'base': './'
-        }),
-        $.zip('source.zip'),
-        gulp.dest('./dist'),
-    ]);
-});
-
-/**
- * Generates a userscript file from the built content.js file from the web extension
- * TODO: this is just kind of... odd. It might be better to make a "build:userscript" (based on "build:scripts") instead
- */
-gulp.task('dist:userscript', () => {
-    const package = require('./package.json');
-    return $.pump([
-        // use 2 streams to grab the web extension output files, then merge the streams
-        merge(
-            // grab the non-minified version from the web extension directory and rename it in the stream
-            $.pump([
-                gulp.src(['./dist/webextension/scripts/content.js']),
-                $.rename({
-                    'basename': package.name.replace(/\-/g, '_') + '.user',
-                }),
-            ]),
-            // grab the minified version from the web extension directory and rename it in the stream
-            $.pump([
-                gulp.src(['./dist/webextension/scripts/content.min.js']),
-                $.rename({
-                    'basename': package.name.replace(/\-/g, '_') + '.user',
-                    'suffix': '.min'
-                }),
-            ])
-        ),
-
-        // insert the header
-        $.header(fs.readFileSync('./banners/userscript.txt', 'utf8'), {
-            'package': package
-        }),
-
-        // replace the browser.i18n.getMessage() calls with the actual localized strings
-        $.localize({
-            'localesDir': './dist/webextension/_locales',
-            'locales': ['en'],
-            'schema': false
-        }),
-
-        gulp.dest('./dist/userscript'),
-    ]);
-});
-
-gulp.task('dist:webextension', () => {
-    const package = require('./package.json');
-    return $.pump([
-        gulp.src(['./dist/webextension/**/*', '!Thumbs.db']),
-        $.zip(package.name + '.zip'),
-        gulp.dest('./dist'),
-    ]);
+gulp.task('zip', function zip() {
+    return $.merge(Object.keys(cfg.supported_browsers).map(browser => {
+        return $.pump([
+            gulp.src([`./dist/${browser}/**/*`, '!Thumbs.db']),
+            $.zip(`${pkg.name}-${browser}.zip`),
+            gulp.dest('./dist'),
+        ],
+        err => { if (err) $.log.error(`${$.colors.red('Task Error [\'zip\']')}: ${err.message}`); });
+    }));
 });
 
 
@@ -259,30 +320,36 @@ gulp.task('dist:webextension', () => {
 // =========================
 
 gulp.task('lint', gulp.parallel(
-    'lint:scripts',
+    'lint:helpers',
+    'lint:pages',
+    'lint:scripts'
 ));
 
 gulp.task('build', gulp.parallel(
+    'build:images',
+    'build:logos',
     'build:locales',
-    'build:logo',
     'build:manifest',
+    'build:pages',
     'build:scripts',
-    'build:vendor',
+    'copy:scripts:vendor'
 ));
 
-gulp.task('dist', gulp.series((done) => {
-    options.uglify.compress.drop_console = true;
+gulp.task('watch', function watch(done) {
+    // TODO: it would be nice to only rebuild the modified files per watch, but that requires a way to pass them to the build task
+    gulp.watch(`${cfg.source_folders.locales}/**/*`, gulp.task('build:locales'));
+    gulp.watch(`${cfg.source_folders.manifests}/**/*`, gulp.task('build:manifest'));
+    gulp.watch(`${cfg.source_folders.pages}/**/*`, gulp.task('build:pages'));
+    gulp.watch([
+        `${cfg.source_folders.helpers}/**/*.js`,
+        `${ cfg.source_folders.scripts }/**/*.js`,
+    ], gulp.task('build:scripts'));
+
     done();
-}, 'clean', 'build', 'dist:userscript', 'dist:webextension'));
+});
 
-gulp.task('watch', gulp.series('build', () => {
-    options.uglify.compress.drop_console = false;
+gulp.task('debug', gulp.series('build', 'watch'));
+gulp.task('package', gulp.series('build', 'minify', 'zip'));
 
-    gulp.watch('./manifest.json', ['build:manifest']);
-    gulp.watch('./resources/logo.svg', ['build:logo']);
-    gulp.watch(path.join(_folders.locales, '/**/*'), ['build:locales']);
-    gulp.watch(path.join(_folders.scripts, '/**/*.js'), ['build:scripts']);
-}));
-
-// default task (alias build)
-gulp.task('default', gulp.task('build'));
+// default task (alias debug)
+gulp.task('default', gulp.task('debug'));

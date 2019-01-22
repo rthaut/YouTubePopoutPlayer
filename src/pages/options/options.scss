@@ -1,0 +1,181 @@
+html {
+    min-width: 600px;
+}
+
+/**
+ * Dialog
+ */
+dialog {
+    position: fixed;
+    top: 50%;
+    transform: translate(0, -50%);
+
+    background: rgb(255, 255, 255);
+    border: none;
+
+    border-radius: 8px;
+
+    box-shadow: 0 12px 24px -4px rgba(50, 50, 50, 0.25),
+                0 8px 16px 0px rgba(0, 0, 0, 0.25);
+}
+
+dialog::backdrop,
+dialog+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background-color: rgba(255, 255, 255, 1);
+}
+
+/**
+ * Dismissible Alerts (Automatic & Manual)
+ * adopted for Shoelace.css
+ */
+.alert-dismissible {
+    position: relative;
+    padding-right: 64px;
+
+    .close {
+        cursor: pointer;
+        display: block;
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 32px;
+        height: 32px;
+        margin: 4px;
+
+        .x {
+            font-size: 2rem;
+            display: block;
+            opacity: 0.5;
+            text-align: center;
+            width: 100%;
+            line-height: 24px;
+        }
+
+        &:hover {
+            .x {
+                opacity: 1;
+            }
+
+            text-decoration: none;
+        }
+    }
+
+    &.alert-timed {
+        .close {
+            border-radius: 100%;
+
+            .x {
+                position: absolute;
+            }
+
+            .timer-left,
+            .timer-right {
+                float: left;
+                width: 50%;
+                height: 100%;
+                overflow: hidden;
+
+                &:before {
+                    content: "";
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    opacity: 0.25;
+                    box-sizing: border-box;
+                    border: 2px solid currentColor;
+                    animation-duration: var(--duration);
+                    animation-iteration-count: 1;
+                    animation-timing-function: linear;
+                    animation-fill-mode: forwards;
+                }
+            }
+
+            .timer-left:before {
+                border-right: none;
+                border-top-left-radius: 32px;
+                border-bottom-left-radius: 32px;
+                transform-origin: center right;
+                animation-name: rotate-left;
+            }
+
+            .timer-right:before {
+                border-left: none;
+                border-top-right-radius: 32px;
+                border-bottom-right-radius: 32px;
+                transform-origin: center left;
+                animation-name: rotate-right;
+            }
+        }
+    }
+}
+
+/**
+ * Animations
+ */
+@keyframes rotate-left {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(-180deg);
+    }
+
+    100% {
+        transform: rotate(-180deg);
+    }
+}
+
+@keyframes rotate-right {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-180deg);
+    }
+}
+
+.fade.ng-leave {
+    transition: 0.2s linear opacity;
+    opacity: 1;
+
+    &.ng-leave-active {
+        opacity: 0;
+    }
+}
+
+
+
+/**
+ * Firefox-Specific Overrides
+ * Note: these are applied to all browsers, but should match the computed values when rendered outside the Add-ons Manager
+ * TODO: Ensure this is only used for Firefox. Ideas include:
+ *   - modifying the build process to only include it for FF
+ *   - finding a selector that is only present in Firefox when the Options page is rendered inside the Add-ons Manager
+ *   - using JS to add a custom body/html class for Firefox (ideally only when inside the Add-ons Manager)
+ */
+body {
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+
+    button {
+        font-size: 16px !important;
+        line-height: 34px !important;
+        height: 36px !important;
+    }
+
+    .alert {
+        padding: 16px;
+    }
+}

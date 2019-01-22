@@ -10,13 +10,8 @@ const YouTubePopoutPlayer = (() => {
         constructor() {
             console.group('YouTubePopoutPlayer()');
 
-            //@TODO convert these into user-configurable settings
-            this.defaults = {
-                'width': 854,
-                'height': 480,
-                'startThreshold': 5
-            };
-            console.log('defaults', this.defaults);
+            this.insertControls();
+            this.watchPageChange();
 
             console.groupEnd();
         }
@@ -29,7 +24,7 @@ const YouTubePopoutPlayer = (() => {
         getVideoIDFromPlayer(player) {
             console.group('YouTubePopoutPlayer.getVideoIDFromPlayer()');
 
-            var id = this.getVideoIDFromURL(player.baseURI);
+            const id = this.getVideoIDFromURL(player.baseURI);
 
             console.log('Return', id);
             console.groupEnd();
@@ -44,10 +39,10 @@ const YouTubePopoutPlayer = (() => {
         getVideoIDFromURL(url) {
             console.group('YouTubePopoutPlayer.getVideoIDFromURL()');
 
-            var id = null;
+            let id = null;
 
-            var result = new RegExp(/(?:(?:v=)|(?:\/embed\/)|(?:\/youtu\.be\/))([^\?\&\/]{11})/).exec(url);
-            console.log(result);
+            const result = new RegExp(/(?:(?:v=)|(?:\/embed\/)|(?:\/youtu\.be\/))([^\?\&\/]{11})/).exec(url);
+            console.log('RegExp Result', result);
 
             if (result && result[1]) {
                 id = result[1];
@@ -66,10 +61,10 @@ const YouTubePopoutPlayer = (() => {
         getPlaylistIDFromURL(url) {
             console.group('YouTubePopoutPlayer.getPlaylistIDFromURL()');
 
-            var id = null;
+            let id = null;
 
-            var result = new RegExp(/list=((?:WL|[^\?\&\/]+))/).exec(url);
-            console.log(result);
+            const result = new RegExp(/list=((?:WL|[^\?\&\/]+))/).exec(url);
+            console.log('RegExp Result', result);
 
             if (result && result[1]) {
                 id = result[1];
@@ -89,6 +84,7 @@ const YouTubePopoutPlayer = (() => {
             this.insertContextMenuEntry();
             this.insertPlayerControlsButton();
 
+            console.log('Controls inserted');
             console.groupEnd();
         }
 
@@ -98,7 +94,7 @@ const YouTubePopoutPlayer = (() => {
         insertContextMenuEntry() {
             console.group('YouTubePopoutPlayer.insertControls()');
 
-            var menu = document.getElementsByClassName('ytp-contextmenu')[0];
+            const menu = document.getElementsByClassName('ytp-contextmenu')[0];
 
             if (!menu) {
                 console.warn('Missing context menu');
@@ -106,9 +102,9 @@ const YouTubePopoutPlayer = (() => {
                 return false;
             }
 
-            var target = menu.getElementsByClassName('ytp-panel')[0].getElementsByClassName('ytp-panel-menu')[0];
+            const target = menu.getElementsByClassName('ytp-panel')[0].getElementsByClassName('ytp-panel-menu')[0];
 
-            var menuItem = document.getElementById('popout-player-context-menu-item');
+            let menuItem = document.getElementById('popout-player-context-menu-item');
             if (menuItem) {
                 console.warn('#popout-player-context-menu-item already exists', menuItem);
                 console.groupEnd();
@@ -122,11 +118,11 @@ const YouTubePopoutPlayer = (() => {
             menuItem.setAttribute('tabindex', 0);
             menuItem.id = 'popout-player-context-menu-item';
 
-            var menuItemLabel = document.createElement('div');
+            const menuItemLabel = document.createElement('div');
             menuItemLabel.className = 'ytp-menuitem-label';
             menuItemLabel.innerText = browser.i18n.getMessage('ContextMenuEntryLabel_PopoutPlayer');
 
-            var menuItemContent = document.createElement('div');
+            const menuItemContent = document.createElement('div');
             menuItemContent.className = 'ytp-menuitem-content';
 
             menuItem.appendChild(menuItemLabel);
@@ -138,18 +134,19 @@ const YouTubePopoutPlayer = (() => {
             target.appendChild(menuItem);
             console.info('Inserting context menu entry', menuItem);
 
-            var contextMenus = document.getElementsByClassName('ytp-contextmenu');
-            var contextMenu = contextMenus[contextMenus.length - 1];
-            var contextMenuPanel = contextMenu.getElementsByClassName('ytp-panel')[0];
-            var contextMenuPanelMenu = contextMenuPanel.getElementsByClassName('ytp-panel-menu')[0];
+            const contextMenus = document.getElementsByClassName('ytp-contextmenu');
+            const contextMenu = contextMenus[contextMenus.length - 1];
+            const contextMenuPanel = contextMenu.getElementsByClassName('ytp-panel')[0];
+            const contextMenuPanelMenu = contextMenuPanel.getElementsByClassName('ytp-panel-menu')[0];
 
-            var height = (contextMenu.offsetHeight + menuItem.offsetHeight);
+            const height = (contextMenu.offsetHeight + menuItem.offsetHeight);
             console.info('Modifying context menu height to ' + height + 'px', contextMenu);
 
             contextMenu.style.height = height + 'px';
             contextMenuPanel.style.height = height + 'px';
             contextMenuPanelMenu.style.height = height + 'px';
 
+            console.log('Inserted Context Menu Item', menuItem);
             console.groupEnd();
         }
 
@@ -159,51 +156,53 @@ const YouTubePopoutPlayer = (() => {
         insertPlayerControlsButton() {
             console.group('YouTubePopoutPlayer.insertPlayerControlsButton()');
 
-            var controls = document.getElementsByClassName('ytp-right-controls')[0];
+            const controls = document.getElementsByClassName('ytp-right-controls')[0];
             if (!controls) {
                 console.warn('Missing player controls');
                 console.groupEnd();
                 return false;
             }
 
-            var fullScreenButton = controls.getElementsByClassName('ytp-fullscreen-button')[0];
+            const fullScreenButton = controls.getElementsByClassName('ytp-fullscreen-button')[0];
             if (!fullScreenButton) {
                 console.warn('Missing player controls full screen button');
                 console.groupEnd();
                 return false;
             }
 
-            var playerButton = controls.getElementsByClassName('ytp-popout-button')[0];
+            let playerButton = controls.getElementsByClassName('ytp-popout-button')[0];
             if (playerButton) {
                 console.warn('#popout-player-control-button already exists', playerButton);
                 console.groupEnd();
                 return false;
             }
 
-            var xmlns = 'http://www.w3.org/2000/svg';
-            var xlink = 'http://www.w3.org/1999/xlink';
+            // TODO: use the SVG file, now that `web_accessible_resources` in the manifest permits access to the images directory?
 
-            var playerButtonSVG = document.createElementNS(xmlns, 'svg');
+            const xmlns = 'http://www.w3.org/2000/svg';
+            const xlink = 'http://www.w3.org/1999/xlink';
+
+            const playerButtonSVG = document.createElementNS(xmlns, 'svg');
             playerButtonSVG.setAttribute('width', '100%');
             playerButtonSVG.setAttribute('height', '100%');
             playerButtonSVG.setAttribute('viewBox', '0 0 36 36');
             playerButtonSVG.setAttribute('version', '1.1');
 
-            var playerButtonSVGPath01 = document.createElementNS(xmlns, 'path');
+            const playerButtonSVGPath01 = document.createElementNS(xmlns, 'path');
             playerButtonSVGPath01.id = 'ytp-svg-pop-01';
             playerButtonSVGPath01.setAttributeNS(null, 'd', 'm 8,8 v 20 h 20 v -6 h -2 v 4 H 10 V 10 h 4 V 8 Z');
             playerButtonSVGPath01.setAttributeNS(null, 'class', 'ytp-svg-fill');
 
-            var playerButtonSVGPath02 = document.createElementNS(xmlns, 'path');
+            const playerButtonSVGPath02 = document.createElementNS(xmlns, 'path');
             playerButtonSVGPath02.id = 'ytp-svg-pop-02';
             playerButtonSVGPath02.setAttributeNS(null, 'd', 'M 28,8 H 18 l 3,3 -7,8 3,3 8,-7 3,3 z');
             playerButtonSVGPath02.setAttributeNS(null, 'class', 'ytp-svg-fill');
 
-            var playerButtonSVGUse01 = document.createElementNS(xmlns, 'use');
+            const playerButtonSVGUse01 = document.createElementNS(xmlns, 'use');
             playerButtonSVGUse01.setAttributeNS(null, 'class', 'ytp-svg-shadow');
             playerButtonSVGUse01.setAttributeNS(xlink, 'href', '#' + playerButtonSVGPath01.id);
 
-            var playerButtonSVGUse02 = document.createElementNS(xmlns, 'use');
+            const playerButtonSVGUse02 = document.createElementNS(xmlns, 'use');
             playerButtonSVGUse02.setAttributeNS(null, 'class', 'ytp-svg-shadow');
             playerButtonSVGUse02.setAttributeNS(xlink, 'href', '#' + playerButtonSVGPath02.id);
 
@@ -223,6 +222,7 @@ const YouTubePopoutPlayer = (() => {
 
             controls.insertBefore(playerButton, fullScreenButton);
 
+            console.log('Inserted Button', playerButton);
             console.groupEnd();
         }
 
@@ -230,81 +230,34 @@ const YouTubePopoutPlayer = (() => {
          * Click event handler for any of the popout player controls
          * @param {Event} event
          */
-        onClick(event) {
-            console.group('YouTubePopoutPlayer.onClick()');
+        onClick() {
+            console.log('YouTubePopoutPlayer.onClick()');
 
-            var player = new HTML5Player();
+            const container = document.getElementById('movie_player') || document.getElementById('player');
+            const video = container.querySelector('video');
+            const player = new HTML5Player(video);
 
-            player.pause();
-
-            var id = this.getVideoIDFromPlayer(player.player) || this.getVideoIDFromURL(window.location.href);
-            var list = this.getPlaylistIDFromURL(window.location.href);
-
-            var time = player.getTime() || 0;
-            if (time <= this.defaults.startThreshold) {
-                console.info('Popout video will start from beginning');
-                time = 0;
+            let id = this.getVideoIDFromPlayer(player.getVideo());
+            if (id === undefined || id === null || id.length === 0) {
+                // fallback to parsing the video ID from the page's address
+                id = this.getVideoIDFromURL(window.location.href);
             }
 
-            var attrs = {};
-
-            if (list != null) {
-                attrs.list = list;
-            }
-
-            attrs.start = time;
-            attrs.autoplay = 1;
-
-            var opts = {
-                'width': player.getWidth() || this.defaults.width,
-                'height': player.getHeight() || this.defaults.height,
-                'scrollbars': 'no',
-                'toolbar': 'no'
-            };
-
-            player.pause();
-            this.popoutPlayer(id, attrs, opts);
-
-            console.groupEnd();
-        }
-
-        /**
-         * Opens the specified video in a new popout window
-         * @param {String} id
-         * @param {Object} [attrs]
-         * @param {Object} [opts]
-         */
-        popoutPlayer(id, attrs, opts) {
-            console.group('YouTubePopoutPlayer.popoutPlayer()');
-
-            console.log('id', id);
-            console.log('attrs', attrs);
-            console.log('opts', opts);
-
-            var location = 'https://www.youtube.com/embed/' + id + '?';
-
-            if (attrs !== undefined) {
-                for (var attr in attrs) {
-                    location += attr + '=' + attrs[attr] + '&';
+            browser.runtime.sendMessage({
+                'action': 'open-popout',
+                'data': {
+                    'id': id,
+                    'list': this.getPlaylistIDFromURL(window.location.href),
+                    'time': player.getTime(),
+                    'width': player.getWidth(),
+                    'height': player.getHeight()
                 }
-                location = location.replace(/\&$/, ''); // trim trailing ampersand (&)
-            }
-
-            var options = '';
-            if (opts !== undefined) {
-                for (var opt in opts) {
-                    options += opt + '=' + opts[opt] + ',';
-                }
-                options = options.replace(/\,$/, ''); // trim trailing comma (,)
-            }
-
-            console.log('location', location);
-            console.log('options', options);
-
-            var popout = window.open(location, id, options);
-            console.log('Opened window', popout);
-
-            console.groupEnd();
+            }).then(response => {
+                console.log('YouTubePopoutPlayer.onClick() :: Message Response', response);
+                player.pause();
+            }).catch(error => {
+                console.error('YouTubePopoutPlayer.onClick() :: Message Error', error);
+            });
         }
 
         /**
@@ -313,44 +266,32 @@ const YouTubePopoutPlayer = (() => {
         watchPageChange() {
             console.group('YouTubePopoutPlayer.watchPageChange()');
 
-            var self = this;
-
-            var observer = new MutationObserver(function (mutations) {
-                mutations.forEach(function (mutation) {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
                     if (mutation.addedNodes != null) {
-                        for (var i = 0; i < mutation.addedNodes.length; i++) {
-                            switch (mutation.addedNodes[i].className) {
+                        for (const node of mutation.addedNodes) {
+                            switch (node.className) {
                                 case 'ytp-popup ytp-contextmenu':
-                                    console.log('Mutation observed for context menu', mutation.addedNodes[i]);
-                                    self.insertContextMenuEntry();
+                                    console.log('Mutation observed for context menu', node);
+                                    this.insertContextMenuEntry();
                                     break;
 
                                 case 'ytp-right-controls':
-                                    console.log('Mutation observed for player controls', mutation.addedNodes[i]);
-                                    self.insertPlayerControlsButton();
+                                    console.log('Mutation observed for player controls', node);
+                                    this.insertPlayerControlsButton();
                                     break;
                             }
                         }
                     }
                 });
             });
+
             observer.observe(document.body, {
                 'childList': true,
                 'subtree': true
             });
 
-            console.groupEnd();
-        }
-
-        /**
-         * Initializes the YouTube Popout Player functionality
-         */
-        run() {
-            console.group('YouTubePopoutPlayer.initialize()');
-
-            this.insertControls();
-            this.watchPageChange();
-
+            console.log('Mutation Observer watching for changes', observer);
             console.groupEnd();
         }
 
