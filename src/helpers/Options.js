@@ -6,15 +6,43 @@ const Options = (() => {
 
         /**
          * Resets all options in local storage to their default values
+         * @param {boolean} [reset=false] indicates if local storage should be reset
          * @returns {Promise}
          */
-        'InitLocalStorageDefaults': function () {
+        'InitLocalStorageDefaults': function (reset = false) {
             console.log('Options.InitDefaults()');
 
-            return browser.storage.local.clear().then(() => {
-                const options = this.ConvertForStorage(Object.assign({}, OPTION_DEFAULTS));
-                return browser.storage.local.set(options);
-            });
+            const defaults = this.ConvertForStorage(Object.assign({}, OPTION_DEFAULTS));
+
+            if (reset) {
+                console.log('Options.InitDefaults() :: Setting all options to default values', defaults);
+                return browser.storage.local.clear().then(() => {
+                    return browser.storage.local.set(defaults);
+                });
+            } else {
+                return browser.storage.local.get().then((options) => {
+                    const promises = [];
+                    Object.keys(defaults).forEach(option => {
+                        if (options[option] === undefined || options[option] === null) {
+                            console.log(`Options.InitDefaults() :: Setting "${option}" to default value`, defaults[option]);
+
+                            const opt = {};
+                            opt[option] = defaults[option];
+                            promises.push(browser.storage.local.set(opt));
+                        }
+                    });
+
+                    Object.keys(options).forEach(option => {
+                        if (defaults[option] === undefined || defaults[option] === null) {
+                            console.log(`Options.InitDefaults() :: Removing unknown option "${option}"`);
+
+                            promises.push(browser.storage.local.remove(option));
+                        }
+                    });
+
+                    return Promise.all(promises);
+                });
+            }
         },
 
         /**
