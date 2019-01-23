@@ -55,7 +55,7 @@ browser.runtime.onMessage.addListener((message, sender) => {
 
         }
 
-        console.log('[Background] Runtime Message :: Unhandled Action');
+        console.log('[Background] Runtime Message :: Unhandled action', message.action);
         return;
     }
 });
