@@ -41,6 +41,13 @@
     "message": "Disabling this will show the open popout player button and context menu entry on videos playing within the popout player. <strong>The default for this setting is enabled.</strong>"
   },
 
+  "OptionsBehaviorCloseOriginalLabel": {
+    "message": "Close Original Window/Tab"
+  },
+  "OptionsBehaviorCloseOriginalDescription": {
+    "message": "Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong>"
+  },
+
   "OptionsSizeHeading": {
     "message": "Popout Player Size"
   },

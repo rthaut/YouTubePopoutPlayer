@@ -273,10 +273,21 @@ const YouTubePopoutPlayer = (() => {
                     'height': player.getHeight()
                 }
             }).then(response => {
-                console.log('YouTubePopoutPlayer.openPopout() :: Message Response', response);
+                if (response !== undefined) {
+                    console.log('YouTubePopoutPlayer.openPopout() :: Action "open-popout" response', response);
+                }
                 player.pause();
+
+                // note: the background script will only close the original tab when appropriate
+                return browser.runtime.sendMessage({
+                    'action': 'close-original-tab'
+                });
+            }).then(response => {
+                if (response !== undefined) {
+                    console.log('YouTubePopoutPlayer.openPopout() :: Action "close-original-tab" response', response);
+                }
             }).catch(error => {
-                console.error('YouTubePopoutPlayer.openPopout() :: Message Error', error);
+                console.error('YouTubePopoutPlayer.openPopout() :: Error', error);
             });
         }
 

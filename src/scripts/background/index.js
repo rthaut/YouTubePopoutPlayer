@@ -53,9 +53,12 @@ browser.runtime.onMessage.addListener((message, sender) => {
             case 'get-commands':
                 return browser.commands.getAll();
 
+            case 'close-original-tab':
+                return Popout.closeOriginalTab(sender.tab.id);
+
         }
 
-        console.log('[Background] Runtime Message :: Unhandled Action');
+        console.log('[Background] Runtime Message :: Unhandled action', message.action);
         return;
     }
 });
