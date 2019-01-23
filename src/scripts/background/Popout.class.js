@@ -12,6 +12,8 @@ const Popout = (() => {
         'open': async function ({ id, list, time, width, height }) {
             console.log('[Background] Popout.open()', id, list, time, width, height);
 
+            let promise;
+
             const attrs = {};
 
             // custom flag for determining if the embedded player is playing within a popout window/tab
@@ -24,7 +26,7 @@ const Popout = (() => {
             attrs.autoplay = 1; // TODO: should this be configurable?
 
             if (time <= START_THRESHOLD) {
-                console.info('Popout video will start from beginning');
+                console.info('[Background] Popout.open() :: Popout video will start from beginning');
                 time = 0;
             }
             attrs.start = time;
@@ -32,7 +34,6 @@ const Popout = (() => {
             const url = this.getURL(id, attrs);
 
             const target = await Options.GetLocalOption('behavior', 'target');
-            let promise;
             switch (target) {
                 case 'tab':
                     promise = this.openTab(url);
@@ -40,7 +41,7 @@ const Popout = (() => {
 
                 case 'window':
                 default:
-                    promise = this.openWindow(url, width, height);
+                promise = this.openWindow(url, width, height);
                     break;
             }
 
@@ -64,7 +65,7 @@ const Popout = (() => {
             console.log('[Background] Popout.openWindow()', url, width, height);
 
             const size = await Options.GetLocalOptionsForDomain('size');
-            console.log('[Background] Popout.openWindow() :: Size Options', size);
+            console.log('[Background] Popout.openWindow() :: Size options', size);
 
             if (size.mode.toLowerCase() === 'custom') {
                 switch (size.units.toLowerCase()) {

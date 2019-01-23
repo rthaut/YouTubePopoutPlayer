@@ -17,8 +17,8 @@ browser.runtime.onMessage.addListener((message, sender) => {
 
         }
 
-        console.log('[Background] Runtime Message :: Unhandled Action');
-        return true;
+        console.log('[Background] Runtime Message :: Unhandled action', message.action);
+        return;
     }
 
 });
@@ -27,10 +27,10 @@ browser.runtime.onInstalled.addListener(details => {
     console.log('[Background] Extension Installed', details);
 
     if (details.reason === 'install') {
-        console.log('[Background] Extension Installed :: Initializing Defaults for All Options');
+        console.log('[Background] Extension Installed :: Initializing defaults for ALL options');
         Options.InitLocalStorageDefaults(true);
     } else if (details.reason === 'update') {
-        console.log('[Background] Extension Updated :: Initializing Defaults for New Options');
+        console.log('[Background] Extension Updated :: Initializing defaults for new options only');
         Options.InitLocalStorageDefaults(false);
     }
 });
