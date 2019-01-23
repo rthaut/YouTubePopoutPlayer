@@ -23,6 +23,8 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
 
     /* BEGIN ALERTS */
 
+    // TODO: the alerts should probably be actual custom directives with their own scope/link functionality...
+
     $scope.alerts = [];
 
     /**
@@ -81,6 +83,9 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
     /* END ALERTS */
 
     /* BEGIN DIALOGS */
+
+    // TODO: move these dialog functions into a helper/utility? that would help expose them to custom directives
+    // TODO: the dialogs should probably be actual custom directives with their own scope/link functionality...
 
     var initDialog = function (dialog) {
         /* global dialogPolyfill */
@@ -345,6 +350,9 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
     /* END SETTINGS */
 
     /* BEGIN COMMANDS */
+
+    // TODO: move all of the command-related functionality into a custom directive?
+    // aside from the dialog methods (initDialog(), showDialog(), closeDialog()), it is already self-contained
 
     $scope.canUpdateCommands = (typeof browser.commands.update === 'function');
 
