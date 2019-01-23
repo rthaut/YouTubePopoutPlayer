@@ -11,8 +11,11 @@ const app = angular.module('OptionsApp', ['ngAnimate', 'ngMessages', 'ngSanitize
 
 app.filter('kbdCombo', function () {
   return function (input) {
-    input = input || '';
-    return Utils.kbdWrap(input);
+        if (input === undefined || input === null || !input.length) {
+            return '';
+        }
+
+        return input.split('+').map(i => `<${tag}>${i}</${tag}>`).join(' + ');
   };
 });
 
@@ -381,14 +384,14 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
 
         const key = event.code.replace('Key', '').replace('Arrow', '');
         if (!VALID_SHORTCUT_KEYS.includes(key)) {
-            $scope.updateCommandError = browser.i18n.getMessage('InvalidCommandShortcutKeyPlaceholder', '<kbd>' + key + '</kbd>');
+            $scope.updateCommandError = browser.i18n.getMessage('InvalidCommandShortcutKeyPlaceholder', kbdComboFilter(key));
 
             const keys = [];
             VALID_SHORTCUT_KEYS_DESCRIPTIONS.forEach(description => {
                 if (description.includes('-')) {
-                    description = Utils.kbdWrap(description, '-', '-');
+                    description = description.split('-').map(kbdComboFilter).join('-');
                 } else if (description.includes(', ')) {
-                    description = Utils.kbdWrap(description, ', ', ' , ');
+                    description = description.split(', ').map(kbdComboFilter).join(' , ');
                 }
                 keys.push(description);
             });
@@ -410,7 +413,7 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
 
         if (1 > modifierCount || modifierCount > 2) {
             $scope.updateCommandError = browser.i18n.getMessage('InvalidCommandShortcutModifiers');
-            $scope.updateCommandError += '<p>' + Utils.kbdWrap(modifiers.map(Utils.TitleCase), null, ' , ') + '</p>';
+            $scope.updateCommandError += '<p>' + modifiers.map(Utils.TitleCase).map(kbdComboFilter).join(' , ') + '</p>';
             $scope.$apply();
             return;
         }
