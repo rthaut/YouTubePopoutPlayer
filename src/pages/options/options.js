@@ -11,13 +11,9 @@ const app = angular.module('OptionsApp', ['ngAnimate', 'ngMessages', 'ngSanitize
 
 app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $timeout) {
 
+    /* BEGIN ALERTS */
+
     $scope.alerts = [];
-
-    $scope.cache = {};
-
-    $scope.options = angular.copy(OPTION_DEFAULTS);
-
-    $scope.resolution = window.screen.width + ' &times; ' + window.screen.height;
 
     /**
      * Removes an alert (and cancels the timeout, if applicable)
@@ -62,6 +58,61 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
 
         $scope.alerts.push(alert);
     };
+
+    $scope.$on('$destroy', function () {
+        // cancel all ongoing alert timers
+        for (const alert of $scope.alerts) {
+            if (alert.timeout !== undefined) {
+                $timeout.cancel(alert.timeout);
+            }
+        }
+    });
+
+    /* END ALERTS */
+
+    /* BEGIN DIALOGS */
+
+    var initDialog = function (dialog) {
+        /* global dialogPolyfill */
+        if (typeof dialogPolyfill !== 'undefined') {
+            dialogPolyfill.registerDialog(dialog);
+        }
+
+        dialog.addEventListener('close', () => {
+            document.body.style.overflowY = null;
+        });
+
+        return dialog;
+    };
+
+    $scope.showDialog = function (id) {
+        const dialog = document.querySelector(`#${id}`);
+        initDialog(dialog);
+
+        if (!dialog.open) {
+            document.body.style.overflowY = 'hidden';
+            dialog.showModal();
+        }
+    };
+
+    $scope.closeDialog = function (id) {
+        const dialog = document.querySelector(`#${id}`);
+        initDialog(dialog);
+
+        if (dialog.open) {
+            dialog.close();
+        }
+    };
+
+    /* END DIALOGS */
+
+    /* BEGIN SETTINGS */
+
+    $scope.cache = {};
+
+    $scope.options = angular.copy(OPTION_DEFAULTS);
+
+    $scope.resolution = window.screen.width + ' &times; ' + window.screen.height;
 
     /**
      * Creates/reset the object structure used for caching some options within the app
@@ -237,31 +288,6 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
         return 0;
     };
 
-    var initDialog = function (dialog) {
-        /* global dialogPolyfill */
-        if (typeof dialogPolyfill !== 'undefined') {
-            dialogPolyfill.registerDialog(dialog);
-        }
-    };
-
-    $scope.showDialog = function (id) {
-        const dialog = document.querySelector(`#${id}`);
-        initDialog(dialog);
-
-        if (!dialog.open) {
-            dialog.showModal();
-        }
-    };
-
-    $scope.closeDialog = function (id) {
-        const dialog = document.querySelector(`#${id}`);
-        initDialog(dialog);
-
-        if (dialog.open) {
-            dialog.close();
-        }
-    };
-
     $scope.confirmReset = function () {
         $scope.showDialog('ResetConfirmDialog');
     };
@@ -306,5 +332,7 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
             $scope.$apply();
         });
     };
+
+    /* END SETTINGS */
 
 }]);
