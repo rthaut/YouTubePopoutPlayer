@@ -10,7 +10,7 @@ import Utils from '../../helpers/utils';
 const app = angular.module('OptionsApp', ['ngAnimate', 'ngMessages', 'ngSanitize', 'browser.i18n']);
 
 app.filter('kbdCombo', function () {
-  return function (input) {
+  return function (input, tag = 'kbd') {
         if (input === undefined || input === null || !input.length) {
             return '';
         }
