@@ -313,11 +313,13 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         });
     };
 
+    $scope.canUpdateCommands = (typeof browser.commands.update === 'function');
+
     var getCommands = function () {
         browser.runtime.sendMessage({
             'action': 'get-commands'
-        }).then(response => {
-            $scope.commands = response;
+        }).then(commands => {
+            $scope.commands = commands;
         }).catch(err => {
             console.error('Failed to retrieve extension commands', err);
         }).finally(() => {
