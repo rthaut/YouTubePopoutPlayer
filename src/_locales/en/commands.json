@@ -12,6 +12,16 @@
     "message": "When changing any of the following keyboard shortcuts, you do <strong>not</strong> need to save settings; the new shortcut is applied automatically."
   },
 
+  "CommandListChangeChrome": {
+    "message": "<strong>Chrome Users</strong>: To change the shortcut(s) listed below, go to <code>$URL$</code> in a new browser tab.",
+    "description": "The help text displayed in Chrome to inform users how to change keyboard shortcuts",
+    "placeholders": {
+      "url": {
+        "content": "chrome://extensions/shortcuts"
+      }
+    }
+  },
+
   "CommandListDescriptionColumnHeading": {
     "message": "Description"
   },

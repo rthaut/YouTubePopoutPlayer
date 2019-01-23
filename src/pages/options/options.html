@@ -208,21 +208,22 @@
             <fieldset ng-show="commands && commands.length">
                 <legend class="text-primary" get-message="CommandListHeading"></legend>
 
-                <p class="text-small" get-message="CommandListSaveHelpText"></p>
+                <p class="text-small" get-message="CommandListSaveHelpText" ng-show="canUpdateCommands"></p>
+                <p class="text-small" get-message="CommandListChangeChrome" ng-hide="canUpdateCommands"></p>
 
                 <table>
                     <thead>
                         <tr>
                             <th get-message="CommandListDescriptionColumnHeading"></th>
                             <th get-message="CommandListShortcutColumnHeading"></th>
-                            <th></th>
+                            <th ng-if="canUpdateCommands"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="command in commands">
+                        <tr ng-repeat="command in commands" ng-if="command.description.length">
                             <td>{{command.description}}</td>
                             <td class="text-nowrap" ng-bind-html="command.shortcut | kbdCombo"></td>
-                            <td><a href ng-click="updateCommand(command)" get-message="CommandListUpdateCommandLabel"></a></td>
+                            <td ng-if="canUpdateCommands"><a href ng-click="updateCommand(command)" get-message="CommandListUpdateCommandLabel"></a></td>
                         </tr>
                     </tbody>
                 </table>
