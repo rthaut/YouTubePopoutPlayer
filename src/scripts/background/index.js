@@ -15,6 +15,9 @@ browser.runtime.onMessage.addListener((message, sender) => {
             case 'open-popout':
                 return Popout.open(message.data);
 
+            case 'close-original-tab':
+                return Popout.closeOriginalTab(sender.tab.id);
+
         }
 
         console.log('[Background] Runtime Message :: Unhandled Action');

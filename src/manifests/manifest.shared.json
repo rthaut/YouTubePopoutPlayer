@@ -16,7 +16,8 @@
   "permissions": [
     "*://*.youtube.com/*",
     "*://*.youtube-nocookie.com/*",
-    "storage"
+    "storage",
+    "tabs"
   ],
 
   "content_scripts": [

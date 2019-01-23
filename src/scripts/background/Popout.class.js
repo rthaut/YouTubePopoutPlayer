@@ -103,6 +103,35 @@ const Popout = (() => {
 
             console.log('[Background] Popout.getURL() :: Return', url);
             return url;
+        },
+
+        'closeOriginalTab': async function (tabId) {
+            console.log('[Background] Popout.closeOriginalTab()', tabId);
+
+            let promise;
+
+            const closeOriginal = await Options.GetLocalOption('behavior', 'closeOriginal');
+
+            if (closeOriginal) {
+                const tab = await browser.tabs.get(tabId);
+                if (tab && tab.url) {
+                    console.log('[Background] Popout.closeOriginalTab() :: Original tab', tab);
+
+                    const url = new URL(tab.url);
+                    const domain = url.hostname.split('.').splice(-2).join('.');
+                    console.log('[Background] Popout.closeOriginalTab() :: Original tab domain', domain);
+
+                    if (domain === 'youtube.com') {   // TODO: other YouTube domains to support?
+                        console.log('[Background] Popout.closeOriginalTab() :: Closing original tab');
+                        promise = browser.tabs.remove(tab.id);
+                    } else {
+                        console.info('[Background] Popout.closeOriginalTab() :: Original tab is NOT YouTube');
+                    }
+                }
+            }
+
+            console.log('[Background] Popout.closeOriginalTab() :: Return [Promise]', promise);
+            return promise;
         }
 
     };

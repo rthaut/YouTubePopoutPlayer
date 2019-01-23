@@ -4,7 +4,8 @@ export const START_THRESHOLD = 5;   // TODO: should this be configurable?
 
 export const OPTION_DEFAULTS = {
     'behavior': {
-        'target': 'window'
+        'target': 'window',
+        'closeOriginal': false
     },
     'size': {
         'mode': 'current',
