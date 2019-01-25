@@ -88,20 +88,7 @@ function lintJSON(dir, failOnError = true) {
  */
 function getWebpackConfig(dir) {
     // NOTE: the webpack.config.js file contains basic configuration that does not require any dynamic values
-    const config = require(`${dir}/webpack.config.js`);
-
-    switch (env) {
-        case 'production':
-            config.mode = 'production';
-            config.devtool = 'none';
-            break;
-
-        case 'development':
-        default:
-            config.mode = 'development';
-            config.devtool = 'inline-source-map';
-            break;
-    }
+    const config = require(`${dir}/webpack.config.${env}.js`);
 
     const entry = config.entry || {};
     const plugins = config.plugins || [];
@@ -351,8 +338,9 @@ gulp.task('watch', function watch(done) {
     done();
 });
 
-gulp.task('debug', gulp.series('build', 'watch'));
-gulp.task('package', gulp.series('build', 'minify', 'zip'));
+gulp.task('build:development', gulp.task('build'));
+gulp.task('build:production', gulp.series('build', 'minify'));
 
-// default task (alias debug)
-gulp.task('default', gulp.task('debug'));
+gulp.task('debug', gulp.series('build:development', 'watch'));
+
+gulp.task('package', gulp.series('build:production', 'zip'));

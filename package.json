@@ -8,14 +8,15 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
+    "build:development": "cross-env NODE_ENV=development gulp build:development",
+    "build:production": "cross-env NODE_ENV=production gulp build:production",
     "clean": "trash ./dist",
-    "build": "gulp build",
-    "test": "run-s clean build firefox:lint",
-    "watch": "gulp build && gulp watch",
-    "package": "cross-env NODE_ENV=production gulp package",
+    "debug": "cross-env NODE_ENV=development gulp debug",
     "firefox:lint": "web-ext lint --source-dir=./dist/firefox",
     "firefox:build": "web-ext build --source-dir=./dist/firefox --firefox=firefox",
-    "firefox:start": "web-ext run --source-dir=./dist/firefox"
+    "firefox:start": "web-ext run --source-dir=./dist/firefox",
+    "package": "cross-env NODE_ENV=production gulp package",
+    "test": "run-s clean build:production firefox:lint"
   },
   "repository": {
     "type": "git",
@@ -67,6 +68,7 @@
     "raw-loader": "^1.0.0",
     "rollup-stream": "^1.24.1",
     "sass-loader": "^7.1.0",
+    "terser-webpack-plugin": "^1.2.1",
     "trash-cli": "^1.4.0",
     "uglify-es": "^3.3.9",
     "url-loader": "^1.1.2",
@@ -74,6 +76,7 @@
     "vinyl-source-stream": "^2.0.0",
     "web-ext": "^2.9.3",
     "webpack": "^4.28.3",
+    "webpack-merge": "^4.2.1",
     "webpack-stream": "^5.2.1"
   }
 }
