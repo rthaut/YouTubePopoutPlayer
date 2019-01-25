@@ -78,13 +78,21 @@ const Popout = (() => {
                 }
             }
 
-            const promise = browser.windows.create({
+            const createData = {
                 'width': width + WIDTH_PADDING,     // manually increasing size to account for window frame
                 'height': height + HEIGHT_PADDING,  // manually increasing size to account for window frame
-                // 'titlePreface': 'YTPP :: ',  // TODO: this should be configurable
                 'type': 'popup',
                 'url': url
-            });
+            };
+
+            const isFirefox = await Utils.IsFirefox();
+
+            if (isFirefox) {
+                createData.titlePreface = await Options.GetLocalOption('advanced', 'title');
+            }
+
+            console.log('[Background] Popout.openWindow() :: Opening Window', createData);
+            const promise = browser.windows.create(createData);
 
             console.log('[Background] Popout.openWindow() :: Return [Promise]', promise);
             return promise;

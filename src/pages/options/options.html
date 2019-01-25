@@ -148,6 +148,19 @@
 
             </fieldset>
 
+            <fieldset ng-show="isFirefox">
+                <legend class="text-primary" get-message="OptionsAdvancedHeading"></legend>
+
+                <div class="input-field">
+                    <label get-message="OptionsAdvancedTitleLabel"></label>
+                    <input type="text" name="advancedTitle" ng-model="options.advanced.title" ng-trim="false" ng-disabled="options.behavior.target !== 'window'" />
+                    <p class="input-hint text-warning" ng-hide="options.behavior.target === 'window'"><i class="fa fa-warning"></i> <span get-message="OptionsBehaviorTabWarning"></span></p>
+                    <p class="input-hint text-primary" ng-show="optionsForm.advancedTitle.$dirty && optionsForm.advancedTitle.$valid"><i class="fa fa-check-square-o"></i> <i18n message="OptionsSaveSettingsReminder"></i18n></p>
+                    <p class="input-hint" get-message="OptionsAdvancedTitleDescription"></p>
+                </div>
+
+            </fieldset>
+
             <div class="row">
                 <div class="col-6">
                     <button class="button button-block" ng-class="{'button-light': optionsForm.$pristine}" ng-click="save()" ng-disabled="optionsForm.$pristine || optionsForm.$invalid" get-message="ButtonSaveLabel"></button>

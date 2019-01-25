@@ -108,6 +108,11 @@ app.controller('OptionsController', ['$scope', '$timeout', function ($scope, $ti
 
     /* BEGIN SETTINGS */
 
+    $scope.isFirefox = false;
+    (async () => {
+        $scope.isFirefox = await Utils.IsFirefox();
+    })();
+
     $scope.cache = {};
 
     $scope.options = angular.copy(OPTION_DEFAULTS);
