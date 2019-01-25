@@ -145,12 +145,12 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         resetCache();
 
         $scope.$watch('options.size.width', () => {
-            if ($scope.optionsForm.width.$valid) {
+            if ($scope.optionsForm.sizeDimensionsForm.sizeWidth.$valid) {
                 $scope.cache.dimensions[$scope.options.size.units].width = angular.copy($scope.options.size.width);
             }
         });
         $scope.$watch('options.size.height', () => {
-            if ($scope.optionsForm.height.$valid) {
+            if ($scope.optionsForm.sizeDimensionsForm.sizeHeight.$valid) {
                 $scope.cache.dimensions[$scope.options.size.units].height = angular.copy($scope.options.size.height);
             }
         });
