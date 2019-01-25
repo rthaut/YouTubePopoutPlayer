@@ -123,6 +123,11 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
 
     /* BEGIN SETTINGS */
 
+    $scope.isFirefox = false;
+    (async () => {
+        $scope.isFirefox = await Utils.IsFirefox();
+    })();
+
     $scope.cache = {};
 
     $scope.options = angular.copy(OPTION_DEFAULTS);

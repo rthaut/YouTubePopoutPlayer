@@ -14,6 +14,9 @@ export const OPTION_DEFAULTS = {
         'width': 854,
         'height': 480
     },
+    'advanced': {
+        'title': ''
+    }
 };
 
 export const VALID_SHORTCUT_KEYS = [

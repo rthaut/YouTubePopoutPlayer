@@ -16,6 +16,17 @@
     "message": "<strong>Warning</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window."
   },
 
+  "OptionsAdvancedHeading": {
+    "message": "Advanced Settings"
+  },
+
+  "OptionsAdvancedTitleLabel": {
+    "message": "Window Title Text (Preface)"
+  },
+  "OptionsAdvancedTitleDescription": {
+    "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
+  },
+
   "OptionsBehaviorHeading": {
     "message": "Popout Player Behavior"
   },
