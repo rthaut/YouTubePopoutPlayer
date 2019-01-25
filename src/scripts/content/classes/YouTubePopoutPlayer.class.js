@@ -115,7 +115,7 @@ const YouTubePopoutPlayer = (() => {
             const menu = document.getElementsByClassName('ytp-contextmenu')[0];
 
             if (!menu) {
-                console.warn('Missing context menu');
+                console.info('Missing context menu');
                 console.groupEnd();
                 return false;
             }
@@ -124,7 +124,7 @@ const YouTubePopoutPlayer = (() => {
 
             let menuItem = document.getElementById('popout-player-context-menu-item');
             if (menuItem) {
-                console.warn('#popout-player-context-menu-item already exists', menuItem);
+                console.info('#popout-player-context-menu-item already exists', menuItem);
                 console.groupEnd();
                 return false;
             }
@@ -177,21 +177,21 @@ const YouTubePopoutPlayer = (() => {
 
             const controls = document.getElementsByClassName('ytp-right-controls')[0];
             if (!controls) {
-                console.warn('Missing player controls');
+                console.info('Missing player controls');
                 console.groupEnd();
                 return false;
             }
 
             const fullScreenButton = controls.getElementsByClassName('ytp-fullscreen-button')[0];
             if (!fullScreenButton) {
-                console.warn('Missing player controls full screen button');
+                console.info('Missing player controls full screen button');
                 console.groupEnd();
                 return false;
             }
 
             let playerButton = controls.getElementsByClassName('ytp-popout-button')[0];
             if (playerButton) {
-                console.warn('#popout-player-control-button already exists', playerButton);
+                console.info('#popout-player-control-button already exists', playerButton);
                 console.groupEnd();
                 return false;
             }
