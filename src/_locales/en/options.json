@@ -107,6 +107,9 @@
   "FieldRequiredMessage": {
     "message": "This field is required"
   },
+  "FieldPatternNumberMessage": {
+    "message": "The value of this field must be a number"
+  },
   "FieldMinValuePlaceholderMessage": {
     "message": "The value of this field cannot be less than <strong>$VALUE$</strong>",
     "placeholders": {

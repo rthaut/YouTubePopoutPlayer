@@ -2,7 +2,7 @@
 <html ng-app="OptionsApp" ng-csp ng-controller="OptionsController">
 
     <head>
-        <meta charset="utf-8"/>
+        <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title get-message="OptionsPageTitle"></title>
@@ -19,22 +19,26 @@
             <fieldset>
                 <legend class="text-primary" get-message="OptionsBehaviorHeading"></legend>
 
-                <div class="input-field">
-                    <label>
-                        <input type="radio" name="target" value="window" ng-model="options.behavior.target" ng-required/>
-                        <span get-message="OptionsBehaviorTargetWindowLabel"></span>
-                        <p class="input-hint" get-message="OptionsBehaviorTargetWindowDescription"></p>
-                    </label>
+                <ng-form name="behaviorTargetForm">
 
-                </div>
+                    <div class="input-field">
+                        <label>
+                            <input type="radio" name="behaviorTarget" value="window" ng-model="options.behavior.target" ng-required />
+                            <span get-message="OptionsBehaviorTargetWindowLabel"></span>
+                            <p class="input-hint" get-message="OptionsBehaviorTargetWindowDescription"></p>
+                        </label>
 
-                <div class="input-field">
-                    <label>
-                        <input type="radio" name="target" value="tab" ng-model="options.behavior.target" ng-required/>
-                        <span get-message="OptionsBehaviorTargetTabLabel"></span>
-                        <p class="input-hint" get-message="OptionsBehaviorTargetTabDescription"></p>
-                    </label>
-                </div>
+                    </div>
+
+                    <div class="input-field">
+                        <label>
+                            <input type="radio" name="behaviorTarget" value="tab" ng-model="options.behavior.target" ng-required />
+                            <span get-message="OptionsBehaviorTargetTabLabel"></span>
+                            <p class="input-hint" get-message="OptionsBehaviorTargetTabDescription"></p>
+                        </label>
+                    </div>
+
+                </ng-form>
 
                 <hr/>
 
@@ -63,31 +67,35 @@
 
                 <div ng-show="options.behavior.target === 'window'">
 
-                    <div class="input-field">
-                        <label>
-                            <input type="radio" name="size" value="current" ng-model="options.size.mode" ng-required>
-                            <span get-message="OptionsSizeModeCurrentLabel"></span>
-                            <p class="input-hint" get-message="OptionsSizeModeCurrentDescription"></p>
-                        </label>
-                    </div>
+                    <ng-form name="sizeModeForm">
 
-                    <div class="input-field mar-b-0">
-                        <label>
-                            <input type="radio" name="size" value="custom" ng-model="options.size.mode" ng-required>
-                            <span get-message="OptionsSizeModeCustomLabel"></span><br/>
-                            <p class="input-hint" get-message="OptionsSizeModeCustomDescription"></p>
-                        </label>
-                    </div>
+                        <div class="input-field">
+                            <label>
+                                <input type="radio" name="sizeMode" value="current" ng-model="options.size.mode" ng-required>
+                                <span get-message="OptionsSizeModeCurrentLabel"></span>
+                                <p class="input-hint" get-message="OptionsSizeModeCurrentDescription"></p>
+                            </label>
+                        </div>
+
+                        <div class="input-field mar-b-0">
+                            <label>
+                                <input type="radio" name="sizeMode" value="custom" ng-model="options.size.mode" ng-required>
+                                <span get-message="OptionsSizeModeCustomLabel"></span><br />
+                                <p class="input-hint" get-message="OptionsSizeModeCustomDescription"></p>
+                            </label>
+                        </div>
+
+                    </ng-form>
 
                     <div class="container-fluid mar-t-sm" ng-show="options.size.mode === 'custom'">
 
-                        <div class="input-field mar-b-0">
+                        <div ng-form="sizeDimensionsForm" class="input-field mar-b-0">
                             <div class="row">
 
                                 <div class="col">
                                     <div class="input-field">
-                                        <label for="units" get-message="DimensionUnitsLabel"></label>
-                                        <select class="input-lg" name="units" id="units" ng-model="options.size.units" ng-required>
+                                        <label for="sizeModeUnits" get-message="DimensionUnitsLabel"></label>
+                                        <select class="input-lg" name="sizeModeUnits" id="sizeModeUnits" ng-model="options.size.units" ng-required>
                                             <option value="pixels" get-message="DimensionUnitsPixelsOptionLabel"></option>
                                             <option value="percentage" get-message="DimensionUnitsPercentageOptionLabel"></option>
                                         </select>
@@ -99,36 +107,38 @@
                             <div class="row">
 
                                 <div class="col">
-                                    <div class="input-field" ng-class="{'input-invalid': optionsForm.width.$invalid}">
-                                        <label for="width" get-message="WidthLabel"></label>
+                                    <div class="input-field" ng-class="{'input-invalid': optionsForm.sizeDimensionsForm.sizeWidth.$invalid}">
+                                        <label for="sizeWidth" get-message="WidthLabel"></label>
                                         <div class="input-group">
-                                            <input type="number" class="input-lg" name="width" id="width" ng-min="sizeMin('width')" ng-max="sizeMax('width')" placeholder="Width" ng-model="options.size.width" ng-model-options="{ debounce: 500 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')"/>
+                                            <input type="number" class="input-lg" name="sizeWidth" id="sizeWidth" pattern="\d+" ng-min="sizeMin('width')" ng-max="sizeMax('width')" ng-model="options.size.width" ng-model-options="{ debounce: 200 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')" />
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
-                                        <div ng-messages="optionsForm.width.$error" role="alert">
-                                            <p class="input-hint" ng-message="required" get-message="FieldRequiredMessage"></p>
-                                            <p class="input-hint" ng-message="min" get-message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('width')}}"></p>
-                                            <p class="input-hint" ng-message="max" get-message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('width')}}"></p>
-                                        </div>
+                                        <p class="input-hint text-danger" ng-messages="optionsForm.sizeDimensionsForm.sizeWidth.$error">
+                                            <span get-message="FieldRequiredMessage"></span>
+                                            <span get-message="FieldPatternNumberMessage"></span>
+                                            <span get-message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('width')}}"></span>
+                                            <span get-message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('height')}}"></span>
+                                        </p>
                                     </div>
                                 </div>
 
                                 <div class="col">
-                                    <div class="input-field" ng-class="{'input-invalid': optionsForm.height.$invalid}">
-                                        <label for="inputPassword4" get-message="HeightLabel"></label>
+                                    <div class="input-field" ng-class="{'input-invalid': optionsForm.sizeDimensionsForm.sizeHeight.$invalid}">
+                                        <label for="sizeHeight" get-message="HeightLabel"></label>
                                         <div class="input-group">
-                                            <input type="number" class="input-lg" name="height" id="height" ng-min="sizeMin('height')" ng-max="sizeMax('height')" placeholder="Height" ng-model="options.size.height" ng-model-options="{ debounce: 500 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')"/>
+                                            <input type="number" class="input-lg" name="sizeHeight" id="sizeHeight" pattern="\d+" ng-min="sizeMin('height')" ng-max="sizeMax('height')" ng-model="options.size.height" ng-model-options="{ debounce: 200 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')" />
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
-                                        <div ng-messages="optionsForm.height.$error" role="alert">
-                                            <p class="input-hint" ng-message="required" get-message="FieldRequiredMessage"></p>
-                                            <p class="input-hint" ng-message="min" get-message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('height')}}"></p>
-                                            <p class="input-hint" ng-message="max" get-message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('height')}}"></p>
-                                        </div>
+                                        <p class="input-hint text-danger" ng-messages="optionsForm.sizeDimensionsForm.sizeHeight.$error">
+                                            <span get-message="FieldRequiredMessage"></span>
+                                            <span get-message="FieldPatternNumberMessage"></span>
+                                            <span get-message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('width')}}"></span>
+                                            <span get-message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('height')}}"></span>
+                                        </p>
                                     </div>
                                 </div>
 
-                                <div class="col-12">
+                                <div class="col-12" ng-class="{'mar-t-lg': (optionsForm.sizeDimensionsForm.sizeWidth.$valid && optionsForm.sizeDimensionsForm.sizeHeight.$valid)}">
                                     <table class="table-bordered">
                                         <tbody>
                                             <tr>
@@ -189,7 +199,7 @@
                     <div class="col">
                         <h3 class="mar-b-md" get-message="ConfirmSettingsResetHeading"></h3>
                         <p get-message="ConfirmSettingsResetText"></p>
-                        <hr/>
+                        <hr />
                     </div>
                 </div>
 
