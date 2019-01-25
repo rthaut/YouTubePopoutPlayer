@@ -16,6 +16,15 @@
     "message": "<strong>Warning</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window."
   },
 
+  "OptionsSaveSettingsReminder": {
+    "message": "Remember to save your changes using the \"$SAVE$\" button below",
+    "placeholders": {
+      "save": {
+        "content": "Save Settings"
+      }
+    }
+  },
+
   "OptionsAdvancedHeading": {
     "message": "Advanced Settings"
   },

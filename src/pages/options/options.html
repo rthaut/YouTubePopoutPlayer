@@ -6,6 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title get-message="OptionsPageTitle"></title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     </head>
 
     <body class="pad-y-sm pad-x-0">
@@ -14,7 +15,10 @@
 
         <form name="optionsForm" class="container-fluid">
 
-            <div class="alert alert-secondary text-small" get-message="OptionsPerDeviceWarning"></div>
+            <div class="alert alert-primary text-small">
+                <i class="fa fa-cogs"></i>
+                <i18n message="OptionsPerDeviceWarning"></i18n>
+            </div>
 
             <fieldset>
                 <legend class="text-primary" get-message="OptionsBehaviorHeading"></legend>
@@ -24,7 +28,7 @@
                     <div class="input-field">
                         <label>
                             <input type="radio" name="behaviorTarget" value="window" ng-model="options.behavior.target" ng-required />
-                            <span get-message="OptionsBehaviorTargetWindowLabel"></span>
+                            <i18n message="OptionsBehaviorTargetWindowLabel"></i18n>
                             <p class="input-hint" get-message="OptionsBehaviorTargetWindowDescription"></p>
                         </label>
 
@@ -33,27 +37,40 @@
                     <div class="input-field">
                         <label>
                             <input type="radio" name="behaviorTarget" value="tab" ng-model="options.behavior.target" ng-required />
-                            <span get-message="OptionsBehaviorTargetTabLabel"></span>
+                            <i18n message="OptionsBehaviorTargetTabLabel"></i18n>
                             <p class="input-hint" get-message="OptionsBehaviorTargetTabDescription"></p>
                         </label>
                     </div>
 
                 </ng-form>
 
-                <hr/>
+                <p class="text-small text-primary" ng-show="optionsForm.behaviorTargetForm.$dirty && optionsForm.behaviorTargetForm.$valid">
+                    <i class="fa fa-check-square-o"></i>
+                    <i18n message="OptionsSaveSettingsReminder"></i18n>
+                </p>
+
+                <hr />
 
                 <div class="input-field">
                     <span class="switch">
-                        <input type="checkbox" name="disableOnPopout" id="disableOnPopout" ng-model="options.behavior.disableOnPopout">
-                        <label for="disableOnPopout" get-message="OptionsBehaviorDisableOnPopoutLabel"></label>
+                        <input type="checkbox" name="behaviorDisableOnPopout" id="behaviorDisableOnPopout" ng-model="options.behavior.disableOnPopout">
+                        <label for="behaviorDisableOnPopout" get-message="OptionsBehaviorDisableOnPopoutLabel"></label>
+                        <p class="input-hint text-primary" ng-show="optionsForm.behaviorDisableOnPopout.$dirty && optionsForm.behaviorDisableOnPopout.$valid">
+                            <i class="fa fa-check-square-o"></i>
+                            <i18n message="OptionsSaveSettingsReminder"></i18n>
+                        </p>
                         <p class="input-hint" get-message="OptionsBehaviorDisableOnPopoutDescription"></p>
                     </span>
                 </div>
 
                 <div class="input-field">
                     <span class="switch">
-                        <input type="checkbox" name="closeOriginal" id="closeOriginal" ng-model="options.behavior.closeOriginal">
-                        <label for="closeOriginal" get-message="OptionsBehaviorCloseOriginalLabel"></label>
+                        <input type="checkbox" name="behaviorCloseOriginal" id="behaviorCloseOriginal" ng-model="options.behavior.closeOriginal">
+                        <label for="behaviorCloseOriginal" get-message="OptionsBehaviorCloseOriginalLabel"></label>
+                        <p class="input-hint text-primary" ng-show="optionsForm.behaviorCloseOriginal.$dirty && optionsForm.behaviorCloseOriginal.$valid">
+                            <i class="fa fa-check-square-o"></i>
+                            <i18n message="OptionsSaveSettingsReminder"></i18n>
+                        </p>
                         <p class="input-hint" get-message="OptionsBehaviorCloseOriginalDescription"></p>
                     </span>
                 </div>
@@ -63,7 +80,12 @@
             <fieldset>
                 <legend class="text-primary" get-message="OptionsSizeHeading"></legend>
 
-                <div class="alert alert-warning text-small" ng-hide="options.behavior.target === 'window'" get-message="OptionsBehaviorTabWarning"></div>
+                <div class="alert alert-warning text-small" ng-hide="options.behavior.target === 'window'">
+                    <p>
+                        <i class="fa fa-warning"></i>
+                        <i18n message="OptionsBehaviorTabWarning"></i18n>
+                    </p>
+                </div>
 
                 <div ng-show="options.behavior.target === 'window'">
 
@@ -72,7 +94,7 @@
                         <div class="input-field">
                             <label>
                                 <input type="radio" name="sizeMode" value="current" ng-model="options.size.mode" ng-required>
-                                <span get-message="OptionsSizeModeCurrentLabel"></span>
+                                <i18n message="OptionsSizeModeCurrentLabel"></i18n>
                                 <p class="input-hint" get-message="OptionsSizeModeCurrentDescription"></p>
                             </label>
                         </div>
@@ -80,7 +102,7 @@
                         <div class="input-field mar-b-0">
                             <label>
                                 <input type="radio" name="sizeMode" value="custom" ng-model="options.size.mode" ng-required>
-                                <span get-message="OptionsSizeModeCustomLabel"></span><br />
+                                <i18n message="OptionsSizeModeCustomLabel"></i18n><br />
                                 <p class="input-hint" get-message="OptionsSizeModeCustomDescription"></p>
                             </label>
                         </div>
@@ -114,10 +136,22 @@
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
                                         <p class="input-hint text-danger" ng-messages="optionsForm.sizeDimensionsForm.sizeWidth.$error">
-                                            <span get-message="FieldRequiredMessage"></span>
-                                            <span get-message="FieldPatternNumberMessage"></span>
-                                            <span get-message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('width')}}"></span>
-                                            <span get-message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('height')}}"></span>
+                                            <span ng-message="required">
+                                                <i class="fa fa-times"></i>
+                                                <i18n message="FieldRequiredMessage"></i18n>
+                                            </span>
+                                            <span ng-message="number">
+                                                <i class="fa fa-times"></i>
+                                                <i18n message="FieldPatternNumberMessage"></i18n>
+                                            </span>
+                                            <span ng-message="min">
+                                                <i class="fa fa-times"></i>
+                                                <i18n message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('width')}}"></i18n>
+                                            </span>
+                                            <span ng-message="max">
+                                                <i class="fa fa-times"></i>
+                                                <i18n message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('width')}}"></i18n>
+                                            </span>
                                         </p>
                                     </div>
                                 </div>
@@ -130,10 +164,22 @@
                                             <span class="input-addon input-addon-lg">{{sizeUnits()}}</span>
                                         </div>
                                         <p class="input-hint text-danger" ng-messages="optionsForm.sizeDimensionsForm.sizeHeight.$error">
-                                            <span get-message="FieldRequiredMessage"></span>
-                                            <span get-message="FieldPatternNumberMessage"></span>
-                                            <span get-message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('width')}}"></span>
-                                            <span get-message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('height')}}"></span>
+                                            <span ng-message="required">
+                                                <i class="fa fa-times"></i>
+                                                <i18n message="FieldRequiredMessage"></i18n>
+                                            </span>
+                                            <span ng-message="number">
+                                                <i class="fa fa-times"></i>
+                                                <i18n message="FieldPatternNumberMessage"></i18n>
+                                            </span>
+                                            <span ng-message="min">
+                                                <i class="fa fa-times"></i>
+                                                <i18n message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin('height')}}"></i18n>
+                                            </span>
+                                            <span ng-message="max">
+                                                <i class="fa fa-times"></i>
+                                                <i18n message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax('height')}}"></i18n>
+                                            </span>
                                         </p>
                                     </div>
                                 </div>
@@ -162,6 +208,10 @@
 
                     </div>
 
+                    <p class="text-small text-primary" ng-show="(optionsForm.sizeModeForm.$dirty && optionsForm.sizeModeForm.$valid) || (optionsForm.sizeDimensionsForm.$dirty && optionsForm.sizeDimensionsForm.$valid)"><i class="fa fa-check-square-o"></i>
+                        <i18n message="OptionsSaveSettingsReminder"></i18n>
+                    </p>
+
                 </div>
 
             </fieldset>
@@ -172,8 +222,14 @@
                 <div class="input-field">
                     <label get-message="OptionsAdvancedTitleLabel"></label>
                     <input type="text" name="advancedTitle" ng-model="options.advanced.title" ng-trim="false" ng-disabled="options.behavior.target !== 'window'" />
-                    <p class="input-hint text-warning" ng-hide="options.behavior.target === 'window'"><i class="fa fa-warning"></i> <span get-message="OptionsBehaviorTabWarning"></span></p>
-                    <p class="input-hint text-primary" ng-show="optionsForm.advancedTitle.$dirty && optionsForm.advancedTitle.$valid"><i class="fa fa-check-square-o"></i> <i18n message="OptionsSaveSettingsReminder"></i18n></p>
+                    <p class="input-hint text-warning" ng-hide="options.behavior.target === 'window'">
+                        <i class="fa fa-warning"></i>
+                        <i18n message="OptionsBehaviorTabWarning"></i18n>
+                    </p>
+                    <p class="input-hint text-primary" ng-show="optionsForm.advancedTitle.$dirty && optionsForm.advancedTitle.$valid">
+                        <i class="fa fa-check-square-o"></i>
+                        <i18n message="OptionsSaveSettingsReminder"></i18n>
+                    </p>
                     <p class="input-hint" get-message="OptionsAdvancedTitleDescription"></p>
                 </div>
 
@@ -181,10 +237,16 @@
 
             <div class="row">
                 <div class="col-6">
-                    <button class="button button-block" ng-class="{'button-light': optionsForm.$pristine}" ng-click="save()" ng-disabled="optionsForm.$pristine || optionsForm.$invalid" get-message="ButtonSaveLabel"></button>
+                    <button class="button button-block" ng-class="{'button-light': optionsForm.$pristine}" ng-click="save()" ng-disabled="optionsForm.$pristine || optionsForm.$invalid">
+                        <i class="fa fa-check mar-r-sm"></i>
+                        <i18n message="ButtonSaveLabel"></i18n>
+                    </button>
                 </div>
                 <div class="col-6">
-                    <button class="button button-block button-danger" ng-click="confirmReset()" get-message="ButtonResetLabel"></button>
+                    <button class="button button-block button-danger" ng-click="confirmReset()">
+                        <i class="fa fa-ban mar-r-sm"></i>
+                        <i18n message="ButtonResetLabel"></i18n>
+                    </button>
                 </div>
             </div>
 
@@ -218,10 +280,16 @@
 
                 <div class="row">
                     <div class="col">
-                        <button type="button" class="button-block" ng-click="reset()" get-message="ButtonConfirmResetLabel"></button>
+                        <button type="button" class="button-block" ng-click="reset()">
+                            <i class="fa fa-check mar-r-sm"></i>
+                            <i18n message="ButtonConfirmResetLabel"></i18n>
+                        </button>
                     </div>
                     <div class="col">
-                        <button type="button" class="button-block button-secondary" ng-click="cancelReset()" get-message="ButtonCancelResetLabel"></button>
+                        <button type="button" class="button-block button-secondary" ng-click="cancelReset()">
+                            <i class="fa fa-ban mar-r-sm"></i>
+                            <i18n message="ButtonCancelResetLabel"></i18n>
+                        </button>
                     </div>
                 </div>
 
@@ -230,7 +298,7 @@
 
         <!-- END SETTINGS -->
 
-        <hr/>
+        <hr />
 
         <!-- BEGIN COMMANDS -->
 
@@ -239,7 +307,10 @@
         <form class="container-fluid">
 
             <fieldset ng-show="commands && commands.length">
-                <legend class="text-primary" get-message="CommandListHeading"></legend>
+                <legend class="text-primary">
+                    <i class="fa fa-keyboard-o mar-r-xs"></i>
+                    <i18n message="CommandListHeading"></i18n>
+                </legend>
 
                 <p class="text-small" get-message="CommandListSaveHelpText" ng-show="canUpdateCommands"></p>
                 <p class="text-small" get-message="CommandListChangeChrome" ng-hide="canUpdateCommands"></p>
@@ -272,7 +343,7 @@
                     <div class="col">
                         <h3 class="mar-b-md" get-message="UpdateCommandHeading"></h3>
                         <p get-message="UpdateCommandInstructionsPlaceholder" substitutions="{{getCommandInstructionSubstitutions()}}"></p>
-                        <hr ng-show="updateCommandError"/>
+                        <hr ng-show="updateCommandError" />
                         <div class="alert alert-danger" ng-show="updateCommandError" ng-bind-html="updateCommandError"></div>
                     </div>
                 </div>
