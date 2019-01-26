@@ -14,34 +14,68 @@ const Popout = (() => {
 
             let promise;
 
-            const attrs = {};
+            // https://developers.google.com/youtube/player_parameters
+            const params = {};
 
             // custom flag for determining if the embedded player is playing within a popout window/tab
-            attrs.popout = 1;
+            params.popout = 1;
 
-            if (list != null) {
-                attrs.list = list;
+            const behavior = await Options.GetLocalOptionsForDomain('behavior');
+
+            ['autoplay', 'loop'].forEach(param => {
+                params[param] = behavior[param] ? 1 : 0;   // convert true/false to 1/0 for URL params
+            });
+
+            switch (behavior.controls) {
+                case 'none':
+                    params.controls = 0;
+                    params.modestbranding = 1;
+                    break;
+
+                case 'native':
+                    params.controls = 1;
+                    params.modestbranding = 0;
+                    break;
+
+                case 'extended':
+                    params.controls = 1;
+                    params.modestbranding = 0;
+                    break;
             }
 
-            attrs.autoplay = 1; // TODO: should this be configurable?
+            params.controls = (behavior.controls === 'none') ? 0 : 1;
 
             if (time <= START_THRESHOLD) {
                 console.info('[Background] Popout.open() :: Popout video will start from beginning');
                 time = 0;
             }
-            attrs.start = time;
+            params.start = time;
 
-            const url = this.getURL(id, attrs);
+            if (list !== undefined && list !== null) {
+                // `list` is the identifier for either: playlist, search, or user_uploads
+                params.list = list;
 
-            const target = await Options.GetLocalOption('behavior', 'target');
-            switch (target) {
+                // TODO: handle the other two list types (search and user_uploads)
+                // this will likely need to come from the original URL (when it is parsed in the content script)
+                if (list.startsWith('PL')) {
+                    params.listType = 'playlist';
+                }
+            } else if (behavior.loop) {
+                // `playlist` is a comma-separated list of video IDs to play
+                // to loop a single video, the playlist parameter value must be set to the video's ID
+                params.playlist = id;
+            }
+
+            const url = this.getURL(id, params);
+
+            switch (behavior.target) {
                 case 'tab':
                     promise = this.openTab(url);
                     break;
 
                 case 'window':
                 default:
-                promise = this.openWindow(url, width, height);
+                    promise = this.openWindow(url, width, height);
                     break;
             }
 
@@ -52,10 +86,13 @@ const Popout = (() => {
         'openTab': function (url) {
             console.log('[Background] Popout.openTab()', url);
 
-            const promise = browser.tabs.create({
-                'active': true,                // TODO: should this be configurable?
+            const createData = {
+                'active': true,     // TODO: should this be configurable?
                 'url': url
-            });
+            };
+
+            console.log('[Background] Popout.openTab() :: Creating Tab', createData);
+            const promise = browser.tabs.create(createData);
 
             console.log('[Background] Popout.openTab() :: Return [Promise]', promise);
             return promise;
@@ -94,23 +131,26 @@ const Popout = (() => {
                 createData.titlePreface = await Options.GetLocalOption('advanced', 'title');
             }
 
-            console.log('[Background] Popout.openWindow() :: Opening Window', createData);
+            console.log('[Background] Popout.openWindow() :: Creating Window', createData);
             const promise = browser.windows.create(createData);
 
             console.log('[Background] Popout.openWindow() :: Return [Promise]', promise);
             return promise;
         },
 
-        'getURL': function (id, attrs) {
-            console.log('[Background] Popout.getURL()', id, attrs);
+        /**
+         * Gets the URL for the popout player given a video ID and optional URL parameters
+         * @param {string} id the video ID
+         * @param {Object} [params] URL parameters
+         * @returns {string} the full URL for the popout player
+         */
+        'getURL': function (id, params = null) {
+            console.log('[Background] Popout.getURL()', id, params);
 
-            var url = YOUTUBE_EMBED_URL + id + '?';
+            let url = YOUTUBE_EMBED_URL + id;
 
-            if (attrs !== undefined) {
-                for (var attr in attrs) {
-                    url += attr + '=' + attrs[attr] + '&';
-                }
-                url = url.replace(/\&$/, ''); // trim trailing ampersand (&)
+            if (params !== undefined && params !== null) {
+                url += '?' + new URLSearchParams(params).toString();
             }
 
             console.log('[Background] Popout.getURL() :: Return', url);
@@ -120,11 +160,9 @@ const Popout = (() => {
         'closeOriginalTab': async function (tabId) {
             console.log('[Background] Popout.closeOriginalTab()', tabId);
 
-            let promise;
+            const closeOriginalWindowTab = await Options.GetLocalOption('advanced', 'close');
 
-            const closeOriginal = await Options.GetLocalOption('behavior', 'closeOriginal');
-
-            if (closeOriginal) {
+            if (closeOriginalWindowTab) {
                 const tab = await browser.tabs.get(tabId);
                 if (tab && tab.url) {
                     console.log('[Background] Popout.closeOriginalTab() :: Original tab', tab);
@@ -135,15 +173,17 @@ const Popout = (() => {
 
                     if (domain === 'youtube.com') {   // TODO: other YouTube domains to support?
                         console.log('[Background] Popout.closeOriginalTab() :: Closing original tab');
-                        promise = browser.tabs.remove(tab.id);
+                        const promise = browser.tabs.remove(tab.id);
+
+                        console.log('[Background] Popout.closeOriginalTab() :: Return [Promise]', promise);
+                        return promise;
                     } else {
                         console.info('[Background] Popout.closeOriginalTab() :: Original tab is NOT YouTube');
                     }
                 }
             }
 
-            console.log('[Background] Popout.closeOriginalTab() :: Return [Promise]', promise);
-            return promise;
+            return;
         }
 
     };

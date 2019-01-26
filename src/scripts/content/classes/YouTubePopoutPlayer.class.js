@@ -1,3 +1,5 @@
+import Options from '../../../helpers/Options';
+import Utils from '../../../helpers/utils';
 import HTML5Player from './HTML5Player.class';
 
 const YouTubePopoutPlayer = (() => {
@@ -81,6 +83,7 @@ const YouTubePopoutPlayer = (() => {
 
             let id = null;
 
+            // TODO: instead of using a RegExp, use URLSearchParams to just get the list parameter?
             const result = new RegExp(/list=((?:WL|[^\?\&\/]+))/).exec(url);
             console.log('RegExp Result', result);
 
@@ -96,13 +99,12 @@ const YouTubePopoutPlayer = (() => {
         /**
          * Inserts the various control elements
          */
-        insertControls() {
+        async insertControls() {
             console.group('YouTubePopoutPlayer.insertControls()');
 
             this.insertContextMenuEntry();
-            this.insertPlayerControlsButton();
+            await this.insertPlayerControlsButton();
 
-            console.log('Controls inserted');
             console.groupEnd();
         }
 
@@ -171,9 +173,19 @@ const YouTubePopoutPlayer = (() => {
 
         /**
          * Adds a new button to the YouTube video player controls (in the lower-right corner)
+         * This method checks the configurable "controls" option, so the button is only inserted when appropriate
          */
-        insertPlayerControlsButton() {
+        async insertPlayerControlsButton() {
             console.group('YouTubePopoutPlayer.insertPlayerControlsButton()');
+
+            if (Utils.IsPopoutPlayer(window.location)) {
+                const controls = await Options.GetLocalOption('behavior', 'controls');
+                if (controls !== 'extended') {
+                    console.info('Popout Player controls option is NOT set to "extended"');
+                    console.groupEnd();
+                    return false;
+                }
+            }
 
             const controls = document.getElementsByClassName('ytp-right-controls')[0];
             if (!controls) {
@@ -247,8 +259,7 @@ const YouTubePopoutPlayer = (() => {
         }
 
         /**
-         * Click event handler for any of the popout player controls
-         * @param {Event} event
+         * Opens the Popout Player (via a request to the background script)
          */
         openPopout() {
             console.log('YouTubePopoutPlayer.openPopout()');
@@ -262,6 +273,9 @@ const YouTubePopoutPlayer = (() => {
                 // fallback to parsing the video ID from the page's address
                 id = this.getVideoIDFromURL(window.location.href);
             }
+
+            // TODO: we should be setting `listType` when specifying `list` for the embedded player URL
+            //       (this probably has to be extracted/determined here from the original page URL)
 
             browser.runtime.sendMessage({
                 'action': 'open-popout',
@@ -303,12 +317,12 @@ const YouTubePopoutPlayer = (() => {
                         for (const node of mutation.addedNodes) {
                             switch (node.className) {
                                 case 'ytp-popup ytp-contextmenu':
-                                    console.log('Mutation observed for context menu', node);
+                                    console.log('YouTubePopoutPlayer.watchPageChange() :: Mutation observed for context menu', node);
                                     this.insertContextMenuEntry();
                                     break;
 
                                 case 'ytp-right-controls':
-                                    console.log('Mutation observed for player controls', node);
+                                    console.log('YouTubePopoutPlayer.watchPageChange() :: Mutation observed for player controls', node);
                                     this.insertPlayerControlsButton();
                                     break;
                             }

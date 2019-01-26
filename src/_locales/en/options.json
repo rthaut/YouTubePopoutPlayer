@@ -29,6 +29,13 @@
     "message": "Advanced Settings"
   },
 
+  "OptionsAdvancedCloseLabel": {
+    "message": "Close Original Window/Tab"
+  },
+  "OptionsAdvancedCloseDescription": {
+    "message": "Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong>"
+  },
+
   "OptionsAdvancedTitleLabel": {
     "message": "Window Title Text (Preface)"
   },
@@ -54,18 +61,41 @@
     "message": "The popout player will open in a new tab in your current browser window."
   },
 
-  "OptionsBehaviorDisableOnPopoutLabel": {
-    "message": "Hide Custom Controls on Popout Player"
+  "OptionsBehaviorAutoplayLabel": {
+    "message": "Autoplay Video(s)"
   },
-  "OptionsBehaviorDisableOnPopoutDescription": {
-    "message": "Disabling this will show the open popout player button and context menu entry on videos playing within the popout player. <strong>The default for this setting is enabled.</strong>"
+  "OptionsBehaviorAutoplayDescription": {
+    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong>"
   },
 
-  "OptionsBehaviorCloseOriginalLabel": {
-    "message": "Close Original Window/Tab"
+  "OptionsBehaviorLoopLabel": {
+    "message": "Loop Video(s)"
   },
-  "OptionsBehaviorCloseOriginalDescription": {
-    "message": "Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong>"
+  "OptionsBehaviorLoopDescription": {
+    "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
+  },
+
+  "BehaviorControlsLabel": {
+    "message": "Show Controls"
+  },
+
+  "BehaviorControlsDescription": {
+    "message": "Use this setting to adjust which controls are displayed on the popout player. <strong>The default for this setting is $DEFAULT$.</strong>",
+    "placeholders": {
+      "default": {
+        "content": "Native"
+      }
+    }
+  },
+
+  "BehaviorControlsNoneOptionLabel": {
+    "message": "None"
+  },
+  "BehaviorControlsNativeOptionLabel": {
+    "message": "Native"
+  },
+  "BehaviorControlsExtendedOptionLabel": {
+    "message": "Extended"
   },
 
   "OptionsSizeHeading": {
