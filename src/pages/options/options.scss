@@ -159,15 +159,17 @@ dialog+.backdrop {
 
 /**
  * Firefox-Specific Overrides
- * Note: these are applied to all browsers, but should match the computed values when rendered outside the Add-ons Manager
- * TODO: Ensure this is only used for Firefox. Ideas include:
- *   - modifying the build process to only include it for FF
- *   - finding a selector that is only present in Firefox when the Options page is rendered inside the Add-ons Manager
- *   - using JS to add a custom body/html class for Firefox (ideally only when inside the Add-ons Manager)
+ * These are basically "resets" for the styles applied to the page when it is "embedded" in the Add-ons Manager
  */
-body {
+body.firefox {
     font-size: 16px !important;
-    line-height: 1.5 !important;
+    line-height: 24px !important;
+
+    input:not([type="checkbox"]):not([type="radio"]), select {
+        font-size: 16px !important;
+        line-height: 36px !important;
+        height: 36px !important;
+    }
 
     button {
         font-size: 16px !important;
@@ -175,11 +177,21 @@ body {
         height: 36px !important;
     }
 
+    .input-addon {
+        font-size: 16px !important;
+        line-height: 36px !important;
+        height: 36px !important;
+    }
+
+    .input-hint {
+        font-size: 13px !important;
+    }
+
     .switch {
         font-size: 16px !important;
     }
 
     .alert {
-        padding: 16px;
+        padding: 16px !important;
     }
 }
