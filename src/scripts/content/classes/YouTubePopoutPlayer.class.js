@@ -208,44 +208,41 @@ const YouTubePopoutPlayer = (() => {
                 return false;
             }
 
-            // TODO: use the SVG file, now that `web_accessible_resources` in the manifest permits access to the images directory?
+            const svgNS = 'http://www.w3.org/2000/svg';
 
-            const xmlns = 'http://www.w3.org/2000/svg';
-            const xlink = 'http://www.w3.org/1999/xlink';
-
-            const playerButtonSVG = document.createElementNS(xmlns, 'svg');
+            const playerButtonSVG = document.createElementNS(svgNS, 'svg');
             playerButtonSVG.setAttribute('width', '100%');
             playerButtonSVG.setAttribute('height', '100%');
             playerButtonSVG.setAttribute('viewBox', '0 0 36 36');
             playerButtonSVG.setAttribute('version', '1.1');
 
-            const playerButtonSVGPath01 = document.createElementNS(xmlns, 'path');
-            playerButtonSVGPath01.id = 'ytp-svg-pop-01';
-            playerButtonSVGPath01.setAttributeNS(null, 'd', 'm 8,8 v 20 h 20 v -6 h -2 v 4 H 10 V 10 h 4 V 8 Z');
-            playerButtonSVGPath01.setAttributeNS(null, 'class', 'ytp-svg-fill');
+            const paths = {
+                'frame': 'm 9,10 v 16 h 18 v -4 h -2 v 2 H 11 V 12 h 3 v -2 z',
+                //'arrow': 'M 28,9 H 18 l 3,3 -6,8 2,2 8,-6 3,3 z',
+                'popout': 'M 16,9 V 20 H 28 V 9 Z m 2,2 h 8 v 7 h -8 z'
+            };
 
-            const playerButtonSVGPath02 = document.createElementNS(xmlns, 'path');
-            playerButtonSVGPath02.id = 'ytp-svg-pop-02';
-            playerButtonSVGPath02.setAttributeNS(null, 'd', 'M 28,8 H 18 l 3,3 -7,8 3,3 8,-7 3,3 z');
-            playerButtonSVGPath02.setAttributeNS(null, 'class', 'ytp-svg-fill');
+            for (const name in paths) {
+                const pathElement = document.createElementNS(svgNS, 'path');
+                pathElement.id = 'ytp-svg-pop-' + name;
+                pathElement.setAttributeNS(null, 'd', paths[name]);
+                pathElement.setAttributeNS(null, 'class', 'ytp-svg-fill');
 
-            const playerButtonSVGUse01 = document.createElementNS(xmlns, 'use');
-            playerButtonSVGUse01.setAttributeNS(null, 'class', 'ytp-svg-shadow');
-            playerButtonSVGUse01.setAttributeNS(xlink, 'href', '#' + playerButtonSVGPath01.id);
+                const useElement = document.createElementNS(svgNS, 'use');
+                useElement.setAttributeNS(null, 'class', 'ytp-svg-shadow');
+                useElement.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#' + pathElement.id);
 
-            const playerButtonSVGUse02 = document.createElementNS(xmlns, 'use');
-            playerButtonSVGUse02.setAttributeNS(null, 'class', 'ytp-svg-shadow');
-            playerButtonSVGUse02.setAttributeNS(xlink, 'href', '#' + playerButtonSVGPath02.id);
+                playerButtonSVG.appendChild(useElement);
+                playerButtonSVG.appendChild(pathElement);
+            }
 
-            playerButtonSVG.appendChild(playerButtonSVGUse01);
-            playerButtonSVG.appendChild(playerButtonSVGPath01);
-            playerButtonSVG.appendChild(playerButtonSVGUse02);
-            playerButtonSVG.appendChild(playerButtonSVGPath02);
-
+            // TODO: see if we can re-trigger (or fake) the YT method(s) that setup custom tooltips for the buttons?
+            //       (the tooltips come from aria-label and display ABOVE the button, making them more visible)
             playerButton = document.createElement('button');
             playerButton.className = ['ytp-popout-button', 'ytp-button'].join(' ');
-            playerButton.id = 'popout-player-control-button';
+            playerButton.setAttribute('aria-label', browser.i18n.getMessage('PlayerControlsButtonTitle_PopoutPlayer'));
             playerButton.setAttribute('title', browser.i18n.getMessage('PlayerControlsButtonTitle_PopoutPlayer'));
+            playerButton.id = 'popout-player-control-button';
             playerButton.appendChild(playerButtonSVG);
             playerButton.addEventListener('click', event => {
                 console.log('Player Controls Button Click', event);

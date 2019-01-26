@@ -6,12 +6,40 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg3734"
    height="36"
    width="36"
    viewBox="0 0 36 36"
    preserveAspectRatio="xMidYMid meet"
-   version="1.1">
+   version="1.1"
+   sodipodi:docname="icon.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="3440"
+     inkscape:window-height="1377"
+     id="namedview23"
+     showgrid="true"
+     inkscape:zoom="64"
+     inkscape:cx="15.117885"
+     inkscape:cy="18.047083"
+     inkscape:window-x="1432"
+     inkscape:window-y="302"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3734">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3732" />
+  </sodipodi:namedview>
   <metadata
      id="metadata3738">
     <rdf:RDF>
@@ -20,12 +48,19 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <defs
      id="defs3704">
+    <inkscape:path-effect
+       effect="fill_between_strokes"
+       id="path-effect25"
+       is_visible="true"
+       linkedpath=""
+       secondpath=""
+       reversesecond="false" />
     <path
        id="g4VswiO08W"
        d="M7 9L9 9L9 29L7 29L7 9Z" />
@@ -102,10 +137,20 @@
   </defs>
   <path
      id="path3852"
-     d="m 8,8 v 20 h 20 v -6 h -2 v 4 H 10 V 10 h 4 V 8 Z"
-     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+     d="m 9,10 v 16 h 18 v -4 h -2 v 2 H 11 V 12 h 3 v -2 z"
+     style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccccccc" />
+  <path
+     style="fill:#000000"
+     d="M 16,9 V 20 H 28 V 9 Z m 2,2 h 8 v 7 h -8 z"
+     id="rect3749"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccccc" />
   <path
      id="path4659"
-     d="M 28,8 H 18 l 3,3 -7,8 3,3 8,-7 3,3 z"
-     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+     d="M 28,9 H 18 l 3,3 -6,8 2,2 8,-6 3,3 z"
+     style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccc" />
 </svg>
