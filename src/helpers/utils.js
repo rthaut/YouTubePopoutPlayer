@@ -4,6 +4,12 @@ const Utils = (() => {
 
     const Utils = {
 
+        /**
+         * Returns the number of pixels a given percentage is for the screen (in the specified dimension)
+         * @param {string} dimension a screen dimension (either "width" or "height")
+         * @param {number} percentage the percentage of the screen resolution
+         * @returns {number} The pixels corresponding to the specified percentage of the screen's dimension
+         */
         'GetDimensionForScreenPercentage': function (dimension, percentage) {
             if (percentage > 0) {
                 percentage = (percentage / 100);
@@ -15,7 +21,7 @@ const Utils = (() => {
         /**
         * Determines if the browser is Firefox
         * @see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/getBrowserInfo
-        * @returns {boolean}
+        * @returns {boolean} `true` only if the browser is successfully identified as Firefox
         */
         'IsFirefox': async function () {
             console.group('Utils.IsFirefox()');
@@ -45,9 +51,9 @@ const Utils = (() => {
         },
 
         /**
-         * Determines if the given Location is for a Popout Player
-         * @param {Location} location window/document location
-         * @returns {boolean}
+         * Determines if the given `Location` is for a Popout Player
+         * @param {Location} location window/document `Location`
+         * @returns {boolean} whether or not the given `Location` is a Popout Player
          */
         'IsPopoutPlayer': function (location) {
             console.group('Utils.IsPopoutPlayer()', location);
@@ -68,8 +74,13 @@ const Utils = (() => {
             return false;
         },
 
-        'TitleCase': function (str) {
-            return str.replace(/\b\w+/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+        /**
+         * Converts a `string` to Title Case
+         * @param {string} string the `string` to convert to Title Case
+         * @returns {string} the `string` in Title Case
+         */
+        'TitleCase': function (string) {
+            return string.replace(/\b\w+/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
         }
 
     };
