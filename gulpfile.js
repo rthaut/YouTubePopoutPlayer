@@ -327,8 +327,10 @@ gulp.task('build', gulp.parallel(
 
 gulp.task('watch', function watch(done) {
     // TODO: it would be nice to only rebuild the modified files per watch, but that requires a way to pass them to the build task
+    gulp.watch(`${cfg.source_folders.images}/**/*.{png,svg}`, gulp.task('build:images'));
+    gulp.watch(`${cfg.source_folders.images}/logo/*.svg`, gulp.task('build:logos'));
     gulp.watch(`${cfg.source_folders.locales}/**/*`, gulp.task('build:locales'));
-    gulp.watch(`${cfg.source_folders.manifests}/**/*`, gulp.task('build:manifest'));
+    gulp.watch(`${cfg.source_folders.manifests}/**/*`, gulp.series('build:manifest', 'build:logos'));
     gulp.watch(`${cfg.source_folders.pages}/**/*`, gulp.task('build:pages'));
     gulp.watch([
         `${cfg.source_folders.helpers}/**/*.js`,
