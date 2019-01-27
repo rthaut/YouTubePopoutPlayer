@@ -16,8 +16,17 @@
         <form name="optionsForm" class="container-fluid">
 
             <div class="alert alert-primary text-small">
-                <i class="fa fa-cogs"></i>
-                <i18n message="OptionsPerDeviceWarning"></i18n>
+                <div class="row">
+                    <div class="col-auto pad-r-0">
+                        <span class="fa-stack fa-lg">
+                            <i class="fa fa-cloud fa-stack-1x"></i>
+                            <i class="fa fa-ban fa-stack-2x text-danger"></i>
+                        </span>
+                    </div>
+                    <div class="col">
+                        <i18n message="OptionsPerDeviceWarning"></i18n>
+                    </div>
+                </div>
             </div>
 
             <fieldset>
@@ -55,7 +64,7 @@
                 <!-- End Save Reminder -->
 
                 <hr />
-                
+
                 <!-- Show Controls -->
                 <div class="input-field" ng-class="{'input-invalid': optionsForm.behaviorControls.$invalid}">
                     <label for="behaviorControls" get-message="BehaviorControlsLabel"></label>
