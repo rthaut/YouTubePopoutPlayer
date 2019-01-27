@@ -165,6 +165,9 @@ const Popout = (() => {
         'getURL': function (id, params = null) {
             console.log('[Background] Popout.getURL()', id, params);
 
+            // TODO: if autoplay is disabled, we can omit the video ID from the path; as long as either `playlist` or `list` has a value, the Embedded Player will use it when the user clicks play (for single videos, this will prevent it appearing as a playlist with 2 videos, even though it is just the same video twice)
+            // TODO: there may be some other edge cases to consider, like setting the start time with autoplay disabled
+
             let url = YOUTUBE_EMBED_URL + id;
 
             if (params !== undefined && params !== null) {
