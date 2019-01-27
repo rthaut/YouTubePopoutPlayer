@@ -223,9 +223,6 @@ gulp.task('lint:pages', function lint_pages() {
 gulp.task('build:pages', gulp.series('lint:pages', function build_pages() {
     const config = getWebpackConfig(cfg.source_folders.pages);
 
-    // TODO: drop console.* statements for production builds of page scripts
-    // either configure webpack or change/use the minify task (currently only targets scripts/**/*) to do it
-
     return $.pump([
         $.webpackStream(config, $.webpack),
         ...Object.keys(cfg.supported_browsers).map(browser => gulp.dest(`./dist/${browser}/pages`)),
