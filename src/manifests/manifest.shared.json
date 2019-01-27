@@ -44,7 +44,7 @@
 
   "browser_action": {
     "default_icon": "images/logo/logo-32.png",
-    "default_title": "__MSG_ExtensionName__"
+    "default_title": "__MSG_BrowserActionTitle__"
   },
 
   "commands": {
