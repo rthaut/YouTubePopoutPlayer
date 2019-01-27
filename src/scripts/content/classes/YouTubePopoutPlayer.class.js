@@ -271,9 +271,6 @@ const YouTubePopoutPlayer = (() => {
                 id = this.getVideoIDFromURL(window.location.href);
             }
 
-            // TODO: we should be setting `listType` when specifying `list` for the embedded player URL
-            //       (this probably has to be extracted/determined here from the original page URL)
-
             browser.runtime.sendMessage({
                 'action': 'open-popout',
                 'data': {

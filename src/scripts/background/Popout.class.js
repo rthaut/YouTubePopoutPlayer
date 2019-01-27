@@ -61,12 +61,6 @@ const Popout = (() => {
             if (list !== undefined && list !== null) {
                 // `list` is the identifier for either: playlist, search, or user_uploads
                 params.list = list;
-
-                // TODO: handle the other two list types (search and user_uploads)
-                // this will likely need to come from the original URL (when it is parsed in the content script)
-                if (list.startsWith('PL')) {
-                    params.listType = 'playlist';
-                }
             } else if (behavior.loop) {
                 // `playlist` is a comma-separated list of video IDs to play
                 // to loop a single video, the playlist parameter value must be set to the video's ID
