@@ -32,7 +32,7 @@ const Popout = (() => {
                     params.modestbranding = 1;
                     break;
 
-                case 'native':
+                case 'standard':
                     params.controls = 1;
                     params.modestbranding = 0;
                     break;

@@ -80,10 +80,10 @@
   },
 
   "BehaviorControlsDescription": {
-    "message": "Use this setting to adjust which controls are displayed on the popout player. <strong>The default for this setting is $DEFAULT$.</strong>",
+    "message": "Use this setting to adjust which video player controls are displayed on the popout player. <strong>The default for this setting is $DEFAULT$.</strong>",
     "placeholders": {
       "default": {
-        "content": "Native"
+        "content": "Standard"
       }
     }
   },
@@ -91,8 +91,8 @@
   "BehaviorControlsNoneOptionLabel": {
     "message": "None"
   },
-  "BehaviorControlsNativeOptionLabel": {
-    "message": "Native"
+  "BehaviorControlsStandardOptionLabel": {
+    "message": "Standard"
   },
   "BehaviorControlsExtendedOptionLabel": {
     "message": "Extended"

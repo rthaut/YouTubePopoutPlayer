@@ -7,7 +7,7 @@ export const OPTION_DEFAULTS = {
         'target': 'window',
         'autoplay': true,
         'loop': false,
-        'controls': 'native'
+        'controls': 'standard'
     },
     'size': {
         'mode': 'current',
