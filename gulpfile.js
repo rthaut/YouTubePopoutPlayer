@@ -340,6 +340,7 @@ gulp.task('watch', function watch(done) {
 gulp.task('build:development', gulp.task('build'));
 gulp.task('build:production', gulp.series('build', 'minify'));
 
-gulp.task('debug', gulp.series('build:development', 'watch'));
+gulp.task('watch:development', gulp.series('build:development', 'watch'));
+gulp.task('watch:production', gulp.series('build:production', 'watch'));
 
 gulp.task('package', gulp.series('build:production', 'zip'));
