@@ -84,6 +84,11 @@ const Popout = (() => {
             return promise;
         },
 
+        /**
+         * Opens an Embedded Player in a new tab
+         * @param {string} url the URL of the Embedded Player to open in a new window
+         * @returns {Promise}
+         */
         'openTab': function (url) {
             console.log('[Background] Popout.openTab()', url);
 
@@ -99,6 +104,13 @@ const Popout = (() => {
             return promise;
         },
 
+        /**
+         * Opens an Embedded Player in a new window (optionally matching the size of the original video player)
+         * @param {string} url the URL of the Embedded Player to open in a new window
+         * @param {number} width the width of the original video player
+         * @param {number} height the height of the original video player
+         * @returns {Promise}
+         */
         'openWindow': async function (url, width, height) {
             console.log('[Background] Popout.openWindow()', url, width, height);
 
