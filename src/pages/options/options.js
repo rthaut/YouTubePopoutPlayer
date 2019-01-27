@@ -45,17 +45,14 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
 
     /**
      * Creates an alert to display inline on the form
-     * @param {string} message
-     * @param {string} type
+     * @param {object} alert
      * @param {boolean} dismissible
      * @param {number} duration
      */
-    $scope.createAlert = function(message, type = 'default', dismissible = true, duration = null) {
-        const alert = {
-            'type': type,
-            'message': message,
-            'dismissible': dismissible
-        };
+    $scope.createAlert = function(alert, dismissible = true, duration = null) {
+        if (dismissible) {
+            alert.dismissible = true;
+        }
 
         if (duration !== null) {
             duration = parseInt(duration, 10);
@@ -339,11 +336,19 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         Options.InitLocalStorageDefaults(true).then(() => {
             $scope.options = angular.copy(OPTION_DEFAULTS);
             resetCache();
-            $scope.createAlert(browser.i18n.getMessage('OptionsResetSuccessMessage'), 'success', true, 5);
+            $scope.createAlert({
+                'message': browser.i18n.getMessage('OptionsResetSuccessMessage'),
+                'type': 'success',
+                'icon': 'check-square-o'
+            }, true, 5);
             $scope.optionsForm.$setPristine();
         }).catch(err => {
             console.error('Failed to reset settings to default values', err);
-            $scope.createAlert(browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage'), 'danger', true);
+            $scope.createAlert({
+                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err.message),
+                'type': 'danger',
+                'icon': 'exclamation-o'
+            }, true);
         }).finally(() => {
             $scope.closeDialog('ResetConfirmDialog');
             $scope.$apply();
@@ -357,11 +362,19 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         console.log('OptionsController.save()');
 
         Options.SetLocalOptions(angular.copy($scope.options)).then(() => {
-            $scope.createAlert(browser.i18n.getMessage('OptionsSaveSuccessMessage'), 'success', true, 5);
+            $scope.createAlert({
+                'message': browser.i18n.getMessage('OptionsSaveSuccessMessage'),
+                'type': 'success',
+                'icon': 'check-square-o'
+            }, true, 5);
             $scope.optionsForm.$setPristine();
         }).catch(err => {
             console.error('Failed to save settings to local storage', err);
-            $scope.createAlert(browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage'), 'danger', true);
+            $scope.createAlert({
+                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err.message),
+                'type': 'danger',
+                'icon': 'exclamation-o'
+            }, true);
         }).finally(() => {
             $scope.$apply();
         });

@@ -277,11 +277,15 @@
                 </div>
             </div>
 
+            <!-- Alerts -->
             <div class="row mar-t-lg" ng-show="alerts && alerts.length">
                 <div class="col">
 
                     <div class="fade alert alert-{{alert.type}}" ng-class="{'alert-dismissible': alert.dismissible, 'alert-timed': alert.duration}" ng-repeat="alert in alerts" style="--duration: {{alert.duration}}s">
-                        <div ng-bind-html="alert.message"></div>
+                        <div>
+                            <i class="fa fa-{{alert.icon}}" ng-show="alert.icon"></i>
+                            <span ng-bind-html="alert.message"></span>
+                        </div>
                         <a class="close" ng-click="removeAlert(alert)" ng-if="alert.dismissible">
                             <span class="x">&times</span>
                             <div class="timer-left"></div>
@@ -291,6 +295,7 @@
 
                 </div>
             </div>
+            <!-- End Alerts -->
 
         </form>
 
