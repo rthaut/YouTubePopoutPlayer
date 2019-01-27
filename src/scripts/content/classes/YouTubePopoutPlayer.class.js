@@ -83,12 +83,9 @@ const YouTubePopoutPlayer = (() => {
 
             let id = null;
 
-            // TODO: instead of using a RegExp, use URLSearchParams to just get the list parameter?
-            const result = new RegExp(/list=((?:WL|[^\?\&\/]+))/).exec(url);
-            console.log('RegExp Result', result);
-
-            if (result && result[1]) {
-                id = result[1];
+            url = new URL(url);
+            if (url.searchParams !== undefined && url.searchParams !== null) {
+                id = url.searchParams.get('list');
             }
 
             console.log('Return', id);
