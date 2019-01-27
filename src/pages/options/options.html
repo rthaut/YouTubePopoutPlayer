@@ -21,7 +21,10 @@
             </div>
 
             <fieldset>
-                <legend class="text-primary" get-message="OptionsBehaviorHeading"></legend>
+                <legend class="text-primary">
+                    <i class="fa fa-sliders mar-r-xs"></i>
+                    <i18n message="OptionsBehaviorHeading"></i18n>
+                </legend>
 
                 <ng-form name="behaviorTargetForm">
 
@@ -100,7 +103,10 @@
             </fieldset>
 
             <fieldset>
-                <legend class="text-primary" get-message="OptionsSizeHeading"></legend>
+                <legend class="text-primary">
+                    <i class="fa fa-window-maximize mar-r-xs"></i>
+                    <i18n message="OptionsSizeHeading"></i18n>
+                </legend>
 
                 <div class="alert alert-warning text-small" ng-hide="options.behavior.target === 'window'">
                     <p>
@@ -222,7 +228,10 @@
             </fieldset>
 
             <fieldset>
-                <legend class="text-primary" get-message="OptionsAdvancedHeading"></legend>
+                <legend class="text-primary">
+                    <i class="fa fa-cogs mar-r-xs"></i>
+                    <i18n message="OptionsAdvancedHeading"></i18n>
+                </legend>
 
                 <!-- Toggle Close Original Window/Tab -->
                 <div class="input-field">
