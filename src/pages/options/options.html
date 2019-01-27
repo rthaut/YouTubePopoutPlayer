@@ -54,9 +54,9 @@
                 <hr />
                 
                 <!-- Show Controls -->
-                <div class="input-field">
+                <div class="input-field" ng-class="{'input-invalid': optionsForm.behaviorControls.$invalid}">
                     <label for="behaviorControls" get-message="BehaviorControlsLabel"></label>
-                    <select name="behaviorControls" id="behaviorControls" ng-model="options.behavior.controls" ng-required>
+                    <select name="behaviorControls" id="behaviorControls" ng-model="options.behavior.controls" ng-change="validateBehaviorControlsValue()" required>
                         <option value="none" get-message="BehaviorControlsNoneOptionLabel"></option>
                         <option value="standard" get-message="BehaviorControlsStandardOptionLabel"></option>
                         <option value="extended" get-message="BehaviorControlsExtendedOptionLabel"></option>
@@ -115,7 +115,7 @@
 
                         <div class="input-field">
                             <label>
-                                <input type="radio" name="sizeMode" value="current" ng-model="options.size.mode" ng-required>
+                                <input type="radio" name="sizeMode" value="current" ng-model="options.size.mode" required>
                                 <i18n message="OptionsSizeModeCurrentLabel"></i18n>
                                 <p class="input-hint" get-message="OptionsSizeModeCurrentDescription"></p>
                             </label>
@@ -123,7 +123,7 @@
 
                         <div class="input-field mar-b-0">
                             <label>
-                                <input type="radio" name="sizeMode" value="custom" ng-model="options.size.mode" ng-required>
+                                <input type="radio" name="sizeMode" value="custom" ng-model="options.size.mode" required>
                                 <i18n message="OptionsSizeModeCustomLabel"></i18n><br />
                                 <p class="input-hint" get-message="OptionsSizeModeCustomDescription"></p>
                             </label>
@@ -138,9 +138,9 @@
 
                                 <!-- Size Dimensions -->
                                 <div class="col">
-                                    <div class="input-field">
+                                    <div class="input-field" ng-class="{'input-invalid': optionsForm.sizeDimensionsForm.sizeModeUnits.$invalid}">
                                         <label for="sizeModeUnits" get-message="DimensionUnitsLabel"></label>
-                                        <select name="sizeModeUnits" id="sizeModeUnits" ng-model="options.size.units" ng-required>
+                                        <select name="sizeModeUnits" id="sizeModeUnits" ng-model="options.size.units" ng-change="validateSizeUnitsValue()" required>
                                             <option value="pixels" get-message="DimensionUnitsPixelsOptionLabel"></option>
                                             <option value="percentage" get-message="DimensionUnitsPercentageOptionLabel"></option>
                                         </select>
@@ -257,6 +257,12 @@
             </fieldset>
 
             <div class="row">
+                <div class="col-12" ng-show="optionsForm.$invalid">
+                    <p class="text-warning">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <i18n message="OptionsCorrectErrorsWarning"></i18n>
+                    </p>
+                </div>
                 <div class="col-6">
                     <button class="button button-block" ng-class="{'button-light': optionsForm.$pristine}" ng-click="save()" ng-disabled="optionsForm.$pristine || optionsForm.$invalid">
                         <i class="fa fa-check mar-r-sm"></i>

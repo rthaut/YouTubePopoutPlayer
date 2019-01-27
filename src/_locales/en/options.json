@@ -25,6 +25,10 @@
     }
   },
 
+  "OptionsCorrectErrorsWarning": {
+    "message": "You must correct all error(s) before you can save your settings."
+  },
+
   "OptionsAdvancedHeading": {
     "message": "Advanced Settings"
   },
@@ -204,10 +208,10 @@
   },
 
   "OptionsResetSuccessMessage": {
-    "message": "All settings reset to default values"
+    "message": "All settings reset to default values."
   },
   "OptionsSaveSuccessMessage": {
-    "message": "All settings saved successfully"
+    "message": "All settings saved successfully!"
   },
   "OptionsSaveErrorPlaceholderMessage": {
     "message": "Failed to save settings: $ERROR$",

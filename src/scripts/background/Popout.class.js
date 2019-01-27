@@ -26,7 +26,7 @@ const Popout = (() => {
                 params[param] = behavior[param] ? 1 : 0;   // convert true/false to 1/0 for URL params
             });
 
-            switch (behavior.controls) {
+            switch (behavior.controls.toLowerCase()) {
                 case 'none':
                     params.controls = 0;
                     params.modestbranding = 1;
@@ -38,6 +38,13 @@ const Popout = (() => {
                     break;
 
                 case 'extended':
+                    params.controls = 1;
+                    params.modestbranding = 0;
+                    break;
+
+                default:
+                    console.warn('[Background] Popout.open() :: Invalid value for controls option', behavior.controls);
+                    // use values for "standard" configuration
                     params.controls = 1;
                     params.modestbranding = 0;
                     break;
@@ -68,7 +75,7 @@ const Popout = (() => {
 
             const url = this.getURL(id, params);
 
-            switch (behavior.target) {
+            switch (behavior.target.toLowerCase()) {
                 case 'tab':
                     promise = this.openTab(url);
                     break;
@@ -114,6 +121,11 @@ const Popout = (() => {
                     case 'percentage':
                         width = Utils.GetDimensionForScreenPercentage('Width', size.width);
                         height = Utils.GetDimensionForScreenPercentage('Height', size.height);
+                        break;
+
+                    default:
+                        console.warn('[Background] Popout.openWindow() :: Invalid value for "size.units" option', size.units);
+                        // do nothing; use the original video player's dimensions instead
                         break;
                 }
             }

@@ -170,6 +170,18 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         });
     };
 
+    $scope.validateBehaviorControlsValue = function () {
+        if (!['none', 'standard', 'extended'].includes($scope.options.behavior.controls)) {
+            $scope.options.behavior.controls = null;
+        }
+    };
+
+    $scope.validateSizeUnitsValue = function () {
+        if (!['pixels', 'percentage'].includes($scope.options.size.units)) {
+            $scope.options.size.units = null;
+        }
+    };
+
     /**
      * Loads the options from local storage
      */
@@ -185,6 +197,9 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
 
         $scope.options = Object.assign({}, $scope.options, _options);
         console.log('OptionsController.load() :: Options', $scope.options);
+
+        $scope.validateBehaviorControlsValue();
+        $scope.validateSizeUnitsValue();
 
         // once the options have been loaded and converted, setup the cache for dimensions
         $scope.cacheDimensions();
