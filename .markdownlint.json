@@ -1,0 +1,8 @@
+{
+  "default": true,
+  "line-length": false,
+  "no-inline-html": false,
+  "no-multiple-blanks": false,
+  "no-duplicate-header": false,
+  "no-duplicate-heading": false
+}
