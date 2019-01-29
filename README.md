@@ -68,14 +68,14 @@ The Tabs permission is used to close the original window/tab (when configured) a
 
 ### Configuring YouTube Popout Player Options
 
-1. Click the Red YouTube Popout Player icon that appears to the right of the address bar. ![YouTube Popout Player Browser Action in Firefox](/resources/screenshots/Page-Action-Firefox.png?raw=true)![YouTube Popout Player Browser Action in Chrome](/resources/screenshots/Page-Action-Chrome.png?raw=true)
+1. Click the Red YouTube Popout Player icon that appears to the right of the address bar. ![YouTube Popout Player Browser Action in Firefox](/resources/screenshots/Page-Action-Firefox.png?raw=true) ![YouTube Popout Player Browser Action in Chrome](/resources/screenshots/Page-Action-Chrome.png?raw=true)
 2. The YouTube Popout Player options screen will open automatically when you click the icon.
 
 * * *
 
 ## Options
 
-### Popout Player Behavior
+### Popout Player Behavior ([View Screenshot](#popout-player-behavior-options-cropped-screenshot))
 
 These are the basic settings for configuring the YouTube Popout Player. You can control where the Popout Player opens, which controls are shown for video(s) in the Popout Player (if any), and whether or not video(s) start playing automatically and/or loop indefinitely.
 
@@ -107,13 +107,13 @@ These are the basic settings for configuring the YouTube Popout Player. You can 
 
 ### Popout Player Size
 
-#### Use Original Player Size
+#### Use Original Player Size ([View Screenshot](#popout-player-size-original-size-options-cropped-screenshot))
 
 > The popout player will be sized to match the original YouTube video player. **This is the default setting.**
 
 When you select this setting, the Popout Player will match the size of the current video automatically when it is opened.
 
-#### Set Custom Dimensions
+#### Set Custom Dimensions ([View Screenshot](#popout-player-size-custom-dimensions-options-cropped-screenshot))
 
 > Use this setting to specify dimensions (either in pixels or percentages) for the popout player.
 
@@ -124,7 +124,7 @@ When you select this setting, additional fields will appear to let you configure
 | **Dimensions&nbsp;Units**          | You can choose to specify your custom dimensions using either pixels or a percentage of your screen size. When using percentages, the resulting resolution will be displayed beneath your current screen resolution in the information table. |
 | **Width**&nbsp;and&nbsp;**Height** | These fields are where you enter your desired width and height for the Popout Player, either as pixels (px) or percentages (%). |
 
-### Advanced Settings
+### Advanced Settings ([View Screenshot](#advanced-settings-options-cropped-screenshot))
 
 These are the more advanced settings for configuring the YouTube Popout Player. Use caution when changing these settings, as they are a little more complex than the others.
 
@@ -136,7 +136,7 @@ These are the more advanced settings for configuring the YouTube Popout Player. 
 
 > Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. **This text does NOT replace the standard title text.**
 
-### Keyboard Shortcuts *(a.k.a. Hotkeys)*
+### Keyboard Shortcuts *(a.k.a. Hotkeys)* ([View Screenshot](#keyboard-shortcuts-options-cropped-screenshot))
 
 YouTube Popout Player has a configurable keyboard shortcut for opening the popout player. The default shortcut is <kbd>Ctrl</kbd> + <kbd>Up Arrow</kbd>.
 
@@ -145,3 +145,29 @@ YouTube Popout Player has a configurable keyboard shortcut for opening the popou
 **In Chrome**, you must manually open `chrome://extensions/shortcuts` in a new tab, which lets you set keyboard shortcuts for all of your installed extensions (including YouTube Popout Player).
 
 Note that keyboard shortcuts require 1-2 modifier keys (<kbd>Ctrl</kbd> , <kbd>Alt</kbd> , <kbd>Meta</kbd> , <kbd>Shift</kbd>) and one regular key (<kbd>A</kbd>-<kbd>Z</kbd> , <kbd>0</kbd>-<kbd>9</kbd> , <kbd>F1</kbd>-<kbd>F12</kbd> , etc.). See the [documentation for Shortcut Values on Mozilla's developer page](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/commands#Shortcut_values) for more information about valid keyboard shortcuts.
+
+* * *
+
+## Screenshots
+
+*(The following screenshots are taken from **Version 3.0.0** and may not accurately represent current functionality.)*
+
+### Popout Player Behavior Options Cropped Screenshot
+
+![Popout Player Behavior Options Cropped Screenshot](/resources/screenshots/Options-Cropped-Behavior.png?raw=true)
+
+### Popout Player Size (Original Size) Options Cropped Screenshot
+
+![Popout Player Size(Original Size) Options Cropped Screenshot](/resources/screenshots/Options-Cropped-Size-Original.png?raw=true)
+
+### Popout Player Size (Custom Dimensions) Options Cropped Screenshot
+
+![Popout Player Size (Custom Dimensions) Options Cropped Screenshot](/resources/screenshots/Options-Cropped-Size-Custom.png?raw=true)
+
+### Advanced Settings Options Cropped Screenshot
+
+![Advanced Settings Options Cropped Screenshot](/resources/screenshots/Options-Cropped-Advanced.png?raw=true)
+
+### Keyboard Shortcuts Options Cropped Screenshot
+
+![Keyboard Shortcuts Options Cropped Screenshot](/resources/screenshots/Options-Cropped-Keyboard-Shortcuts.png?raw=true)
