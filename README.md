@@ -119,10 +119,10 @@ When you select this setting, the Popout Player will match the size of the curre
 
 When you select this setting, additional fields will appear to let you configure the size of the Popout Player. Some information about your screen resolution and the resulting aspect ratio will also be displayed in a table to help you set good dimensions.
 
-| Field Name           | Description |
-| -------------------- | ----------- |
-| **Dimensions Units** | You can choose to specify your custom dimensions using either pixels or a percentage of your screen size. When using percentages, the resulting resolution will be displayed beneath your current screen resolution in the information table. |
-| **Width** and **Height** | These fields are where you enter your desired width and height for the Popout Player, either as pixels (px) or percentages (%). |
+| Field Name                         | Description |
+| ---------------------------------- | ----------- |
+| **Dimensions&nbsp;Units**          | You can choose to specify your custom dimensions using either pixels or a percentage of your screen size. When using percentages, the resulting resolution will be displayed beneath your current screen resolution in the information table. |
+| **Width**&nbsp;and&nbsp;**Height** | These fields are where you enter your desired width and height for the Popout Player, either as pixels (px) or percentages (%). |
 
 ### Advanced Settings
 
