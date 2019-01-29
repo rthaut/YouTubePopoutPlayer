@@ -144,4 +144,4 @@ YouTube Popout Player has a configurable keyboard shortcut for opening the popou
 
 **In Chrome**, you must manually open `chrome://extensions/shortcuts` in a new tab, which lets you set keyboard shortcuts for all of your installed extensions (including YouTube Popout Player).
 
-Note that keyboard shortcuts require 1-2 modifier keys (<kbd>Ctrl</kbd> , <kbd>Alt</kbd> , <kbd>Meta</kbd> , <kbd>Shift</kbd>) and one regular key (<kbd>A</kbd>-<kbd>Z</kbd>, <kbd>0</kbd>-<kbd>9</kbd>, <kbd>F1</kbd>-<kbd>F12</kbd>, etc.).
+Note that keyboard shortcuts require 1-2 modifier keys (<kbd>Ctrl</kbd> , <kbd>Alt</kbd> , <kbd>Meta</kbd> , <kbd>Shift</kbd>) and one regular key (<kbd>A</kbd>-<kbd>Z</kbd> , <kbd>0</kbd>-<kbd>9</kbd> , <kbd>F1</kbd>-<kbd>F12</kbd> , etc.). See the [documentation for Shortcut Values on Mozilla's developer page](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/commands#Shortcut_values) for more information about valid keyboard shortcuts.
