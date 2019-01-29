@@ -111,6 +111,8 @@ These are the basic settings for configuring the YouTube Popout Player. You can 
 
 > The popout player will be sized to match the original YouTube video player. **This is the default setting.**
 
+When you select this setting, the Popout Player will match the size of the current video automatically when it is opened.
+
 #### Set Custom Dimensions
 
 > Use this setting to specify dimensions (either in pixels or percentages) for the popout player.
