@@ -1,3 +1,4 @@
+[<img align="right" src="https://travis-ci.com/rthaut/YouTubePopoutPlayer.svg?branch=master" alt="Build Status"/>](https://travis-ci.com/rthaut/YouTubePopoutPlayer)
 [<img align="right" src="https://badges.greenkeeper.io/rthaut/YouTubePopoutPlayer.svg" alt="Greenkeeper badge"/>](https://greenkeeper.io/)
 [<img align="right" src="https://img.shields.io/badge/all_contributors-1-orange.svg" alt="All Contributors"/>](#contributors)
 
