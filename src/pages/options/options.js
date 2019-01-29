@@ -460,9 +460,9 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             const keys = [];
             VALID_SHORTCUT_KEYS_DESCRIPTIONS.forEach(description => {
                 if (description.includes('-')) {
-                    description = description.split('-').map(kbdComboFilter).join('-');
+                    description = description.split('-').map(key => kbdComboFilter(key)).join('-');
                 } else if (description.includes(', ')) {
-                    description = description.split(', ').map(kbdComboFilter).join(' , ');
+                    description = description.split(', ').map(key => kbdComboFilter(key)).join(' , ');
                 }
                 keys.push(description);
             });
@@ -484,7 +484,7 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
 
         if (1 > modifierCount || modifierCount > 2) {
             $scope.updateCommandError = browser.i18n.getMessage('InvalidCommandShortcutModifiers');
-            $scope.updateCommandError += '<p>' + modifiers.map(Utils.TitleCase).map(kbdComboFilter).join(' , ') + '</p>';
+            $scope.updateCommandError += '<p>' + modifiers.map(Utils.TitleCase).map(key => kbdComboFilter(key)).join(' , ') + '</p>';
             $scope.$apply();
             return;
         }
