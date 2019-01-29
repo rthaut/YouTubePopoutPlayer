@@ -1,4 +1,6 @@
+[<img align="right" src="https://travis-ci.com/rthaut/YouTubePopoutPlayer.svg?branch=master" alt="Build Status"/>](https://travis-ci.com/rthaut/YouTubePopoutPlayer)
 [<img align="right" src="https://badges.greenkeeper.io/rthaut/YouTubePopoutPlayer.svg" alt="Greenkeeper badge"/>](https://greenkeeper.io/)
+[<img align="right" src="https://img.shields.io/badge/all_contributors-1-orange.svg" alt="All Contributors"/>](#contributors)
 
 # YouTube Popout Player v3.0.0
 
@@ -171,3 +173,17 @@ Note that keyboard shortcuts require 1-2 modifier keys (<kbd>Ctrl</kbd> , <kbd>A
 ### Keyboard Shortcuts Options Cropped Screenshot
 
 ![Keyboard Shortcuts Options Cropped Screenshot](/resources/screenshots/Options-Cropped-Keyboard-Shortcuts.png?raw=true)
+
+* * *
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars0.githubusercontent.com/u/1769875?v=4" width="100px;" alt="YFdyh000"/><br /><sub><b>YFdyh000</b></sub>](http://wiki.mozilla.org/User:YFdyh000)<br />[🌍](#translation-yfdyh000 "Translation") | [<img src="https://avatars3.githubusercontent.com/u/8739797?v=4" width="100px;" alt="CD"/><br /><sub><b>CD</b></sub>](https://cdcs2.com)<br />[🤔](#ideas-d5c4b3 "Ideas, Planning, & Feedback") |
+| :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
