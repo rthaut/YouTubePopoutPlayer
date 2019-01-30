@@ -87,10 +87,10 @@ The Tabs permission is used to close the original window/tab (when configured) a
 
 ### Opening the Popout Player
 
-**While viewing any YouTube video**, whether directly [YouTube](https://www.youtube.com), or embedded on any other website, you can use any of the following methods to open the Popout Player for the current video/playlist:
+**While viewing any YouTube video**, whether directly [YouTube](https://www.youtube.com), or embedded on any other website, you can use any of the following methods to open the popout player for the current video/playlist:
 
 * Right-click on the video and click the "Popout Player" option (at the bottom of the menu that is displayed)
-* Click the Popout Player icon (a square with a smaller square coming out of the top right corner), which can be found in the lower right corner of the video (by the settings and fullscreen icons)
+* Click the popout player icon (a square with a smaller square coming out of the top right corner), which can be found in the lower right corner of the video (by the settings and fullscreen icons)
 * Use the keyboard shortcut (default <kbd>Ctrl</kbd> + <kbd>Up Arrow</kbd> )
 
 ### Configuring YouTube Popout Player Options
@@ -122,7 +122,7 @@ The popout player uses YouTube's [embedded video player](https://developers.goog
 
 ### Popout Player Behavior ([View Screenshot](#popout-player-behavior-options-cropped-screenshot))
 
-These are the basic settings for configuring the YouTube Popout Player. You can control where the Popout Player opens, which controls are shown for video(s) in the Popout Player (if any), and whether or not video(s) start playing automatically and/or loop indefinitely.
+These are the basic settings for configuring the YouTube Popout Player. You can control where the popout player opens, which controls are shown for video(s) in the popout player (if any), and whether or not video(s) start playing automatically and/or loop indefinitely.
 
 #### Open in a Popup Window
 
@@ -138,9 +138,9 @@ These are the basic settings for configuring the YouTube Popout Player. You can 
 
 | Option       | Description |
 | ------------ | ----------- |
-| **None**     | Set "Show Controls" to "None" to completely remove the video player controls (play/pause, volume, fullscreen, etc.) for video(s) in the Popout Player. |
-| **Standard** | Set "Show Controls" to "Standard" to show the normal YouTube video player controls (play/pause, volume, fullscreen, etc.) for video(s) in the Popout Player. |
-| **Extended** | Set "Show Controls" to "Extended" to show the normal YouTube video player controls (play/pause, volume, fullscreen, etc.), plus the Popout Player button, for video(s) in the Popout Player. |
+| **None**     | Set "Show Controls" to "None" to completely remove the video player controls (play/pause, volume, fullscreen, etc.) for video(s) in the popout player. |
+| **Standard** | Set "Show Controls" to "Standard" to show the normal YouTube video player controls (play/pause, volume, fullscreen, etc.) for video(s) in the popout player. |
+| **Extended** | Set "Show Controls" to "Extended" to show the normal YouTube video player controls (play/pause, volume, fullscreen, etc.), plus the popout player button, for video(s) in the popout player. |
 
 #### Autoplay Video(s)
 
@@ -156,18 +156,18 @@ These are the basic settings for configuring the YouTube Popout Player. You can 
 
 > The popout player will be sized to match the original YouTube video player. **This is the default setting.**
 
-When you select this setting, the Popout Player will match the size of the current video automatically when it is opened.
+When you select this setting, the popout player will match the size of the current video automatically when it is opened.
 
 #### Set Custom Dimensions ([View Screenshot](#popout-player-size-custom-dimensions-options-cropped-screenshot))
 
 > Use this setting to specify dimensions (either in pixels or percentages) for the popout player.
 
-When you select this setting, additional fields will appear to let you configure the size of the Popout Player. Some information about your screen resolution and the resulting aspect ratio will also be displayed in a table to help you set good dimensions.
+When you select this setting, additional fields will appear to let you configure the size of the popout player. Some information about your screen resolution and the resulting aspect ratio will also be displayed in a table to help you set good dimensions.
 
 | Field Name                         | Description |
 | ---------------------------------- | ----------- |
 | **Dimensions&nbsp;Units**          | You can choose to specify your custom dimensions using either pixels or a percentage of your screen size. When using percentages, the resulting resolution will be displayed beneath your current screen resolution in the information table. |
-| **Width**&nbsp;and&nbsp;**Height** | These fields are where you enter your desired width and height for the Popout Player, either as pixels (px) or percentages (%). |
+| **Width**&nbsp;and&nbsp;**Height** | These fields are where you enter your desired width and height for the popout player, either as pixels (px) or percentages (%). |
 
 ### Advanced Settings ([View Screenshot](#advanced-settings-options-cropped-screenshot))
 
