@@ -18,6 +18,7 @@
 * [Usage](#usage)
   * [Opening the Popout Player](#opening-the-popout-player)
   * [Configuring YouTube Popout Player Options](#configuring-youtube-popout-player-options)
+* [Frequently Asked Questions](#frequently-asked-questions)
 * [Options](#options)
   * [Popout Player Behavior](#popout-player-behavior-view-screenshot)
   * [Popout Player Size](#popout-player-size)
@@ -96,6 +97,24 @@ The Tabs permission is used to close the original window/tab (when configured) a
 
 1. Click the Red YouTube Popout Player icon that appears to the right of the address bar. ![YouTube Popout Player Browser Action in Firefox](/resources/screenshots/Page-Action-Firefox.png?raw=true) ![YouTube Popout Player Browser Action in Chrome](/resources/screenshots/Page-Action-Chrome.png?raw=true)
 2. The YouTube Popout Player options screen will open automatically when you click the icon.
+
+* * *
+
+## Frequently Asked Questions
+
+### How do I make the popout player always stay on top of other windows?
+
+The APIs for browser extensions do not expose any functionality to keep windows on top, so this is not possible through the extension alone (at least for now).
+
+**However**, you can use third-party applications on Windows, like [AutoHotkey](https://www.autohotkey.com/), [DeskPins](https://efotinis.neocities.org/deskpins/), [TurboTop](https://www.savardsoftware.com/turbotop/), or [DisplayFusion](https://www.displayfusion.com/). To make this even easier/better, if you are using Firefox, you can use the [Window Title Text (Preface)](#window-title-text-preface---firefox-only) setting to add some custom text to the popout player window's title, which you can then use to target the popout player window in these applications.
+
+For MacOS, you can try using [SIMBL + Afloat](https://www.maketecheasier.com/mac-keeping-your-application-window-always-on-top/), though your mileage may vary.
+
+For Linux, depending on your distribution (and, more likely, your window manager), you probably have a way to set windows to always be on top without the need for additional software.
+
+### Why do some videos say "Video Unavailable" when opened in the popout player?
+
+The popout player uses YouTube's [embedded video player](https://developers.google.com/youtube/player_parameters). By default, all videos uploaded to YouTube can be used in the embedded video player, but all videos can be [restricted from being able to be embedded](https://support.google.com/youtube/answer/6301625). This means that the owner of the video has intentionally blocked the video from the embedded player, and, as such, it cannot be played through the popout player.
 
 * * *
 
