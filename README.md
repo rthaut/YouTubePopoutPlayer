@@ -90,7 +90,7 @@ The Tabs permission is used to close the original window/tab (when configured) a
 
 * Right-click on the video and click the "Popout Player" option (at the bottom of the menu that is displayed)
 * Click the Popout Player icon (a square with a smaller square coming out of the top right corner), which can be found in the lower right corner of the video (by the settings and fullscreen icons)
-* Use the keyboard shortcut (default <kbd>Ctrl</kbd> + <kbd>Up Arrow</kbd>)
+* Use the keyboard shortcut (default <kbd>Ctrl</kbd> + <kbd>Up Arrow</kbd> )
 
 ### Configuring YouTube Popout Player Options
 
@@ -164,13 +164,13 @@ These are the more advanced settings for configuring the YouTube Popout Player. 
 
 ### Keyboard Shortcuts *(a.k.a. Hotkeys)* ([View Screenshot](#keyboard-shortcuts-options-cropped-screenshot))
 
-YouTube Popout Player has a configurable keyboard shortcut for opening the popout player. The default shortcut is <kbd>Ctrl</kbd> + <kbd>Up Arrow</kbd>.
+YouTube Popout Player has a configurable keyboard shortcut for opening the popout player. The default shortcut is <kbd>Ctrl</kbd> + <kbd>Up Arrow</kbd> .
 
 **In Firefox**, you can customize the shortcut by clicking the "Change" link that appears on the right side of the shortcut. Simply press a new combination of keys on your keyboard to set the new shortcut immediately.
 
 **In Chrome**, you must manually open `chrome://extensions/shortcuts` in a new tab, which lets you set keyboard shortcuts for all of your installed extensions (including YouTube Popout Player).
 
-Note that keyboard shortcuts require 1-2 modifier keys (<kbd>Ctrl</kbd> , <kbd>Alt</kbd> , <kbd>Meta</kbd> , <kbd>Shift</kbd>) and one regular key (<kbd>A</kbd>-<kbd>Z</kbd> , <kbd>0</kbd>-<kbd>9</kbd> , <kbd>F1</kbd>-<kbd>F12</kbd> , etc.). See the [documentation for Shortcut Values on Mozilla's developer page](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/commands#Shortcut_values) for more information about valid keyboard shortcuts.
+Note that keyboard shortcuts require 1-2 modifier keys ( <kbd>Ctrl</kbd> , <kbd>Alt</kbd> , <kbd>Meta</kbd> , <kbd>Shift</kbd> ) and one regular key ( <kbd>A</kbd>-<kbd>Z</kbd> , <kbd>0</kbd>-<kbd>9</kbd> , <kbd>F1</kbd>-<kbd>F12</kbd> , etc.). See the [documentation for Shortcut Values on Mozilla's developer page](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/commands#Shortcut_values) for more information about valid keyboard shortcuts.
 
 * * *
 
