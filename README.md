@@ -6,6 +6,30 @@
 
 > This browser extension provides a simple way to open any YouTube video or playlist (including videos and playlists embedded in other sites/pages) in a configurable "popout" window which you can freely position and resize.
 
+* * *
+
+<details>
+<summary><strong>Table of Contents</strong></summary>
+
+* [Overview](#overview)
+  * [Features](#features)
+* [Installation](#installation)
+* [Permissions](#permissions)
+* [Usage](#usage)
+  * [Opening the Popout Player](#opening-the-popout-player)
+  * [Configuring YouTube Popout Player Options](#configuring-youtube-popout-player-options)
+* [Options](#options)
+  * [Popout Player Behavior](#popout-player-behavior-view-screenshot)
+  * [Popout Player Size](#popout-player-size)
+  * [Advanced Settings](#advanced-settings-view-screenshot)
+  * [Keyboard Shortcuts *(a.k.a. Hotkeys)*](#keyboard-shortcuts-aka-hotkeys-view-screenshot)
+* [Screenshots](#screenshots)
+* [Contributors](#contributors)
+
+</details>
+
+* * *
+
 ## Overview
 
 ![YouTube Popout Player Promotional Image](/resources/screenshots/Promo-Screenshot.png?raw=true)
