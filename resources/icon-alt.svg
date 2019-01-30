@@ -14,7 +14,7 @@
    viewBox="0 0 36 36"
    preserveAspectRatio="xMidYMid meet"
    version="1.1"
-   sodipodi:docname="icon.svg"
+   sodipodi:docname="icon-old.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -30,7 +30,7 @@
      id="namedview23"
      showgrid="true"
      inkscape:zoom="64"
-     inkscape:cx="15.117885"
+     inkscape:cx="13.188198"
      inkscape:cy="18.047083"
      inkscape:window-x="1432"
      inkscape:window-y="302"
@@ -141,12 +141,6 @@
      style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccccccc" />
-  <path
-     style="fill:#000000"
-     d="M 16,9 V 20 H 28 V 9 Z m 2,2 h 8 v 7 h -8 z"
-     id="rect3749"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccccccccc" />
   <path
      id="path4659"
      d="M 28,9 H 18 l 3,3 -6,8 2,2 8,-6 3,3 z"
