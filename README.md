@@ -112,7 +112,7 @@ For MacOS, you can try using [SIMBL + Afloat](https://www.maketecheasier.com/mac
 
 For Linux, depending on your distribution (and, more likely, your window manager), you probably have a way to set windows to always be on top without the need for additional software.
 
-### Why do some videos say "Video Unavailable" when opened in the popout player?
+### Why do some videos say "Video unavailable" ([example screenshot](resources/screenshots/Video-Unavailable.png?raw=true)) when opened in the popout player?
 
 The popout player uses YouTube's [embedded video player](https://developers.google.com/youtube/player_parameters). By default, all videos uploaded to YouTube can be used in the embedded video player, but all videos can be [restricted from being able to be embedded](https://support.google.com/youtube/answer/6301625). This means that the owner of the video has intentionally blocked the video from the embedded player, and, as such, it cannot be played through the popout player.
 
