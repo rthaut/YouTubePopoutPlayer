@@ -91,7 +91,10 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         }
 
         dialog.addEventListener('close', () => {
-            document.body.style.overflowY = null;
+            if ($scope.isFirefox) {
+                delete document.body.style.height;
+                document.body.classList.remove('dialog-open');
+            }
         });
 
         return dialog;
@@ -102,8 +105,11 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         initDialog(dialog);
 
         if (!dialog.open) {
-            document.body.style.overflowY = 'hidden';
             dialog.showModal();
+            if ($scope.isFirefox) {
+                document.body.style.height = 'calc(' + dialog.offsetHeight + 'px + 25vh)';
+                document.body.classList.add('dialog-open');
+            }
         }
     };
 
