@@ -12,10 +12,6 @@
     "message": "<strong>Note</strong>: All settings are per-device. If you have YouTube Popout Player installed on multiple devices, you can configure settings differently for each device."
   },
 
-  "OptionsBehaviorTabWarning": {
-    "message": "<strong>Warning</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window."
-  },
-
   "OptionsSaveSettingsReminder": {
     "message": "Remember to save your changes using the \"$SAVE$\" button below",
     "placeholders": {
@@ -40,29 +36,8 @@
     "message": "Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong>"
   },
 
-  "OptionsAdvancedTitleLabel": {
-    "message": "Window Title Text (Preface)"
-  },
-  "OptionsAdvancedTitleDescription": {
-    "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
-  },
-
   "OptionsBehaviorHeading": {
     "message": "Popout Player Behavior"
-  },
-
-  "OptionsBehaviorTargetWindowLabel": {
-    "message": "Open in a Popup Window"
-  },
-  "OptionsBehaviorTargetWindowDescription": {
-    "message": "The popout player will open in a new popup window. <strong>This is the default setting.</strong>"
-  },
-
-  "OptionsBehaviorTargetTabLabel": {
-    "message": "Open in a Tab"
-  },
-  "OptionsBehaviorTargetTabDescription": {
-    "message": "The popout player will open in a new tab in your current browser window."
   },
 
   "OptionsBehaviorAutoplayLabel": {
@@ -100,6 +75,53 @@
   },
   "BehaviorControlsExtendedOptionLabel": {
     "message": "Extended"
+  },
+
+  "OptionsExperimentalHeading": {
+    "message": "Experimental Settings"
+  },
+
+  "OptionsExperimentalWarningHTML": {
+    "message": "<p><strong>These settings are experimental.</strong></p><p>This means they may not work as intended (or even at all), and changing them might even cause $NAME$ to stop working altogether. If this happens, please click the \"$RESET$\" button below, then fully close and re-open your browser.</p><p>If you have any feedback (everything works as expected, something's broken, etc.), please <a href=\"$URL$\" target=\"_blank\">open a ticket <i class=\"fa fa-external-link-square\"></i></a> on GitHub.</p>",
+    "placeholders": {
+      "name": {
+        "content": "YouTube Popout Player"
+      },
+      "reset": {
+        "content": "Reset to Defaults"
+      },
+      "url": {
+        "content": "https://github.com/rthaut/YouTubePopoutPlayer/issues"
+      }
+    }
+  },
+
+  "OptionsExperimentalUseNewOpenerLabel": {
+    "message": "Use New Popout Player Opening Mechanism"
+  },
+  "OptionsExperimentalUseNewOpenerDescription": {
+    "message": "Enabling this will cause the popout player to be opened using a new (experimental) method. This will hide the address bar (a.k.a. the URL bar), but some videos may NOT work (they will say \"Video unavailable\" instead). <strong>The default for this setting is disabled.</strong>"
+  },
+
+  "OptionsExperimentalTargetWindowLabel": {
+    "message": "Open in a Popup Window"
+  },
+  "OptionsExperimentalTargetWindowDescription": {
+    "message": "The popout player will open in a new popup window. <strong>This is the default setting.</strong>"
+  },
+
+  "OptionsExperimentalTargetTabLabel": {
+    "message": "Open in a Tab"
+  },
+  "OptionsExperimentalTargetTabDescription": {
+    "message": "The popout player will open in a new tab in your current browser window."
+  },
+
+  "OptionsExperimentalTitleLabel": {
+    "message": "Window Title Text (Preface)"
+  },
+  "OptionsExperimentalTitleDescription": {
+    "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
   },
 
   "OptionsSizeHeading": {

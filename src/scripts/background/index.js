@@ -50,6 +50,9 @@ browser.runtime.onMessage.addListener((message, sender) => {
             case 'open-popout':
                 return Popout.open(message.data);
 
+            case 'get-data-for-popout':
+                return Popout.getPopoutPlayerData(message.data);
+
             case 'get-commands':
                 return browser.commands.getAll();
 

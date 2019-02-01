@@ -255,7 +255,7 @@ const YouTubePopoutPlayer = (() => {
         /**
          * Opens the Popout Player (via a request to the background script)
          */
-        openPopout() {
+        async openPopout() {
             console.log('YouTubePopoutPlayer.openPopout()');
 
             const container = document.getElementById('movie_player') || document.getElementById('player');
@@ -268,32 +268,93 @@ const YouTubePopoutPlayer = (() => {
                 id = this.getVideoIDFromURL(window.location.href);
             }
 
-            browser.runtime.sendMessage({
-                'action': 'open-popout',
-                'data': {
-                    'id': id,
-                    'list': this.getPlaylistIDFromURL(window.location.href),
-                    'time': player.getTime(),
-                    'width': player.getWidth(),
-                    'height': player.getHeight()
-                }
-            }).then(response => {
-                if (response !== undefined) {
-                    console.log('YouTubePopoutPlayer.openPopout() :: Action "open-popout" response', response);
-                }
+            const data = {
+                'id': id,
+                'list': this.getPlaylistIDFromURL(window.location.href),
+                'time': player.getTime(),
+                'width': player.getWidth(),
+                'height': player.getHeight()
+            };
+
+            let opened = false;
+            if (await Options.GetLocalOption('experimental', 'useNewOpener')) {
+                opened = await this.openPopoutViaBackgroundScript(data);
+            } else {
+                opened = await this.openPopoutViaContentScript(data, id);
+            }
+
+            if (opened) {
                 player.pause();
 
-                // note: the background script will only close the original tab when appropriate
+                // note: the background script will only close the original window/tab when appropriate
                 return browser.runtime.sendMessage({
                     'action': 'close-original-tab'
+                }).catch(error => {
+                    console.error('YouTubePopoutPlayer.openPopout() :: Failed to close original window/tab', error);
                 });
-            }).then(response => {
-                if (response !== undefined) {
-                    console.log('YouTubePopoutPlayer.openPopout() :: Action "close-original-tab" response', response);
-                }
-            }).catch(error => {
-                console.error('YouTubePopoutPlayer.openPopout() :: Error', error);
-            });
+            }
+        }
+
+        /**
+         * Opens the popout player via the content script (using `window.open()`)
+         * @param {object} data data from the original video player ({id, list, time, width, height})
+         * @param {string} id the ID of the original video
+         * @returns {boolean} whether the popout player was opened successfully or not
+         */
+        async openPopoutViaContentScript(data, id) {
+            console.log('YouTubePopoutPlayer.openPopoutViaContentScript()', data, id);
+
+            try {
+                data = await browser.runtime.sendMessage({
+                    'action': 'get-data-for-popout',
+                    'data': data
+                });
+
+                console.log('YouTubePopoutPlayer.openPopoutViaContentScript() :: Popout data', data);
+
+                const options = {
+                    'width': data.width,
+                    'height': data.height,
+                    'scrollbars': 'no',
+                    'toolbar': 'no'
+                };
+                const optionString = Object.keys(options).map(opt => opt + '=' + options[opt]).join(',');
+
+                var popout = window.open(data.url, id, optionString);
+                console.log('YouTubePopoutPlayer.openPopoutViaContentScript() :: Opened popout', popout, options);
+
+                console.log('YouTubePopoutPlayer.openPopoutViaContentScript() :: Return', (popout !== null));
+                return (popout !== null);
+            } catch (error) {
+                console.error('YouTubePopoutPlayer.openPopoutViaContentScript() :: Failed to open popout', error);
+
+                console.log('YouTubePopoutPlayer.openPopoutViaContentScript() :: Return', false);
+                return false;
+            }
+        }
+
+        /**
+         * Opens the popout player via the background script (using `browser.windows.create()` or `browser.tabs.create()`)
+         * @param {object} data data from the original video player ({id, list, time, width, height})
+         * @returns {boolean} whether the popout player was opened successfully or not
+         */
+        async openPopoutViaBackgroundScript(data) {
+            console.log('YouTubePopoutPlayer.openPopoutViaBackgroundScript()', data);
+
+            try {
+                await browser.runtime.sendMessage({
+                    'action': 'open-popout',
+                    'data': data
+                });
+
+                console.log('YouTubePopoutPlayer.openPopoutViaBackgroundScript() :: Return', true);
+                return true;
+            } catch(error) {
+                console.error('YouTubePopoutPlayer.openPopoutViaBackgroundScript() :: Failed to open popout', error);
+
+                console.log('YouTubePopoutPlayer.openPopoutViaBackgroundScript() :: Return', false);
+                return false;
+            }
         }
 
         /**

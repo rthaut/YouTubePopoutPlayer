@@ -35,36 +35,6 @@
                     <i18n message="OptionsBehaviorHeading"></i18n>
                 </legend>
 
-                <ng-form name="behaviorTargetForm">
-
-                    <div class="input-field">
-                        <label>
-                            <input type="radio" name="behaviorTarget" value="window" ng-model="options.behavior.target" ng-required />
-                            <i18n message="OptionsBehaviorTargetWindowLabel"></i18n>
-                            <p class="input-hint" get-message="OptionsBehaviorTargetWindowDescription"></p>
-                        </label>
-
-                    </div>
-
-                    <div class="input-field">
-                        <label>
-                            <input type="radio" name="behaviorTarget" value="tab" ng-model="options.behavior.target" ng-required />
-                            <i18n message="OptionsBehaviorTargetTabLabel"></i18n>
-                            <p class="input-hint" get-message="OptionsBehaviorTargetTabDescription"></p>
-                        </label>
-                    </div>
-
-                </ng-form>
-
-                <!-- Save Reminder :: Behavior Target Change -->
-                <p class="text-small text-primary" ng-show="optionsForm.behaviorTargetForm.$dirty && optionsForm.behaviorTargetForm.$valid">
-                    <i class="fa fa-check-square-o"></i>
-                    <i18n message="OptionsSaveSettingsReminder"></i18n>
-                </p>
-                <!-- End Save Reminder -->
-
-                <hr />
-
                 <!-- Show Controls -->
                 <div class="input-field" ng-class="{'input-invalid': optionsForm.behaviorControls.$invalid}">
                     <label for="behaviorControls" get-message="BehaviorControlsLabel"></label>
@@ -117,122 +87,111 @@
                     <i18n message="OptionsSizeHeading"></i18n>
                 </legend>
 
-                <div class="alert alert-warning text-small" ng-hide="options.behavior.target === 'window'">
-                    <p>
-                        <i class="fa fa-warning"></i>
-                        <i18n message="OptionsBehaviorTabWarning"></i18n>
-                    </p>
-                </div>
+                <ng-form name="sizeModeForm">
 
-                <div ng-show="options.behavior.target === 'window'">
-
-                    <ng-form name="sizeModeForm">
-
-                        <div class="input-field">
-                            <label>
-                                <input type="radio" name="sizeMode" value="current" ng-model="options.size.mode" required>
-                                <i18n message="OptionsSizeModeCurrentLabel"></i18n>
-                                <p class="input-hint" get-message="OptionsSizeModeCurrentDescription"></p>
-                            </label>
-                        </div>
-
-                        <div class="input-field mar-b-0">
-                            <label>
-                                <input type="radio" name="sizeMode" value="custom" ng-model="options.size.mode" required>
-                                <i18n message="OptionsSizeModeCustomLabel"></i18n><br />
-                                <p class="input-hint" get-message="OptionsSizeModeCustomDescription"></p>
-                            </label>
-                        </div>
-
-                    </ng-form>
-
-                    <div class="container-fluid mar-t-sm" ng-show="options.size.mode === 'custom'">
-
-                        <div ng-form="sizeDimensionsForm" class="input-field mar-b-0">
-                            <div class="row">
-
-                                <!-- Size Dimensions -->
-                                <div class="col">
-                                    <div class="input-field" ng-class="{'input-invalid': optionsForm.sizeDimensionsForm.sizeModeUnits.$invalid}">
-                                        <label for="sizeModeUnits" get-message="DimensionUnitsLabel"></label>
-                                        <select name="sizeModeUnits" id="sizeModeUnits" ng-model="options.size.units" ng-change="validateSizeUnitsValue()" required>
-                                            <option value="pixels" get-message="DimensionUnitsPixelsOptionLabel"></option>
-                                            <option value="percentage" get-message="DimensionUnitsPercentageOptionLabel"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <!-- End Size Dimensions -->
-
-                            </div>
-
-                            <div class="row">
-
-                                <!-- Size Width and Height -->
-                                <div class="col-12 col-sm-6" ng-repeat="(dimension, name) in {'width': 'sizeWidth', 'height': 'sizeHeight'}">
-                                    <div class="input-field" ng-class="{'input-invalid': optionsForm.sizeDimensionsForm[name].$invalid}">
-                                        <label for="{{name}}" get-message="{{dimension}}Label"></label>
-                                        <div class="input-group">
-                                            <input type="number" name="{{name}}" id="{{name}}" pattern="\d+" ng-min="sizeMin(dimension)" ng-max="sizeMax(dimension)" ng-model="options.size[dimension]" ng-model-options="{ debounce: 200 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')" />
-                                            <span class="input-addon">{{sizeUnits()}}</span>
-                                        </div>
-                                        <p class="input-hint text-danger" ng-messages="optionsForm.sizeDimensionsForm[name].$error">
-                                            <span ng-message="required">
-                                                <i class="fa fa-times"></i>
-                                                <i18n message="FieldRequiredMessage"></i18n>
-                                            </span>
-                                            <span ng-message="number">
-                                                <i class="fa fa-times"></i>
-                                                <i18n message="FieldPatternNumberMessage"></i18n>
-                                            </span>
-                                            <span ng-message="min">
-                                                <i class="fa fa-times"></i>
-                                                <i18n message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin(dimension)}}"></i18n>
-                                            </span>
-                                            <span ng-message="max">
-                                                <i class="fa fa-times"></i>
-                                                <i18n message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax(dimension)}}"></i18n>
-                                            </span>
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- End Size Width and Height -->
-
-                            </div>
-
-                            <div class="row" ng-class="{'mar-t-lg': (optionsForm.sizeDimensionsForm.sizeWidth.$valid && optionsForm.sizeDimensionsForm.sizeHeight.$valid)}">
-
-                                <div class="col">
-                                    <table class="table-bordered">
-                                        <tbody>
-                                            <tr>
-                                                <td get-message="InfoCurrentScreenResolutionLabel"></td>
-                                                <td class="text-bold" ng-bind-html="resolution"></td>
-                                            </tr>
-                                            <tr ng-show="options.size.units === 'percentage'">
-                                                <td get-message="InfoPopoutPlayerWindowSizeLabel"></td>
-                                                <td class="text-bold" ng-bind-html="showInfo('dimensions')"></td>
-                                            </tr>
-                                            <tr>
-                                                <td get-message="InfoPopoutPlayerAspectRatioLabel"></td>
-                                                <td class="text-bold" ng-bind-html="showInfo('aspectRatio')"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-                        </div>
-
+                    <div class="input-field">
+                        <label>
+                            <input type="radio" name="sizeMode" value="current" ng-model="options.size.mode" required>
+                            <i18n message="OptionsSizeModeCurrentLabel"></i18n>
+                            <p class="input-hint" get-message="OptionsSizeModeCurrentDescription"></p>
+                        </label>
                     </div>
 
-                    <!-- Save Reminder :: Size Mode or Size Dimensions Change(s) -->
-                    <p class="text-small text-primary" ng-show="(optionsForm.sizeModeForm.$dirty && optionsForm.sizeModeForm.$valid) || (optionsForm.sizeDimensionsForm.$dirty && optionsForm.sizeDimensionsForm.$valid)">
-                        <i class="fa fa-check-square-o"></i>
-                        <i18n message="OptionsSaveSettingsReminder"></i18n>
-                    </p>
-                    <!-- End Save Reminder -->
+                    <div class="input-field mar-b-0">
+                        <label>
+                            <input type="radio" name="sizeMode" value="custom" ng-model="options.size.mode" required>
+                            <i18n message="OptionsSizeModeCustomLabel"></i18n><br />
+                            <p class="input-hint" get-message="OptionsSizeModeCustomDescription"></p>
+                        </label>
+                    </div>
+
+                </ng-form>
+
+                <div class="container-fluid mar-t-sm" ng-show="options.size.mode === 'custom'">
+
+                    <div ng-form="sizeDimensionsForm" class="input-field mar-b-0">
+                        <div class="row">
+
+                            <!-- Size Dimensions -->
+                            <div class="col">
+                                <div class="input-field" ng-class="{'input-invalid': optionsForm.sizeDimensionsForm.sizeModeUnits.$invalid}">
+                                    <label for="sizeModeUnits" get-message="DimensionUnitsLabel"></label>
+                                    <select name="sizeModeUnits" id="sizeModeUnits" ng-model="options.size.units" ng-change="validateSizeUnitsValue()" required>
+                                        <option value="pixels" get-message="DimensionUnitsPixelsOptionLabel"></option>
+                                        <option value="percentage" get-message="DimensionUnitsPercentageOptionLabel"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- End Size Dimensions -->
+
+                        </div>
+
+                        <div class="row">
+
+                            <!-- Size Width and Height -->
+                            <div class="col-12 col-sm-6" ng-repeat="(dimension, name) in {'width': 'sizeWidth', 'height': 'sizeHeight'}">
+                                <div class="input-field" ng-class="{'input-invalid': optionsForm.sizeDimensionsForm[name].$invalid}">
+                                    <label for="{{name}}" get-message="{{dimension}}Label"></label>
+                                    <div class="input-group">
+                                        <input type="number" name="{{name}}" id="{{name}}" pattern="\d+" ng-min="sizeMin(dimension)" ng-max="sizeMax(dimension)" ng-model="options.size[dimension]" ng-model-options="{ debounce: 200 }" ng-required="options.size.mode === 'custom'" />
+                                        <span class="input-addon">{{sizeUnits()}}</span>
+                                    </div>
+                                    <p class="input-hint text-danger" ng-messages="optionsForm.sizeDimensionsForm[name].$error">
+                                        <span ng-message="required">
+                                            <i class="fa fa-times"></i>
+                                            <i18n message="FieldRequiredMessage"></i18n>
+                                        </span>
+                                        <span ng-message="number">
+                                            <i class="fa fa-times"></i>
+                                            <i18n message="FieldPatternNumberMessage"></i18n>
+                                        </span>
+                                        <span ng-message="min">
+                                            <i class="fa fa-times"></i>
+                                            <i18n message="FieldMinValuePlaceholderMessage" substitutions="{{sizeMin(dimension)}}"></i18n>
+                                        </span>
+                                        <span ng-message="max">
+                                            <i class="fa fa-times"></i>
+                                            <i18n message="FieldMaxValuePlaceholderMessage" substitutions="{{sizeMax(dimension)}}"></i18n>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- End Size Width and Height -->
+
+                        </div>
+
+                        <div class="row" ng-class="{'mar-t-lg': (optionsForm.sizeDimensionsForm.sizeWidth.$valid && optionsForm.sizeDimensionsForm.sizeHeight.$valid)}">
+
+                            <div class="col">
+                                <table class="table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td get-message="InfoCurrentScreenResolutionLabel"></td>
+                                            <td class="text-bold" ng-bind-html="resolution"></td>
+                                        </tr>
+                                        <tr ng-show="options.size.units === 'percentage'">
+                                            <td get-message="InfoPopoutPlayerWindowSizeLabel"></td>
+                                            <td class="text-bold" ng-bind-html="showInfo('dimensions')"></td>
+                                        </tr>
+                                        <tr>
+                                            <td get-message="InfoPopoutPlayerAspectRatioLabel"></td>
+                                            <td class="text-bold" ng-bind-html="showInfo('aspectRatio')"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
 
                 </div>
+
+                <!-- Save Reminder :: Size Mode or Size Dimensions Change(s) -->
+                <p class="text-small text-primary" ng-show="(optionsForm.sizeModeForm.$dirty && optionsForm.sizeModeForm.$valid) || (optionsForm.sizeDimensionsForm.$dirty && optionsForm.sizeDimensionsForm.$valid)">
+                    <i class="fa fa-check-square-o"></i>
+                    <i18n message="OptionsSaveSettingsReminder"></i18n>
+                </p>
+                <!-- End Save Reminder -->
 
             </fieldset>
 
@@ -256,19 +215,71 @@
                 </div>
                 <!-- End Toggle Close Original Window/Tab -->
 
-                <!-- Title Preface -->
-                <div class="input-field" ng-show="isFirefox">
-                    <label get-message="OptionsAdvancedTitleLabel"></label>
-                    <input type="text" name="advancedTitle" ng-model="options.advanced.title" ng-trim="false" ng-disabled="options.behavior.target !== 'window'" />
-                    <p class="input-hint text-warning" ng-hide="options.behavior.target === 'window'">
-                        <i class="fa fa-warning"></i>
-                        <i18n message="OptionsBehaviorTabWarning"></i18n>
-                    </p>
-                    <p class="input-hint text-primary" ng-show="optionsForm.advancedTitle.$dirty && optionsForm.advancedTitle.$valid">
+            </fieldset>
+
+            <fieldset>
+                <legend class="text-primary">
+                    <i class="fa fa-flask mar-r-xs"></i>
+                    <i18n message="OptionsExperimentalHeading"></i18n>
+                </legend>
+
+                <div class="alert alert-warning text-small" get-message="OptionsExperimentalWarningHTML"></div>
+
+                <!-- Toggle Use New Popout Opener -->
+                <div class="input-field">
+                    <span class="switch">
+                        <input type="checkbox" name="experimentalUseNewOpener" id="experimentalUseNewOpener" ng-model="options.experimental.useNewOpener">
+                        <label for="experimentalUseNewOpener" get-message="OptionsExperimentalUseNewOpenerLabel"></label>
+                        <p class="input-hint text-primary" ng-show="optionsForm.experimentalUseNewOpener.$dirty && optionsForm.experimentalUseNewOpener.$valid">
+                            <i class="fa fa-check-square-o"></i>
+                            <i18n message="OptionsSaveSettingsReminder"></i18n>
+                        </p>
+                        <p class="input-hint" get-message="OptionsExperimentalUseNewOpenerDescription"></p>
+                    </span>
+                </div>
+                <!-- End Toggle Use New Popout Opener -->
+
+                <hr ng-show="options.experimental.useNewOpener" />
+
+                <!-- Open in New Window vs. Tab Radios -->
+                <ng-form name="experimentalTargetForm" ng-show="options.experimental.useNewOpener">
+
+                    <div class="input-field">
+                        <label>
+                            <input type="radio" name="experimentalTarget" value="window" ng-model="options.experimental.target" ng-required />
+                            <i18n message="OptionsExperimentalTargetWindowLabel"></i18n>
+                            <p class="input-hint" get-message="OptionsExperimentalTargetWindowDescription"></p>
+                        </label>
+
+                    </div>
+
+                    <div class="input-field">
+                        <label>
+                            <input type="radio" name="experimentalTarget" value="tab" ng-model="options.experimental.target" ng-required />
+                            <i18n message="OptionsExperimentalTargetTabLabel"></i18n>
+                            <p class="input-hint" get-message="OptionsExperimentalTargetTabDescription"></p>
+                        </label>
+                    </div>
+
+                    <p class="text-small text-primary" ng-show="optionsForm.experimentalTargetForm.$dirty && optionsForm.experimentalTargetForm.$valid">
                         <i class="fa fa-check-square-o"></i>
                         <i18n message="OptionsSaveSettingsReminder"></i18n>
                     </p>
-                    <p class="input-hint" get-message="OptionsAdvancedTitleDescription"></p>
+
+                </ng-form>
+                <!-- End Open in New Window vs. Tab Radios -->
+
+                <hr ng-show="options.experimental.useNewOpener" />
+
+                <!-- Title Preface -->
+                <div class="input-field" ng-show="options.experimental.useNewOpener">
+                    <label get-message="OptionsExperimentalTitleLabel"></label>
+                    <input type="text" name="experimentalTitle" ng-model="options.experimental.title" ng-trim="false" />
+                    <p class="input-hint text-primary" ng-show="optionsForm.experimentalTitle.$dirty && optionsForm.experimentalTitle.$valid">
+                        <i class="fa fa-check-square-o"></i>
+                        <i18n message="OptionsSaveSettingsReminder"></i18n>
+                    </p>
+                    <p class="input-hint" get-message="OptionsExperimentalTitleDescription"></p>
                 </div>
                 <!-- End Title Preface -->
 

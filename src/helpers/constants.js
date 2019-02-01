@@ -4,7 +4,6 @@ export const START_THRESHOLD = 5;   // TODO: should this be configurable?
 
 export const OPTION_DEFAULTS = {
     'behavior': {
-        'target': 'window',
         'autoplay': true,
         'loop': false,
         'controls': 'standard'
@@ -16,7 +15,11 @@ export const OPTION_DEFAULTS = {
         'height': 480
     },
     'advanced': {
-        'close': false,
+        'close': false
+    },
+    'experimental': {
+        'useNewOpener': false,
+        'target': 'window',
         'title': ''
     }
 };
