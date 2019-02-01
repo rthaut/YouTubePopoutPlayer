@@ -194,4 +194,12 @@ body.firefox {
     .alert {
         padding: 16px !important;
     }
+
+    &.dialog-open {
+        // hide everything but the dialog elements when a dialog is open
+        // NOTE: the body height must also be explicitely set (via JS)
+        & > *:not(dialog):not(.backdrop):not(._dialog_overlay) {
+            display: none;
+        }
+    }
 }
