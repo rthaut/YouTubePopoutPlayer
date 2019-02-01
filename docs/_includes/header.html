@@ -1,0 +1,34 @@
+<header>
+    <div class="section grey darken-4 center">
+        <br class="hide-on-med-and-down"/><br class="hide-on-med-and-down"/>
+        <img alt="YouTube Popout Player Promotional Image" class="responsive-img z-depth-3" src="/screenshots/Promo-Screenshot.png">
+        <br class="hide-on-med-and-down"/><br class="hide-on-med-and-down"/>
+    </div>
+    <div class="section">
+        <div class="container">
+            <h2 class="header center red-text">{{ site.title | default: site.github.repository_name }}</h2>
+            <div class="row center">
+                <h5 class="header col s12 light">{{ site.description | default: site.github.project_tagline }}</h5>
+            </div>
+            {% if site.links %}
+            <div class="row center">
+                {% for item in site.links %}
+                <div class="col s12 xl6">
+
+                    {% if forloop.length > 2 and forloop.index > 2 %}
+                    <p class="hide-on-med-and-down hide-on-large-only show-on-extra-large"></p>
+                    {% endif %}
+
+                    {% if forloop.index > 1 %}
+                    <p class="hide-on-extra-large-only"></p>
+                    {% endif %}
+
+                    <a href="{{ item.url }}" class="btn-large red white-text"><i class="material-icons right">file_download</i>{{ item.name }}</a>
+
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</header>
