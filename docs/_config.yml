@@ -1,1 +1,9 @@
-theme: jekyll-theme-cayman
+repository: rthaut/YouTubePopoutPlayer
+
+title: YouTube Popout Player
+
+links:
+  - name: Get for Chrome
+    url: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
+  - name: Get for Firefox
+    url: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
