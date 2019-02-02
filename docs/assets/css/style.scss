@@ -10,7 +10,7 @@ strong {
 }
 
 #content-main {
-    a {
+    a:not(.btn):not(.btn-small):not(.btn-large) {
         &:active, &:focus, &:hover {
             text-decoration: underline;
         }

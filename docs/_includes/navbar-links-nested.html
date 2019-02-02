@@ -4,9 +4,11 @@
 <ul id="{{ category.name }}" class="dropdown-content">
     {% assign pages = category.items | sort: 'order' %}
     {% for p in pages %}
+    {% unless p.exclude %}
     <li class="{% if page.url == p.url %}darken-1{% endif %}">
         <a class="red-text" href="{{ p.url }}">{{ p.title }}</a>
     </li>
+    {% endunless %}
     {% endfor %}
 </ul>
 {% endif %}
