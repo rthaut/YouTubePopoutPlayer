@@ -1,4 +1,4 @@
-import { MSG_REGEX } from '../../helpers/constants';
+import { MSG_REGEX, YOUTUBE_EMBED_URL, YOUTUBE_NOCOOKIE_EMBED_URL } from '../../helpers/constants';
 import Options from '../../helpers/Options';
 import Popout from './Popout.class';
 
@@ -62,6 +62,46 @@ browser.runtime.onMessage.addListener((message, sender) => {
         return;
     }
 });
+
+/**
+ * Modify requests to the YouTube Embedded Player to ensure the `Referer` header is set
+ * The `Referer` header is required to avoid the "Video unavailable" error in the popout player
+ */
+browser.webRequest.onBeforeSendHeaders.addListener(
+    details => {
+        console.log('[Background] Web Request onBeforeSendHeaders', details);
+
+        // only if the request is for the popout player (identified by a custom GET parameter in the query string)
+        if (details.url.includes('popout=1')) {
+            console.log('[Background] Web Request onBeforeSendHeaders :: Request is for popout player', details.url);
+
+            // only if the Referer header is not already set
+            if (!details.requestHeaders.some(header => header.name === 'Referer')) {
+                const referer = {
+                    'name': 'Referer',
+                    'value': details.url
+                };
+                console.log('[Background] Web Request onBeforeSendHeaders :: Setting "Referer" header', referer);
+                details.requestHeaders.push(referer);
+            }
+        }
+
+        console.log('[Background] Web Request onBeforeSendHeaders :: Return', details.requestHeaders);
+        return {
+            'requestHeaders': details.requestHeaders
+        };
+    },
+    {
+        'urls': [
+            YOUTUBE_EMBED_URL + '*',
+            YOUTUBE_NOCOOKIE_EMBED_URL + '*'
+        ]
+    },
+    [
+        'blocking',
+        'requestHeaders'
+    ]
+);
 
 /**
  * Sends a message to the active browser tab
