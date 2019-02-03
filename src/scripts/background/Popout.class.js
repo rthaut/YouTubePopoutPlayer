@@ -1,4 +1,4 @@
-import { YOUTUBE_EMBED_URL, START_THRESHOLD } from '../../helpers/constants';
+import { START_THRESHOLD, YOUTUBE_EMBED_URL } from '../../helpers/constants';
 import Options from '../../helpers/Options';
 import Utils from '../../helpers/utils';
 
