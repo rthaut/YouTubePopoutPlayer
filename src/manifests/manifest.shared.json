@@ -54,9 +54,5 @@
       },
       "description": "__MSG_OpenPopoutCommandDescription__"
     }
-  },
-
-  "web_accessible_resources": [
-    "images/*"
-  ]
+  }
 }
