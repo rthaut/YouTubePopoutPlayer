@@ -17,7 +17,7 @@
                     {% for p in pages %}
                     {% unless p.exclude %}
                     <li>
-                        <a class="grey-text {% if page.url == p.url %}text-lighten-5{% else %}text-lighten-2{% endif %}" href="{{p.url}}">{{p.title}}</a>
+                        <a class="grey-text {% if page.url == p.url %}text-lighten-5{% else %}text-lighten-2{% endif %}" href="{{ p.url | relative_url }}">{{p.title}}</a>
                     </li>
                     {% endunless %}
                     {% endfor %}
