@@ -1,0 +1,53 @@
+{% assign categories = site.html_pages | sort: 'order' | group_by: 'category' %}
+{% for category in categories %}
+{% if category.name != '' %}
+<ul id="{{ category.name }}" class="dropdown-content">
+    {% assign pages = category.items | sort: 'order' %}
+    {% for p in pages %}
+    {% unless p.exclude %}
+    <li class="{% if page.url == p.url %}darken-1{% endif %}">
+        <a class="red-text" href="{{ p.url }}">{{ p.title }}</a>
+    </li>
+    {% endunless %}
+    {% endfor %}
+</ul>
+{% endif %}
+{% endfor %}
+
+<nav class="red" role="navigation">
+    <div class="nav-wrapper container">
+
+        <a href="/" class="brand-logo hide-on-med-and-down">{{ site.title | default: site.github.repository_name }}</a>
+
+        <a href="#!" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+        <ul class="right hide-on-med-and-down">
+            {% assign pages = site.html_pages | sort: 'order' %}
+            {% for p in pages %}
+            {% unless p.exclude or p.category %}
+            <li class="{% if page.url == p.url %}active{% endif %}">
+                <a class="text-white" href="{{p.url}}">{{p.title}}</a>
+            </li>
+            {% endunless %}
+            {% endfor %}
+
+            {% for category in categories %}
+            {% if category.name != '' %}
+            <li><a class="dropdown-trigger" href="#!" data-target="{{ category.name }}">{{ category.name | capitalize }} <i class="material-icons right">arrow_drop_down</i></a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+
+        <ul id="nav-mobile" class="sidenav">
+            {% assign pages = site.html_pages | sort: 'order' %}
+            {% for p in pages %}
+            {% unless p.exclude %}
+            <li class="{% if page.url == p.url %}active{% endif %}">
+                <a href="{{p.url}}">{{p.title}}</a>
+            </li>
+            {% endunless %}
+            {% endfor %}
+        </ul>
+
+    </div>
+</nav>

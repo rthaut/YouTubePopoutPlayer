@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'en-US' }}">
+    {% include head.html %}
+    <body>
+        {% include navbar-links-nested.html %}
+
+        <main id="content">
+            {% include header.html %}
+            <div class="container">
+                <div id="content-main">
+                {{ content }}
+                </div>
+            </div>
+        </main>
+
+        {% include footer.html %}
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="{{ '/assets/js/scripts.js?v=' | append: site.github.build_revision | relative_url }}"></script>
+    </body>
+</html>

@@ -1,0 +1,30 @@
+---
+layout: default
+title: FAQ
+heading: Frequently Asked Questions
+permalink: /faq
+category: documentation
+order: 4
+---
+
+<section id="always-on-top" class="section scrollspy">
+    <h4 class="hide">Always on Top</h4>
+    <h5><i class="material-icons">question_answer</i> How do I make the popout player always stay on top of other windows?</h5>
+
+    <p>The APIs for browser extensions do not expose any functionality to keep windows on top, so this is not possible through the extension alone (at least for now).</p>
+
+    <p><strong>However</strong>, you can use third-party applications on Windows, like <a class="red-text" href="https://www.autohotkey.com/" rel="nofollow">AutoHotkey</a>, <a class="red-text" href="https://efotinis.neocities.org/deskpins/" rel="nofollow">DeskPins</a>, <a class="red-text" href="https://www.savardsoftware.com/turbotop/" rel="nofollow">TurboTop</a>, or <a class="red-text" href="https://www.displayfusion.com/" rel="nofollow">DisplayFusion</a>. To make this even easier/better, if you are using Firefox, you can use the <a class="red-text" href="/options#advanced">Window Title Text (Preface)</a> setting to add some custom text to the popout player window's title, which you can then use to target the popout player window in these applications.</p>
+
+    <p>For MacOS, you can try using <a class="red-text" href="https://www.maketecheasier.com/mac-keeping-your-application-window-always-on-top/" rel="nofollow">SIMBL + Afloat</a>, though your mileage may vary.</p>
+
+    <p>For Linux, depending on your distribution (and, more likely, your window manager), you probably have a way to set windows to always be on top without the need for additional software.</p>
+</section>
+
+<div class="divider"></div>
+
+<section id="video-unavailable" class="section scrollspy">
+    <h4 class="hide">Video Unavailable</h4>
+    <h5><i class="material-icons">question_answer</i> Why do some videos say "Video unavailable" when opened in the popout player?</h5>
+
+    <p>The popout player uses YouTube's <a class="red-text" href="https://developers.google.com/youtube/player_parameters" rel="nofollow">embedded video player</a>. By default, all videos uploaded to YouTube can be used in the embedded video player, but all videos can be <a class="red-text" href="https://support.google.com/youtube/answer/6301625" rel="nofollow">restricted from being able to be embedded</a>. This means that the owner of the video has intentionally blocked the video from the embedded player, and, as such, it cannot be played through the popout player.</p>
+</section>
