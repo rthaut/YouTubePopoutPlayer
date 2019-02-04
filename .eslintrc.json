@@ -12,9 +12,14 @@
         "ecmaVersion": 8,
         "sourceType": "module"
     },
+    "plugins": [
+      "no-unsanitized"
+    ],
     "rules": {
         "curly": ["error", "multi-line"],
         "no-console": "off",
+        "no-unsanitized/method": "error",
+        "no-unsanitized/property": "error",
         "no-unused-vars": ["error", {
             "vars": "local",
             "args": "none"
