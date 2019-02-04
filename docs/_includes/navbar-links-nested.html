@@ -6,7 +6,7 @@
     {% for p in pages %}
     {% unless p.exclude %}
     <li class="{% if page.url == p.url %}darken-1{% endif %}">
-        <a class="red-text" href="{{ p.url }}">{{ p.title }}</a>
+        <a class="red-text" href="{{ p.url | relative_url }}">{{ p.title }}</a>
     </li>
     {% endunless %}
     {% endfor %}
@@ -26,7 +26,7 @@
             {% for p in pages %}
             {% unless p.exclude or p.category %}
             <li class="{% if page.url == p.url %}active{% endif %}">
-                <a class="text-white" href="{{p.url}}">{{p.title}}</a>
+                <a class="text-white" href="{{ p.url | relative_url }}">{{p.title}}</a>
             </li>
             {% endunless %}
             {% endfor %}
@@ -43,7 +43,7 @@
             {% for p in pages %}
             {% unless p.exclude %}
             <li class="{% if page.url == p.url %}active{% endif %}">
-                <a href="{{p.url}}">{{p.title}}</a>
+                <a href="{{ p.url | relative_url }}">{{p.title}}</a>
             </li>
             {% endunless %}
             {% endfor %}
