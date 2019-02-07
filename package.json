@@ -31,11 +31,11 @@
     "url": "https://github.com/rthaut/YouTubePopoutPlayer/issues"
   },
   "dependencies": {
-    "angular": "^1.7.5",
-    "angular-animate": "^1.7.5",
+    "angular": "^1.7.7",
+    "angular-animate": "^1.7.7",
     "angular-browser-i18n": "^2.0.1",
-    "angular-messages": "^1.7.5",
-    "angular-sanitize": "^1.7.5",
+    "angular-messages": "^1.7.7",
+    "angular-sanitize": "^1.7.7",
     "bootstrap": "^4.2.1",
     "jquery": "^3.3.1",
     "shoelace-css": "^1.0.0-beta24",
