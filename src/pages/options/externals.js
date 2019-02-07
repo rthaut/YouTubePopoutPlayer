@@ -40,12 +40,5 @@ module.exports = [
             'dist/shoelace.css',
             'dist/shoelace.js'
         ]
-    },
-    {
-        'module': 'dialog-polyfill',
-        'entry': [
-            'dialog-polyfill.css',
-            'dialog-polyfill.js'
-        ]
     }
 ];

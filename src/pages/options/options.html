@@ -13,7 +13,7 @@
 
         <!-- BEGIN SETTINGS -->
 
-        <form name="optionsForm" class="container-fluid">
+        <form name="optionsForm" class="container-fluid" ng-hide="hideMainContent()">
 
             <div class="alert alert-primary text-small">
                 <div class="row">
@@ -288,7 +288,7 @@
                     </button>
                 </div>
                 <div class="col-6">
-                    <button class="button button-block button-danger" ng-click="confirmReset()">
+                    <button class="button button-block button-danger" ng-click="confirmReset = true">
                         <i class="fa fa-ban mar-r-sm"></i>
                         <i18n message="ButtonResetLabel"></i18n>
                     </button>
@@ -317,12 +317,14 @@
 
         </form>
 
-        <dialog id="ResetConfirmDialog">
-            <div class="container">
+        <div class="container-fluid" ng-show="confirmReset">
 
                 <div class="row">
                     <div class="col">
-                        <h3 class="mar-b-md" get-message="ConfirmSettingsResetHeading"></h3>
+                    <h3 class="text-danger text-bold mar-b-md">
+                        <i class="fa fa-warning"></i>
+                        <i18n message="ConfirmSettingsResetHeading"></i18n>
+                    </h3>
                         <p get-message="ConfirmSettingsResetText"></p>
                         <hr />
                     </div>
@@ -336,7 +338,7 @@
                         </button>
                     </div>
                     <div class="col">
-                        <button type="button" class="button-block button-secondary" ng-click="cancelReset()">
+                    <button type="button" class="button-block button-secondary" ng-click="confirmReset = false">
                             <i class="fa fa-ban mar-r-sm"></i>
                             <i18n message="ButtonCancelResetLabel"></i18n>
                         </button>
@@ -344,21 +346,20 @@
                 </div>
 
             </div>
-        </dialog>
 
         <!-- END SETTINGS -->
 
-        <hr />
+        <hr ng-hide="hideMainContent()" />
 
         <!-- BEGIN COMMANDS -->
 
         <!-- TODO: move all of the command-related functionality into a custom directive? -->
 
-        <form class="container-fluid">
+        <form class="container-fluid" ng-hide="hideMainContent()">
 
             <fieldset ng-show="commands && commands.length">
-                <legend class="text-primary">
-                    <i class="fa fa-keyboard-o mar-r-xs"></i>
+                <legend class="text-primary mar-r-xs">
+                    <i class="fa fa-keyboard-o"></i>
                     <i18n message="CommandListHeading"></i18n>
                 </legend>
 
@@ -386,12 +387,14 @@
 
         </form>
 
-        <dialog id="UpdateCommandDialog" ng-init="initUpdateCommandDialog()">
-            <div class="container">
+        <div class="container-fluid" ng-show="command">
 
                 <div class="row">
                     <div class="col">
-                        <h3 class="mar-b-md" get-message="UpdateCommandHeading"></h3>
+                    <h3 class="text-primary text-bold mar-b-md">
+                        <i class="fa fa-keyboard-o"></i>
+                        <i18n message="UpdateCommandHeading"></i18n>
+                    </h3>
                         <p get-message="UpdateCommandInstructionsPlaceholder" substitutions="{{getCommandInstructionSubstitutions()}}"></p>
                         <hr ng-show="updateCommandError" />
                         <div class="alert alert-danger" ng-show="updateCommandError" ng-bind-html="updateCommandError"></div>
@@ -399,7 +402,6 @@
                 </div>
 
             </div>
-        </dialog>
 
         <!-- END COMMANDS -->
 

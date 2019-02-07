@@ -3,34 +3,6 @@ html {
 }
 
 /**
- * Dialog
- */
-dialog {
-    position: fixed;
-    top: 50%;
-    transform: translate(0, -50%);
-
-    background: rgb(255, 255, 255);
-    border: none;
-
-    border-radius: 8px;
-
-    box-shadow: 0 12px 24px -4px rgba(50, 50, 50, 0.25),
-                0 8px 16px 0px rgba(0, 0, 0, 0.25);
-}
-
-dialog::backdrop,
-dialog+.backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    background-color: rgba(255, 255, 255, 1);
-}
-
-/**
  * Dismissible Alerts (Automatic & Manual)
  * adopted for Shoelace.css
  */
@@ -195,11 +167,33 @@ body.firefox {
         padding: 16px !important;
     }
 
-    &.dialog-open {
-        // hide everything but the dialog elements when a dialog is open
-        // NOTE: the body height must also be explicitely set (via JS)
-        & > *:not(dialog):not(.backdrop):not(._dialog_overlay) {
-            display: none;
-        }
+    h1 {
+        font-size: 40px !important;
+        line-height: 44px !important;
+    }
+
+    h2 {
+        font-size: 32px !important;
+        line-height: 35.2px !important;
+    }
+
+    h3 {
+        font-size: 28px !important;
+        line-height: 30.8px !important;
+    }
+
+    h4 {
+        font-size: 24px !important;
+        line-height: 26.4px !important;
+    }
+
+    h5 {
+        font-size: 20px !important;
+        line-height: 22px !important;
+    }
+
+    h6 {
+        font-size: 16px !important;
+        line-height: 17.6px !important;
     }
 }

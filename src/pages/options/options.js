@@ -21,6 +21,10 @@ app.filter('kbdCombo', function () {
 
 app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', function ($scope, $timeout, kbdComboFilter) {
 
+    $scope.hideMainContent = function () {
+        return $scope.command || $scope.confirmReset;
+    };
+
     /* BEGIN ALERTS */
 
     // TODO: the alerts should probably be actual custom directives with their own scope/link functionality...
@@ -78,51 +82,6 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
     });
 
     /* END ALERTS */
-
-    /* BEGIN DIALOGS */
-
-    // TODO: move these dialog functions into a helper/utility? that would help expose them to custom directives
-    // TODO: the dialogs should probably be actual custom directives with their own scope/link functionality...
-
-    var initDialog = function (dialog) {
-        /* global dialogPolyfill */
-        if (typeof dialogPolyfill !== 'undefined') {
-            dialogPolyfill.registerDialog(dialog);
-        }
-
-        dialog.addEventListener('close', () => {
-            if ($scope.isFirefox) {
-                delete document.body.style.height;
-                document.body.classList.remove('dialog-open');
-            }
-        });
-
-        return dialog;
-    };
-
-    $scope.showDialog = function (id) {
-        const dialog = document.querySelector(`#${id}`);
-        initDialog(dialog);
-
-        if (!dialog.open) {
-            dialog.showModal();
-            if ($scope.isFirefox) {
-                document.body.style.height = 'calc(' + dialog.offsetHeight + 'px + 25vh)';
-                document.body.classList.add('dialog-open');
-            }
-        }
-    };
-
-    $scope.closeDialog = function (id) {
-        const dialog = document.querySelector(`#${id}`);
-        initDialog(dialog);
-
-        if (dialog.open) {
-            dialog.close();
-        }
-    };
-
-    /* END DIALOGS */
 
     /* BEGIN SETTINGS */
 
@@ -325,14 +284,6 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         return 0;
     };
 
-    $scope.confirmReset = function () {
-        $scope.showDialog('ResetConfirmDialog');
-    };
-
-    $scope.cancelReset = function () {
-        $scope.closeDialog('ResetConfirmDialog');
-    };
-
     /**
      * Resets all options to the extension defaults
      */
@@ -356,7 +307,7 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
                 'icon': 'exclamation-o'
             }, true);
         }).finally(() => {
-            $scope.closeDialog('ResetConfirmDialog');
+            $scope.confirmReset = false;
             $scope.$apply();
         });
     };
@@ -391,7 +342,6 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
     /* BEGIN COMMANDS */
 
     // TODO: move all of the command-related functionality into a custom directive?
-    // aside from the dialog methods (initDialog(), showDialog(), closeDialog()), it is already self-contained
 
     $scope.canUpdateCommands = (typeof browser.commands.update === 'function');
 
@@ -408,19 +358,6 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
     };
     getCommands();
 
-    $scope.initUpdateCommandDialog = function () {
-        const dialog = document.querySelector('#UpdateCommandDialog');
-        initDialog(dialog);
-
-        dialog.addEventListener('close', () => {
-            removeCommandUpdateKeyListener();
-            if ($scope.command !== null) {
-                $scope.command = null;
-                $scope.$apply();
-            }
-        });
-    };
-
     var addCommandUpdateKeyListener = function () {
         console.log('OptionsController.addCommandUpdateKeyListener()');
         window.addEventListener('keydown', updateCommandShortcut, false);
@@ -434,7 +371,6 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
     $scope.updateCommand = function (command) {
         console.log('OptionsController.updateCommand()', command);
 
-        $scope.showDialog('UpdateCommandDialog');
         $scope.command = command;
 
         // ensure we don't already have an active event listener
@@ -469,6 +405,26 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         if (event.keyCode === 27) {
             console.log('Escape key pressed');
             removeCommandUpdateKeyListener();
+            delete $scope.updateCommandError;
+            delete $scope.command;
+            $scope.$apply();
+            return;
+        }
+
+        const modifierKeys = ['ctrl', 'alt', 'meta', 'shift'];
+        let combination = '';
+        let modifierCount = 0;
+        modifierKeys.forEach(modifier => {
+            if (event[modifier + 'Key']) {
+                combination += modifier + '+';
+                modifierCount++;
+            }
+        });
+
+        if (1 > modifierCount || modifierCount > 2) {
+            $scope.updateCommandError = browser.i18n.getMessage('InvalidCommandShortcutModifiers');
+            $scope.updateCommandError += '<p>' + modifierKeys.map(Utils.TitleCase).map(key => kbdComboFilter(key)).join(' , ') + '</p>';
+            $scope.$apply();
             return;
         }
 
@@ -491,23 +447,6 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             return;
         }
 
-        const modifierKeys = ['ctrl', 'alt', 'meta', 'shift'];
-        let combination = '';
-        let modifierCount = 0;
-        modifierKeys.forEach(modifier => {
-            if (event[modifier + 'Key']) {
-                combination += modifier + '+';
-                modifierCount++;
-            }
-        });
-
-        if (1 > modifierCount || modifierCount > 2) {
-            $scope.updateCommandError = browser.i18n.getMessage('InvalidCommandShortcutModifiers');
-            $scope.updateCommandError += '<p>' + modifiers.map(Utils.TitleCase).map(key => kbdComboFilter(key)).join(' , ') + '</p>';
-            $scope.$apply();
-            return;
-        }
-
         combination = Utils.TitleCase(combination) + key;
 
         try {
@@ -518,10 +457,8 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             });
 
             delete $scope.updateCommandError;
-            $scope.command.shortcut = combination;
-
-            $scope.closeDialog('UpdateCommandDialog');
-            $scope.command = null;
+            delete $scope.command;
+            getCommands();
         } catch(err) {
             console.error('Failed to set command shortcut', err);
             $scope.updateCommandError = err;
