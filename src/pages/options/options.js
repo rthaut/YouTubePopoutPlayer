@@ -421,19 +421,26 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         });
     };
 
+    var addCommandUpdateKeyListener = function () {
+        console.log('OptionsController.addCommandUpdateKeyListener()');
+        window.addEventListener('keydown', updateCommandShortcut, false);
+    };
+
     var removeCommandUpdateKeyListener = function () {
         console.log('OptionsController.removeCommandUpdateKeyListener()');
-        window.removeEventListener('keypress', updateCommandShortcut, false);
+        window.removeEventListener('keydown', updateCommandShortcut, false);
     };
 
     $scope.updateCommand = function (command) {
+        console.log('OptionsController.updateCommand()', command);
+
         $scope.showDialog('UpdateCommandDialog');
         $scope.command = command;
 
         // ensure we don't already have an active event listener
         removeCommandUpdateKeyListener();
 
-        window.addEventListener('keypress', updateCommandShortcut, false);
+        addCommandUpdateKeyListener();
     };
 
     var updateCommandShortcut = async function (event) {
@@ -450,6 +457,12 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         if ($scope.command === undefined || $scope.command === null) {
             console.log('No command actively being updated');
             removeCommandUpdateKeyListener();
+            return;
+        }
+
+        const modifiers = ['Control', 'Alt', 'Shift', 'Meta'];
+        if (modifiers.includes(event.key)) {
+            console.log(`Event is for ${event.key} Modifier`);
             return;
         }
 
@@ -478,10 +491,10 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             return;
         }
 
-        const modifiers = ['ctrl', 'alt', 'meta', 'shift'];
+        const modifierKeys = ['ctrl', 'alt', 'meta', 'shift'];
         let combination = '';
         let modifierCount = 0;
-        modifiers.forEach(modifier => {
+        modifierKeys.forEach(modifier => {
             if (event[modifier + 'Key']) {
                 combination += modifier + '+';
                 modifierCount++;
