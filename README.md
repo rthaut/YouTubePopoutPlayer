@@ -23,7 +23,7 @@
 * *Firefox Only* Add custom text to the popout player's window title (for scripting).
 * Keyboard shortcut for opening the popout player.
 
-#### For more information, head to the [YouTube Popout Player website](http://rthaut.github.io/YouTubePopoutPlayer/).
+#### For more information, head to the [YouTube Popout Player website](https://rthaut.github.io/YouTubePopoutPlayer/).
 
 * * *
 
@@ -41,6 +41,47 @@
 [firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
 [firefox-image-download]: https://img.shields.io/amo/d/youtube-popout-player.svg
 [firefox-image-version]: https://img.shields.io/amo/v/youtube-popout-player.svg
+
+* * *
+
+## Contributing
+
+Contributions are always welcome! Even if you aren't comfortable coding, you can always submit [new ideas](https://github.com/rthaut/YouTubePopoutPlayer/issues/new?labels=enhancement) and [bug reports](https://github.com/rthaut/YouTubePopoutPlayer/issues/new?labels=bug).
+
+### Localization/Translation
+
+This extension is setup to be fully localized/translated into multiple languages, but for now English is the only language with full translations. If you are able to help localize/translate, please [check out this guide](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization). All of the text for the extension is stored [here in the `/src/_locales` directory](https://github.com/rthaut/YouTubePopoutPlayer/tree/master/src/_locales).
+
+### Building the Extension
+
+To build the extension from source code, you will need to use [Node Package Manager (npm)](https://www.npmjs.com/), which handles all of the dependencies needed for this project and is used to execute the various scripts for development/building/packaging/etc.
+
+```sh
+npm install
+```
+
+Then you can generate either a development build or a production build (development builds use un-minified code and have `console.*` statements throughout for debugging, whereas production builds minify all code and remove all `console.*` usage).
+
+```sh
+npm run build:production
+```
+
+or
+
+```sh
+npm run build:development
+```
+
+### Development Process
+
+To make development easier, you can start up a temporary development profile on [Mozilla Firefox](https://getfirefox.com) with the extension already loaded. Firefox will also automatically detect changes and reload the extension for you (read more about this on the [`web-ext` documentation pages](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Getting_started_with_web-ext)). Use the following commands to re-build the extension and re-load it in Firefox automatically as you make changes:
+
+```sh
+npm run watch:development # or npm run watch:production
+npm run firefox:start
+```
+
+Note you will need 2 terminal instances, one for each of the above commands, as they both remain running until you cancel them (use <kbd>CTRL</kbd> + <kbd>c</kbd> to cancel each process in your terminal(s)).
 
 * * *
 
