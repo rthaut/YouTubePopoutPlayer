@@ -9,9 +9,8 @@ order: 2
 <section id="overview" class="section scrollspy">
     <h4>Permissions Overview</h4>
 
-            <p>If you would like to know more about permissions in general, Mozilla has a <a class="red-text" href="https://support.mozilla.org/en-US/kb/permission-request-messages-firefox-extensions" rel="nofollow">support article about permissions</a>, as well as a <a class="red-text" href="https://support.mozilla.org/en-US/kb/tips-assessing-safety-extension" rel="nofollow">guide for assessing the safety of an extension</a>.</p>
-            <p>Please <a class="red-text" href="https://github.com/rthaut/YouTubePopoutPlayer/issues/new" rel="nofollow">submit a new issue</a> if you are still concerned about the use of any of the following permissions so the information provided below can be updated to cover common concerns and answer common questions.</p>
-
+    <p>If you would like to know more about permissions in general, Mozilla has a <a class="red-text" href="https://support.mozilla.org/en-US/kb/permission-request-messages-firefox-extensions" rel="nofollow">support article about permissions</a>, as well as a <a class="red-text" href="https://support.mozilla.org/en-US/kb/tips-assessing-safety-extension" rel="nofollow">guide for assessing the safety of an extension</a>.</p>
+    <p>Please <a class="red-text" href="https://github.com/rthaut/YouTubePopoutPlayer/issues/new" rel="nofollow">submit a new issue</a> if you are still concerned about the use of any of the following permissions so the information provided below can be updated to cover common concerns and answer common questions.</p>
 </section>
 
 <section id="overview" class="section scrollspy">
@@ -23,21 +22,39 @@ order: 2
             <p>These are the required browser permissions for YouTube Popout Player.</p>
         </div>
 
-        <div class="card-body">
-            <img class="responsive-img z-depth-1" src="{{ '/screenshots/Permissions-Firefox-Cropped.png' | relative_url }}" alt="Popout Player Permissions Request (in Firefox) Cropped Screenshot"/>
+        <div class="card-body center">
+            <div class="row">
+                <div class="col s12 xl6">
+                    <h6>Permission Request in Google Chrome</h6>
+                    <img class="responsive-img z-depth-1" src="{{ '/screenshots/Permissions-Chrome-Cropped.png' | relative_url }}" alt="Popout Player Permissions Request (in Chrome) Cropped Screenshot"/>
+                </div>
+                <div class="col s12 hide-on-extra-large-only">
+                    <p class="divider"></p>
+                </div>
+                <div class="col s12 xl6">
+                        <h6>Permission Request in Mozilla Firefox</h6>
+                    <img class="responsive-img z-depth-1" src="{{ '/screenshots/Permissions-Firefox-Cropped.png' | relative_url }}" alt="Popout Player Permissions Request (in Firefox) Cropped Screenshot"/>
+                </div>
+            </div>
         </div>
 
         <div class="card-body">
             <dl>
-                <dt>Access your data for sites in the youtube.com domain</dt>
-                <dt>Access your data for sites in the youtube-nocookie.com domain</dt>
+                <dt>Read and change your data on all youtube-nocookie.com sites and all youtube.com sites (<em>in Chrome</em>)</dt>
+                <span>&mdash; OR &mdash;</span>
+                <dt>Access your data for sites in the youtube.com domain (<em>in Firefox</em>)</dt>
+                <dt>Access your data for sites in the youtube-nocookie.com domain (<em>in Firefox</em>)</dt>
                 <dd>
+                    <p><strong>This extensions does not read (or collect) or modify any of your data at all.</strong></p>
                     <p>This permission is used to add the controls (button and context menu) and listen for the keyboard shortcut, which are used to open the popout player, on YouTube videos. This permission is requested for both the primary <code class="red-text">youtube.com</code> domain and the alternate <code class="red-text">youtube-nocookie.com</code> domain (which some sites use to embed YouTube videos), as these are the domains where YouTube videos are hosted.</p>
                 </dd>
 
-                <dt>Access browser tabs</dt>
+                <dt>Read your browsing history (<em>in Chrome</em>)</dt>
+                <span>&mdash; OR &mdash;</span>
+                <dt>Access browser tabs (<em>in Firefox</em>)</dt>
                 <dd>
-                    <p>The Tabs permission is used to close the original window/tab (when configured) after opening the popout player.</p>
+                    <p><strong>This extension does not read (or collect) your browsing history at all.</strong></p>
+                    <p>The Tabs permission is used to close the original window/tab (when configured via the "Close Original Window/Tab" option) after opening the popout player.</p>
                 </dd>
             </dl>
         </div>
