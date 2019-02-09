@@ -308,8 +308,8 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         promise.then(response => {
             console.log('OptionsController.togglePermission() :: Permissions promise response', response);
             element.$setValidity('permissions', response);
-        }).catch(err => {
-            console.error('OptionsController.togglePermission() :: Permissions promise error', err);
+        }).catch(error => {
+            console.error('OptionsController.togglePermission() :: Permissions promise error', error);
             // TODO: if revoking permissions fails, is the control really invalid?
             element.$setValidity('permissions', false);
         }).finally(() => {
@@ -332,10 +332,10 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
                 'icon': 'check-square-o'
             }, true, 5);
             $scope.optionsForm.$setPristine();
-        }).catch(err => {
-            console.error('Failed to reset settings to default values', err);
+        }).catch(error => {
+            console.error('Failed to reset settings to default values', error);
             $scope.createAlert({
-                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err.message),
+                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', error.message),
                 'type': 'danger',
                 'icon': 'exclamation-o'
             }, true);
@@ -358,10 +358,10 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
                 'icon': 'check-square-o'
             }, true, 5);
             $scope.optionsForm.$setPristine();
-        }).catch(err => {
-            console.error('Failed to save settings to local storage', err);
+        }).catch(error => {
+            console.error('Failed to save settings to local storage', error);
             $scope.createAlert({
-                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err.message),
+                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', error.message),
                 'type': 'danger',
                 'icon': 'exclamation-o'
             }, true);
@@ -383,8 +383,8 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             'action': 'get-commands'
         }).then(commands => {
             $scope.commands = commands;
-        }).catch(err => {
-            console.error('Failed to retrieve extension commands', err);
+        }).catch(error => {
+            console.error('Failed to retrieve extension commands', error);
         }).finally(() => {
             $scope.$apply();
         });
@@ -492,9 +492,9 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             delete $scope.updateCommandError;
             delete $scope.command;
             getCommands();
-        } catch(err) {
-            console.error('Failed to set command shortcut', err);
-            $scope.updateCommandError = err;
+        } catch(error) {
+            console.error('Failed to set command shortcut', error);
+            $scope.updateCommandError = error;
         }
 
         $scope.$apply();
