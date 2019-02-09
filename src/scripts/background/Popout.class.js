@@ -185,7 +185,10 @@ const Popout = (() => {
 
             if (closeOriginalWindowTab) {
                 const tab = await browser.tabs.get(tabId);
-                if (tab && tab.url) {
+
+                // if the "tabs" permission is not granted, the tab object does NOT include the `url` property
+                // we cannot request that permission now, as we are outside of a synchronous user input handler
+                if (tab && tab.url && tab.url !== undefined) {
                     console.log('[Background] Popout.closeOriginalTab() :: Original tab', tab);
 
                     const url = new URL(tab.url);
@@ -201,10 +204,14 @@ const Popout = (() => {
                     } else {
                         console.info('[Background] Popout.closeOriginalTab() :: Original tab is NOT YouTube');
                     }
+                } else {
+                    const error = new Error('Unable to determine if original window/tab should be closed (likely due to the "tabs" permission not being granted)');
+                    console.error('[Background] Popout.closeOriginalTab() ::', error);
+                    return Promise.reject(error);
                 }
             }
 
-            return;
+            return Promise.resolve();
         }
 
     };

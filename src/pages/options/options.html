@@ -243,13 +243,19 @@
                 </legend>
 
                 <!-- Toggle Close Original Window/Tab -->
-                <div class="input-field">
-                    <span class="switch">
-                        <input type="checkbox" name="advancedClose" id="advancedClose" ng-model="options.advanced.close">
+                <div class="input-field" ng-class="{'input-invalid': optionsForm.advancedClose.$invalid}">
+                    <span class="switch" ng-class="{'switch-danger': optionsForm.advancedClose.$invalid}">
+                        <input type="checkbox" name="advancedClose" id="advancedClose" ng-model="options.advanced.close" ng-disabled="optionsForm.advancedClose.$pending" ng-change="togglePermission(optionsForm.advancedClose, {'permissions': ['tabs']})">
                         <label for="advancedClose" get-message="OptionsAdvancedCloseLabel"></label>
                         <p class="input-hint text-primary" ng-show="optionsForm.advancedClose.$dirty && optionsForm.advancedClose.$valid">
                             <i class="fa fa-check-square-o"></i>
                             <i18n message="OptionsSaveSettingsReminder"></i18n>
+                        </p>
+                        <p class="input-hint text-danger" ng-messages="optionsForm.advancedClose.$error">
+                            <span ng-message="permissions">
+                                <i class="fa fa-times"></i>
+                                <i18n message="FieldRequiredPermissionsNotGrantedMessage"></i18n>
+                            </span>
                         </p>
                         <p class="input-hint" get-message="OptionsAdvancedCloseDescription"></p>
                     </span>
@@ -282,7 +288,7 @@
                     </p>
                 </div>
                 <div class="col-6">
-                    <button class="button button-block" ng-class="{'button-light': optionsForm.$pristine}" ng-click="save()" ng-disabled="optionsForm.$pristine || optionsForm.$invalid">
+                    <button class="button button-block" ng-class="{'button-light': optionsForm.$pristine, 'button-loader': optionsForm.$pending}" ng-click="save()" ng-disabled="optionsForm.$pristine || optionsForm.$invalid ||optionsForm.$pending">
                         <i class="fa fa-check mar-r-sm"></i>
                         <i18n message="ButtonSaveLabel"></i18n>
                     </button>

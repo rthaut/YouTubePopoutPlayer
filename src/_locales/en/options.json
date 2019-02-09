@@ -181,6 +181,10 @@
     }
   },
 
+  "FieldRequiredPermissionsNotGrantedMessage": {
+    "message": "You must grant the requested additional permission(s) when prompted to enable this setting."
+  },
+
   "ButtonSaveLabel": {
     "message": "Save Settings"
   },

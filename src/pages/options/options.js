@@ -285,6 +285,39 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
     };
 
     /**
+     * Requests/removes the specified permission(s); must be invoked synchronously from a user input handler
+     * @param {object} element the AngularJS form element
+     * @param {object} request the permissions request object
+     */
+    // TODO: this breaks if the user toggles the option off but does NOT save (the corresponding option remains enabled, but the permission was removed)
+    $scope.togglePermission = function (element, request) {
+        console.log('OptionsController.togglePermission()', element, request);
+
+        // set the 'permissions` validation property as pending
+        element.$setValidity('permissions', undefined);
+
+        let promise;
+        if (element.$modelValue) {
+            console.log('OptionsController.togglePermission() :: Requesting permission(s)', request);
+            promise = browser.permissions.request(request);
+        } else {
+            console.log('OptionsController.togglePermission() :: Removing permission(s)', request);
+            promise = browser.permissions.remove(request);
+        }
+
+        promise.then(response => {
+            console.log('OptionsController.togglePermission() :: Permissions promise response', response);
+            element.$setValidity('permissions', response);
+        }).catch(err => {
+            console.error('OptionsController.togglePermission() :: Permissions promise error', err);
+            // TODO: if revoking permissions fails, is the control really invalid?
+            element.$setValidity('permissions', false);
+        }).finally(() => {
+            $scope.$apply();
+        });
+    };
+
+    /**
      * Resets all options to the extension defaults
      */
     $scope.reset = function () {
