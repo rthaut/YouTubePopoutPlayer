@@ -2,8 +2,18 @@ import { OPTION_DEFAULTS } from '../helpers/constants';
 
 const Options = (() => {
 
-    const Options = {
+    /**
+     * @param {string} type the type of writable storage (`sync`, `local`, or `managed`)
+     * @param {boolean} [defaults=true] indicates if the default value(s) should be returned for missing key(s)
+     * @return {Promise<object>}
+     */
+    const GetAllFromStorage = async function (type = 'local', defaults = true) {
+        const options = Options.ConvertForStorage(OPTION_DEFAULTS);
+        const keys = defaults ? options : Object.keys(options);
+        return browser.storage[type].get(keys);
+    };
 
+    const Options = {
         /**
          * Resets all options in local storage to their default values
          * @param {boolean} [reset=false] indicates if local storage should be reset
@@ -20,7 +30,7 @@ const Options = (() => {
                     return browser.storage.local.set(defaults);
                 });
             } else {
-                return browser.storage.local.get().then((options) => {
+                return GetAllFromStorage('local', false).then(options => {
                     const promises = [];
                     Object.keys(defaults).forEach(option => {
                         if (options[option] === undefined || options[option] === null) {
@@ -115,11 +125,10 @@ const Options = (() => {
         'GetLocalOption': async function (domain, name) {
             console.log('Options.GetLocalOption()', domain, name);
 
-            const key = `${domain}.${name}`;
-            const option = await browser.storage.local.get(key);
+            const options = await this.GetLocalOptionsForDomain(domain);
 
-            console.log('Options.GetLocalOption() :: Return', option[key]);
-            return option[key];
+            console.log('Options.GetLocalOption() :: Return', options[name]);
+            return options[name];
         },
 
         /**
@@ -132,7 +141,7 @@ const Options = (() => {
 
             let options;
 
-            options = await browser.storage.local.get();
+            options = await GetAllFromStorage('local');
             options = Object.assign({}, this.ConvertFromStorage(options));
             options = Object.assign({}, options[domain]);
 
