@@ -29,6 +29,26 @@
                 </div>
             </div>
 
+            <!-- Alerts -->
+            <div class="row mar-t-lg" ng-show="alerts && alerts.length">
+                <div class="col">
+
+                    <div class="fade alert alert-{{alert.type}}" ng-class="{'alert-dismissible': alert.dismissible, 'alert-timed': alert.duration}" ng-repeat="alert in alerts" style="--duration: {{alert.duration}}s">
+                        <div>
+                            <i class="fa fa-{{alert.icon}}" ng-show="alert.icon"></i>
+                            <span ng-bind-html="alert.message"></span>
+                        </div>
+                        <a class="close" ng-click="RemoveAlert(alert)" ng-if="alert.dismissible">
+                            <span class="x">&times</span>
+                            <div class="timer-left"></div>
+                            <div class="timer-right"></div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            <!-- End Alerts -->
+
             <fieldset>
                 <legend class="text-primary">
                     <i class="fa fa-sliders mar-r-xs"></i>
@@ -39,7 +59,7 @@
 
                     <div class="input-field">
                         <label>
-                            <input type="radio" name="behaviorTarget" value="window" ng-model="options.behavior.target" ng-required />
+                            <input type="radio" name="behaviorTarget" value="window" ng-model="options.behavior.target" ng-click="saveOption('behavior.target', behaviorTargetForm, 'window')" ng-required />
                             <i18n message="OptionsBehaviorTargetWindowLabel"></i18n>
                             <p class="input-hint" get-message="OptionsBehaviorTargetWindowDescription"></p>
                         </label>
@@ -48,7 +68,7 @@
 
                     <div class="input-field">
                         <label>
-                            <input type="radio" name="behaviorTarget" value="tab" ng-model="options.behavior.target" ng-required />
+                            <input type="radio" name="behaviorTarget" value="tab" ng-model="options.behavior.target" ng-click="saveOption('behavior.target', behaviorTargetForm, 'tab')" ng-required />
                             <i18n message="OptionsBehaviorTargetTabLabel"></i18n>
                             <p class="input-hint" get-message="OptionsBehaviorTargetTabDescription"></p>
                         </label>
@@ -56,27 +76,16 @@
 
                 </ng-form>
 
-                <!-- Save Reminder :: Behavior Target Change -->
-                <p class="text-small text-primary" ng-show="optionsForm.behaviorTargetForm.$dirty && optionsForm.behaviorTargetForm.$valid">
-                    <i class="fa fa-check-square-o"></i>
-                    <i18n message="OptionsSaveSettingsReminder"></i18n>
-                </p>
-                <!-- End Save Reminder -->
-
                 <hr />
 
                 <!-- Show Controls -->
                 <div class="input-field" ng-class="{'input-invalid': optionsForm.behaviorControls.$invalid}">
                     <label for="behaviorControls" get-message="BehaviorControlsLabel"></label>
-                    <select name="behaviorControls" id="behaviorControls" ng-model="options.behavior.controls" ng-change="validateBehaviorControlsValue()" required>
+                    <select name="behaviorControls" id="behaviorControls" ng-model="options.behavior.controls" ng-change="saveOption('behavior.controls', optionsForm.behaviorControls)" required>
                         <option value="none" get-message="BehaviorControlsNoneOptionLabel"></option>
                         <option value="standard" get-message="BehaviorControlsStandardOptionLabel"></option>
                         <option value="extended" get-message="BehaviorControlsExtendedOptionLabel"></option>
                     </select>
-                    <p class="input-hint text-primary" ng-show="optionsForm.behaviorControls.$dirty && optionsForm.behaviorControls.$valid">
-                        <i class="fa fa-check-square-o"></i>
-                        <i18n message="OptionsSaveSettingsReminder"></i18n>
-                    </p>
                     <p class="input-hint" get-message="BehaviorControlsDescription"></p>
                 </div>
                 <!-- Show Controls -->
@@ -84,12 +93,8 @@
                 <!-- Toggle Autoplay -->
                 <div class="input-field">
                     <span class="switch">
-                        <input type="checkbox" name="behaviorAutoplay" id="behaviorAutoplay" ng-model="options.behavior.autoplay">
+                        <input type="checkbox" name="behaviorAutoplay" id="behaviorAutoplay" ng-model="options.behavior.autoplay" ng-change="saveOption('behavior.autoplay', optionsForm.behaviorAutoplay)">
                         <label for="behaviorAutoplay" get-message="OptionsBehaviorAutoplayLabel"></label>
-                        <p class="input-hint text-primary" ng-show="optionsForm.behaviorAutoplay.$dirty && optionsForm.behaviorAutoplay.$valid">
-                            <i class="fa fa-check-square-o"></i>
-                            <i18n message="OptionsSaveSettingsReminder"></i18n>
-                        </p>
                         <p class="input-hint" get-message="OptionsBehaviorAutoplayDescription"></p>
                     </span>
                 </div>
@@ -98,12 +103,8 @@
                 <!-- Toggle Loop -->
                 <div class="input-field">
                     <span class="switch">
-                        <input type="checkbox" name="behaviorLoop" id="behaviorLoop" ng-model="options.behavior.loop">
+                        <input type="checkbox" name="behaviorLoop" id="behaviorLoop" ng-model="options.behavior.loop" ng-change="saveOption('behavior.loop', optionsForm.behaviorLoop)">
                         <label for="behaviorLoop" get-message="OptionsBehaviorLoopLabel"></label>
-                        <p class="input-hint text-primary" ng-show="optionsForm.behaviorLoop.$dirty && optionsForm.behaviorLoop.$valid">
-                            <i class="fa fa-check-square-o"></i>
-                            <i18n message="OptionsSaveSettingsReminder"></i18n>
-                        </p>
                         <p class="input-hint" get-message="OptionsBehaviorLoopDescription"></p>
                     </span>
                 </div>
@@ -130,7 +131,7 @@
 
                         <div class="input-field">
                             <label>
-                                <input type="radio" name="sizeMode" value="current" ng-model="options.size.mode" required>
+                                <input type="radio" name="sizeMode" value="current" ng-model="options.size.mode" ng-click="saveOption('size.mode', sizeModeForm, 'current')" required>
                                 <i18n message="OptionsSizeModeCurrentLabel"></i18n>
                                 <p class="input-hint" get-message="OptionsSizeModeCurrentDescription"></p>
                             </label>
@@ -138,7 +139,7 @@
 
                         <div class="input-field mar-b-0">
                             <label>
-                                <input type="radio" name="sizeMode" value="custom" ng-model="options.size.mode" required>
+                                <input type="radio" name="sizeMode" value="custom" ng-model="options.size.mode" ng-click="saveOption('size.mode', sizeModeForm, 'custom')" required>
                                 <i18n message="OptionsSizeModeCustomLabel"></i18n><br />
                                 <p class="input-hint" get-message="OptionsSizeModeCustomDescription"></p>
                             </label>
@@ -221,16 +222,25 @@
                                 </div>
 
                             </div>
+
+                            <div class="row">
+                                <div class="col-12" ng-show="sizeDimensionsForm.$invalid">
+                                    <p class="text-warning">
+                                        <i class="fa fa-exclamation-triangle"></i>
+                                        <i18n message="OptionsCorrectErrorsWarning"></i18n>
+                                    </p>
+                                </div>
+                                <div class="col-6 offset-3">
+                                    <button class="button button-block" ng-class="{'button-light': sizeDimensionsForm.$pristine}" ng-click="saveOptions('size', sizeDimensionsForm)" ng-disabled="sizeDimensionsForm.$pristine || sizeDimensionsForm.$invalid">
+                                        <i class="fa fa-check mar-r-sm"></i>
+                                        <i18n message="ButtonSaveCustomDimensionsLabel"></i18n>
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
-
-                    <!-- Save Reminder :: Size Mode or Size Dimensions Change(s) -->
-                    <p class="text-small text-primary" ng-show="(optionsForm.sizeModeForm.$dirty && optionsForm.sizeModeForm.$valid) || (optionsForm.sizeDimensionsForm.$dirty && optionsForm.sizeDimensionsForm.$valid)">
-                        <i class="fa fa-check-square-o"></i>
-                        <i18n message="OptionsSaveSettingsReminder"></i18n>
-                    </p>
-                    <!-- End Save Reminder -->
 
                 </div>
 
@@ -245,28 +255,20 @@
                 <!-- Toggle Close Original Window/Tab -->
                 <div class="input-field">
                     <span class="switch">
-                        <input type="checkbox" name="advancedClose" id="advancedClose" ng-model="options.advanced.close">
+                        <input type="checkbox" name="advancedClose" id="advancedClose" ng-model="options.advanced.close" ng-change="saveOption('advanced.close', optionsForm.advancedClose)">
                         <label for="advancedClose" get-message="OptionsAdvancedCloseLabel"></label>
-                        <p class="input-hint text-primary" ng-show="optionsForm.advancedClose.$dirty && optionsForm.advancedClose.$valid">
-                            <i class="fa fa-check-square-o"></i>
-                            <i18n message="OptionsSaveSettingsReminder"></i18n>
-                        </p>
                         <p class="input-hint" get-message="OptionsAdvancedCloseDescription"></p>
                     </span>
                 </div>
                 <!-- End Toggle Close Original Window/Tab -->
 
                 <!-- Title Preface -->
-                <div class="input-field" ng-show="isFirefox">
+                <div class="input-field" ng-class="{'input-invalid': optionsForm.advancedTitle.$invalid}" ng-show="isFirefox">
                     <label get-message="OptionsAdvancedTitleLabel"></label>
-                    <input type="text" name="advancedTitle" ng-model="options.advanced.title" ng-trim="false" ng-disabled="options.behavior.target !== 'window'" />
+                    <input type="text" name="advancedTitle" ng-model="options.advanced.title" ng-trim="false" ng-disabled="options.behavior.target !== 'window'" ng-change="saveOption('advanced.title', optionsForm.advancedTitle)" />
                     <p class="input-hint text-warning" ng-hide="options.behavior.target === 'window'">
                         <i class="fa fa-warning"></i>
                         <i18n message="OptionsBehaviorTabWarning"></i18n>
-                    </p>
-                    <p class="input-hint text-primary" ng-show="optionsForm.advancedTitle.$dirty && optionsForm.advancedTitle.$valid">
-                        <i class="fa fa-check-square-o"></i>
-                        <i18n message="OptionsSaveSettingsReminder"></i18n>
                     </p>
                     <p class="input-hint" get-message="OptionsAdvancedTitleDescription"></p>
                 </div>
@@ -275,45 +277,13 @@
             </fieldset>
 
             <div class="row">
-                <div class="col-12" ng-show="optionsForm.$invalid">
-                    <p class="text-warning">
-                        <i class="fa fa-exclamation-triangle"></i>
-                        <i18n message="OptionsCorrectErrorsWarning"></i18n>
-                    </p>
-                </div>
-                <div class="col-6">
-                    <button class="button button-block" ng-class="{'button-light': optionsForm.$pristine}" ng-click="save()" ng-disabled="optionsForm.$pristine || optionsForm.$invalid">
-                        <i class="fa fa-check mar-r-sm"></i>
-                        <i18n message="ButtonSaveLabel"></i18n>
-                    </button>
-                </div>
-                <div class="col-6">
+                <div class="col-6 offset-3">
                     <button class="button button-block button-danger" ng-click="confirmReset = true">
                         <i class="fa fa-ban mar-r-sm"></i>
                         <i18n message="ButtonResetLabel"></i18n>
                     </button>
                 </div>
             </div>
-
-            <!-- Alerts -->
-            <div class="row mar-t-lg" ng-show="alerts && alerts.length">
-                <div class="col">
-
-                    <div class="fade alert alert-{{alert.type}}" ng-class="{'alert-dismissible': alert.dismissible, 'alert-timed': alert.duration}" ng-repeat="alert in alerts" style="--duration: {{alert.duration}}s">
-                        <div>
-                            <i class="fa fa-{{alert.icon}}" ng-show="alert.icon"></i>
-                            <span ng-bind-html="alert.message"></span>
-                        </div>
-                        <a class="close" ng-click="removeAlert(alert)" ng-if="alert.dismissible">
-                            <span class="x">&times</span>
-                            <div class="timer-left"></div>
-                            <div class="timer-right"></div>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-            <!-- End Alerts -->
 
         </form>
 
