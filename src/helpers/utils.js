@@ -17,7 +17,7 @@ const Utils = (() => {
 
             dimension = this.TitleCase(dimension);
 
-            if (window && window.screen && Object.keys(window.screen).includes(`avail${dimension}`)) {
+            if (window && window.screen && window.screen[`avail${dimension}`] !== undefined) {
                 return parseInt(window.screen[`avail${dimension}`] * percentage, 10);
             }
 
