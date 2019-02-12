@@ -33,7 +33,7 @@
   "dependencies": {
     "angular": "^1.7.7",
     "angular-animate": "^1.7.7",
-    "angular-browser-i18n": "^2.0.1",
+    "angular-browser-i18n": "^2.0.2",
     "angular-messages": "^1.7.7",
     "angular-sanitize": "^1.7.7",
     "jquery": "^3.3.1",
