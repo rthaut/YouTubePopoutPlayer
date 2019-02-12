@@ -194,7 +194,9 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
                 width = Utils.GetDimensionForScreenPercentage('Width', width);
                 height = Utils.GetDimensionForScreenPercentage('Height', height);
             }
+        }
 
+        if ((parseInt(width, 10) > 0) && (parseInt(height, 10) > 0)) {
             ratio = gcd(width, height);
         }
 
