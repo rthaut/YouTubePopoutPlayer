@@ -16,15 +16,6 @@
     "message": "<strong>Warning</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window."
   },
 
-  "OptionsSaveSettingsReminder": {
-    "message": "Remember to save your changes using the \"$SAVE$\" button below",
-    "placeholders": {
-      "save": {
-        "content": "Save Settings"
-      }
-    }
-  },
-
   "OptionsCorrectErrorsWarning": {
     "message": "You must correct all error(s) before you can save your settings."
   },
@@ -181,11 +172,11 @@
     }
   },
 
-  "ButtonSaveLabel": {
-    "message": "Save Settings"
+  "ButtonSaveCustomDimensionsLabel": {
+    "message": "Save Custom Dimensions"
   },
   "ButtonResetLabel": {
-    "message": "Reset to Defaults"
+    "message": "Reset All Settings to Defaults"
   },
 
   "ConfirmSettingsResetHeading": {
