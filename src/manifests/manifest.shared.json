@@ -17,9 +17,12 @@
     "*://*.youtube.com/*",
     "*://*.youtube-nocookie.com/*",
     "storage",
-    "tabs",
     "webRequest",
     "webRequestBlocking"
+  ],
+
+  "optional_permissions": [
+    "tabs"
   ],
 
   "content_scripts": [

@@ -315,6 +315,41 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
     };
 
     /**
+     * Requests/removes the specified permission(s); must be invoked synchronously from a user input handler
+     * @param {object} $elem the form element for the option
+     * @param {object} request the permissions request object
+     * @param {string} name the name of the option to save
+     */
+    $scope.togglePermission = function ($elem, request, name) {
+        console.log('OptionsController.togglePermission()', $elem, request);
+
+        // set the `permissions` validation property as pending
+        $elem.$setValidity('permissions', undefined);
+
+        let promise;
+        if ($elem.$modelValue) {
+            console.log('OptionsController.togglePermission() :: Requesting permission(s)', request);
+            promise = browser.permissions.request(request);
+        } else {
+            console.log('OptionsController.togglePermission() :: Removing permission(s)', request);
+            promise = browser.permissions.remove(request);
+        }
+
+        promise.then(response => {
+            console.log('OptionsController.togglePermission() :: Permissions promise response', response);
+            $elem.$setValidity('permissions', response);
+            if (response) {
+                $scope.saveOption(name, $elem);
+            }
+        }).catch(error => {
+            console.error('OptionsController.togglePermission() :: Permissions promise error', error);
+            $elem.$setValidity('permissions', false);
+        }).finally(() => {
+            $scope.$apply();
+        });
+    };
+
+    /**
      * Save a single option to local storage
      * @param {string} name the name of the option to save
      * @param {object} $elem the form element for the option
@@ -382,8 +417,8 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             'action': 'get-commands'
         }).then(commands => {
             $scope.commands = commands;
-        }).catch(err => {
-            console.error('Failed to retrieve extension commands', err);
+        }).catch(error => {
+            console.error('Failed to retrieve extension commands', error);
         }).finally(() => {
             $scope.$apply();
         });

@@ -262,10 +262,16 @@
                     </h4>
 
                     <!-- Toggle Close Original Window/Tab -->
-                    <div class="input-field">
-                        <span class="switch">
-                            <input type="checkbox" name="advancedClose" id="advancedClose" ng-model="options.advanced.close" ng-change="saveOption('advanced.close', optionsForm.advancedClose)">
+                    <div class="input-field" ng-class="{'input-invalid': optionsForm.advancedClose.$invalid}">
+                        <span class="switch" ng-class="{'switch-danger': optionsForm.advancedClose.$invalid}">
+                            <input type="checkbox" name="advancedClose" id="advancedClose" ng-model="options.advanced.close" ng-change="togglePermission(optionsForm.advancedClose, {'permissions': ['tabs']}, 'advanced.close')" ng-disabled="optionsForm.advancedClose.$pending">
                             <label for="advancedClose" get-message="OptionsAdvancedCloseLabel"></label>
+                            <p class="input-hint text-danger" ng-messages="optionsForm.advancedClose.$error">
+                                <span ng-message="permissions">
+                                    <i class="fa fa-times"></i>
+                                    <i18n message="FieldRequiredPermissionsNotGrantedMessage"></i18n>
+                                </span>
+                            </p>
                             <p class="input-hint" get-message="OptionsAdvancedCloseDescription"></p>
                         </span>
                     </div>

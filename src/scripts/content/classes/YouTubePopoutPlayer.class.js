@@ -292,7 +292,7 @@ const YouTubePopoutPlayer = (() => {
                     console.log('YouTubePopoutPlayer.openPopout() :: Action "close-original-tab" response', response);
                 }
             }).catch(error => {
-                console.error('YouTubePopoutPlayer.openPopout() :: Error', error);
+                console.error('YouTubePopoutPlayer.openPopout() ::', error);
             });
         }
 

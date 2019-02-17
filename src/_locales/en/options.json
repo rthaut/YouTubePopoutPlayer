@@ -172,8 +172,16 @@
     }
   },
 
+  "FieldRequiredPermissionsNotGrantedMessage": {
+    "message": "You must grant the requested additional permission(s) when prompted to enable this setting."
+  },
+
   "ButtonSaveCustomDimensionsLabel": {
     "message": "Save Custom Dimensions"
+  },
+
+  "ButtonSaveLabel": {
+    "message": "Save Settings"
   },
   "ButtonResetLabel": {
     "message": "Reset All Settings to Defaults"
