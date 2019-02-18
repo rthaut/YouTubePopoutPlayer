@@ -12,16 +12,40 @@
     "message": "<strong>Note</strong>: All settings are per-device. If you have YouTube Popout Player installed on multiple devices, you can configure settings differently for each device."
   },
 
-  "OptionsBehaviorTabWarning": {
-    "message": "<strong>Warning</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window."
+  "OptionsSettingNotAvailableForTab": {
+    "message": "<strong>Note</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window."
+  },
+
+  "OptionsSettingsNotAvailableForTab": {
+    "message": "These settings do not apply when the popout player is configured to open in a new tab in the current browser window."
   },
 
   "OptionsCorrectErrorsWarning": {
     "message": "You must correct all error(s) before you can save your settings."
   },
 
-  "OptionsAdvancedHeading": {
+  "OptionsHeadingBehavior": {
+    "message": "Popout Player Behavior"
+  },
+
+  "OptionsHeadingSize": {
+    "message": "Popout Player Size"
+  },
+
+  "OptionsHeadingAdvanced": {
     "message": "Advanced Settings"
+  },
+
+  "OptionsTabNameBehavior": {
+    "message": "Behavior"
+  },
+
+  "OptionsTabNameSize": {
+    "message": "Size"
+  },
+
+  "OptionsTabNameAdvanced": {
+    "message": "Advanced"
   },
 
   "OptionsAdvancedCloseLabel": {
@@ -36,10 +60,6 @@
   },
   "OptionsAdvancedTitleDescription": {
     "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
-  },
-
-  "OptionsBehaviorHeading": {
-    "message": "Popout Player Behavior"
   },
 
   "OptionsBehaviorTargetWindowLabel": {
@@ -91,10 +111,6 @@
   },
   "BehaviorControlsExtendedOptionLabel": {
     "message": "Extended"
-  },
-
-  "OptionsSizeHeading": {
-    "message": "Popout Player Size"
   },
 
   "OptionsSizeModeCurrentLabel": {

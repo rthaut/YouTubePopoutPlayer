@@ -117,12 +117,12 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         resetCache();
 
         $scope.$watch('options.size.width', () => {
-            if ($scope.optionsForm.sizeDimensionsForm.sizeWidth.$valid) {
+            if ($scope.SizeCustomDimensionsForm.SizeWidth.$valid) {
                 $scope.cache.dimensions[$scope.options.size.units].width = angular.copy($scope.options.size.width);
             }
         });
         $scope.$watch('options.size.height', () => {
-            if ($scope.optionsForm.sizeDimensionsForm.sizeHeight.$valid) {
+            if ($scope.SizeCustomDimensionsForm.SizeHeight.$valid) {
                 $scope.cache.dimensions[$scope.options.size.units].height = angular.copy($scope.options.size.height);
             }
         });
@@ -184,7 +184,7 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
                 'type': 'success',
                 'icon': 'check-square-o'
             }, true, 5);
-            $scope.optionsForm.$setPristine();
+            $scope.OptionsForm.$setPristine();
         }).catch(err => {
             console.error('Failed to reset settings to default values', err);
             $scope.createAlert({

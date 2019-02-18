@@ -11,9 +11,7 @@
 
     <body class="pad-y-sm pad-x-0" ng-class="{'firefox': isFirefox}">
 
-        <!-- BEGIN SETTINGS -->
-
-        <form name="optionsForm" class="container-fluid" ng-hide="hideMainContent()">
+        <form name="OptionsForm" class="container-fluid" ng-hide="hideMainContent()">
 
             <div class="alert alert-primary text-small">
                 <div class="row">
@@ -49,25 +47,35 @@
             </div>
             <!-- End Alerts -->
 
-            <div class="tabs">
-                <nav class="tabs-nav">
-                    <a href="#tab-behavior" class="active" get-message="OptionsBehaviorHeading"></a>
-                    <a href="#tab-size" get-message="OptionsSizeHeading"></a>
-                    <a href="#tab-advanced" get-message="OptionsAdvancedHeading"></a>
-                </nav>
+            <div class="tabs"><!-- Begin Tabs Container -->
 
-                <div class="tabs-pane pad-md active" id="tab-behavior">
+                <nav class="tabs-nav"><!-- Begin Tab Pill Buttons -->
+                    <a href="#tab-behavior" class="active" ng-class="{'bg-warning': OptionsBehaviorForm.$invalid, 'disabled': (OptionsSizeForm.$invalid || OptionsAdvancedForm.$invalid)}">
+                        <i18n message="OptionsTabNameBehavior"></i18n>
+                        <i class="fa fa-exclamation-triangle" ng-show="OptionsBehaviorForm.$invalid"></i>
+                    </a>
+                    <a href="#tab-size" ng-class="{'bg-warning': OptionsSizeForm.$invalid, 'disabled': (OptionsBehaviorForm.$invalid || OptionsAdvancedForm.$invalid)}">
+                        <i18n message="OptionsTabNameSize"></i18n>
+                        <i class="fa fa-exclamation-triangle" ng-show="OptionsSizeForm.$invalid"></i>
+                    </a>
+                    <a href="#tab-advanced" ng-class="{'bg-warning': OptionsAdvancedForm.$invalid, 'disabled': (OptionsBehaviorForm.$invalid || OptionsSizeForm.$invalid)}">
+                        <i18n message="OptionsTabNameAdvanced"></i18n>
+                        <i class="fa fa-exclamation-triangle" ng-show="OptionsAdvancedForm.$invalid"></i>
+                    </a>
+                </nav><!-- End Tab Pill Buttons -->
+
+                <div class="tabs-pane pad-md active" id="tab-behavior" ng-form="OptionsBehaviorForm"><!-- Begin Behavior Tab -->
 
                     <h4 class="text-primary mar-b-lg">
                         <i class="fa fa-sliders mar-r-xs"></i>
-                        <i18n message="OptionsBehaviorHeading"></i18n>
+                        <i18n message="OptionsHeadingBehavior"></i18n>
                     </h4>
 
-                    <ng-form name="behaviorTargetForm">
+                    <ng-form name="BehaviorTargetRadiosForm">
 
                         <div class="input-field">
                             <label>
-                                <input type="radio" name="behaviorTarget" value="window" ng-model="options.behavior.target" ng-click="saveOption('behavior.target', behaviorTargetForm, 'window')" ng-required />
+                                <input type="radio" name="BehaviorTarget" value="window" ng-model="options.behavior.target" ng-click="saveOption('behavior.target', BehaviorTargetRadiosForm, 'window')" ng-required />
                                 <i18n message="OptionsBehaviorTargetWindowLabel"></i18n>
                                 <p class="input-hint" get-message="OptionsBehaviorTargetWindowDescription"></p>
                             </label>
@@ -76,7 +84,7 @@
 
                         <div class="input-field">
                             <label>
-                                <input type="radio" name="behaviorTarget" value="tab" ng-model="options.behavior.target" ng-click="saveOption('behavior.target', behaviorTargetForm, 'tab')" ng-required />
+                                <input type="radio" name="BehaviorTarget" value="tab" ng-model="options.behavior.target" ng-click="saveOption('behavior.target', BehaviorTargetRadiosForm, 'tab')" ng-required />
                                 <i18n message="OptionsBehaviorTargetTabLabel"></i18n>
                                 <p class="input-hint" get-message="OptionsBehaviorTargetTabDescription"></p>
                             </label>
@@ -87,60 +95,60 @@
                     <hr />
 
                     <!-- Show Controls -->
-                    <div class="input-field" ng-class="{'input-invalid': optionsForm.behaviorControls.$invalid}">
-                        <label for="behaviorControls" get-message="BehaviorControlsLabel"></label>
-                        <select name="behaviorControls" id="behaviorControls" ng-model="options.behavior.controls" ng-change="saveOption('behavior.controls', optionsForm.behaviorControls)" required>
+                    <div class="input-field" ng-class="{'input-invalid': OptionsBehaviorForm.BehaviorControls.$invalid}">
+                        <label for="BehaviorControls" get-message="BehaviorControlsLabel"></label>
+                        <select name="BehaviorControls" id="BehaviorControls" ng-model="options.behavior.controls" ng-change="saveOption('behavior.controls', OptionsBehaviorForm.BehaviorControls)" required>
                             <option value="none" get-message="BehaviorControlsNoneOptionLabel"></option>
                             <option value="standard" get-message="BehaviorControlsStandardOptionLabel"></option>
                             <option value="extended" get-message="BehaviorControlsExtendedOptionLabel"></option>
                         </select>
                         <p class="input-hint" get-message="BehaviorControlsDescription"></p>
                     </div>
-                    <!-- Show Controls -->
+                    <!-- End Show Controls -->
 
                     <!-- Toggle Autoplay -->
-                    <div class="input-field">
-                        <span class="switch">
-                            <input type="checkbox" name="behaviorAutoplay" id="behaviorAutoplay" ng-model="options.behavior.autoplay" ng-change="saveOption('behavior.autoplay', optionsForm.behaviorAutoplay)">
-                            <label for="behaviorAutoplay" get-message="OptionsBehaviorAutoplayLabel"></label>
+                    <div class="input-field" ng-class="{'input-invalid': OptionsBehaviorForm.BehaviorAutoplay.$invalid}">
+                        <span class="switch" ng-class="{'switch-invalid': OptionsBehaviorForm.BehaviorAutoplay.$invalid}">
+                            <input type="checkbox" name="BehaviorAutoplay" id="BehaviorAutoplay" ng-model="options.behavior.autoplay" ng-change="saveOption('behavior.autoplay', OptionsBehaviorForm.BehaviorAutoplay)">
+                            <label for="BehaviorAutoplay" get-message="OptionsBehaviorAutoplayLabel"></label>
                             <p class="input-hint" get-message="OptionsBehaviorAutoplayDescription"></p>
                         </span>
                     </div>
                     <!-- End Toggle Autoplay -->
 
                     <!-- Toggle Loop -->
-                    <div class="input-field">
-                        <span class="switch">
-                            <input type="checkbox" name="behaviorLoop" id="behaviorLoop" ng-model="options.behavior.loop" ng-change="saveOption('behavior.loop', optionsForm.behaviorLoop)">
-                            <label for="behaviorLoop" get-message="OptionsBehaviorLoopLabel"></label>
+                    <div class="input-field" ng-class="{'input-invalid': OptionsBehaviorForm.BehaviorLoop.$invalid}">
+                        <span class="switch" ng-class="{'switch-invalid': OptionsBehaviorForm.BehaviorLoop.$invalid}">
+                            <input type="checkbox" name="BehaviorLoop" id="BehaviorLoop" ng-model="options.behavior.loop" ng-change="saveOption('behavior.loop', OptionsBehaviorForm.BehaviorLoop)">
+                            <label for="BehaviorLoop" get-message="OptionsBehaviorLoopLabel"></label>
                             <p class="input-hint" get-message="OptionsBehaviorLoopDescription"></p>
                         </span>
                     </div>
                     <!-- End Toggle Loop -->
 
-                </div>
+                </div><!-- End Behavior Tab -->
 
-                <div class="tabs-pane pad-md" id="tab-size">
+                <div class="tabs-pane pad-md" id="tab-size" ng-form="OptionsSizeForm"><!-- Begin Size Tab -->
 
                     <h4 class="text-primary mar-b-lg">
                         <i class="fa fa-window-maximize mar-r-xs"></i>
-                        <i18n message="OptionsSizeHeading"></i18n>
+                        <i18n message="OptionsHeadingSize"></i18n>
                     </h4>
 
                     <div class="alert alert-warning text-small" ng-hide="options.behavior.target === 'window'">
                         <p>
                             <i class="fa fa-warning"></i>
-                            <i18n message="OptionsBehaviorTabWarning"></i18n>
+                            <i18n message="OptionsSettingsNotAvailableForTab"></i18n>
                         </p>
                     </div>
 
                     <div ng-show="options.behavior.target === 'window'">
 
-                        <ng-form name="sizeModeForm">
+                        <ng-form name="SizeModeRadiosForm">
 
                             <div class="input-field">
                                 <label>
-                                    <input type="radio" name="sizeMode" value="current" ng-model="options.size.mode" ng-click="saveOption('size.mode', sizeModeForm, 'current')" required>
+                                    <input type="radio" name="SizeMode" value="current" ng-model="options.size.mode" ng-click="saveOption('size.mode', SizeModeRadiosForm, 'current')" required>
                                     <i18n message="OptionsSizeModeCurrentLabel"></i18n>
                                     <p class="input-hint" get-message="OptionsSizeModeCurrentDescription"></p>
                                 </label>
@@ -148,7 +156,7 @@
 
                             <div class="input-field mar-b-0">
                                 <label>
-                                    <input type="radio" name="sizeMode" value="custom" ng-model="options.size.mode" ng-click="saveOption('size.mode', sizeModeForm, 'custom')" required>
+                                    <input type="radio" name="SizeMode" value="custom" ng-model="options.size.mode" ng-click="saveOption('size.mode', SizeModeRadiosForm, 'custom')" required>
                                     <i18n message="OptionsSizeModeCustomLabel"></i18n><br />
                                     <p class="input-hint" get-message="OptionsSizeModeCustomDescription"></p>
                                 </label>
@@ -156,16 +164,16 @@
 
                         </ng-form>
 
-                        <div class="container-fluid mar-t-sm" ng-show="options.size.mode === 'custom'">
+                        <div class="container-fluid mar-t-sm" ng-show="options.size.mode === 'custom'"><!-- Begin Custom Dimensions Form Container -->
 
-                            <div ng-form="sizeDimensionsForm" class="input-field mar-b-0">
+                            <div ng-form="SizeCustomDimensionsForm" class="input-field mar-b-0">
                                 <div class="row">
 
                                     <!-- Size Dimensions -->
                                     <div class="col">
-                                        <div class="input-field" ng-class="{'input-invalid': optionsForm.sizeDimensionsForm.sizeModeUnits.$invalid}">
-                                            <label for="sizeModeUnits" get-message="DimensionUnitsLabel"></label>
-                                            <select name="sizeModeUnits" id="sizeModeUnits" ng-model="options.size.units" ng-change="validateSizeUnitsValue()" required>
+                                        <div class="input-field" ng-class="{'input-invalid': SizeCustomDimensionsForm.SizeModeUnits.$invalid}">
+                                            <label for="SizeModeUnits" get-message="DimensionUnitsLabel"></label>
+                                            <select name="SizeModeUnits" id="SizeModeUnits" ng-model="options.size.units" ng-change="validateSizeUnitsValue()" required>
                                                 <option value="pixels" get-message="DimensionUnitsPixelsOptionLabel"></option>
                                                 <option value="percentage" get-message="DimensionUnitsPercentageOptionLabel"></option>
                                             </select>
@@ -178,14 +186,14 @@
                                 <div class="row">
 
                                     <!-- Size Width and Height -->
-                                    <div class="col-12 col-sm-6" ng-repeat="(dimension, name) in {'width': 'sizeWidth', 'height': 'sizeHeight'}">
-                                        <div class="input-field" ng-class="{'input-invalid': optionsForm.sizeDimensionsForm[name].$invalid}">
+                                    <div class="col-12 col-sm-6" ng-repeat="(dimension, name) in {'width': 'SizeWidth', 'height': 'SizeHeight'}">
+                                        <div class="input-field" ng-class="{'input-invalid': SizeCustomDimensionsForm[name].$invalid}">
                                             <label for="{{name}}" get-message="{{dimension}}Label"></label>
                                             <div class="input-group">
                                                 <input type="number" name="{{name}}" id="{{name}}" pattern="\d+" ng-min="sizeMin(dimension)" ng-max="sizeMax(dimension)" ng-model="options.size[dimension]" ng-model-options="{ debounce: 200 }" ng-required="(options.behavior.target === 'window') && (options.size.mode === 'custom')" />
                                                 <span class="input-addon">{{sizeUnits()}}</span>
                                             </div>
-                                            <p class="input-hint text-danger" ng-messages="optionsForm.sizeDimensionsForm[name].$error">
+                                            <p class="input-hint text-danger" ng-messages="SizeCustomDimensionsForm[name].$error">
                                                 <span ng-message="required">
                                                     <i class="fa fa-times"></i>
                                                     <i18n message="FieldRequiredMessage"></i18n>
@@ -209,7 +217,8 @@
 
                                 </div>
 
-                                <div class="row" ng-class="{'mar-t-lg': (optionsForm.sizeDimensionsForm.sizeWidth.$valid && optionsForm.sizeDimensionsForm.sizeHeight.$valid)}">
+                                <!-- Begin Size Info Table -->
+                                <div class="row" ng-class="{'mar-t-lg': SizeCustomDimensionsForm.$valid}">
 
                                     <div class="col">
                                         <table class="table-bordered">
@@ -231,42 +240,44 @@
                                     </div>
 
                                 </div>
+                                <!-- End Size Info Table -->
+
                             </div>
 
                             <div class="row">
-                                <div class="col-12" ng-show="sizeDimensionsForm.$invalid">
+                                <div class="col-12" ng-show="SizeCustomDimensionsForm.$invalid">
                                     <p class="text-warning">
                                         <i class="fa fa-exclamation-triangle"></i>
                                         <i18n message="OptionsCorrectErrorsWarning"></i18n>
                                     </p>
                                 </div>
                                 <div class="col-6 offset-3">
-                                    <button class="button button-block" ng-class="{'button-light': sizeDimensionsForm.$pristine}" ng-click="saveOptions('size', sizeDimensionsForm)" ng-disabled="sizeDimensionsForm.$pristine || sizeDimensionsForm.$invalid">
+                                    <button class="button button-block" ng-class="{'button-light': SizeCustomDimensionsForm.$pristine}" ng-click="saveOptions('size', SizeCustomDimensionsForm)" ng-disabled="SizeCustomDimensionsForm.$pristine || SizeCustomDimensionsForm.$invalid">
                                         <i class="fa fa-check mar-r-sm"></i>
                                         <i18n message="ButtonSaveCustomDimensionsLabel"></i18n>
                                     </button>
                                 </div>
                             </div>
 
-                        </div>
+                        </div><!-- End Custom Dimensions Form Container -->
 
                     </div>
 
-                </div>
+                </div><!-- End Size Tab -->
 
-                <div class="tabs-pane pad-md" id="tab-advanced">
+                <div class="tabs-pane pad-md" id="tab-advanced" ng-form="OptionsAdvancedForm"><!-- Begin Advanced Tab -->
 
                     <h4 class="text-primary mar-b-lg">
                         <i class="fa fa-cogs mar-r-xs"></i>
-                        <i18n message="OptionsAdvancedHeading"></i18n>
+                        <i18n message="OptionsHeadingAdvanced"></i18n>
                     </h4>
 
                     <!-- Toggle Close Original Window/Tab -->
-                    <div class="input-field" ng-class="{'input-invalid': optionsForm.advancedClose.$invalid}">
-                        <span class="switch" ng-class="{'switch-danger': optionsForm.advancedClose.$invalid}">
-                            <input type="checkbox" name="advancedClose" id="advancedClose" ng-model="options.advanced.close" ng-change="togglePermission(optionsForm.advancedClose, {'permissions': ['tabs']}, 'advanced.close')" ng-disabled="optionsForm.advancedClose.$pending">
-                            <label for="advancedClose" get-message="OptionsAdvancedCloseLabel"></label>
-                            <p class="input-hint text-danger" ng-messages="optionsForm.advancedClose.$error">
+                    <div class="input-field" ng-class="{'input-invalid': OptionsAdvancedForm.AdvancedClose.$invalid}">
+                        <span class="switch" ng-class="{'switch-danger': OptionsAdvancedForm.AdvancedClose.$invalid}">
+                            <input type="checkbox" name="AdvancedClose" id="AdvancedClose" ng-model="options.advanced.close" ng-change="togglePermission(OptionsAdvancedForm.AdvancedClose, {'permissions': ['tabs']}, 'advanced.close')" ng-disabled="OptionsAdvancedForm.AdvancedClose.$pending">
+                            <label for="AdvancedClose" get-message="OptionsAdvancedCloseLabel"></label>
+                            <p class="input-hint text-danger" ng-messages="OptionsAdvancedForm.AdvancedClose.$error">
                                 <span ng-message="permissions">
                                     <i class="fa fa-times"></i>
                                     <i18n message="FieldRequiredPermissionsNotGrantedMessage"></i18n>
@@ -278,28 +289,29 @@
                     <!-- End Toggle Close Original Window/Tab -->
 
                     <!-- Title Preface -->
-                    <div class="input-field" ng-class="{'input-invalid': optionsForm.advancedTitle.$invalid}" ng-show="isFirefox">
+                    <div class="input-field" ng-class="{'input-invalid': OptionsAdvancedForm.AdvancedTitle.$invalid}" ng-show="isFirefox">
                         <label get-message="OptionsAdvancedTitleLabel"></label>
-                        <input type="text" name="advancedTitle" ng-model="options.advanced.title" ng-trim="false" ng-disabled="options.behavior.target !== 'window'" ng-change="saveOption('advanced.title', optionsForm.advancedTitle)" />
+                        <input type="text" name="AdvancedTitle" ng-model="options.advanced.title" ng-trim="false" ng-disabled="options.behavior.target !== 'window'" ng-change="saveOption('advanced.title', OptionsAdvancedForm.AdvancedTitle)" />
                         <p class="input-hint text-warning" ng-hide="options.behavior.target === 'window'">
                             <i class="fa fa-warning"></i>
-                            <i18n message="OptionsBehaviorTabWarning"></i18n>
+                            <i18n message="OptionsSettingNotAvailableForTab"></i18n>
                         </p>
                         <p class="input-hint" get-message="OptionsAdvancedTitleDescription"></p>
                     </div>
                     <!-- End Title Preface -->
 
-                </div>
-            </div>
+                </div><!-- End Advanced Tab -->
 
-            <div class="row">
+            </div><!-- End Tabs Container -->
+
+            <div class="row"><!-- Begin Reset Button Container -->
                 <div class="col-6 offset-3">
                     <button class="button button-block button-danger" ng-click="confirmReset = true">
                         <i class="fa fa-ban mar-r-sm"></i>
                         <i18n message="ButtonResetLabel"></i18n>
                     </button>
                 </div>
-            </div>
+            </div><!-- End Reset Button Container -->
 
         </form>
 
