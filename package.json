@@ -18,7 +18,7 @@
     "firefox:start": "web-ext run --source-dir=./dist/firefox",
     "package": "cross-env NODE_ENV=production gulp package",
     "test": "run-s clean build:production firefox:lint",
-    "docs": "run-p docs:watch docs:serve",
+    "docs": "npm-run-all docs:build --parallel docs:serve docs:watch",
     "docs:build": "cd docs && bundle exec jekyll build",
     "docs:watch": "cd docs && bundle exec jekyll build --watch",
     "docs:serve": "browser-sync docs/_site -w --extensions html --no-notify"
