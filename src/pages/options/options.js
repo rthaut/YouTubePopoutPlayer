@@ -10,13 +10,13 @@ import Utils from '../../helpers/utils';
 const app = angular.module('OptionsApp', ['ngAnimate', 'ngMessages', 'ngSanitize', 'browser.i18n']);
 
 app.filter('kbdCombo', function () {
-  return function (input, tag = 'kbd') {
+    return function (input, tag = 'kbd') {
         if (input === undefined || input === null || !input.length) {
             return '';
         }
 
         return input.split('+').map(i => `<${tag}>${i}</${tag}>`).join(' + ');
-  };
+    };
 });
 
 app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', function ($scope, $timeout, kbdComboFilter) {
@@ -53,7 +53,7 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
      * @param {boolean} dismissible
      * @param {number} duration
      */
-    $scope.createAlert = function(alert, dismissible = true, duration = null) {
+    $scope.createAlert = function (alert, dismissible = true, duration = null) {
         if (dismissible) {
             alert.dismissible = true;
         }
@@ -117,28 +117,28 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         resetCache();
 
         $scope.$watch('options.size.width', () => {
-            if ($scope.optionsForm.sizeDimensionsForm.sizeWidth.$valid) {
+            if ($scope.SizeCustomDimensionsForm.SizeWidth.$valid) {
                 $scope.cache.dimensions[$scope.options.size.units].width = angular.copy($scope.options.size.width);
             }
         });
         $scope.$watch('options.size.height', () => {
-            if ($scope.optionsForm.sizeDimensionsForm.sizeHeight.$valid) {
+            if ($scope.SizeCustomDimensionsForm.SizeHeight.$valid) {
                 $scope.cache.dimensions[$scope.options.size.units].height = angular.copy($scope.options.size.height);
             }
         });
-        $scope.$watch('options.size.units', (newValue, oldValue) => {
-            $scope.options.size.width = angular.copy($scope.cache.dimensions[newValue].width);
-            $scope.options.size.height = angular.copy($scope.cache.dimensions[newValue].height);
+        $scope.$watch('options.size.units', (units) => {
+            $scope.options.size.width = angular.copy($scope.cache.dimensions[units].width);
+            $scope.options.size.height = angular.copy($scope.cache.dimensions[units].height);
         });
     };
 
-    $scope.validateBehaviorControlsValue = function () {
+    var validateBehaviorControlsValue = function () {
         if (!['none', 'standard', 'extended'].includes($scope.options.behavior.controls)) {
             $scope.options.behavior.controls = null;
         }
     };
 
-    $scope.validateSizeUnitsValue = function () {
+    var validateSizeUnitsValue = function () {
         if (!['pixels', 'percentage'].includes($scope.options.size.units)) {
             $scope.options.size.units = null;
         }
@@ -160,8 +160,8 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         $scope.options = Object.assign({}, $scope.options, _options);
         console.log('OptionsController.load() :: Options', $scope.options);
 
-        $scope.validateBehaviorControlsValue();
-        $scope.validateSizeUnitsValue();
+        validateBehaviorControlsValue();
+        validateSizeUnitsValue();
 
         // once the options have been loaded and converted, setup the cache for dimensions
         $scope.cacheDimensions();
@@ -169,6 +169,34 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
         $scope.$apply();
     };
     $scope.load();
+
+    /**
+     * Resets all options to the extension defaults
+     */
+    $scope.reset = function () {
+        console.log('OptionsController.reset()');
+
+        Options.InitLocalStorageDefaults(true).then(() => {
+            $scope.options = angular.copy(OPTION_DEFAULTS);
+            resetCache();
+            $scope.createAlert({
+                'message': browser.i18n.getMessage('OptionsResetSuccessMessage'),
+                'type': 'success',
+                'icon': 'check-square-o'
+            }, true, 5);
+            $scope.OptionsForm.$setPristine();
+        }).catch(err => {
+            console.error('Failed to reset settings to default values', err);
+            $scope.createAlert({
+                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err.message),
+                'type': 'danger',
+                'icon': 'exclamation-o'
+            }, true);
+        }).finally(() => {
+            $scope.confirmReset = false;
+            $scope.$apply();
+        });
+    };
 
     /**
      * Computes the greatest common denominator for a pair of numbers
@@ -287,56 +315,93 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
     };
 
     /**
-     * Resets all options to the extension defaults
+     * Requests/removes the specified permission(s); must be invoked synchronously from a user input handler
+     * @param {object} $elem the form element for the option
+     * @param {object} request the permissions request object
+     * @param {string} name the name of the option to save
      */
-    $scope.reset = function () {
-        console.log('OptionsController.reset()');
+    $scope.togglePermission = function ($elem, request, name) {
+        console.log('OptionsController.togglePermission()', $elem, request);
 
-        Options.InitLocalStorageDefaults(true).then(() => {
-            $scope.options = angular.copy(OPTION_DEFAULTS);
-            resetCache();
-            $scope.createAlert({
-                'message': browser.i18n.getMessage('OptionsResetSuccessMessage'),
-                'type': 'success',
-                'icon': 'check-square-o'
-            }, true, 5);
-            $scope.optionsForm.$setPristine();
-        }).catch(err => {
-            console.error('Failed to reset settings to default values', err);
-            $scope.createAlert({
-                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err.message),
-                'type': 'danger',
-                'icon': 'exclamation-o'
-            }, true);
+        // set the `permissions` validation property as pending
+        $elem.$setValidity('permissions', undefined);
+
+        let promise;
+        if ($elem.$modelValue) {
+            console.log('OptionsController.togglePermission() :: Requesting permission(s)', request);
+            promise = browser.permissions.request(request);
+        } else {
+            console.log('OptionsController.togglePermission() :: Removing permission(s)', request);
+            promise = browser.permissions.remove(request);
+        }
+
+        promise.then(response => {
+            console.log('OptionsController.togglePermission() :: Permissions promise response', response);
+            $elem.$setValidity('permissions', response);
+            if (response) {
+                $scope.saveOption(name, $elem);
+            }
+        }).catch(error => {
+            console.error('OptionsController.togglePermission() :: Permissions promise error', error);
+            $elem.$setValidity('permissions', false);
         }).finally(() => {
-            $scope.confirmReset = false;
             $scope.$apply();
         });
     };
 
     /**
-     * Saves the options to local storage
+     * Save a single option to local storage
+     * @param {string} name the name of the option to save
+     * @param {object} $elem the form element for the option
+     * @param {mixed} [value=null] the value to set for the option (uses the form element's $modelValue by default)
      */
-    $scope.save = function () {
-        console.log('OptionsController.save()');
+    $scope.saveOption = function (name, $elem, value = null) {
+        console.log('OptionsController.saveOption()', name, $elem, value);
 
-        Options.SetLocalOptions(angular.copy($scope.options)).then(() => {
-            $scope.createAlert({
-                'message': browser.i18n.getMessage('OptionsSaveSuccessMessage'),
-                'type': 'success',
-                'icon': 'check-square-o'
-            }, true, 5);
-            $scope.optionsForm.$setPristine();
-        }).catch(err => {
-            console.error('Failed to save settings to local storage', err);
-            $scope.createAlert({
-                'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err.message),
-                'type': 'danger',
-                'icon': 'exclamation-o'
-            }, true);
-        }).finally(() => {
-            $scope.$apply();
-        });
+        if ($elem.$valid && !$elem.$pending) {
+            const option = {};
+            option[name] = (value !== null) ? value : $elem.$modelValue;
+            Options.SetLocalOptions(option, false).then(() => {
+                $elem.$setPristine();
+            }).catch(err => {
+                console.error('Failed to save setting to local storage', err);
+                $scope.createAlert({
+                    'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err.message),
+                    'type': 'danger',
+                    'icon': 'exclamation-o'
+                }, true);
+            }).finally(() => {
+                $scope.$apply();
+            });
+        }
+    };
+
+    /**
+     * Saves all options for the given domain to local storage
+     * @param {string} domain the domain of the options to save
+     * @param {object} $elem the form element for the option
+     */
+    $scope.saveOptions = function (domain, $elem) {
+        console.log('OptionsController.saveOptions()', domain, $elem);
+
+        if ($elem.$valid && !$elem.$pending) {
+            const options = {};
+            Object.keys($scope.options[domain]).forEach(option => {
+                options[`${domain}.${option}`] = $scope.options[domain][option];
+            });
+            Options.SetLocalOptions(options, false).then(() => {
+                $elem.$setPristine();
+            }).catch(err => {
+                console.error('Failed to save setting to local storage', err);
+                $scope.createAlert({
+                    'message': browser.i18n.getMessage('OptionsSaveErrorPlaceholderMessage', err.message),
+                    'type': 'danger',
+                    'icon': 'exclamation-o'
+                }, true);
+            }).finally(() => {
+                $scope.$apply();
+            });
+        }
     };
 
     /* END SETTINGS */
@@ -352,8 +417,8 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             'action': 'get-commands'
         }).then(commands => {
             $scope.commands = commands;
-        }).catch(err => {
-            console.error('Failed to retrieve extension commands', err);
+        }).catch(error => {
+            console.error('Failed to retrieve extension commands', error);
         }).finally(() => {
             $scope.$apply();
         });
@@ -461,7 +526,7 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             delete $scope.updateCommandError;
             delete $scope.command;
             getCommands();
-        } catch(err) {
+        } catch (err) {
             console.error('Failed to set command shortcut', err);
             $scope.updateCommandError = err;
         }
