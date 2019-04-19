@@ -74,7 +74,7 @@
     "sass-loader": "^7.1.0",
     "terser": "3.17.0",
     "terser-webpack-plugin": "1.2.3",
-    "trash-cli": "^1.4.0",
+    "trash-cli": "^2.0.0",
     "uglify-es": "^3.3.9",
     "url-loader": "^1.1.2",
     "vinyl-buffer": "^1.0.1",
