@@ -6,7 +6,6 @@ import { OPTION_DEFAULTS, VALID_SHORTCUT_KEYS, VALID_SHORTCUT_KEYS_DESCRIPTIONS 
 import Options from '../../helpers/Options';
 import Utils from '../../helpers/utils';
 
-/* global angular */
 const app = angular.module('OptionsApp', ['ngAnimate', 'ngMessages', 'ngSanitize', 'browser.i18n']);
 
 app.filter('kbdCombo', function () {
@@ -528,6 +527,7 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             getCommands();
         } catch (err) {
             console.error('Failed to set command shortcut', err);
+            // eslint-disable-next-line require-atomic-updates
             $scope.updateCommandError = err;
         }
 
