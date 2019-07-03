@@ -527,6 +527,7 @@ app.controller('OptionsController', ['$scope', '$timeout', 'kbdComboFilter', fun
             getCommands();
         } catch (err) {
             console.error('Failed to set command shortcut', err);
+            // eslint-disable-next-line require-atomic-updates
             $scope.updateCommandError = err;
         }
 
