@@ -1,6 +1,4 @@
 /* eslint-env node */
-const path = require('path');
-
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
@@ -16,12 +14,7 @@ module.exports = {
                         'loader': 'css-loader'
                     },
                     {
-                        'loader': 'sass-loader',
-                        'options': {
-                            'paths': [
-                                path.resolve(__dirname, '../../node_modules')
-                            ]
-                        }
+                        'loader': 'sass-loader'
                     }
                 ]
             },
