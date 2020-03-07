@@ -135,6 +135,9 @@ const YouTubePopoutPlayer = (() => {
             menuItem.setAttribute('tabindex', 0);
             menuItem.id = 'popout-player-context-menu-item';
 
+            const menuItemIcon = document.createElement('div');
+            menuItemIcon.className = 'ytp-menuitem-icon';
+
             const menuItemLabel = document.createElement('div');
             menuItemLabel.className = 'ytp-menuitem-label';
             menuItemLabel.innerText = browser.i18n.getMessage('ContextMenuEntryLabel_PopoutPlayer');
@@ -142,6 +145,7 @@ const YouTubePopoutPlayer = (() => {
             const menuItemContent = document.createElement('div');
             menuItemContent.className = 'ytp-menuitem-content';
 
+            menuItem.appendChild(menuItemIcon);
             menuItem.appendChild(menuItemLabel);
             menuItem.appendChild(menuItemContent);
             menuItem.addEventListener('click', event => {

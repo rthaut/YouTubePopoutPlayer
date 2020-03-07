@@ -2,7 +2,7 @@
 [<img align="right" src="https://badges.renovateapi.com/github/rthaut/YouTubePopoutPlayer" alt="Renovate Status"/>](https://renovatebot.com/)
 [<img align="right" src="https://img.shields.io/badge/all_contributors-2-orange.svg" alt="All Contributors"/>](#contributors)
 
-# YouTube Popout Player v3.1.0
+# YouTube Popout Player v3.1.1
 
 > This browser extension provides a simple way to open any YouTube video or playlist (including videos and playlists embedded in other sites/pages) in a configurable "popout" window which you can freely position and resize.
 
