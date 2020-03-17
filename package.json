@@ -75,7 +75,7 @@
     "terser-webpack-plugin": "^2.0.0",
     "trash-cli": "^3.0.0",
     "uglify-es": "^3.3.9",
-    "url-loader": "^3.0.0",
+    "url-loader": "^4.0.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "web-ext": "^4.0.0",
