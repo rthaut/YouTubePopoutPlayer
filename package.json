@@ -80,7 +80,7 @@
     "vinyl-source-stream": "^2.0.0",
     "web-ext": "^5.0.0",
     "webpack": "^4.39.3",
-    "webpack-merge": "^4.2.2",
+    "webpack-merge": "^5.0.0",
     "webpack-stream": "^6.0.0"
   }
 }
