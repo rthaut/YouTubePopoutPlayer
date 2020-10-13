@@ -1,5 +1,5 @@
 /* eslint-env node */
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const common = require('./webpack.config.common.js');
 
 const uglifyOptions = require('../../gulp.config.json').plugin_options.uglify;
