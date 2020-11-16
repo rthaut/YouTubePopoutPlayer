@@ -95,145 +95,130 @@
   },
 
   "BehaviorControlsDescription": {
-    "message": "Use this setting to adjust which video player controls are displayed on the popout player. <strong>The default for this setting is $DEFAULT$.</strong>",
-    "placeholders": {
-      "default": {
-        "content": "Standard"
-      }
-    }
-  },
-
-  "BehaviorControlsNoneOptionLabel": {
-    "message": "None"
-  },
-  "BehaviorControlsStandardOptionLabel": {
-    "message": "Standard"
-  },
-  "BehaviorControlsExtendedOptionLabel": {
-    "message": "Extended"
-  },
-
-  "OptionsSizeModeCurrentLabel": {
-    "message": "Use Original Player Size"
-  },
-  "OptionsSizeModeCurrentDescription": {
-    "message": "The popout player will be sized to match the original YouTube video player. <strong>This is the default setting.</strong>"
-  },
-
-  "OptionsSizeModeCustomLabel": {
-    "message": "Set Custom Dimensions"
-  },
-  "OptionsSizeModeCustomDescription": {
-    "message": "Use this setting to specify dimensions (either in pixels or percentages) for the popout player."
-  },
-
-  "DimensionUnitsLabel": {
-    "message": "Dimension Units"
-  },
-
-  "DimensionUnitsPixelsOptionLabel": {
-    "message": "Pixels (px)"
-  },
-  "DimensionUnitsPercentageOptionLabel": {
-    "message": "Percentage (%)"
-  },
-
-  "DimensionUnitsPixelsUnitLabel": {
-    "message": "px"
-  },
-  "DimensionUnitsPercentageUnitLabel": {
-    "message": "%"
-  },
-  "DimensionUnitsUnknownUnitLabel": {
-    "message": "?"
-  },
-
-  "WidthLabel": {
-    "message": "Width"
-  },
-  "HeightLabel": {
-    "message": "Height"
-  },
-
-  "InfoCurrentScreenResolutionLabel": {
-    "message": "Current Screen Resolution"
-  },
-  "InfoPopoutPlayerWindowSizeLabel": {
-    "message": "Popout Player Window Size"
-  },
-  "InfoPopoutPlayerAspectRatioLabel": {
-    "message": "Popout Player Aspect Ratio"
-  },
-
-  "FieldRequiredMessage": {
-    "message": "This field is required"
-  },
-  "FieldPatternNumberMessage": {
-    "message": "The value of this field must be a number"
-  },
-  "FieldMinValuePlaceholderMessage": {
-    "message": "The value of this field cannot be less than <strong>$VALUE$</strong>",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-  "FieldMaxValuePlaceholderMessage": {
-    "message": "The value of this field cannot be more than <strong>$VALUE$</strong>",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
-  },
-
-  "FieldRequiredPermissionsNotGrantedMessage": {
-    "message": "You must grant the requested additional permission(s) when prompted to enable this setting."
-  },
-
-  "ButtonSaveCustomDimensionsLabel": {
-    "message": "Save Custom Dimensions"
-  },
-
-  "ButtonSaveLabel": {
-    "message": "Save Settings"
-  },
-  "ButtonResetLabel": {
-    "message": "Reset All Settings to Defaults"
-  },
-
-  "ConfirmSettingsResetHeading": {
-    "message": "Confirm Settings Reset"
-  },
-  "ConfirmSettingsResetText": {
-    "message": "Are you sure you want to <strong>reset your settings</strong>? If you continue, all settings for $NAME$ on this device will be restored to their default values.",
-    "placeholders": {
-      "name": {
-        "content": "YouTube Popout Player"
-      }
-    }
-  },
-
-  "ButtonConfirmResetLabel": {
-    "message": "Yes, I'm sure"
-  },
-  "ButtonCancelResetLabel": {
-    "message": "No, I changed my mind"
-  },
-
-  "OptionsResetSuccessMessage": {
-    "message": "All settings reset to default values."
-  },
-  "OptionsSaveSuccessMessage": {
-    "message": "All settings saved successfully!"
-  },
-  "OptionsSaveErrorPlaceholderMessage": {
-    "message": "Failed to save settings: $ERROR$",
-    "placeholders": {
-      "error": {
-        "content": "$1"
-      }
-    }
-  }
+		"message": "Popout Player에 표시되는 비디오 플레이어 제어를 조절할때 사용하십시오. <strong>설정 기본값은 $DEFAULT$ 입니다.</strong>",
+		"placeholders": {
+			"default": {
+				"content": "표준"
+			}
+		}
+	},
+	"BehaviorControlsNoneOptionLabel": {
+		"message": "없습니다"
+	},
+	"BehaviorControlsStandardOptionLabel": {
+		"message": "표준입니다"
+	},
+	"BehaviorControlsExtendedOptionLabel": {
+		"message": "확장되었습니다"
+	},
+	"OptionsSizeModeCurrentLabel": {
+		"message": "원본 플레이어 크기 사용"
+	},
+	"OptionsSizeModeCurrentDescription": {
+		"message": "Popout Player는 Youtube 비디오 플레이어와 맞는 크기가 됩니다. <strong>이것은 기본 설정입니다.</strong>"
+	},
+	"OptionsSizeModeCustomLabel": {
+		"message": "사용자 크기 설정"
+	},
+	"OptionsSizeModeCustomDescription": {
+		"message": "Popout Player의 크기(픽셀 또는 백분율)를 지정하세요."
+	},
+	"DimensionUnitsLabel": {
+		"message": "크기 단위"
+	},
+	"DimensionUnitsPixelsOptionLabel": {
+		"message": "픽셀 (px)"
+	},
+	"DimensionUnitsPercentageOptionLabel": {
+		"message": "백분율 (%)"
+	},
+	"DimensionUnitsPixelsUnitLabel": {
+		"message": "px"
+	},
+	"DimensionUnitsPercentageUnitLabel": {
+		"message": "%"
+	},
+	"DimensionUnitsUnknownUnitLabel": {
+		"message": "?"
+	},
+	"WidthLabel": {
+		"message": "너비"
+	},
+	"HeightLabel": {
+		"message": "높이"
+	},
+	"InfoCurrentScreenResolutionLabel": {
+		"message": "현재 화면 해상도"
+	},
+	"InfoPopoutPlayerWindowSizeLabel": {
+		"message": "Popout Player 창 크기"
+	},
+	"InfoPopoutPlayerAspectRatioLabel": {
+		"message": "Popout Player 비율"
+	},
+	"FieldRequiredMessage": {
+		"message": "필수 입력 사항입니다."
+	},
+	"FieldPatternNumberMessage": {
+		"message": "입력이 숫자여야 합니다."
+	},
+	"FieldMinValuePlaceholderMessage": {
+		"message": "값이 <strong>$VALUE$</strong> 보다 작을 수 없습니다.",
+		"placeholders": {
+			"value": {
+				"content": "$1"
+			}
+		}
+	},
+	"FieldMaxValuePlaceholderMessage": {
+		"message": "값이 <strong>$VALUE$</strong> 보다 클 수 없습니다.",
+		"placeholders": {
+			"value": {
+				"content": "$1"
+			}
+		}
+	},
+	"FieldRequiredPermissionsNotGrantedMessage": {
+		"message": "해당 설정을 사용하기 위해서는 요청된 추가 권한이 필요합니다."
+	},
+	"ButtonSaveCustomDimensionsLabel": {
+		"message": "사용자 크기 저장"
+	},
+	"ButtonSaveLabel": {
+		"message": "설정 저장"
+	},
+	"ButtonResetLabel": {
+		"message": "설정 초기화"
+	},
+	"ConfirmSettingsResetHeading": {
+		"message": "설정 초기화 확인"
+	},
+	"ConfirmSettingsResetText": {
+		"message": "<strong>설정을 초기화 하시겠습니까</strong>? 계속 진행하면 $NAME$에 대하면 모든 설정이 기본값으로 복원됩니다..",
+		"placeholders": {
+			"name": {
+				"content": "YouTube Popout Player"
+			}
+		}
+	},
+	"ButtonConfirmResetLabel": {
+		"message": "확인"
+	},
+	"ButtonCancelResetLabel": {
+		"message": "취소"
+	},
+	"OptionsResetSuccessMessage": {
+		"message": "모든설정이 기본값으로 설정되었습니다."
+	},
+	"OptionsSaveSuccessMessage": {
+		"message": "모든 설정이 성공적으로 저장되었습니다!"
+	},
+	"OptionsSaveErrorPlaceholderMessage": {
+		"message": "설정을 저장하지 못했습니다: $ERROR$",
+		"placeholders": {
+			"error": {
+				"content": "$1"
+			}
+		}
+	}
 }
