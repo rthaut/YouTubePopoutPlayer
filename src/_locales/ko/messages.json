@@ -1,22 +1,22 @@
 {
   "ExtensionName": {
     "message": "YouTube Popout Player",
-    "description": "The name of the extension."
+    "description": "확장 프로그램명."
   },
   "ExtensionDescription": {
-    "message": "Provides a simple way to open any YouTube video in a popout window",
-    "description": "The short description of the extension."
+    "message": "YouTube 비디오를 팝업 창에서 간단히 열 수 있는 방법을 제공합니다.",
+    "description": "확장에 대한 간단한 설명."
   },
   "BrowserActionTitle": {
-    "message": "Configure YouTube Popout Player Options",
-    "description": "The title for the browser action button (displayed by the address bar by default)."
+    "message": "YouTube Popout Player 설정 구성",
+    "description": "브라우저 작업 단추 제목(기본적으로 주소 표시줄에 표시)."
   },
   "ContextMenuEntryLabel_PopoutPlayer": {
     "message": "Popout Player",
-    "description": "The label for the context menu entry that opens the popout player."
+    "description": "Popout Player를 여는 컨텍스트 메뉴 항목의 레이블."
   },
   "PlayerControlsButtonTitle_PopoutPlayer": {
     "message": "Popout Player",
-    "description": "The title for the player controls button that opens the popout player."
+    "description": "플레이어 제목이 Popout Player를 여는 버튼을 제어합니다."
   }
 }
