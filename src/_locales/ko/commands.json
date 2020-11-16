@@ -51,7 +51,7 @@
     },
     
 	"InvalidCommandShortcutKeyPlaceholder": {
-		"meassages":"<p><strong> 지원하지 않는 단축키</strong></p><p> 해당 $KEY$는 유효하지 않는 단축키 입니다. 다음 단축키를 사용하세요<p>" ,
+		"meassages":"<p><strong> 지원하지 않는 단축키</strong></p><p> 해당 $KEY$는 유효하지 않는 단축키 입니다. 다음 단축키를 사용하세요</p>" ,
 		"placeholders": {
 			"key": {
 				"content": "$1"
