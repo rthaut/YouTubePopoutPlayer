@@ -1,54 +1,54 @@
 {
   "OpenPopoutCommandDescription": {
-    "message": "Open popout player for this YouTube video",
-    "description": "The description for the 'open-popout' extension command"
-  },
-
-  "CommandListHeading": {
-    "message": "Keyboard Shortcuts"
-  },
-
-  "CommandListSaveHelpText": {
-    "message": "When changing any of the following keyboard shortcuts, you do <strong>not</strong> need to save settings; the new shortcut is applied automatically."
-  },
-
-  "CommandListChangeChrome": {
-    "message": "<strong>Chrome Users</strong>: To change the shortcut(s) listed below, go to <code>$URL$</code> in a new browser tab.",
-    "description": "The help text displayed in Chrome to inform users how to change keyboard shortcuts",
-    "placeholders": {
-      "url": {
-        "content": "chrome://extensions/shortcuts"
-      }
-    }
-  },
-
-  "CommandListDescriptionColumnHeading": {
-    "message": "Description"
-  },
-
-  "CommandListShortcutColumnHeading": {
-    "message": "Shortcut"
-  },
-
-  "CommandListUpdateCommandLabel": {
-    "message": "Change"
-  },
-
-  "UpdateCommandHeading": {
-    "message": "Update Keyboard Shortcut"
-  },
-
-  "UpdateCommandInstructionsPlaceholder": {
-    "message": "<p>Press a new keyboard shortcut for the \"$COMMAND$\" command, or press <kbd>Esc</kbd> to cancel.</p><p>Valid keyboard shortcuts include one or two modifier keys and one regular key.<p><hr/><p>The current keyboard shortcut is: $SHORTCUT$</p>",
-    "placeholders": {
-      "command": {
-        "content": "$1"
-      },
-      "shortcut": {
-        "content": "$2"
-      }
-    }
-  },
+		"message": "이 영상을 YouTube Popout Player로 재생합니다.",
+		"description": "'Popout Player 열기' 확장 명령어에 대한 설명"
+    },
+    
+	"CommandListHeading": {
+		"message": "키보드 단축키"
+    },
+    
+	"CommandListSaveHelpText": {
+		"message": "단축키를 바꾸고 나서 세팅을 따로 저장할 필요가 <strong>없습니다<strong>; 새로운 단축키는 자동으로 저장됩니다."
+    },
+    
+	"CommandListChangeChrome": {
+		"message": "<strong>구글 크롬 사용자</strong>: 아래의 단축키를 수정하려면, 새 탭에서 <code>$URL$</code> 로 이동하세요.",
+		"description": "구글 크롬에서 사용자들에게 단축키 변경을 안내하기 위한 안내 메세지",
+		"placeholders": {
+			"url": {
+				"content": "chrome://extensions/shortcuts"
+			}
+		}
+    },
+    
+	"CommandListDescriptionColumnHeading": {
+		"message": "설명"
+    },
+    
+	"CommandListShortcutColumnHeading": {
+		"message": "단축키"
+    },
+    
+	"CommandListUpdateCommandLabel": {
+		"message": "바꾸기"
+    },
+    
+	"UpdateCommandHeading": {
+		"message": "단축키 업데이트"
+    },
+    
+	"UpdateCommandInstructionsPlaceholder": {
+		"message": "<p>명령어 \"$COMMAND$\"에 맞는 새로운 단축키를 누르시거나 , 취소하려면 <kbd>Esc</kbd> 를 눌러주세요.</p><p>유효한 단축키는 하나 혹은 둘의 수정 키(alt, ctrl, shift)와 하나의 일반 키를 포함해야 합니다.<p><hr/><p>현재의 키보드 단축키는 다음과 같습니다: $SHORTCUT$</p>",
+		"placeholders": {
+			"command": {
+				"content": "$1"
+			},
+			"shortcut": {
+				"content": "$2"
+			}
+		}
+    },
 
   "InvalidCommandShortcutKeyPlaceholder": {
     "message": "<p><strong>Unsupported Shortcut Key</strong></p><p>The $KEY$ key is not a valid key for keyboard shortcuts. Please use one of the following keys:</p>",
