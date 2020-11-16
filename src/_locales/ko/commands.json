@@ -1,5 +1,5 @@
 {
-  "OpenPopoutCommandDescription": {
+	"OpenPopoutCommandDescription": {
 		"message": "이 영상을 YouTube Popout Player로 재생합니다.",
 		"description": "'Popout Player 열기' 확장 명령어에 대한 설명"
     },
@@ -49,17 +49,18 @@
 			}
 		}
     },
+    
+	"InvalidCommandShortcutKeyPlaceholder": {
+		"meassages":"<p><strong> 지원하지 않는 단축키</strong></p><p> 해당 $KEY$는 유효하지 않는 단축키 입니다. 다음 단축키를 사용하세요" ,
+		"placeholders": {
+			"key": {
+				"content": "$1"
+			}
+		}
+    },
+    
+	"InvalidCommandShortcutModifiers": {
+		"messages":"<p><strong>지원하지 않는 수정 키</string></p>  단축키 조합 중 1번 (1) 혹은 2번 (2)중 수정 키를 선택을 해야합니다. 해당 단축키들이 수정 키입니다:"
 
-  "InvalidCommandShortcutKeyPlaceholder": {
-    "message": "<p><strong>Unsupported Shortcut Key</strong></p><p>The $KEY$ key is not a valid key for keyboard shortcuts. Please use one of the following keys:</p>",
-    "placeholders": {
-      "key": {
-        "content": "$1"
-      }
     }
-  },
-
-  "InvalidCommandShortcutModifiers": {
-    "message": "<p><strong>Unsupported Shortcut Modifier(s)</strong></p><p>Shortcut combinations must have either one (1) or two (2) modifier keys. The following are valid modifier keys:<p>"
-  }
 }
