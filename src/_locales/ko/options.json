@@ -8,91 +8,75 @@
     }
   },
 
-  "OptionsPerDeviceWarning": {
-    "message": "<strong>Note</strong>: All settings are per-device. If you have YouTube Popout Player installed on multiple devices, you can configure settings differently for each device."
-  },
-
-  "OptionsSettingNotAvailableForTab": {
-    "message": "<strong>Note</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window."
-  },
-
-  "OptionsSettingsNotAvailableForTab": {
-    "message": "These settings do not apply when the popout player is configured to open in a new tab in the current browser window."
-  },
-
-  "OptionsCorrectErrorsWarning": {
-    "message": "You must correct all error(s) before you can save your settings."
-  },
-
-  "OptionsHeadingBehavior": {
-    "message": "Popout Player Behavior"
-  },
-
-  "OptionsHeadingSize": {
-    "message": "Popout Player Size"
-  },
-
-  "OptionsHeadingAdvanced": {
-    "message": "Advanced Settings"
-  },
-
-  "OptionsTabNameBehavior": {
-    "message": "Behavior"
-  },
-
-  "OptionsTabNameSize": {
-    "message": "Size"
-  },
-
-  "OptionsTabNameAdvanced": {
-    "message": "Advanced"
-  },
-
-  "OptionsAdvancedCloseLabel": {
-    "message": "Close Original Window/Tab"
-  },
-  "OptionsAdvancedCloseDescription": {
-    "message": "Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong>"
-  },
-
-  "OptionsAdvancedTitleLabel": {
-    "message": "Window Title Text (Preface)"
-  },
-  "OptionsAdvancedTitleDescription": {
-    "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
-  },
-
-  "OptionsBehaviorTargetWindowLabel": {
-    "message": "Open in a Popup Window"
-  },
-  "OptionsBehaviorTargetWindowDescription": {
-    "message": "The popout player will open in a new popup window. <strong>This is the default setting.</strong>"
-  },
-
-  "OptionsBehaviorTargetTabLabel": {
-    "message": "Open in a Tab"
-  },
-  "OptionsBehaviorTargetTabDescription": {
-    "message": "The popout player will open in a new tab in your current browser window."
-  },
-
-  "OptionsBehaviorAutoplayLabel": {
-    "message": "Autoplay Video(s)"
-  },
-  "OptionsBehaviorAutoplayDescription": {
-    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong>"
-  },
-
-  "OptionsBehaviorLoopLabel": {
-    "message": "Loop Video(s)"
-  },
-  "OptionsBehaviorLoopDescription": {
-    "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
-  },
-
-  "BehaviorControlsLabel": {
-    "message": "Show Controls"
-  },
+	"OptionsPerDeviceWarning": {
+		"message": "<strong>알림</strong>: 모든 설정은 기기별로 적용되는 설정입니다. 만약 여러대의 기기에 Youtube Popout Player를 설치한 경우 기기별로 다른 설정을 적용할 수 있습니다 ."
+	},
+	"OptionsSettingNotAvailableForTab": {
+		"message": "<strong>알림</strong>: 해당 설정은 Popout Player가 현재 브라우저 창의 새 탭에서 열리도록 설정된 경우에는 적용되지 않습니다."
+	},
+	"OptionsSettingsNotAvailableForTab": {
+		"message": "해당 설정은 Popout Player가 현재 브라우저 창의 새 탭에서 열리도록 설정된 경우에는 적용되지 않습니다."
+	},
+	"OptionsCorrectErrorsWarning": {
+		"message": "해당 설정을 저장하기 전에 모든 오류를 수정해야 합니다."
+	},
+	"OptionsHeadingBehavior": {
+		"message": "Popout Player 동작"
+	},
+	"OptionsHeadingSize": {
+		"message": "Popout Player 크기"
+	},
+	"OptionsHeadingAdvanced": {
+		"message": "고급 설정"
+	},
+	"OptionsTabNameBehavior": {
+		"message": "동작"
+	},
+	"OptionsTabNameSize": {
+		"message": "크기"
+	},
+	"OptionsTabNameAdvanced": {
+		"message": "고급"
+	},
+	"OptionsAdvancedCloseLabel": {
+		"message": "원본 창 닫기"
+	},
+	"OptionsAdvancedCloseDescription": {
+		"message": "이 설정을 활성화하면 Popout Player가 열릴 때 기존의 YouTube 탭이 닫히게 됩니다. 이 설정은 YouTube를 제외한 다른 페이지에 삽입 된 동영상에는 적용되지 않습니다. <strong>이 설정의 기본값은 비활성 상태입니다.</strong>"
+	},
+	"OptionsAdvancedTitleLabel": {
+		"message": "새 창 제목 (미리 보기)"
+	},
+	"OptionsAdvancedTitleDescription": {
+		"message": "Popout Player 창의 제목에 자동으로 삽입할 텍스트를 지정합니다. 이 텍스트는 창 조작 스크립팅에 사용할 수 있습니다. <strong>이 텍스트는 표준 제목 텍스트를 대체하지는 않습니다.</strong>"
+	},
+	"OptionsBehaviorTargetWindowLabel": {
+		"message": "새 창으로 열기"
+	},
+	"OptionsBehaviorTargetWindowDescription": {
+		"message": "Popout Player가 새 창에서 열리도록 설정합니다. <strong>이 설정은 기본값입니다.</strong>"
+	},
+	"OptionsBehaviorTargetTabLabel": {
+		"message": "새 탭으로 열기"
+	},
+	"OptionsBehaviorTargetTabDescription": {
+		"message": "Popout Player가 현재 사용중인 창의 새 탭으로 열리도록 설정합니다."
+	},
+	"OptionsBehaviorAutoplayLabel": {
+		"message": "자동 재생"
+	},
+	"OptionsBehaviorAutoplayDescription": {
+		"message": "이 설정을 적용하면 Popout Player가 열릴 때 해당 영상이 자동으로 재생되도록 설정됩니다. <strong>이 설정은 기본값입니다.</strong>"
+	},
+	"OptionsBehaviorLoopLabel": {
+		"message": "반복 재생"
+	},
+	"OptionsBehaviorLoopDescription": {
+		"message": "이 설정을 적용하면 Popout Player가 닫힐 때 까지 해당 영상을 반복하여 재생합니다. <strong>이 설정의 기본값은 비활성 상태입니다.</strong>"
+	},
+	"BehaviorControlsLabel": {
+		"message": "제어 표시"
+    },
 
   "BehaviorControlsDescription": {
 		"message": "Popout Player에 표시되는 비디오 플레이어 제어를 조절할때 사용하십시오. <strong>설정 기본값은 $DEFAULT$ 입니다.</strong>",
