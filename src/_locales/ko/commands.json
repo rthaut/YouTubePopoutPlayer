@@ -60,7 +60,7 @@
     },
   
     "InvalidCommandShortcutModifiers": {
-      "messages":"<p><strong>지원하지 않는 특수키</string></p>  단축키 조합은 1개 (1) 혹은 2개 (2)의 특수키 조합이어야 합니다. 허용되는 특수키는 다음과 같습니다:</p>"
+      "message":"<p><strong>지원하지 않는 특수키</string></p>  단축키 조합은 1개 (1) 혹은 2개 (2)의 특수키 조합이어야 합니다. 허용되는 특수키는 다음과 같습니다:</p>"
     }
 }
   
