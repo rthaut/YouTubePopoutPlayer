@@ -37,6 +37,34 @@ const YouTubePopoutPlayer = (() => {
         }
 
         /**
+         * Gets the YouTube video ID from various DOM elements
+         * @param {HTMLElement} player
+         * @return {String}
+         */
+        getVideoIDFromDOM() {
+            console.group('YouTubePopoutPlayer.getVideoIDFromDOM()');
+
+            var id;
+
+            var relationships = ['canonical', 'shortlinkUrl'];
+
+            var links = document.getElementsByTagName('link');
+            for (var i = 0; i < links.length; i ++) {
+                if (relationships.indexOf(links[i].getAttribute('rel')) !== -1) {
+                    id = this.getVideoIDFromURL(links[i].getAttribute('href'));
+                    if (id !== undefined && id !== null && id.length > 0) {
+                        console.log('Found ID in', '"' + links[i].getAttribute('rel') + '"', 'link');
+                        break;
+                    }
+                }
+            }
+
+            console.log('Return', id);
+            console.groupEnd();
+            return id;
+        }
+
+        /**
          * Gets the YouTube video ID from the supplied html player element
          * @param {HTMLElement} player
          * @return {String}
@@ -267,9 +295,15 @@ const YouTubePopoutPlayer = (() => {
             const player = new HTML5Player(video);
 
             let id = this.getVideoIDFromPlayer(player.getVideo());
+
             if (id === undefined || id === null || id.length === 0) {
-                // fallback to parsing the video ID from the page's address
+                // try to parse the video ID from the page's address
                 id = this.getVideoIDFromURL(window.location.href);
+            }
+
+            if (id === undefined || id === null || id.length === 0) {
+                // try to parse the video ID from the page's DOM
+                id = this.getVideoIDFromDOM();
             }
 
             browser.runtime.sendMessage({
