@@ -36,7 +36,7 @@
     "angular-browser-i18n": "^2.0.2",
     "angular-messages": "^1.8.2",
     "angular-sanitize": "^1.8.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "shoelace-css": "^1.0.0-beta24",
     "webextension-polyfill": "^0.6.0"
   },
