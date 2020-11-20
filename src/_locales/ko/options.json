@@ -1,0 +1,208 @@
+{
+  "OptionsPageTitle": {
+    "message": "$NAME$ Options",
+    "placeholders": {
+      "name": {
+        "content": "YouTube Popout Player"
+      }
+    }
+  },
+
+	"OptionsPerDeviceWarning": {
+		"message": "<strong>알림</strong>: 모든 설정은 기기별로 적용되는 설정입니다. 만약 여러대의 기기에 Youtube Popout Player를 설치한 경우 기기별로 다른 설정을 적용할 수 있습니다 ."
+	},
+	"OptionsSettingNotAvailableForTab": {
+		"message": "<strong>알림</strong>: 해당 설정은 Popout Player가 현재 브라우저 창의 새 탭에서 열리도록 설정된 경우에는 적용되지 않습니다."
+	},
+	"OptionsSettingsNotAvailableForTab": {
+		"message": "해당 설정은 Popout Player가 현재 브라우저 창의 새 탭에서 열리도록 설정된 경우에는 적용되지 않습니다."
+	},
+	"OptionsCorrectErrorsWarning": {
+		"message": "해당 설정을 저장하기 전에 모든 오류를 수정해야 합니다."
+	},
+	"OptionsHeadingBehavior": {
+		"message": "Popout Player 동작"
+	},
+	"OptionsHeadingSize": {
+		"message": "Popout Player 크기"
+	},
+	"OptionsHeadingAdvanced": {
+		"message": "고급 설정"
+	},
+	"OptionsTabNameBehavior": {
+		"message": "동작"
+	},
+	"OptionsTabNameSize": {
+		"message": "크기"
+	},
+	"OptionsTabNameAdvanced": {
+		"message": "고급"
+	},
+	"OptionsAdvancedCloseLabel": {
+		"message": "원본 창 닫기"
+	},
+	"OptionsAdvancedCloseDescription": {
+		"message": "이 설정을 활성화하면 Popout Player가 열릴 때 기존의 YouTube 탭이 닫히게 됩니다. 이 설정은 YouTube를 제외한 다른 페이지에 삽입 된 동영상에는 적용되지 않습니다. <strong>이 설정의 기본값은 비활성 상태입니다.</strong>"
+	},
+	"OptionsAdvancedTitleLabel": {
+		"message": "새 창 제목 (미리 보기)"
+	},
+	"OptionsAdvancedTitleDescription": {
+		"message": "Popout Player 창의 제목에 자동으로 삽입할 텍스트를 지정합니다. 이 텍스트는 창 조작 스크립팅에 사용할 수 있습니다. <strong>이 텍스트는 표준 제목 텍스트를 대체하지는 않습니다.</strong>"
+	},
+	"OptionsBehaviorTargetWindowLabel": {
+		"message": "새 창으로 열기"
+	},
+	"OptionsBehaviorTargetWindowDescription": {
+		"message": "Popout Player가 새 창에서 열리도록 설정합니다. <strong>이 설정은 기본값입니다.</strong>"
+	},
+	"OptionsBehaviorTargetTabLabel": {
+		"message": "새 탭으로 열기"
+	},
+	"OptionsBehaviorTargetTabDescription": {
+		"message": "Popout Player가 현재 사용중인 창의 새 탭으로 열리도록 설정합니다."
+	},
+	"OptionsBehaviorAutoplayLabel": {
+		"message": "자동 재생"
+	},
+	"OptionsBehaviorAutoplayDescription": {
+		"message": "이 설정을 적용하면 Popout Player가 열릴 때 해당 영상이 자동으로 재생되도록 설정됩니다. <strong>이 설정은 기본값입니다.</strong>"
+	},
+	"OptionsBehaviorLoopLabel": {
+		"message": "반복 재생"
+	},
+	"OptionsBehaviorLoopDescription": {
+		"message": "이 설정을 적용하면 Popout Player가 닫힐 때 까지 해당 영상을 반복하여 재생합니다. <strong>이 설정의 기본값은 비활성 상태입니다.</strong>"
+	},
+	"BehaviorControlsLabel": {
+		"message": "제어 표시"
+    },
+
+  "BehaviorControlsDescription": {
+		"message": "Popout Player에 표시되는 비디오 플레이어 제어를 조절할때 사용하십시오. <strong>설정 기본값은 $DEFAULT$ 입니다.</strong>",
+		"placeholders": {
+			"default": {
+				"content": "표준"
+			}
+		}
+	},
+	"BehaviorControlsNoneOptionLabel": {
+		"message": "없습니다"
+	},
+	"BehaviorControlsStandardOptionLabel": {
+		"message": "표준입니다"
+	},
+	"BehaviorControlsExtendedOptionLabel": {
+		"message": "확장되었습니다"
+	},
+	"OptionsSizeModeCurrentLabel": {
+		"message": "원본 플레이어 크기 사용"
+	},
+	"OptionsSizeModeCurrentDescription": {
+		"message": "Popout Player는 Youtube 비디오 플레이어와 맞는 크기가 됩니다. <strong>이것은 기본 설정입니다.</strong>"
+	},
+	"OptionsSizeModeCustomLabel": {
+		"message": "사용자 크기 설정"
+	},
+	"OptionsSizeModeCustomDescription": {
+		"message": "Popout Player의 크기(픽셀 또는 백분율)를 지정하세요."
+	},
+	"DimensionUnitsLabel": {
+		"message": "크기 단위"
+	},
+	"DimensionUnitsPixelsOptionLabel": {
+		"message": "픽셀 (px)"
+	},
+	"DimensionUnitsPercentageOptionLabel": {
+		"message": "백분율 (%)"
+	},
+	"DimensionUnitsPixelsUnitLabel": {
+		"message": "px"
+	},
+	"DimensionUnitsPercentageUnitLabel": {
+		"message": "%"
+	},
+	"DimensionUnitsUnknownUnitLabel": {
+		"message": "?"
+	},
+	"WidthLabel": {
+		"message": "너비"
+	},
+	"HeightLabel": {
+		"message": "높이"
+	},
+	"InfoCurrentScreenResolutionLabel": {
+		"message": "현재 화면 해상도"
+	},
+	"InfoPopoutPlayerWindowSizeLabel": {
+		"message": "Popout Player 창 크기"
+	},
+	"InfoPopoutPlayerAspectRatioLabel": {
+		"message": "Popout Player 비율"
+	},
+	"FieldRequiredMessage": {
+		"message": "필수 입력 사항입니다."
+	},
+	"FieldPatternNumberMessage": {
+		"message": "입력이 숫자여야 합니다."
+	},
+	"FieldMinValuePlaceholderMessage": {
+		"message": "값이 <strong>$VALUE$</strong> 보다 작을 수 없습니다.",
+		"placeholders": {
+			"value": {
+				"content": "$1"
+			}
+		}
+	},
+	"FieldMaxValuePlaceholderMessage": {
+		"message": "값이 <strong>$VALUE$</strong> 보다 클 수 없습니다.",
+		"placeholders": {
+			"value": {
+				"content": "$1"
+			}
+		}
+	},
+	"FieldRequiredPermissionsNotGrantedMessage": {
+		"message": "해당 설정을 사용하기 위해서는 요청된 추가 권한이 필요합니다."
+	},
+	"ButtonSaveCustomDimensionsLabel": {
+		"message": "사용자 크기 저장"
+	},
+	"ButtonSaveLabel": {
+		"message": "설정 저장"
+	},
+	"ButtonResetLabel": {
+		"message": "설정 초기화"
+	},
+	"ConfirmSettingsResetHeading": {
+		"message": "설정 초기화 확인"
+	},
+	"ConfirmSettingsResetText": {
+		"message": "<strong>설정을 초기화 하시겠습니까</strong>? 계속 진행하면 $NAME$에 대하면 모든 설정이 기본값으로 복원됩니다..",
+		"placeholders": {
+			"name": {
+				"content": "YouTube Popout Player"
+			}
+		}
+	},
+	"ButtonConfirmResetLabel": {
+		"message": "확인"
+	},
+	"ButtonCancelResetLabel": {
+		"message": "취소"
+	},
+	"OptionsResetSuccessMessage": {
+		"message": "모든설정이 기본값으로 설정되었습니다."
+	},
+	"OptionsSaveSuccessMessage": {
+		"message": "모든 설정이 성공적으로 저장되었습니다!"
+	},
+	"OptionsSaveErrorPlaceholderMessage": {
+		"message": "설정을 저장하지 못했습니다: $ERROR$",
+		"placeholders": {
+			"error": {
+				"content": "$1"
+			}
+		}
+	}
+}
