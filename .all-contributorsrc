@@ -26,7 +26,17 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "Sumin971013",
+      "name": "Sumin Bae",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/55087554?v=4",
+      "profile": "https://github.com/Sumin971013",
+      "contributions": [
+        "translation"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
