@@ -1,0 +1,66 @@
+{
+    "OpenPopoutCommandDescription": {
+      "message": "이 영상을 YouTube Popout Player로 재생합니다",
+      "description": "The description for the 'open-popout' extension command"
+    },
+  
+    "CommandListHeading": {
+      "message": "키보드 단축키"
+    },
+  
+    "CommandListSaveHelpText": {
+      "message": "단축키를 바꾸고 나서 설정을 따로 저장할 필요가 <strong>없습니다</strong>; 새로운 단축키는 자동으로 저장됩니다."
+    },
+  
+    "CommandListChangeChrome": {
+      "message": "<strong>구글 크롬 사용자</strong>: 아래의 단축키를 수정하려면, 새 탭에서 <code>$URL$</code> 로 이동하세요.",
+      "description": "The help text displayed in Chrome to inform users how to change keyboard shortcuts",
+      "placeholders": {
+        "url": {
+          "content": "chrome://extensions/shortcuts"
+        }
+      }
+    },
+  
+    "CommandListDescriptionColumnHeading": {
+      "message": "설명"
+    },
+  
+    "CommandListShortcutColumnHeading": {
+      "message": "단축키"
+    },
+  
+    "CommandListUpdateCommandLabel": {
+      "message": "변경"
+    },
+  
+    "UpdateCommandHeading": {
+      "message": "단축키 업데이트"
+    },
+  
+    "UpdateCommandInstructionsPlaceholder": {
+      "message": "<p>명령어 \"$COMMAND$\"에 맞는 새로운 단축키를 누르시거나 , 취소하려면 <kbd>Esc</kbd> 를 눌러주세요.</p><p>유효한 단축키는 하나 혹은 둘의 수정 키(alt, ctrl, shift)와 하나의 일반 키를 포함해야 합니다.<p><hr/><p>현재의 키보드 단축키는 다음과 같습니다: $SHORTCUT$</p>",
+      "placeholders": {
+        "command": {
+          "content": "$1"
+        },
+        "shortcut": {
+          "content": "$2"
+        }
+      }
+    },
+  
+    "InvalidCommandShortcutKeyPlaceholder": {
+      "message": "<p><strong> 지원하지 않는 단축키</strong></p><p> 해당 $KEY$는 유효하지 않는 단축키 입니다. 다음 단축키를 사용하세요:</p>",
+      "placeholders": {
+        "key": {
+          "content": "$1"
+        }
+      }
+    },
+  
+    "InvalidCommandShortcutModifiers": {
+      "message":"<p><strong>지원하지 않는 특수키</string></p>  단축키 조합은 1개 (1) 혹은 2개 (2)의 특수키 조합이어야 합니다. 허용되는 특수키는 다음과 같습니다:</p>"
+    }
+}
+  
