@@ -90,9 +90,18 @@ Note you will need 2 terminal instances, one for each of the above commands, as 
 Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/1769875?v=4" width="100px;" alt="YFdyh000"/><br /><sub><b>YFdyh000</b></sub>](http://wiki.mozilla.org/User:YFdyh000)<br />[🌍](#translation-yfdyh000 "Translation") | [<img src="https://avatars3.githubusercontent.com/u/8739797?v=4" width="100px;" alt="CD"/><br /><sub><b>CD</b></sub>](https://cdcs2.com)<br />[🤔](#ideas-d5c4b3 "Ideas, Planning, & Feedback") |
-| :---: | :---: |
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="http://wiki.mozilla.org/User:YFdyh000"><img src="https://avatars0.githubusercontent.com/u/1769875?v=4" width="100px;" alt=""/><br /><sub><b>YFdyh000</b></sub></a><br /><a href="#translation-yfdyh000" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://cdcs2.com"><img src="https://avatars3.githubusercontent.com/u/8739797?v=4" width="100px;" alt=""/><br /><sub><b>CD</b></sub></a><br /><a href="#ideas-d5c4b3" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/OhKyungTaek"><img src="https://avatars1.githubusercontent.com/u/48934601?v=4" width="100px;" alt=""/><br /><sub><b>OhKyungTaek</b></sub></a><br /><a href="#translation-OhKyungTaek" title="Translation">🌍</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
