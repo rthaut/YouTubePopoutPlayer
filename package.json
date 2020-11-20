@@ -73,7 +73,7 @@
     "rollup-stream": "^1.24.1",
     "sass-loader": "^10.0.0",
     "terser-webpack-plugin": "^4.0.0",
-    "trash-cli": "^3.0.0",
+    "trash-cli": "^4.0.0",
     "uglify-es": "^3.3.9",
     "url-loader": "^4.0.0",
     "vinyl-buffer": "^1.0.1",
