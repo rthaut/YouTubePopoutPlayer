@@ -97,6 +97,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/all-contri
     <td align="center"><a href="http://wiki.mozilla.org/User:YFdyh000"><img src="https://avatars0.githubusercontent.com/u/1769875?v=4" width="100px;" alt=""/><br /><sub><b>YFdyh000</b></sub></a><br /><a href="#translation-yfdyh000" title="Translation">🌍</a></td>
     <td align="center"><a href="https://cdcs2.com"><img src="https://avatars3.githubusercontent.com/u/8739797?v=4" width="100px;" alt=""/><br /><sub><b>CD</b></sub></a><br /><a href="#ideas-d5c4b3" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/201601972-kimdongwook"><img src="https://avatars0.githubusercontent.com/u/62870938?v=4" width="100px;" alt=""/><br /><sub><b>DONGWOOK KIM</b></sub></a><br /><a href="#translation-201601972-kimdongwook" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/kimsoyeong"><img src="https://avatars3.githubusercontent.com/u/43427380?v=4" width="100px;" alt=""/><br /><sub><b>kimsoyeong</b></sub></a><br /><a href="#translation-kimsoyeong" title="Translation">🌍</a></td>
   </tr>
 </table>
 
