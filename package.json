@@ -38,7 +38,7 @@
     "angular-sanitize": "^1.8.2",
     "jquery": "^3.5.1",
     "shoelace-css": "^1.0.0-beta24",
-    "webextension-polyfill": "^0.6.0"
+    "webextension-polyfill": "^0.7.0"
   },
   "devDependencies": {
     "ansi-colors": "^4.1.1",
