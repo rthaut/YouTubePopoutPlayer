@@ -79,7 +79,7 @@
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "web-ext": "^5.3.0",
-    "webpack": "^4.39.3",
+    "webpack": "^4.46.0",
     "webpack-merge": "^5.0.0",
     "webpack-stream": "^6.0.0"
   }
