@@ -38,22 +38,21 @@ const YouTubePopoutPlayer = (() => {
 
         /**
          * Gets the YouTube video ID from various DOM elements
-         * @param {HTMLElement} player
          * @return {String}
          */
         getVideoIDFromDOM() {
             console.group('YouTubePopoutPlayer.getVideoIDFromDOM()');
 
-            var id;
+            let id = null;
 
-            var relationships = ['canonical', 'shortlinkUrl'];
+            const relationships = ['canonical', 'shortlinkUrl'];
 
-            var links = document.getElementsByTagName('link');
-            for (var i = 0; i < links.length; i ++) {
-                if (relationships.indexOf(links[i].getAttribute('rel')) !== -1) {
-                    id = this.getVideoIDFromURL(links[i].getAttribute('href'));
+            const links = document.getElementsByTagName('link');
+            for (const link of links) {
+                if (relationships.indexOf(link.getAttribute('rel')) !== -1) {
+                    id = this.getVideoIDFromURL(link.getAttribute('href'));
                     if (id !== undefined && id !== null && id.length > 0) {
-                        console.log('Found ID in', '"' + links[i].getAttribute('rel') + '"', 'link');
+                        console.log('Found ID in', '"' + link.getAttribute('rel') + '"', 'link');
                         break;
                     }
                 }
