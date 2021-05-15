@@ -60,13 +60,14 @@
     "gulp-print": "^5.0.2",
     "gulp-rename": "^2.0.0",
     "gulp-svg2png": "^2.0.2",
+    "gulp-svg2png-update": "^2.2.1",
     "gulp-uglify": "^3.0.2",
     "gulp-zip": "^5.0.0",
     "html-webpack-externals-plugin": "^3.8.0",
     "html-webpack-plugin": "^5.0.0",
     "merge-stream": "^2.0.0",
     "mini-css-extract-plugin": "^1.0.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^6.0.0",
     "npm-run-all": "^4.1.5",
     "pump": "^3.0.0",
     "raw-loader": "^4.0.0",
@@ -80,7 +81,7 @@
     "vinyl-source-stream": "^2.0.0",
     "web-ext": "^5.0.0",
     "webpack": "^5.0.0",
-    "webpack-merge": "^5.0.0",
-    "webpack-stream": "^6.0.0"
+    "webpack-merge": "^5.7.3",
+    "webpack-stream": "^6.1.2"
   }
 }
