@@ -72,7 +72,7 @@
     "pump": "^3.0.0",
     "raw-loader": "^4.0.0",
     "rollup-stream": "^1.24.1",
-    "sass-loader": "^11.0.0",
+    "sass-loader": "^12.0.0",
     "terser-webpack-plugin": "^5.0.0",
     "trash-cli": "^4.0.0",
     "uglify-es": "^3.3.9",
