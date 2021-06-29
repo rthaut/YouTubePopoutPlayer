@@ -1,7 +1,0 @@
-{
-  "extends": "../../.eslintrc.json",
-  "env": {
-    "es6": true,
-    "webextensions": true
-  }
-}

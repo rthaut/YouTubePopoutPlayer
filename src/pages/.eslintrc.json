@@ -1,8 +1,0 @@
-{
-  "env": {
-      "jquery": true
-  },
-  "globals": {
-      "angular": true
-  }
-}
