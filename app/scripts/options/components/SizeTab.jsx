@@ -1,11 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import Alert from "@material-ui/lab/Alert";
 import Box from "@material-ui/core/Box";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Grid from "@material-ui/core/Grid";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Typography from "@material-ui/core/Typography";
@@ -13,14 +11,18 @@ import Typography from "@material-ui/core/Typography";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 
 import CustomDimensions from "./CustomDimensions";
+import TabPanelHeader from "./TabPanelHeader";
+
+import { useOptions, useOptionsForDomain } from "../contexts/OptionsContext";
+
+import { OPTIONS_SIZE_MODE_VALUES } from "../../helpers/constants";
 
 export const DOMAIN = "size";
 
-// TODO: move these to constants.js
-const modeOptions = ["current", "custom"];
-const dimensionUnitsOptions = ["pixels", "percentage"];
+export default function SizeTab() {
+  const { options, setOption, setOptions } = useOptionsForDomain(DOMAIN);
+  const { getOptionForDomain } = useOptions();
 
-export default function SizeTab({ options, setOption, setOptions, getOptionForDomain }) {
   const targetIsTab = getOptionForDomain("behavior", "target") === "tab";
 
   function ModeOption() {
@@ -29,9 +31,9 @@ export default function SizeTab({ options, setOption, setOptions, getOptionForDo
         <RadioGroup
           name="mode"
           value={options["mode"]}
-          onChange={setOption("mode", "string")}
+          onChange={(event) => setOption("mode", event.target.value)}
         >
-          {modeOptions.map((modeOptionName) => (
+          {OPTIONS_SIZE_MODE_VALUES.map((modeOptionName) => (
             <React.Fragment key={modeOptionName}>
               <FormControlLabel
                 value={modeOptionName}
@@ -58,23 +60,10 @@ export default function SizeTab({ options, setOption, setOptions, getOptionForDo
 
   return (
     <Box>
-      <Grid
-        container
-        wrap="nowrap"
-        spacing={1}
-        direction="row"
-        justify="flex-start"
-        alignItems="center"
-      >
-        <Grid item>
-          <AspectRatioIcon />
-        </Grid>
-        <Grid item xs zeroMinWidth>
-          <Typography variant="h5" component="h2" gutterBottom>
-            {browser.i18n.getMessage("OptionsHeadingSize")}
-          </Typography>
-        </Grid>
-      </Grid>
+      <TabPanelHeader
+        icon={<AspectRatioIcon />}
+        title={browser.i18n.getMessage("OptionsHeadingSize")}
+      />
       {targetIsTab ? (
         <Box marginY={1}>
           <Alert severity="warning">
@@ -86,7 +75,9 @@ export default function SizeTab({ options, setOption, setOptions, getOptionForDo
           <Box marginY={1}>
             <ModeOption />
           </Box>
-          {options["mode"] === "custom" && <CustomDimensions options={options} setOptions={setOptions} />}
+          {options["mode"] === "custom" && (
+            <CustomDimensions options={options} setOptions={setOptions} />
+          )}
           <pre>
             <code>{JSON.stringify(options, null, 2)}</code>
           </pre>
@@ -95,15 +86,3 @@ export default function SizeTab({ options, setOption, setOptions, getOptionForDo
     </Box>
   );
 }
-
-SizeTab.propTypes = {
-  options: PropTypes.exact({
-    mode: PropTypes.oneOf(modeOptions).isRequired,
-    units: PropTypes.oneOf(dimensionUnitsOptions).isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-  }).isRequired,
-  setOption: PropTypes.func.isRequired,
-  setOptions: PropTypes.func.isRequired,
-  getOptionForDomain: PropTypes.func.isRequired,
-};

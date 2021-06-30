@@ -29,7 +29,7 @@ const Utils = (() => {
     /**
      * Determines if the browser is Firefox
      * @see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/getBrowserInfo
-     * @returns {boolean} `true` only if the browser is successfully identified as Firefox
+     * @returns {Promise<boolean>} `true` only if the browser is successfully identified as Firefox
      */
     IsFirefox: async function () {
       console.group("Utils.IsFirefox()");

@@ -18,138 +18,142 @@ import TableRow from "@material-ui/core/TableRow";
 import TextField from "@material-ui/core/TextField";
 
 import SaveIcon from "@material-ui/icons/Save";
+
 import Utils from "../../helpers/utils";
 
-// TODO: move these to constants.js
-const dimensionUnitsOptions = ["pixels", "percentage"];
+import { OPTIONS_SIZE_UNITS_VALUES } from "../../helpers/constants";
 
-export function CustomDimensionsForm({ options, save }) {
+function CustomDimensionsInfoTable({ units, width, height }) {
+  if (units === "percentage") {
+    width = Utils.GetDimensionForScreenPercentage("Width", width);
+    height = Utils.GetDimensionForScreenPercentage("Height", height);
+  }
+
+  const ratio = Utils.GreatestCommonDenominator(width, height);
+
+  return (
+    <Paper variant="outlined">
+      <TableContainer>
+        <Table size="small">
+          <TableBody>
+
+            <TableRow>
+              <TableCell component="th" scope="row">
+                {browser.i18n.getMessage("InfoCurrentScreenResolutionLabel")}
+              </TableCell>
+              <TableCell>
+                <strong>
+                  {window.screen.width} &times; {window.screen.height}
+                </strong>
+              </TableCell>
+            </TableRow>
+
+            {units === "percentage" && (
+              <TableRow>
+                <TableCell component="th" scope="row">
+                  {browser.i18n.getMessage("InfoPopoutPlayerWindowSizeLabel")}
+                </TableCell>
+                <TableCell>
+                  <strong>
+                    {width} &times; {height}
+                  </strong>
+                </TableCell>
+              </TableRow>
+            )}
+
+            <TableRow>
+              <TableCell component="th" scope="row">
+                {browser.i18n.getMessage("InfoPopoutPlayerAspectRatioLabel")}
+              </TableCell>
+              <TableCell>
+                <strong>
+                  {width / ratio}:{height / ratio}
+                </strong>
+              </TableCell>
+            </TableRow>
+
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
+  );
+}
+
+CustomDimensionsInfoTable.propTypes = {
+  units: PropTypes.oneOf(OPTIONS_SIZE_UNITS_VALUES).isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+};
+
+function CustomDimensionsForm({ options, save }) {
   const [units, setUnits] = React.useState(options.units);
-  const [dimensions, setDimensions] = React.useState({
-    width: options.width,
-    height: options.height,
-  });
+  const [width, setWidth] = React.useState(options.width);
+  const [height, setHeight] = React.useState(options.height);
 
-  const setDimension = (dimension) => (event) =>
-    setDimensions((dimensions) => ({
-      ...dimensions,
-      [dimension]:
-        event.target.value !== "" ? parseInt(event.target.value, 10) : 0,
-    }));
+  const [widthRestrictions, setWidthRestrictions] = React.useState({ min: 0, max: 0 });
+  const [heightRestrictions, setHeightRestrictions] = React.useState({ min: 0, max: 0 });
+
+  React.useEffect(() => {
+    switch (units) {
+      case "pixels":
+        setWidthRestrictions({
+          min: parseInt(window.screen.availWidth * 0.1, 10),
+          max: window.screen.availWidth,
+        });
+        setHeightRestrictions({
+          min: parseInt(window.screen.availHeight * 0.1, 10),
+          max: window.screen.availHeight,
+        });
+        break;
+
+      case "percentage":
+        setWidthRestrictions({ min: 10, max: 100 });
+        setHeightRestrictions({ min: 10, max: 100 });
+        break;
+    }
+  }, [units]);
+
+  const handleDimensionInputChange = (dimension) => (event) => {
+    const value =
+      event.target.value !== "" ? parseInt(event.target.value, 10) : 0;
+    switch (dimension) {
+      case "width":
+        setWidth(value);
+        break;
+
+      case "height":
+        setHeight(value);
+        break;
+    }
+  };
 
   // TODO: build and use this when switching from pixels to percentages (so we can be smart about changing the values)
-  const convertPixelsToPercentages = ([width, height]) => {};
+  // const convertPixelsToPercentages = ({ width, height }) => { };
 
   // TODO: build and use this when switching from percentages to pixels (so we can be smart about changing the values)
-  const convertPercentagesToPixels = ([width, height]) => {};
+  // const convertPercentagesToPixels = ({ width, height }) => { };
 
-  const getSizeData = () => {
-    let { width, height } = dimensions;
-    let ratio;
-
-    if (parseInt(width, 10) > 0 && parseInt(height, 10) > 0) {
-      if (units === "percentage") {
-        width = Utils.GetDimensionForScreenPercentage("Width", width);
-        height = Utils.GetDimensionForScreenPercentage("Height", height);
-      }
+  const areDimensionsOptionsValid = () => {
+    if (width === undefined || width === null || width < widthRestrictions["min"] || width > widthRestrictions["max"]) {
+      return false;
     }
 
-    if (parseInt(width, 10) > 0 && parseInt(height, 10) > 0) {
-      ratio = Utils.GreatestCommonDenominator(width, height);
+    if (height === undefined || height === null || height < heightRestrictions["min"] || height > heightRestrictions["max"]) {
+      return false;
     }
 
-    return {
-      width,
-      height,
-      ratio,
-    };
-  };
+    return true;
+  }
 
-  const showSizeData = (property) => {
-    let result = "N/A";
-
-    const { width, height, ratio } = getSizeData();
-
-    if (width && height && ratio) {
-      switch (property) {
-        case "AspectRatio":
-          result = width / ratio + ":" + height / ratio;
-          break;
-
-        case "Dimensions":
-          result = width + " &times; " + height;
-          break;
-      }
-    }
-
-    return result;
-  };
-
-  /**
-   * Determines the minimum size for the width and/or height input fields based on the selected units
-   * @param {string} dimension either "width" or "height"
-   * @returns {number}
-   */
-  const sizeMin = (dimension) => {
-    switch (units) {
-      case "pixels":
-        switch (dimension) {
-          case "width":
-            return parseInt(window.screen.availWidth * 0.1, 10);
-          case "height":
-            return parseInt(window.screen.availHeight * 0.1, 10);
-        }
-        break;
-
-      case "percentage":
-        return 10;
-    }
-
-    return 0;
-  };
-
-  /**
-   * Determines the maximum size for the width and/or height input fields based on the selected units
-   * @param {string} dimension either "width" or "height"
-   * @returns {number}
-   */
-  const sizeMax = (dimension) => {
-    switch (units) {
-      case "pixels":
-        switch (dimension) {
-          case "width":
-            return window.screen.availWidth;
-          case "height":
-            return window.screen.availHeight;
-        }
-        break;
-
-      case "percentage":
-        return 100;
-    }
-
-    return 0;
-  };
-
-  // TODO: this is very basic; it needs to ensure percentages are valid and pixels are not larger than the screen
-  const areDimensionsOptionsValid = () =>
-    Object.keys(dimensions).reduce(
-      (acc, val) =>
-        acc &&
-        dimensions[val] !== undefined &&
-        dimensions[val] !== null &&
-        dimensions[val] !== "" &&
-        dimensions[val] !== 0,
-      true
-    );
 
   const haveDimensionsOptionsChanged = () =>
     units !== options["units"] ||
-    dimensions["width"] !== options["width"] ||
-    dimensions["height"] !== options["height"];
+    width !== options["width"] ||
+    height !== options["height"];
 
   return (
     <Box padding={2}>
+
       <FormControl fullWidth>
         <InputLabel id="size-units-label">
           {browser.i18n.getMessage("DimensionUnitsLabel")}
@@ -160,13 +164,14 @@ export function CustomDimensionsForm({ options, save }) {
           value={units}
           onChange={(event) => setUnits(event.target.value)}
         >
-          {dimensionUnitsOptions.map((unit) => (
+          {OPTIONS_SIZE_UNITS_VALUES.map((unit) => (
             <MenuItem value={unit} key={unit}>
               {browser.i18n.getMessage(`DimensionUnits${unit}OptionLabel`)}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
+
       <Grid
         container
         spacing={2}
@@ -182,13 +187,12 @@ export function CustomDimensionsForm({ options, save }) {
             label="Width"
             type="number"
             margin="normal"
-            value={dimensions["width"]}
-            onChange={setDimension("width")}
+            value={width}
+            onChange={handleDimensionInputChange("width")}
             InputLabelProps={{}}
             InputProps={{
               inputProps: {
-                min: sizeMin("width"),
-                max: sizeMax("width"),
+                ...widthRestrictions,
               },
               endAdornment: (
                 <InputAdornment position="end">
@@ -206,13 +210,12 @@ export function CustomDimensionsForm({ options, save }) {
             label="Height"
             type="number"
             margin="normal"
-            value={dimensions["height"]}
-            onChange={setDimension("height")}
+            value={height}
+            onChange={handleDimensionInputChange("height")}
             InputLabelProps={{}}
             InputProps={{
               inputProps: {
-                min: sizeMin("height"),
-                max: sizeMax("height"),
+                ...heightRestrictions,
               },
               endAdornment: (
                 <InputAdornment position="end">
@@ -223,57 +226,15 @@ export function CustomDimensionsForm({ options, save }) {
           />
         </Grid>
       </Grid>
+
       <Box padding={2}>
-        <Paper variant="outlined">
-          <TableContainer>
-            <Table size="small">
-              <TableBody>
-                <TableRow>
-                  <TableCell component="th" scope="row">
-                    {browser.i18n.getMessage(
-                      "InfoCurrentScreenResolutionLabel"
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <strong>
-                      {window.screen.width} &times; {window.screen.height}
-                    </strong>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="th" scope="row">
-                    {browser.i18n.getMessage("InfoPopoutPlayerWindowSizeLabel")}
-                  </TableCell>
-                  <TableCell>
-                    <strong
-                      dangerouslySetInnerHTML={{
-                        __html: showSizeData("Dimensions"),
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="th" scope="row">
-                    {browser.i18n.getMessage(
-                      "InfoPopoutPlayerAspectRatioLabel"
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <strong
-                      dangerouslySetInnerHTML={{
-                        __html: showSizeData("AspectRatio"),
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
+        <CustomDimensionsInfoTable
+          units={units}
+          width={width}
+          height={height}
+        />
       </Box>
-      <pre>
-        <code>{JSON.stringify(dimensions, null, 2)}</code>
-      </pre>
+
       <Box paddingX={8}>
         <Button
           variant="contained"
@@ -288,13 +249,14 @@ export function CustomDimensionsForm({ options, save }) {
           {browser.i18n.getMessage("ButtonSaveCustomDimensionsLabel")}
         </Button>
       </Box>
+
     </Box>
   );
 }
 
 CustomDimensionsForm.propTypes = {
   options: PropTypes.shape({
-    units: PropTypes.oneOf(dimensionUnitsOptions).isRequired,
+    units: PropTypes.oneOf(OPTIONS_SIZE_UNITS_VALUES).isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
   }).isRequired,
@@ -313,7 +275,7 @@ export default function CustomDimensions({ options, setOptions }) {
 
 CustomDimensions.propTypes = {
   options: PropTypes.shape({
-    units: PropTypes.oneOf(dimensionUnitsOptions).isRequired,
+    units: PropTypes.oneOf(OPTIONS_SIZE_UNITS_VALUES).isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
   }).isRequired,

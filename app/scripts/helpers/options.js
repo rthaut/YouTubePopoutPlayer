@@ -16,9 +16,8 @@ const Options = (() => {
     /**
      * Resets all options in local storage to their default values
      * @param {boolean} [reset=false] indicates if local storage should be reset
-     * @returns {Promise}
      */
-    InitLocalStorageDefaults: function (reset = false) {
+    InitLocalStorageDefaults: async function (reset = false) {
       console.log("Options.InitDefaults()");
 
       const defaults = this.ConvertForStorage(
@@ -30,37 +29,37 @@ const Options = (() => {
           "Options.InitDefaults() :: Setting all options to default values",
           defaults
         );
-        return browser.storage.local.clear().then(() => {
-          return browser.storage.local.set(defaults);
-        });
+        await browser.storage.local.clear();
+        await browser.storage.local.set(defaults);
       } else {
-        return GetAllFromStorage("local", false).then((options) => {
-          const promises = [];
-          Object.keys(defaults).forEach((option) => {
-            if (options[option] === undefined || options[option] === null) {
-              console.log(
-                `Options.InitDefaults() :: Setting "${option}" to default value`,
-                defaults[option]
-              );
+        const options = await GetAllFromStorage("local", false);
 
-              const opt = {};
-              opt[option] = defaults[option];
-              promises.push(browser.storage.local.set(opt));
-            }
-          });
+        const promises = [];
 
-          Object.keys(options).forEach((option) => {
-            if (defaults[option] === undefined || defaults[option] === null) {
-              console.log(
-                `Options.InitDefaults() :: Removing unknown option "${option}"`
-              );
+        Object.keys(defaults).forEach((option) => {
+          if (options[option] === undefined || options[option] === null) {
+            console.log(
+              `Options.InitDefaults() :: Setting "${option}" to default value`,
+              defaults[option]
+            );
 
-              promises.push(browser.storage.local.remove(option));
-            }
-          });
-
-          return Promise.all(promises);
+            const opt = {};
+            opt[option] = defaults[option];
+            promises.push(browser.storage.local.set(opt));
+          }
         });
+
+        Object.keys(options).forEach((option) => {
+          if (defaults[option] === undefined || defaults[option] === null) {
+            console.log(
+              `Options.InitDefaults() :: Removing unknown/invalid option "${option}"`
+            );
+
+            promises.push(browser.storage.local.remove(option));
+          }
+        });
+
+        await Promise.all(promises);
       }
     },
 
@@ -84,8 +83,8 @@ const Options = (() => {
       const result = {};
 
       Object.keys(options).forEach((domain) => {
-        Object.keys(options[domain]).forEach((opt) => {
-          result[`${domain}.${opt}`] = options[domain][opt];
+        Object.keys(options[domain]).forEach((name) => {
+          result[`${domain}.${name}`] = options[domain][name];
         });
       });
 
@@ -137,7 +136,7 @@ const Options = (() => {
      * Returns the value of an option from local storage
      * @param {string} domain the domain of the option
      * @param {string} name the name of the option
-     * @returns {*}
+     * @returns {Promise<*>} the value of an option from local storage
      */
     GetLocalOption: async function (domain, name) {
       console.log("Options.GetLocalOption()", domain, name);
@@ -149,6 +148,35 @@ const Options = (() => {
     },
 
     /**
+     * Saves the value of an option to local storage
+     * @param {string} domain the domain of the option
+     * @param {string} name the name of the option
+     */
+    SetLocalOption: async function (domain, name, value) {
+      console.log("Options.SetLocalOption()", domain, name);
+
+      const option = this.ConvertForStorage(
+        Object.assign({}, { [domain]: { [name]: value } })
+      );
+
+      await browser.storage.local.set(option);
+    },
+
+    /**
+     * Returns all options (as an object) from local storage
+     * @returns {Object}
+     */
+    GetLocalOptions: async function () {
+      console.log("Options.GetLocalOptions()");
+
+      let options = await GetAllFromStorage("local");
+      options = Object.assign({}, this.ConvertFromStorage(options));
+
+      console.log("Options.GetLocalOptions() :: Return", options);
+      return options;
+    },
+
+    /**
      * Returns all options (as an object) for the specified domain from local storage
      * @param {string} domain the domain of the options
      * @returns {Object}
@@ -156,10 +184,7 @@ const Options = (() => {
     GetLocalOptionsForDomain: async function (domain) {
       console.log("Options.GetLocalOptionsForDomain()", domain);
 
-      let options;
-
-      options = await GetAllFromStorage("local");
-      options = Object.assign({}, this.ConvertFromStorage(options));
+      let options = await this.GetLocalOptions();
       options = Object.assign({}, options[domain]);
 
       console.log("Options.GetLocalOptionsForDomain() :: Return", options);
@@ -169,32 +194,16 @@ const Options = (() => {
     /**
      * Saves the options to local storage
      * @param {Object} options options (in a nested structure)
-     * @returns {Promise}
      */
-    SetLocalOptions: function (options, convertForStorage = true) {
-      console.log("Options.SetLocalOptions()", options);
-
-      if (convertForStorage) {
-        options = this.ConvertForStorage(Object.assign({}, options));
-      }
-
-      return browser.storage.local.set(options);
-    },
-
-    /**
-     * Saves the options to local storage
-     * @param {Object} options options (in a nested structure)
-     * @returns {Promise}
-     */
-    SetLocalOptionsForDomain: function (domain, options) {
+    SetLocalOptionsForDomain: async function (domain, options) {
       console.log("Options.SetLocalOptionsForDomain()", domain, options);
 
-      options = this.ConvertForStorage(Object.assign({}, { [domain]: options }));
+      options = this.ConvertForStorage(
+        Object.assign({}, { [domain]: options })
+      );
 
-      return browser.storage.local.set(options);
+      await browser.storage.local.set(options);
     },
-
-    // TODO: create helper method for saving an option to storage? maybe multiple methods for both structures?
   };
 
   return Options;

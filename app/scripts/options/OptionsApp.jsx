@@ -9,6 +9,8 @@ import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
 
+import { OptionsProvider } from "./contexts/OptionsContext";
+
 import BehaviorTab, {
   DOMAIN as BehaviorDomain,
 } from "./components/BehaviorTab";
@@ -17,10 +19,7 @@ import AdvancedTab, {
   DOMAIN as AdvancedDomain,
 } from "./components/AdvancedTab";
 
-import { OPTION_DEFAULTS } from "../helpers/constants";
-import Options from "../helpers/options";
-
-export default function App() {
+export default function OptionsApp() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
   const theme = React.useMemo(
@@ -40,67 +39,15 @@ export default function App() {
   );
 
   const tabs = {
-    [BehaviorDomain]: BehaviorTab,
-    [SizeDomain]: SizeTab,
-    [AdvancedDomain]: AdvancedTab,
+    [BehaviorDomain]: <BehaviorTab />,
+    [SizeDomain]: <SizeTab />,
+    [AdvancedDomain]: <AdvancedTab />,
   };
 
   const [tabValue, setTabValue] = React.useState(Object.keys(tabs)[0]);
 
   const handleTabChange = (event, tabValue) => {
     setTabValue(tabValue);
-  };
-
-  const [options, setOptions] = React.useState(OPTION_DEFAULTS);
-
-  React.useEffect(() => {
-    (async () => {
-      const options = {};
-      for (const domain of Object.keys(tabs)) {
-        options[domain] = await Options.GetLocalOptionsForDomain(domain);
-      }
-      setOptions(options);
-    })();
-  }, []);
-
-  const getOptionForDomain = (domain, option) => options[domain][option];
-
-  const setOptionForDomain = (domain) => (optionName, optionType) => (event) => {
-    let value = undefined;
-    switch (optionType) {
-      case "string":
-        value = event.target.value;
-        break;
-
-      case "number":
-        value =
-          event.target.value !== "" ? parseInt(event.target.value, 10) : 0;
-        break;
-
-      case "boolean":
-        value = event.target.checked;
-        break;
-    }
-
-    if (value === undefined) {
-      return;
-    }
-
-    const domainOptions = {
-      ...options[domain],
-      [optionName]: value,
-    };
-
-    setOptionsForDomain(domain)(domainOptions);
-  };
-
-  const setOptionsForDomain = (domain) => (domainOptions) => {
-    setOptions((options) => ({
-      ...options,
-      [domain]: domainOptions,
-    }));
-
-    Options.SetLocalOptionsForDomain(domain, domainOptions);
   };
 
   return (
@@ -119,16 +66,13 @@ export default function App() {
               ))}
             </TabList>
           </AppBar>
-          {Object.entries(tabs).map(([domain, panel]) => (
-            <TabPanel value={domain} key={domain}>
-              {panel({
-                options: options[domain],
-                setOption: setOptionForDomain(domain),
-                setOptions: setOptionsForDomain(domain),
-                getOptionForDomain
-              })}
-            </TabPanel>
-          ))}
+          <OptionsProvider>
+            {Object.entries(tabs).map(([domain, panel]) => (
+              <TabPanel value={domain} key={domain}>
+                {panel}
+              </TabPanel>
+            ))}
+          </OptionsProvider>
         </TabContext>
       </Paper>
     </ThemeProvider>

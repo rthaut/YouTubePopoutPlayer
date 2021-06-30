@@ -1,12 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
-import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -19,23 +17,29 @@ import Typography from "@material-ui/core/Typography";
 
 import TuneIcon from "@material-ui/icons/Tune";
 
+import TabPanelHeader from "./TabPanelHeader";
+
+import { useOptionsForDomain } from "../contexts/OptionsContext";
+
+import {
+  OPTIONS_BEHAVIOR_TARGET_VALUES,
+  OPTIONS_BEHAVIOR_CONTROLS_VALUES,
+} from "../../helpers/constants";
+
 export const DOMAIN = "behavior";
 
-// TODO: move these to constants.js
-const targetOptions = ["window", "tab"];
-const controlsOptions = ["none", "standard", "extended"];
-const toggleOptions = ["autoplay", "loop"];
+export default function BehaviorTab() {
+  const { options, setOption } = useOptionsForDomain(DOMAIN);
 
-export default function BehaviorTab({ options, setOption }) {
   function TargetOption() {
     return (
       <FormControl component="fieldset">
         <RadioGroup
           name="target"
           value={options["target"]}
-          onChange={setOption("target", "string")}
+          onChange={(event) => setOption("target", event.target.value)}
         >
-          {targetOptions.map((targetOptionName) => (
+          {OPTIONS_BEHAVIOR_TARGET_VALUES.map((targetOptionName) => (
             <React.Fragment key={targetOptionName}>
               <FormControlLabel
                 value={targetOptionName}
@@ -70,9 +74,9 @@ export default function BehaviorTab({ options, setOption }) {
           labelId="behavior-controls-label"
           id="behavior-controls-select"
           value={options["controls"]}
-          onChange={setOption("controls", "string")}
+          onChange={(event) => setOption("controls", event.target.value)}
         >
-          {controlsOptions.map((option) => (
+          {OPTIONS_BEHAVIOR_CONTROLS_VALUES.map((option) => (
             <MenuItem value={option} key={option}>
               {browser.i18n.getMessage(`BehaviorControls${option}OptionLabel`)}
             </MenuItem>
@@ -90,6 +94,7 @@ export default function BehaviorTab({ options, setOption }) {
   }
 
   function ToggleOptions() {
+    const toggleOptions = ["autoplay", "loop"];
     return (
       <List>
         {toggleOptions.map((toggleOptionName) => (
@@ -105,7 +110,9 @@ export default function BehaviorTab({ options, setOption }) {
                     name={toggleOptionName}
                     color="primary"
                     checked={options[toggleOptionName]}
-                    onChange={setOption(toggleOptionName, "boolean")}
+                    onChange={(event) =>
+                      setOption(toggleOptionName, event.target.checked)
+                    }
                   />
                 }
               />
@@ -126,23 +133,10 @@ export default function BehaviorTab({ options, setOption }) {
 
   return (
     <Box>
-      <Grid
-        container
-        wrap="nowrap"
-        spacing={1}
-        direction="row"
-        justify="flex-start"
-        alignItems="center"
-      >
-        <Grid item>
-          <TuneIcon />
-        </Grid>
-        <Grid item xs zeroMinWidth>
-          <Typography variant="h5" component="h2" gutterBottom>
-            {browser.i18n.getMessage("OptionsHeadingBehavior")}
-          </Typography>
-        </Grid>
-      </Grid>
+      <TabPanelHeader
+        icon={<TuneIcon />}
+        title={browser.i18n.getMessage("OptionsHeadingBehavior")}
+      />
       <Box marginTop={1} marginBottom={2}>
         <TargetOption />
       </Box>
@@ -155,13 +149,3 @@ export default function BehaviorTab({ options, setOption }) {
     </Box>
   );
 }
-
-BehaviorTab.propTypes = {
-  options: PropTypes.exact({
-    target: PropTypes.oneOf(targetOptions).isRequired,
-    controls: PropTypes.oneOf(controlsOptions).isRequired,
-    autoplay: PropTypes.bool.isRequired,
-    loop: PropTypes.bool.isRequired,
-  }).isRequired,
-  setOption: PropTypes.func.isRequired,
-};
