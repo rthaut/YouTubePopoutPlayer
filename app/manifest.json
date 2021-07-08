@@ -58,6 +58,9 @@
     "webRequest",
     "webRequestBlocking"
   ],
+  "optional_permissions": [
+    "tabs"
+  ],
   "__chrome__minimum_chrome_version": "49.0",
   "__edge__minimum_edge_version": "33.14281.1000.0",
   "__firefox__applications": {
