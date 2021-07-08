@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { usePrevious } from "react-use";
+
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
@@ -19,9 +21,13 @@ import TextField from "@material-ui/core/TextField";
 
 import SaveIcon from "@material-ui/icons/Save";
 
+import { useOptionsForDomain } from "../hooks/useOptions";
+
 import Utils from "../../helpers/utils";
 
 import { OPTIONS_SIZE_UNITS_VALUES } from "../../helpers/constants";
+
+import { DOMAIN } from "./SizeTab";
 
 function CustomDimensionsInfoTable({ units, width, height }) {
   if (units === "percentage") {
@@ -85,13 +91,24 @@ CustomDimensionsInfoTable.propTypes = {
   height: PropTypes.number.isRequired,
 };
 
-function CustomDimensionsForm({ options, save }) {
+function CustomDimensionsForm() {
+  const { options, setOptions } = useOptionsForDomain(DOMAIN);
+  console.log("CustomDimensionsForm ~ options", options);
+
   const [units, setUnits] = React.useState(options.units);
   const [width, setWidth] = React.useState(options.width);
   const [height, setHeight] = React.useState(options.height);
 
-  const [widthRestrictions, setWidthRestrictions] = React.useState({ min: 0, max: 0 });
-  const [heightRestrictions, setHeightRestrictions] = React.useState({ min: 0, max: 0 });
+  const prevUnits = usePrevious(units);
+
+  const [widthRestrictions, setWidthRestrictions] = React.useState({
+    min: 0,
+    max: 0,
+  });
+  const [heightRestrictions, setHeightRestrictions] = React.useState({
+    min: 0,
+    max: 0,
+  });
 
   React.useEffect(() => {
     switch (units) {
@@ -104,11 +121,25 @@ function CustomDimensionsForm({ options, save }) {
           min: parseInt(window.screen.availHeight * 0.1, 10),
           max: window.screen.availHeight,
         });
+
+        if (prevUnits === "percentage") {
+          const { width: newWidth, height: newHeight } =
+            convertPercentagesToPixels({ width, height });
+          setWidth(newWidth);
+          setHeight(newHeight);
+        }
         break;
 
       case "percentage":
         setWidthRestrictions({ min: 10, max: 100 });
         setHeightRestrictions({ min: 10, max: 100 });
+
+        if (prevUnits === "pixels") {
+          const { width: newWidth, height: newHeight } =
+            convertPixelsToPercentages({ width, height });
+          setWidth(newWidth);
+          setHeight(newHeight);
+        }
         break;
     }
   }, [units]);
@@ -127,33 +158,51 @@ function CustomDimensionsForm({ options, save }) {
     }
   };
 
-  // TODO: build and use this when switching from pixels to percentages (so we can be smart about changing the values)
-  // const convertPixelsToPercentages = ({ width, height }) => { };
+  const convertPixelsToPercentages = ({ width, height }) => {
+    return {
+      width: (width / window.screen.availWidth) * 100,
+      height: (height / window.screen.availHeight) * 100,
+    };
+  };
 
-  // TODO: build and use this when switching from percentages to pixels (so we can be smart about changing the values)
-  // const convertPercentagesToPixels = ({ width, height }) => { };
+  const convertPercentagesToPixels = ({ width, height }) => {
+    return {
+      width: Utils.GetDimensionForScreenPercentage("Width", width),
+      height: Utils.GetDimensionForScreenPercentage("Height", height),
+    };
+  };
 
-  const areDimensionsOptionsValid = () => {
-    if (width === undefined || width === null || width < widthRestrictions["min"] || width > widthRestrictions["max"]) {
+  const validateDimensions = () => {
+    if (
+      width === undefined ||
+      width === null ||
+      width < widthRestrictions["min"] ||
+      width > widthRestrictions["max"]
+    ) {
+      console.warn("width is invalid", width);
       return false;
     }
 
-    if (height === undefined || height === null || height < heightRestrictions["min"] || height > heightRestrictions["max"]) {
+    if (
+      height === undefined ||
+      height === null ||
+      height < heightRestrictions["min"] ||
+      height > heightRestrictions["max"]
+    ) {
+      console.warn("height is invalid", width);
       return false;
     }
 
     return true;
-  }
+  };
 
-
-  const haveDimensionsOptionsChanged = () =>
+  const dimensionsChanged = () =>
     units !== options["units"] ||
     width !== options["width"] ||
     height !== options["height"];
 
   return (
     <Box padding={2}>
-
       <FormControl fullWidth>
         <InputLabel id="size-units-label">
           {browser.i18n.getMessage("DimensionUnitsLabel")}
@@ -187,7 +236,7 @@ function CustomDimensionsForm({ options, save }) {
             label="Width"
             type="number"
             margin="normal"
-            value={width}
+            value={parseInt(width, 10)}
             onChange={handleDimensionInputChange("width")}
             InputLabelProps={{}}
             InputProps={{
@@ -210,7 +259,7 @@ function CustomDimensionsForm({ options, save }) {
             label="Height"
             type="number"
             margin="normal"
-            value={height}
+            value={parseInt(height, 10)}
             onChange={handleDimensionInputChange("height")}
             InputLabelProps={{}}
             InputProps={{
@@ -243,41 +292,28 @@ function CustomDimensionsForm({ options, save }) {
           startIcon={<SaveIcon />}
           fullWidth
           disabled={
-            !areDimensionsOptionsValid() || !haveDimensionsOptionsChanged()
+            !validateDimensions() || !dimensionsChanged()
+          }
+          onClick={() =>
+            setOptions({
+              units,
+              width: parseInt(width, 10),
+              height: parseInt(height, 10),
+            })
           }
         >
           {browser.i18n.getMessage("ButtonSaveCustomDimensionsLabel")}
         </Button>
-      </Box>
 
+      </Box>
     </Box>
   );
 }
 
-CustomDimensionsForm.propTypes = {
-  options: PropTypes.shape({
-    units: PropTypes.oneOf(OPTIONS_SIZE_UNITS_VALUES).isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-  }).isRequired,
-  save: PropTypes.func.isRequired,
-};
-
-export default function CustomDimensions({ options, setOptions }) {
-  const save = (options) => setOptions(options);
-
+export default function CustomDimensions() {
   return (
     <>
-      <CustomDimensionsForm options={options} save={save} />
+      <CustomDimensionsForm />
     </>
   );
 }
-
-CustomDimensions.propTypes = {
-  options: PropTypes.shape({
-    units: PropTypes.oneOf(OPTIONS_SIZE_UNITS_VALUES).isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-  }).isRequired,
-  setOptions: PropTypes.func.isRequired,
-};

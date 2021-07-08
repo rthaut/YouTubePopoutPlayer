@@ -1,15 +1,26 @@
 import React from "react";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
+import blue from '@material-ui/core/colors/blue';
+import red from '@material-ui/core/colors/red';
+
+import Alert from "@material-ui/lab/Alert";
 import AppBar from "@material-ui/core/AppBar";
+import Box from "@material-ui/core/Box";
+import Paper from "@material-ui/core/Paper";
 import Tab from "@material-ui/core/Tab";
 import TabContext from "@material-ui/lab/TabContext";
 import TabList from "@material-ui/lab/TabList";
 import TabPanel from "@material-ui/lab/TabPanel";
+import Typography from "@material-ui/core/Typography";
 
-import { OptionsProvider } from "./contexts/OptionsContext";
+import CloudOffIcon from "@material-ui/icons/CloudOff";
+
+import { ExtensionStorageProvider } from "./contexts/ExtensionStorage";
+
+import ResetOptions from "./components/ResetOptions";
 
 import BehaviorTab, {
   DOMAIN as BehaviorDomain,
@@ -28,10 +39,13 @@ export default function OptionsApp() {
         palette: {
           type: prefersDarkMode ? "dark" : "light",
           primary: {
-            main: "#d50000",
+            main: blue[800],
           },
           secondary: {
-            main: "#d32f2f",
+            main: red["A700"],
+          },
+          background: {
+            default: prefersDarkMode ? "#303030" : "#fff",
           },
         },
       }),
@@ -51,30 +65,46 @@ export default function OptionsApp() {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Paper elevation={0} square variant="outlined">
-        <TabContext value={tabValue}>
-          <AppBar position="static" color="default">
-            <TabList onChange={handleTabChange} variant="fullWidth">
-              {Object.keys(tabs).map((tab) => (
-                <Tab
-                  label={browser.i18n.getMessage(`OptionsTabName${tab}`)}
-                  value={tab}
-                  key={tab}
-                />
-              ))}
-            </TabList>
-          </AppBar>
-          <OptionsProvider>
+    <ExtensionStorageProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box marginTop={1} marginBottom={2}>
+          <Alert
+            severity="info"
+            icon={<CloudOffIcon color="primary" fontSize="inherit" />}
+            // onClose={() => {}} // TODO: use a cookie here? or an extension storage item? how/when to re-display it?
+          >
+            <Typography
+              dangerouslySetInnerHTML={{
+                __html: browser.i18n.getMessage("OptionsPerDeviceWarning"),
+              }}
+            />
+          </Alert>
+        </Box>
+        <Paper elevation={0} square variant="outlined">
+          <TabContext value={tabValue}>
+            <AppBar position="static" color="default">
+              <TabList onChange={handleTabChange} variant="fullWidth">
+                {Object.keys(tabs).map((tab) => (
+                  <Tab
+                    label={browser.i18n.getMessage(`OptionsTabName${tab}`)}
+                    value={tab}
+                    key={tab}
+                  />
+                ))}
+              </TabList>
+            </AppBar>
             {Object.entries(tabs).map(([domain, panel]) => (
               <TabPanel value={domain} key={domain}>
                 {panel}
               </TabPanel>
             ))}
-          </OptionsProvider>
-        </TabContext>
-      </Paper>
-    </ThemeProvider>
+          </TabContext>
+        </Paper>
+        <Box marginTop={2} marginBottom={1}>
+          <ResetOptions />
+        </Box>
+      </ThemeProvider>
+    </ExtensionStorageProvider>
   );
 }

@@ -13,19 +13,20 @@ import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import CustomDimensions from "./CustomDimensions";
 import TabPanelHeader from "./TabPanelHeader";
 
-import { useOptions, useOptionsForDomain } from "../contexts/OptionsContext";
+import { useOptions, useOptionsForDomain } from "../hooks/useOptions";
 
 import { OPTIONS_SIZE_MODE_VALUES } from "../../helpers/constants";
 
 export const DOMAIN = "size";
 
 export default function SizeTab() {
-  const { options, setOption, setOptions } = useOptionsForDomain(DOMAIN);
   const { getOptionForDomain } = useOptions();
+  const { options, setOption } = useOptionsForDomain(DOMAIN);
+  console.log("SizeTab ~ options", options)
 
   const targetIsTab = getOptionForDomain("behavior", "target") === "tab";
 
-  function ModeOption() {
+  function ModeOptionControl() {
     return (
       <FormControl component="fieldset">
         <RadioGroup
@@ -37,7 +38,7 @@ export default function SizeTab() {
             <React.Fragment key={modeOptionName}>
               <FormControlLabel
                 value={modeOptionName}
-                control={<Radio />}
+                control={<Radio color="primary" />}
                 label={browser.i18n.getMessage(
                   `OptionsSizeMode${modeOptionName}Label`
                 )}
@@ -73,16 +74,15 @@ export default function SizeTab() {
       ) : (
         <>
           <Box marginY={1}>
-            <ModeOption />
+            <ModeOptionControl />
           </Box>
           {options["mode"] === "custom" && (
-            <CustomDimensions options={options} setOptions={setOptions} />
+            <CustomDimensions />
           )}
-          <pre>
-            <code>{JSON.stringify(options, null, 2)}</code>
-          </pre>
         </>
       )}
     </Box>
   );
 }
+
+SizeTab.whyDidYouRender = true;

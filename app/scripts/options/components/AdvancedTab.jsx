@@ -1,18 +1,25 @@
 import React from "react";
 
+import Alert from '@material-ui/lab/Alert';
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
+import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
+import IconButton from '@material-ui/core/IconButton';
+import Input from "@material-ui/core/Input";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import InputLabel from "@material-ui/core/InputLabel";
 import Switch from "@material-ui/core/Switch";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
+import CheckIcon from '@material-ui/icons/Check';
 import SettingsIcon from "@material-ui/icons/Settings";
 
 import TabPanelHeader from "./TabPanelHeader";
 
-import { useOptionsForDomain } from "../contexts/OptionsContext";
+import { useOptionsForDomain } from "../hooks/useOptions";
+
+import { useDebounce } from "react-use";
 
 import Utils from "../../helpers/utils";
 
@@ -20,6 +27,7 @@ export const DOMAIN = "advanced";
 
 export default function AdvancedTab() {
   const { options, setOption } = useOptionsForDomain(DOMAIN);
+  console.log("AdvancedTab ~ options", options)
 
   const [isFirefox, setIsFirefox] = React.useState(false);
   React.useEffect(() => {
@@ -28,18 +36,41 @@ export default function AdvancedTab() {
     })();
   }, []);
 
-  const [title, setTitle] = React.useState(options.title);
-  React.useEffect(() => {
-    setOption("title", title);
-  }, [title]);
+  function TitleOptionControl() {
+    const [title, setTitle] = React.useState(options["title"]);
 
-  function TitleOption() {
+    const saveTitle = () => {
+      if (title !== options["title"]) {
+        setOption("title", title);
+      }
+    };
+
+    useDebounce(saveTitle, 2000, [title, options]);
+
     return (
-      <FormGroup>
-        <TextField
-          label={browser.i18n.getMessage("OptionsAdvancedTitleLabel")}
+      <FormControl>
+        <InputLabel htmlFor="title-input" variant="standard">
+          {browser.i18n.getMessage("OptionsAdvancedTitleLabel")}
+        </InputLabel>
+        <Input
+          id="title-input"
+          type="text"
           value={title}
           onChange={(event) => setTitle(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.code === "Enter") {
+              saveTitle();
+            }
+          }}
+          endAdornment={
+            title !== options["title"] && (
+              <InputAdornment position="end">
+                <IconButton onClick={saveTitle} edge="end">
+                  <CheckIcon />
+                </IconButton>
+              </InputAdornment>
+            )
+          }
         />
         <Typography
           color="textSecondary"
@@ -47,31 +78,75 @@ export default function AdvancedTab() {
             __html: browser.i18n.getMessage("OptionsAdvancedTitleDescription"),
           }}
         />
-      </FormGroup>
+      </FormControl>
     );
   }
 
-  function CloseOption() {
+  function CloseOptionControl() {
+    const [showPermissionError, setShowPermissionError] = React.useState(false);
+
+    // TODO: extract this to a generic utility function for re-use? (if future optional permissions are ever introduced)
+    const handleCloseSwitchToggle = async (event) => {
+      setShowPermissionError(false);
+
+      const permissionsRequest = {
+        permissions: ["tabs"],
+      };
+
+      if (!event.target.checked) {
+        await browser.permissions.remove(permissionsRequest);
+        setOption("close", false);
+        return;
+      }
+
+      const permissionGranted = await browser.permissions.request(
+        permissionsRequest
+      );
+
+      if (!permissionGranted) {
+        setShowPermissionError(true);
+        return;
+      }
+
+      setOption("close", true);
+    };
+
     return (
-      <FormGroup>
-        <FormControlLabel
-          label={browser.i18n.getMessage("OptionsAdvancedCloseLabel")}
-          control={
-            <Switch
-              name="close-switch"
-              color="primary"
-              checked={options["close"]}
-              onChange={(event) => setOption("close", event.target.checked)}
-            />
-          }
-        />
-        <Typography
-          color="textSecondary"
-          dangerouslySetInnerHTML={{
-            __html: browser.i18n.getMessage("OptionsAdvancedCloseDescription"),
-          }}
-        />
-      </FormGroup>
+      <>
+        <FormControl>
+          <FormControlLabel
+            label={browser.i18n.getMessage("OptionsAdvancedCloseLabel")}
+            control={
+              <Switch
+                name="close-switch"
+                color="primary"
+                checked={options["close"]}
+                onChange={handleCloseSwitchToggle}
+              />
+            }
+          />
+          {showPermissionError && (
+            <Alert
+              severity="error"
+              onClose={() => {
+                setShowPermissionError(false);
+              }}
+            >
+              {browser.i18n.getMessage(
+                "FieldRequiredPermissionsNotGrantedMessage"
+              )}
+            </Alert>
+          )}
+          <Typography
+            color="textSecondary"
+            dangerouslySetInnerHTML={{
+              __html: browser.i18n.getMessage(
+                "OptionsAdvancedCloseDescription"
+              ),
+            }}
+          />
+        </FormControl>
+      </>
     );
   }
 
@@ -82,16 +157,18 @@ export default function AdvancedTab() {
         title={browser.i18n.getMessage("OptionsHeadingAdvanced")}
       />
       <Box marginTop={1} marginBottom={2}>
-        <CloseOption />
+        <CloseOptionControl />
       </Box>
       {isFirefox && (
         <>
           <Divider />
-          <Box marginTop={1}>
-            <TitleOption />
+          <Box marginTop={2}>
+            <TitleOptionControl />
           </Box>
         </>
       )}
     </Box>
   );
 }
+
+AdvancedTab.whyDidYouRender = true;

@@ -19,7 +19,7 @@ import TuneIcon from "@material-ui/icons/Tune";
 
 import TabPanelHeader from "./TabPanelHeader";
 
-import { useOptionsForDomain } from "../contexts/OptionsContext";
+import { useOptionsForDomain } from "../hooks/useOptions";
 
 import {
   OPTIONS_BEHAVIOR_TARGET_VALUES,
@@ -30,8 +30,9 @@ export const DOMAIN = "behavior";
 
 export default function BehaviorTab() {
   const { options, setOption } = useOptionsForDomain(DOMAIN);
+  console.log("BehaviorTab ~ options", options)
 
-  function TargetOption() {
+  function TargetOptionControl() {
     return (
       <FormControl component="fieldset">
         <RadioGroup
@@ -43,7 +44,7 @@ export default function BehaviorTab() {
             <React.Fragment key={targetOptionName}>
               <FormControlLabel
                 value={targetOptionName}
-                control={<Radio />}
+                control={<Radio color="primary" />}
                 label={browser.i18n.getMessage(
                   `OptionsBehaviorTarget${targetOptionName}Label`
                 )}
@@ -64,7 +65,7 @@ export default function BehaviorTab() {
     );
   }
 
-  function ShowControlsOption() {
+  function ShowControlsOptionControl() {
     return (
       <FormControl fullWidth>
         <InputLabel id="behavior-controls-label">
@@ -93,7 +94,7 @@ export default function BehaviorTab() {
     );
   }
 
-  function ToggleOptions() {
+  function ToggleOptionsControls() {
     const toggleOptions = ["autoplay", "loop"];
     return (
       <List>
@@ -138,14 +139,16 @@ export default function BehaviorTab() {
         title={browser.i18n.getMessage("OptionsHeadingBehavior")}
       />
       <Box marginTop={1} marginBottom={2}>
-        <TargetOption />
+        <TargetOptionControl />
       </Box>
       <Divider />
       <Box marginTop={2}>
-        <ShowControlsOption />
+        <ShowControlsOptionControl />
       </Box>
       <Divider />
-      <ToggleOptions />
+      <ToggleOptionsControls />
     </Box>
   );
 }
+
+BehaviorTab.whyDidYouRender = true;
