@@ -1,0 +1,72 @@
+{
+  "name": "__MSG_ExtensionName__",
+  "short_name": "__MSG_ExtensionShortName__",
+  "description": "__MSG_ExtensionDescription__",
+  "homepage_url": "https://rthaut.github.io/YouTubePopoutPlayer/",
+  "manifest_version": 2,
+  "default_locale": "en",
+  "icons": {
+    "16": "images/icon-16.png",
+    "32": "images/icon-32.png",
+    "48": "images/icon-48.png",
+    "64": "images/icon-64.png",
+    "128": "images/icon-128.png"
+  },
+  "background": {
+    "scripts": [
+      "scripts/background.js"
+    ]
+  },
+  "browser_action": {
+    "default_icon": {
+      "19": "images/icon-19.png",
+      "38": "images/icon-38.png"
+    },
+    "default_title": "__MSG_BrowserActionTitle__"
+  },
+  "commands": {
+    "open-popout": {
+      "suggested_key": {
+        "default": "Ctrl+Up"
+      },
+      "description": "__MSG_OpenPopoutCommandDescription__"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.youtube-nocookie.com/*"
+      ],
+      "css": [
+        "styles/content.css"
+      ],
+      "js": [
+        "scripts/content.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ],
+  "options_ui": {
+    "page": "pages/options.html"
+  },
+  "permissions": [
+    "*://*.youtube.com/*",
+    "*://*.youtube-nocookie.com/*",
+    "storage",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "optional_permissions": [
+    "tabs"
+  ],
+  "__chrome__minimum_chrome_version": "49.0",
+  "__edge__minimum_edge_version": "33.14281.1000.0",
+  "__firefox__applications": {
+    "gecko": {
+      "id": "{85b42b8f-49cd-4935-aeca-a6b32dd6ac9f}",
+      "strict_min_version": "60.0"
+    }
+  }
+}
