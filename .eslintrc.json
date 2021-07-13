@@ -17,5 +17,10 @@
   },
   "rules": {
     "no-useless-escape": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
