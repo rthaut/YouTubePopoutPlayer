@@ -1,4 +1,4 @@
-[<img align="right" src="https://img.shields.io/badge/all_contributors-2-orange.svg" alt="All Contributors"/>](#contributors)
+[<img align="right" src="https://img.shields.io/badge/all_contributors-8-green.svg" alt="All Contributors"/>](#contributors)
 
 # YouTube Popout Player v3.1.1
 
