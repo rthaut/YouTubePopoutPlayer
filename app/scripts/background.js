@@ -110,7 +110,7 @@ browser.webRequest.onBeforeSendHeaders.addListener(
       );
 
       // only if the Referer header is not already set
-      if (!details.requestHeaders.some((header) => header.name === "Referer")) {
+      if (!details.requestHeaders.some((header) => header.name.toLowerCase() === "referer")) {
         const referer = {
           name: "Referer",
           value: details.url,
