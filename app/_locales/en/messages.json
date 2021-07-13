@@ -1,7 +1,15 @@
 {
   "OpenPopoutCommandDescription": {
-    "message": "Open popout player for this YouTube video",
-    "description": "The description for the 'open-popout' extension command"
+    "message": "Open popout player for the current YouTube video",
+    "description": "The description for the 'open-popout-auto-close-command' extension command"
+  },
+  "OpenPopoutForceCloseCommandDescription": {
+    "message": "Open popout player for the current YouTube video AND close the current window/tab",
+    "description": "The description for the 'open-popout-force-close-command' extension command"
+  },
+  "OpenPopoutNoCloseCommandDescription": {
+    "message": "Open popout player for the current YouTube video BUT DO NOT close the current window/tab",
+    "description": "The description for the 'open-popout-no-close-command' extension command"
   },
   "CommandListHeading": {
     "message": "Keyboard Shortcuts"

@@ -13,7 +13,7 @@ const YouTubePopoutPlayer = (() => {
       this.insertControls();
       this.watchPageChange();
 
-      browser.runtime.onMessage.addListener((message, sender) => {
+      browser.runtime.onMessage.addListener(async (message, sender) => {
         console.log(
           "[Content] YouTubePopoutPlayer Runtime Message",
           message,
@@ -22,9 +22,11 @@ const YouTubePopoutPlayer = (() => {
 
         if (message.action !== undefined) {
           switch (message.action.toLowerCase()) {
-            case "open-popout-command":
-              this.openPopout();
-              return;
+            case "open-popout-via-command":
+              await this.openPopout();
+              if (message.data?.closeTab) {
+                await this.closeTab(message.data?.enforceDomainRestriction);
+              }
           }
 
           console.log(
@@ -162,7 +164,7 @@ const YouTubePopoutPlayer = (() => {
         "click",
         (event) => {
           console.log("Context Menu Item Click", event);
-          this.openPopout();
+          this.handleControlClickEvent(event);
         },
         false
       );
@@ -286,7 +288,7 @@ const YouTubePopoutPlayer = (() => {
         "click",
         (event) => {
           console.log("Player Controls Button Click", event);
-          this.openPopout();
+          this.handleControlClickEvent(event);
         },
         false
       );
@@ -298,9 +300,22 @@ const YouTubePopoutPlayer = (() => {
     }
 
     /**
+     * Click event handler for the context menu entry and the controls button
+     * @param {MouseEvent} event the original click event
+     */
+    async handleControlClickEvent(event) {
+      event.preventDefault();
+
+      await this.openPopout();
+      if (await Options.GetLocalOption("advanced", "close")) {
+        await this.closeTab(true);
+      }
+    }
+
+    /**
      * Opens the Popout Player (via a request to the background script)
      */
-    openPopout() {
+    async openPopout() {
       console.log("YouTubePopoutPlayer.openPopout()");
 
       const container =
@@ -315,42 +330,55 @@ const YouTubePopoutPlayer = (() => {
         id = this.getVideoIDFromURL(window.location.href);
       }
 
-      browser.runtime
-        .sendMessage({
+      try {
+        const response = await browser.runtime.sendMessage({
           action: "open-popout",
           data: {
-            id: id,
+            id,
             list: this.getPlaylistIDFromURL(window.location.href),
             time: player.getTime(),
             width: player.getWidth(),
             height: player.getHeight(),
           },
-        })
-        .then((response) => {
-          if (response !== undefined) {
-            console.log(
-              'YouTubePopoutPlayer.openPopout() :: Action "open-popout" response',
-              response
-            );
-          }
-          player.pause();
-
-          // note: the background script will only close the original tab when appropriate
-          return browser.runtime.sendMessage({
-            action: "close-original-tab",
-          });
-        })
-        .then((response) => {
-          if (response !== undefined) {
-            console.log(
-              'YouTubePopoutPlayer.openPopout() :: Action "close-original-tab" response',
-              response
-            );
-          }
-        })
-        .catch((error) => {
-          console.error("YouTubePopoutPlayer.openPopout() ::", error);
         });
+
+        if (response !== undefined) {
+          console.log(
+            'YouTubePopoutPlayer.openPopout() :: Action "open-popout" response',
+            response
+          );
+        }
+
+        player.pause();
+      } catch (error) {
+        console.error("YouTubePopoutPlayer.openPopout() :: Error", error);
+      }
+    }
+
+    /**
+     * Closes the current tab (via a request to the background script)
+     * @param {Boolean} [enforceDomainRestriction] if the tab should only be closed if it is on a known YouTube domain
+     */
+    async closeTab(enforceDomainRestriction = true) {
+      console.log("YouTubePopoutPlayer.closeTab()");
+
+      try {
+        const response = await browser.runtime.sendMessage({
+          action: "close-tab",
+          data: {
+            enforceDomainRestriction,
+          },
+        });
+
+        if (response !== undefined) {
+          console.log(
+            'YouTubePopoutPlayer.closeTab() :: Action "close-tab" response',
+            response
+          );
+        }
+      } catch (error) {
+        console.error("YouTubePopoutPlayer.closeTab() :: Error", error);
+      }
     }
 
     /**

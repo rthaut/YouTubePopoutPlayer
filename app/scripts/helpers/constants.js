@@ -1,6 +1,9 @@
-export const YOUTUBE_EMBED_URL = "https://www.youtube.com/embed/";
-export const YOUTUBE_NOCOOKIE_EMBED_URL =
-  "https://www.youtube-nocookie.com/embed/";
+export const YOUTUBE_DOMAIN = "youtube.com";
+export const YOUTUBE_NOCOOKIE_DOMAIN = "youtube-nocookie.com";
+export const YOUTUBE_DOMAINS = [YOUTUBE_DOMAIN, YOUTUBE_NOCOOKIE_DOMAIN];
+
+export const YOUTUBE_EMBED_URL = `https://www.${YOUTUBE_DOMAIN}/embed/`;
+export const YOUTUBE_NOCOOKIE_EMBED_URL = `https://www.${YOUTUBE_NOCOOKIE_DOMAIN}/embed/`;
 
 export const START_THRESHOLD = 5; // TODO: should this be configurable?
 

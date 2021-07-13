@@ -195,61 +195,6 @@ const Popout = (() => {
       console.log("[Background] Popout.getURL() :: Return", url);
       return url;
     },
-
-    closeOriginalTab: async function (tabId) {
-      console.log("[Background] Popout.closeOriginalTab()", tabId);
-
-      const closeOriginalWindowTab = await Options.GetLocalOption(
-        "advanced",
-        "close"
-      );
-
-      if (closeOriginalWindowTab) {
-        const tab = await browser.tabs.get(tabId);
-
-        // if the "tabs" permission is not granted, the tab object does NOT include the `url` property
-        // we cannot request that permission now, as we are outside of a synchronous user input handler
-        if (tab && tab.url && tab.url !== undefined) {
-          console.log(
-            "[Background] Popout.closeOriginalTab() :: Original tab",
-            tab
-          );
-
-          const url = new URL(tab.url);
-          const domain = url.hostname.split(".").splice(-2).join(".");
-          console.log(
-            "[Background] Popout.closeOriginalTab() :: Original tab domain",
-            domain
-          );
-
-          if (domain === "youtube.com") {
-            // TODO: other YouTube domains to support?
-            console.log(
-              "[Background] Popout.closeOriginalTab() :: Closing original tab"
-            );
-            const promise = browser.tabs.remove(tab.id);
-
-            console.log(
-              "[Background] Popout.closeOriginalTab() :: Return [Promise]",
-              promise
-            );
-            return promise;
-          } else {
-            console.info(
-              "[Background] Popout.closeOriginalTab() :: Original tab is NOT YouTube"
-            );
-          }
-        } else {
-          const error = new Error(
-            'Unable to determine if original window/tab should be closed (likely due to the "tabs" permission not being granted)'
-          );
-          console.error("[Background] Popout.closeOriginalTab() ::", error);
-          return Promise.reject(error);
-        }
-      }
-
-      return Promise.resolve();
-    },
   };
 
   return Popout;

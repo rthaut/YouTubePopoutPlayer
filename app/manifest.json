@@ -25,11 +25,23 @@
     "default_title": "__MSG_BrowserActionTitle__"
   },
   "commands": {
-    "open-popout": {
+    "open-popout-auto-close-command": {
       "suggested_key": {
         "default": "Ctrl+Up"
       },
       "description": "__MSG_OpenPopoutCommandDescription__"
+    },
+    "open-popout-force-close-command": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Up"
+      },
+      "description": "__MSG_OpenPopoutForceCloseCommandDescription__"
+    },
+    "open-popout-no-close-command": {
+      "suggested_key": {
+        "default": "Ctrl+Alt+Up"
+      },
+      "description": "__MSG_OpenPopoutNoCloseCommandDescription__"
     }
   },
   "content_scripts": [
