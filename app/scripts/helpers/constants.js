@@ -27,6 +27,10 @@ export const OPTION_DEFAULTS = {
 };
 
 export const OPTIONS_BEHAVIOR_TARGET_VALUES = ["window", "tab"];
-export const OPTIONS_BEHAVIOR_CONTROLS_VALUES = ["none", "standard", "extended"];
+export const OPTIONS_BEHAVIOR_CONTROLS_VALUES = [
+  "none",
+  "standard",
+  "extended",
+];
 export const OPTIONS_SIZE_MODE_VALUES = ["current", "custom"];
 export const OPTIONS_SIZE_UNITS_VALUES = ["pixels", "percentage"];
