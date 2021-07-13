@@ -10,8 +10,6 @@ const Popout = (() => {
     open: async function ({ id, list, time, width, height }) {
       console.log("[Background] Popout.open()", id, list, time, width, height);
 
-      let promise;
-
       // https://developers.google.com/youtube/player_parameters
       const params = {};
 
@@ -19,6 +17,7 @@ const Popout = (() => {
       params.popout = 1;
 
       const behavior = await Options.GetLocalOptionsForDomain("behavior");
+      console.log("[Background] Popout.open() :: Behavior options", behavior);
 
       ["autoplay", "loop"].forEach((param) => {
         params[param] = behavior[param] ? 1 : 0; // convert true/false to 1/0 for URL params
@@ -42,7 +41,7 @@ const Popout = (() => {
 
         default:
           console.warn(
-            "[Background] Popout.open() :: Invalid value for controls option",
+            '[Background] Popout.open() :: Invalid value for "behavior.controls" option',
             behavior.controls
           );
           // use values for "standard" configuration
@@ -50,8 +49,6 @@ const Popout = (() => {
           params.modestbranding = 0;
           break;
       }
-
-      params.controls = behavior.controls === "none" ? 0 : 1;
 
       if (time <= START_THRESHOLD) {
         console.info(
@@ -72,19 +69,20 @@ const Popout = (() => {
 
       const url = this.getURL(id, params);
 
+      let result;
       switch (behavior.target.toLowerCase()) {
         case "tab":
-          promise = this.openTab(url);
+          result = this.openTab(url);
           break;
 
         case "window":
         default:
-          promise = this.openWindow(url, width, height);
+          result = this.openWindow(url, width, height);
           break;
       }
 
-      console.log("[Background] Popout.open() :: Return [Promise]", promise);
-      return promise;
+      console.log("[Background] Popout.open() :: Return", result);
+      return result;
     },
 
     /**
@@ -92,19 +90,19 @@ const Popout = (() => {
      * @param {string} url the URL of the Embedded Player to open in a new window
      * @returns {Promise}
      */
-    openTab: function (url) {
+    openTab: async function (url) {
       console.log("[Background] Popout.openTab()", url);
 
       const createData = {
         active: true, // TODO: should this be configurable?
-        url: url,
+        url,
       };
 
       console.log("[Background] Popout.openTab() :: Creating Tab", createData);
-      const promise = browser.tabs.create(createData);
+      const result = await browser.tabs.create(createData);
 
-      console.log("[Background] Popout.openTab() :: Return [Promise]", promise);
-      return promise;
+      console.log("[Background] Popout.openTab() :: Return", result);
+      return result;
     },
 
     /**
@@ -149,7 +147,7 @@ const Popout = (() => {
         width: width + WIDTH_PADDING, // manually increasing size to account for window frame
         height: height + HEIGHT_PADDING, // manually increasing size to account for window frame
         type: "popup",
-        url: url,
+        url,
       };
 
       const isFirefox = await Utils.IsFirefox();
@@ -165,13 +163,10 @@ const Popout = (() => {
         "[Background] Popout.openWindow() :: Creating Window",
         createData
       );
-      const promise = browser.windows.create(createData);
+      const result = await browser.windows.create(createData);
 
-      console.log(
-        "[Background] Popout.openWindow() :: Return [Promise]",
-        promise
-      );
-      return promise;
+      console.log("[Background] Popout.openWindow() :: Return", result);
+      return result;
     },
 
     /**
