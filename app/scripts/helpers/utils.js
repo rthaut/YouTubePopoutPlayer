@@ -11,7 +11,7 @@ export const GetDimensionForScreenPercentage = (dimension, percentage) => {
     percentage = percentage / 100;
   }
 
-  dimension = this.TitleCase(dimension);
+  dimension = TitleCase(dimension);
 
   if (
     window &&
