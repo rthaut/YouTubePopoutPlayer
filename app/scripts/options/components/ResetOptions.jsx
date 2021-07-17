@@ -22,8 +22,16 @@ export default function ResetOptions() {
     setDialogOpen(true);
   };
 
-  const handleClose = () => {
-    setDialogOpen(false);
+  const handleClose = (event, reason) => {
+    switch (reason) {
+      case "escapeKeyDown":
+      case "backdropClick":
+        return;
+
+      default:
+        setDialogOpen(false);
+        break;
+    }
   };
 
   const handleConfirm = async () => {
@@ -37,7 +45,7 @@ export default function ResetOptions() {
       <Grid
         container
         direction="column"
-        justify="center"
+        justifyContent="center"
         alignItems="center"
         spacing={0}
       >
@@ -55,7 +63,6 @@ export default function ResetOptions() {
       <Dialog
         open={dialogOpen}
         onClose={handleClose}
-        disableBackdropClick
         keepMounted
       >
         <DialogTitle>

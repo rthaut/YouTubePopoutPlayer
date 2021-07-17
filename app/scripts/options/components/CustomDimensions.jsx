@@ -226,7 +226,7 @@ function CustomDimensionsForm() {
         container
         spacing={2}
         direction="row"
-        justify="flex-start"
+        justifyContent="flex-start"
         alignItems="center"
       >
         <Grid item xs>

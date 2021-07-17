@@ -11,7 +11,7 @@ export default function TabPanelHeader({ title, icon = null }) {
       wrap="nowrap"
       spacing={1}
       direction="row"
-      justify="flex-start"
+      justifyContent="flex-start"
       alignItems="center"
     >
       {icon && <Grid item>{icon}</Grid>}
