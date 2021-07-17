@@ -1,5 +1,6 @@
 import Options from "../helpers/options";
-import Utils from "../helpers/utils";
+import { IsPopoutPlayer } from "../helpers/utils";
+import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
 import HTML5Player from "./HTML5Player.class";
 
 const YouTubePopoutPlayer = (() => {
@@ -47,51 +48,7 @@ const YouTubePopoutPlayer = (() => {
     getVideoIDFromPlayer(player) {
       console.group("YouTubePopoutPlayer.getVideoIDFromPlayer()");
 
-      const id = this.getVideoIDFromURL(player.baseURI);
-
-      console.log("Return", id);
-      console.groupEnd();
-      return id;
-    }
-
-    /**
-     * Gets the YouTube video ID from the specified YouTube URL
-     * @param {String} url
-     * @return {String}
-     */
-    getVideoIDFromURL(url) {
-      console.group("YouTubePopoutPlayer.getVideoIDFromURL()");
-
-      let id = null;
-
-      const result = new RegExp(
-        /(?:(?:v=)|(?:\/embed\/)|(?:\/youtu\.be\/))([^\?\&\/]{11})/
-      ).exec(url);
-      console.log("RegExp Result", result);
-
-      if (result && result[1]) {
-        id = result[1];
-      }
-
-      console.log("Return", id);
-      console.groupEnd();
-      return id;
-    }
-
-    /**
-     * Gets the YouTube playlist ID from the specified YouTube URL
-     * @param {String} url
-     * @return {String}
-     */
-    getPlaylistIDFromURL(url) {
-      console.group("YouTubePopoutPlayer.getPlaylistIDFromURL()");
-
-      let id = null;
-
-      url = new URL(url);
-      if (url.searchParams !== undefined && url.searchParams !== null) {
-        id = url.searchParams.get("list");
-      }
+      const id = GetVideoIDFromURL(player.baseURI);
 
       console.log("Return", id);
       console.groupEnd();
@@ -200,7 +157,7 @@ const YouTubePopoutPlayer = (() => {
     async insertPlayerControlsButton() {
       console.group("YouTubePopoutPlayer.insertPlayerControlsButton()");
 
-      if (Utils.IsPopoutPlayer(window.location)) {
+      if (IsPopoutPlayer(window.location)) {
         const controls = await Options.GetLocalOption("behavior", "controls");
         if (controls !== "extended") {
           console.info(
@@ -327,7 +284,7 @@ const YouTubePopoutPlayer = (() => {
       let id = this.getVideoIDFromPlayer(player.getVideo());
       if (id === undefined || id === null || id.length === 0) {
         // fallback to parsing the video ID from the page's address
-        id = this.getVideoIDFromURL(window.location.href);
+        id = GetVideoIDFromURL(window.location.href);
       }
 
       try {
@@ -335,7 +292,7 @@ const YouTubePopoutPlayer = (() => {
           action: "open-popout",
           data: {
             id,
-            list: this.getPlaylistIDFromURL(window.location.href),
+            list: GetPlaylistIDFromURL(window.location.href),
             time: player.getTime(),
             width: player.getWidth(),
             height: player.getHeight(),

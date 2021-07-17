@@ -23,7 +23,10 @@ import SaveIcon from "@material-ui/icons/Save";
 
 import { useOptionsForDomain } from "../hooks/useOptions";
 
-import Utils from "../../helpers/utils";
+import {
+  GetDimensionForScreenPercentage,
+  GreatestCommonDenominator,
+} from "../../helpers/utils";
 
 import { OPTIONS_SIZE_UNITS_VALUES } from "../../helpers/constants";
 
@@ -31,18 +34,17 @@ import { DOMAIN } from "./SizeTab";
 
 function CustomDimensionsInfoTable({ units, width, height }) {
   if (units === "percentage") {
-    width = Utils.GetDimensionForScreenPercentage("Width", width);
-    height = Utils.GetDimensionForScreenPercentage("Height", height);
+    width = GetDimensionForScreenPercentage("Width", width);
+    height = GetDimensionForScreenPercentage("Height", height);
   }
 
-  const ratio = Utils.GreatestCommonDenominator(width, height);
+  const ratio = GreatestCommonDenominator(width, height);
 
   return (
     <Paper variant="outlined">
       <TableContainer>
         <Table size="small">
           <TableBody>
-
             <TableRow>
               <TableCell component="th" scope="row">
                 {browser.i18n.getMessage("InfoCurrentScreenResolutionLabel")}
@@ -77,7 +79,6 @@ function CustomDimensionsInfoTable({ units, width, height }) {
                 </strong>
               </TableCell>
             </TableRow>
-
           </TableBody>
         </Table>
       </TableContainer>
@@ -167,8 +168,8 @@ function CustomDimensionsForm() {
 
   const convertPercentagesToPixels = ({ width, height }) => {
     return {
-      width: Utils.GetDimensionForScreenPercentage("Width", width),
-      height: Utils.GetDimensionForScreenPercentage("Height", height),
+      width: GetDimensionForScreenPercentage("Width", width),
+      height: GetDimensionForScreenPercentage("Height", height),
     };
   };
 
@@ -291,9 +292,7 @@ function CustomDimensionsForm() {
           size="large"
           startIcon={<SaveIcon />}
           fullWidth
-          disabled={
-            !validateDimensions() || !dimensionsChanged()
-          }
+          disabled={!validateDimensions() || !dimensionsChanged()}
           onClick={() =>
             setOptions({
               units,
@@ -304,7 +303,6 @@ function CustomDimensionsForm() {
         >
           {browser.i18n.getMessage("ButtonSaveCustomDimensionsLabel")}
         </Button>
-
       </Box>
     </Box>
   );

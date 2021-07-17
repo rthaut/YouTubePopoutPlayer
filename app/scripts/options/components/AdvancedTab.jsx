@@ -1,18 +1,18 @@
 import React from "react";
 
-import Alert from '@material-ui/lab/Alert';
+import Alert from "@material-ui/lab/Alert";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from "@material-ui/core/IconButton";
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import InputLabel from "@material-ui/core/InputLabel";
 import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 
-import CheckIcon from '@material-ui/icons/Check';
+import CheckIcon from "@material-ui/icons/Check";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 import TabPanelHeader from "./TabPanelHeader";
@@ -21,18 +21,18 @@ import { useOptionsForDomain } from "../hooks/useOptions";
 
 import { useDebounce } from "react-use";
 
-import Utils from "../../helpers/utils";
+import { IsFirefox } from "../../helpers/utils";
 
 export const DOMAIN = "advanced";
 
 export default function AdvancedTab() {
   const { options, setOption } = useOptionsForDomain(DOMAIN);
-  console.log("AdvancedTab ~ options", options)
+  console.log("AdvancedTab ~ options", options);
 
   const [isFirefox, setIsFirefox] = React.useState(false);
   React.useEffect(() => {
     (async () => {
-      setIsFirefox(await Utils.IsFirefox());
+      setIsFirefox(await IsFirefox());
     })();
   }, []);
 

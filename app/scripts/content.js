@@ -1,5 +1,5 @@
-import YouTubePopoutPlayer from "./classes/YouTubePopoutPlayer.class";
+import YouTubePopoutPlayer from "./content/YouTubePopoutPlayer.class";
 
-(async function () {
+(async () => {
   new YouTubePopoutPlayer();
 })();
