@@ -3,6 +3,7 @@ import {
   YOUTUBE_NOCOOKIE_EMBED_URL,
 } from "./helpers/constants";
 import { OnCommandEventHandler } from "./background/commands";
+import { InitMenus } from "./background/menus";
 import { OnInstalled, OnRuntimeMessage } from "./background/runtime";
 import { OnBeforeSendHeaders } from "./background/webRequest";
 
@@ -23,3 +24,5 @@ browser.webRequest.onBeforeSendHeaders.addListener(
   },
   ["blocking", "requestHeaders"]
 );
+
+InitMenus();

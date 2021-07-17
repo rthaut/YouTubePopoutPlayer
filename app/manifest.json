@@ -66,6 +66,7 @@
   "permissions": [
     "*://*.youtube.com/*",
     "*://*.youtube-nocookie.com/*",
+    "contextMenus",
     "storage",
     "webRequest",
     "webRequestBlocking"

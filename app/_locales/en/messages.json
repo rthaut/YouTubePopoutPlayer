@@ -84,6 +84,14 @@
     "message": "Popout Player",
     "description": "The title for the player controls button that opens the popout player."
   },
+  "LinkContextMenuEntry_OpenVideo_Text": {
+    "message": "Open Video in Popout Player",
+    "description": "The text for the context menu entry added to video links."
+  },
+  "LinkContextMenuEntry_OpenPlaylist_Text": {
+    "message": "Open Playlist in Popout Player",
+    "description": "The text for the context menu entry added to playlist links."
+  },
   "OptionsPageTitle": {
     "message": "$NAME$ Options",
     "placeholders": {
