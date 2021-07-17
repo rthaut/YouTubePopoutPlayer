@@ -1,4 +1,20 @@
 {
+  "ExtensionName": {
+    "message": "YouTube Popout Player",
+    "description": "The name of the extension."
+  },
+  "ExtensionShortName": {
+    "message": "PopoutPlayer",
+    "description": "The short name of the extension (12 characters or less)."
+  },
+  "ExtensionDescription": {
+    "message": "Provides a simple way to open any YouTube video in a popout window",
+    "description": "The short description of the extension."
+  },
+  "BrowserActionTitle": {
+    "message": "Configure YouTube Popout Player Options",
+    "description": "The title for the browser action button (displayed by the address bar by default)."
+  },
   "OpenPopoutCommandDescription": {
     "message": "Open popout player for the current YouTube video",
     "description": "The description for the 'open-popout-auto-close-command' extension command"
@@ -10,71 +26,6 @@
   "OpenPopoutNoCloseCommandDescription": {
     "message": "Open popout player for the current YouTube video BUT DO NOT close the current window/tab",
     "description": "The description for the 'open-popout-no-close-command' extension command"
-  },
-  "CommandListHeading": {
-    "message": "Keyboard Shortcuts"
-  },
-  "CommandListSaveHelpText": {
-    "message": "When changing any of the following keyboard shortcuts, you do <strong>not</strong> need to save settings; the new shortcut is applied automatically."
-  },
-  "CommandListChangeChrome": {
-    "message": "<strong>Chrome Users</strong>: To change the shortcut(s) listed below, go to <code>$URL$</code> in a new browser tab.",
-    "description": "The help text displayed in Chrome to inform users how to change keyboard shortcuts",
-    "placeholders": {
-      "url": {
-        "content": "chrome://extensions/shortcuts"
-      }
-    }
-  },
-  "CommandListDescriptionColumnHeading": {
-    "message": "Description"
-  },
-  "CommandListShortcutColumnHeading": {
-    "message": "Shortcut"
-  },
-  "CommandListUpdateCommandLabel": {
-    "message": "Change"
-  },
-  "UpdateCommandHeading": {
-    "message": "Update Keyboard Shortcut"
-  },
-  "UpdateCommandInstructionsPlaceholder": {
-    "message": "<p>Press a new keyboard shortcut for the \"$COMMAND$\" command, or press <kbd>Esc</kbd> to cancel.</p><p>Valid keyboard shortcuts include one or two modifier keys and one regular key.<p><hr/><p>The current keyboard shortcut is: $SHORTCUT$</p>",
-    "placeholders": {
-      "command": {
-        "content": "$1"
-      },
-      "shortcut": {
-        "content": "$2"
-      }
-    }
-  },
-  "InvalidCommandShortcutKeyPlaceholder": {
-    "message": "<p><strong>Unsupported Shortcut Key</strong></p><p>The $KEY$ key is not a valid key for keyboard shortcuts. Please use one of the following keys:</p>",
-    "placeholders": {
-      "key": {
-        "content": "$1"
-      }
-    }
-  },
-  "InvalidCommandShortcutModifiers": {
-    "message": "<p><strong>Unsupported Shortcut Modifier(s)</strong></p><p>Shortcut combinations must have either one (1) or two (2) modifier keys. The following are valid modifier keys:<p>"
-  },
-  "ExtensionName": {
-    "message": "YouTube Popout Player",
-    "description": "The name of the extension."
-  },
-  "ExtensionShortName": {
-    "message": "YTPP",
-    "description": "The short name of the extension (less than 11 characters)."
-  },
-  "ExtensionDescription": {
-    "message": "Provides a simple way to open any YouTube video in a popout window",
-    "description": "The short description of the extension."
-  },
-  "BrowserActionTitle": {
-    "message": "Configure YouTube Popout Player Options",
-    "description": "The title for the browser action button (displayed by the address bar by default)."
   },
   "ContextMenuEntryLabel_PopoutPlayer": {
     "message": "Popout Player",
@@ -103,14 +54,14 @@
   "OptionsPerDeviceWarning": {
     "message": "<strong>Note</strong>: All settings are per-device. If you have YouTube Popout Player installed on multiple devices, you can configure settings differently for each device."
   },
-  "OptionsSettingNotAvailableForTab": {
-    "message": "<strong>Note</strong>: This setting does not apply when the popout player is configured to open in a new tab in the current browser window."
+  "OptionsTabNameBehavior": {
+    "message": "Behavior"
   },
-  "OptionsSettingsNotAvailableForTab": {
-    "message": "These settings do not apply when the popout player is configured to open in a new tab in the current browser window."
+  "OptionsTabNameSize": {
+    "message": "Size"
   },
-  "OptionsCorrectErrorsWarning": {
-    "message": "You must correct all error(s) before you can save your settings."
+  "OptionsTabNameAdvanced": {
+    "message": "Advanced"
   },
   "OptionsHeadingBehavior": {
     "message": "Popout Player Behavior"
@@ -121,50 +72,17 @@
   "OptionsHeadingAdvanced": {
     "message": "Advanced Settings"
   },
-  "OptionsTabNameBehavior": {
-    "message": "Behavior"
-  },
-  "OptionsTabNameSize": {
-    "message": "Size"
-  },
-  "OptionsTabNameAdvanced": {
-    "message": "Advanced"
-  },
-  "OptionsAdvancedCloseLabel": {
-    "message": "Close Original Window/Tab"
-  },
-  "OptionsAdvancedCloseDescription": {
-    "message": "Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong>"
-  },
-  "OptionsAdvancedTitleLabel": {
-    "message": "Window Title Text (Preface)"
-  },
-  "OptionsAdvancedTitleDescription": {
-    "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
-  },
-  "OptionsBehaviorTargetWindowLabel": {
-    "message": "Open in a Popup Window"
-  },
-  "OptionsBehaviorTargetWindowDescription": {
-    "message": "The popout player will open in a new popup window. <strong>This is the default setting.</strong>"
-  },
   "OptionsBehaviorTargetTabLabel": {
     "message": "Open in a Tab"
   },
   "OptionsBehaviorTargetTabDescription": {
     "message": "The popout player will open in a new tab in your current browser window."
   },
-  "OptionsBehaviorAutoplayLabel": {
-    "message": "Autoplay Video(s)"
+  "OptionsBehaviorTargetWindowLabel": {
+    "message": "Open in a Popup Window"
   },
-  "OptionsBehaviorAutoplayDescription": {
-    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong>"
-  },
-  "OptionsBehaviorLoopLabel": {
-    "message": "Loop Video(s)"
-  },
-  "OptionsBehaviorLoopDescription": {
-    "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
+  "OptionsBehaviorTargetWindowDescription": {
+    "message": "The popout player will open in a new popup window. <strong>This is the default setting.</strong>"
   },
   "BehaviorControlsLabel": {
     "message": "Show Controls"
@@ -177,14 +95,29 @@
       }
     }
   },
+  "BehaviorControlsExtendedOptionLabel": {
+    "message": "Extended"
+  },
   "BehaviorControlsNoneOptionLabel": {
     "message": "None"
   },
   "BehaviorControlsStandardOptionLabel": {
     "message": "Standard"
   },
-  "BehaviorControlsExtendedOptionLabel": {
-    "message": "Extended"
+  "OptionsBehaviorAutoplayLabel": {
+    "message": "Autoplay Video(s)"
+  },
+  "OptionsBehaviorAutoplayDescription": {
+    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong>"
+  },
+  "OptionsBehaviorLoopDescription": {
+    "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
+  },
+  "OptionsBehaviorLoopLabel": {
+    "message": "Loop Video(s)"
+  },
+  "OptionsSettingsNotAvailableForTab": {
+    "message": "These settings do not apply when the popout player is configured to open in a new tab in the current browser window."
   },
   "OptionsSizeModeCurrentLabel": {
     "message": "Use Original Player Size"
@@ -201,17 +134,17 @@
   "DimensionUnitsLabel": {
     "message": "Dimension Units"
   },
-  "DimensionUnitsPixelsOptionLabel": {
-    "message": "Pixels (px)"
-  },
   "DimensionUnitsPercentageOptionLabel": {
     "message": "Percentage (%)"
   },
-  "DimensionUnitsPixelsUnitLabel": {
-    "message": "px"
-  },
   "DimensionUnitsPercentageUnitLabel": {
     "message": "%"
+  },
+  "DimensionUnitsPixelsOptionLabel": {
+    "message": "Pixels (px)"
+  },
+  "DimensionUnitsPixelsUnitLabel": {
+    "message": "px"
   },
   "DimensionUnitsUnknownUnitLabel": {
     "message": "?"
@@ -225,25 +158,26 @@
   "InfoCurrentScreenResolutionLabel": {
     "message": "Current Screen Resolution"
   },
-  "InfoPopoutPlayerWindowSizeLabel": {
-    "message": "Popout Player Window Size"
-  },
   "InfoPopoutPlayerAspectRatioLabel": {
     "message": "Popout Player Aspect Ratio"
   },
-  "FieldRequiredMessage": {
-    "message": "This field is required"
+  "InfoPopoutPlayerWindowSizeLabel": {
+    "message": "Popout Player Window Size"
   },
-  "FieldPatternNumberMessage": {
-    "message": "The value of this field must be a number"
+  "ButtonSaveCustomDimensionsLabel": {
+    "message": "Save Custom Dimensions"
   },
-  "FieldMinValuePlaceholderMessage": {
-    "message": "The value of this field cannot be less than <strong>$VALUE$</strong>",
-    "placeholders": {
-      "value": {
-        "content": "$1"
-      }
-    }
+  "OptionsAdvancedCloseLabel": {
+    "message": "Close Original Window/Tab"
+  },
+  "OptionsAdvancedCloseDescription": {
+    "message": "Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong>"
+  },
+  "OptionsAdvancedTitleLabel": {
+    "message": "Window Title Text (Preface)"
+  },
+  "OptionsAdvancedTitleDescription": {
+    "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
   },
   "FieldMaxValuePlaceholderMessage": {
     "message": "The value of this field cannot be more than <strong>$VALUE$</strong>",
@@ -253,14 +187,22 @@
       }
     }
   },
+  "FieldMinValuePlaceholderMessage": {
+    "message": "The value of this field cannot be less than <strong>$VALUE$</strong>",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "FieldPatternNumberMessage": {
+    "message": "The value of this field must be a number"
+  },
+  "FieldRequiredMessage": {
+    "message": "This field is required"
+  },
   "FieldRequiredPermissionsNotGrantedMessage": {
     "message": "You must grant the requested additional permission(s) when prompted to enable this setting."
-  },
-  "ButtonSaveCustomDimensionsLabel": {
-    "message": "Save Custom Dimensions"
-  },
-  "ButtonSaveLabel": {
-    "message": "Save Settings"
   },
   "ButtonResetLabel": {
     "message": "Reset All Settings to Defaults"
@@ -276,24 +218,13 @@
       }
     }
   },
-  "ButtonConfirmResetLabel": {
-    "message": "Yes, I'm sure"
-  },
   "ButtonCancelResetLabel": {
     "message": "No, I changed my mind"
   },
+  "ButtonConfirmResetLabel": {
+    "message": "Yes, I'm sure"
+  },
   "OptionsResetSuccessMessage": {
     "message": "All settings reset to default values."
-  },
-  "OptionsSaveSuccessMessage": {
-    "message": "All settings saved successfully!"
-  },
-  "OptionsSaveErrorPlaceholderMessage": {
-    "message": "Failed to save settings: $ERROR$",
-    "placeholders": {
-      "error": {
-        "content": "$1"
-      }
-    }
   }
 }
