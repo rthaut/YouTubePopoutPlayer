@@ -52,6 +52,10 @@ export default function OptionsApp() {
     [prefersDarkMode]
   );
 
+  React.useEffect(() => {
+    document.title = browser.i18n.getMessage("OptionsPageTitle");
+  }, []);
+
   const tabs = {
     [BehaviorDomain]: <BehaviorTab />,
     [SizeDomain]: <SizeTab />,
