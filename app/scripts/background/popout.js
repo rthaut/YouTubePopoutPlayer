@@ -1,17 +1,27 @@
-import { START_THRESHOLD, YOUTUBE_EMBED_URL } from "../helpers/constants";
+import {
+  START_THRESHOLD,
+  OPTION_DEFAULTS,
+  YOUTUBE_EMBED_URL,
+} from "../helpers/constants";
 import Options from "../helpers/options";
 import { GetDimensionForScreenPercentage, IsFirefox } from "../helpers/utils";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
 
-export const OpenPopoutPlayer = async ({ id, list, time, width, height }) => {
+export const OpenPopoutPlayer = async ({
+  id,
+  list,
+  time,
+  originalVideoWidth,
+  originalVideoHeight,
+}) => {
   console.log("[Background] OpenPopoutPlayer()", {
     id,
     list,
     time,
-    width,
-    height,
+    originalVideoWidth,
+    originalVideoHeight,
   });
 
   // https://developers.google.com/youtube/player_parameters
@@ -71,17 +81,29 @@ export const OpenPopoutPlayer = async ({ id, list, time, width, height }) => {
     params.playlist = id;
   }
 
-  const url = GetURLforPopoutPlayer(id, params);
+  const url = GetUrlForPopoutPlayer(id, params);
+
+  const openInBackground = await Options.GetLocalOption(
+    "advanced",
+    "background"
+  );
 
   let result;
   switch (behavior.target.toLowerCase()) {
     case "tab":
-      result = OpenPopoutPlayerInTab(url);
+      result = OpenPopoutPlayerInTab(url, !openInBackground);
       break;
 
     case "window":
     default:
-      result = OpenPopoutPlayerInWindow(url, width, height);
+      result = OpenPopoutPlayerInWindow(
+        url,
+        await GetDimensionsForPopoutPlayerWindow(
+          originalVideoWidth,
+          originalVideoHeight
+        ),
+        openInBackground
+      );
       break;
   }
 
@@ -92,48 +114,129 @@ export const OpenPopoutPlayer = async ({ id, list, time, width, height }) => {
 /**
  * Opens an Embedded Player in a new tab
  * @param {string} url the URL of the Embedded Player to open in a new window
+ * @param {boolean} [active] indicates if the tab should become the active tab in the window
  * @returns {Promise}
  */
-export const OpenPopoutPlayerInTab = async (url) => {
-  console.log("[Background] OpenPopoutPlayerInTab()", url);
+export const OpenPopoutPlayerInTab = async (url, active = true) => {
+  console.log("[Background] OpenPopoutPlayerInTab()", url, active);
 
   const createData = {
-    active: true, // TODO: should this be configurable?
     url,
+    active,
   };
 
   console.log(
     "[Background] OpenPopoutPlayerInTab() :: Creating Tab",
     createData
   );
-  const result = await browser.tabs.create(createData);
+  const tab = await browser.tabs.create(createData);
 
-  console.log("[Background] OpenPopoutPlayerInTab() :: Return", result);
-  return result;
+  console.log("[Background] OpenPopoutPlayerInTab() :: Return", tab);
+  return tab;
 };
 
 /**
  * Opens an Embedded Player in a new window (optionally matching the size of the original video player)
  * @param {string} url the URL of the Embedded Player to open in a new window
- * @param {number} [width] the width of the original video player
- * @param {number} [height] the height of the original video player
+ * @param {object} dimensions the target width & height of the window
+ * @param {boolean} [openInBackground] indicates if the window should be opened in the background
  * @returns {Promise}
  */
 export const OpenPopoutPlayerInWindow = async (
   url,
-  width = null,
-  height = null
+  dimensions = {
+    width: OPTION_DEFAULTS.size.width,
+    height: OPTION_DEFAULTS.size.height,
+  },
+  openInBackground = false
 ) => {
-  console.log("[Background] OpenPopoutPlayerInWindow()", url, width, height);
+  console.log(
+    "[Background] OpenPopoutPlayerInWindow()",
+    url,
+    dimensions,
+    openInBackground
+  );
+
+  const createData = {
+    url,
+    state: "normal",
+    type: "popup",
+    ...dimensions,
+  };
+
+  const isFirefox = await IsFirefox();
+
+  if (isFirefox) {
+    createData.titlePreface = await Options.GetLocalOption("advanced", "title");
+  }
+
+  console.log(
+    "[Background] OpenPopoutPlayerInWindow() :: Creating Window",
+    createData
+  );
+  let window = await browser.windows.create(createData);
+
+  if (openInBackground) {
+    console.log(
+      "[Background] OpenPopoutPlayerInWindow() :: Moving Window to Background"
+    );
+    // TODO: maybe instead of (and/or in addition to) minimizing the popout window, we should re-focus the original window
+    window = await browser.windows.update(window.id, {
+      focused: false,
+      state: "minimized",
+    });
+  }
+
+  console.log("[Background] OpenPopoutPlayerInWindow() :: Return", window);
+  return window;
+};
+
+/**
+ * Gets the URL for the popout player given a video ID and/or URL parameters
+ * @param {string} [id] the video ID
+ * @param {Object} [params] URL parameters
+ * @returns {string} the full URL for the popout player
+ */
+export const GetUrlForPopoutPlayer = (id = null, params = null) => {
+  console.log("[Background] GetUrlForPopoutPlayer()", id, params);
+
+  // TODO: if autoplay is disabled, we can omit the video ID from the path; as long as either `playlist` or `list` has a value, the Embedded Player will use it when the user clicks play (for single videos, this will prevent it appearing as a playlist with 2 videos, even though it is just the same video twice)
+  // TODO: there may be some other edge cases to consider, like setting the start time with autoplay disabled
+
+  let url = YOUTUBE_EMBED_URL;
+
+  if (id !== undefined && id !== null) {
+    url += id;
+  }
+
+  if (params !== undefined && params !== null) {
+    url += "?" + new URLSearchParams(params).toString();
+  }
+
+  console.log("[Background] GetUrlForPopoutPlayer() :: Return", url);
+  return url;
+};
+
+export const GetDimensionsForPopoutPlayerWindow = async (
+  originalVideoWidth,
+  originalVideoHeight
+) => {
+  console.log(
+    "[Background] GetDimensionsForPopoutPlayerWindow()",
+    originalVideoWidth,
+    originalVideoHeight
+  );
+
+  let width = originalVideoWidth ?? OPTION_DEFAULTS.size.width;
+  let height = originalVideoHeight ?? OPTION_DEFAULTS.size.height;
 
   const size = await Options.GetLocalOptionsForDomain("size");
-  console.log("[Background] OpenPopoutPlayerInWindow() :: Size options", size);
+  console.log(
+    "[Background] GetDimensionsForPopoutPlayerWindow() :: Size options",
+    size
+  );
 
-  if (
-    size.mode.toLowerCase() === "custom" ||
-    ((width === undefined || width === null) &&
-      (height === undefined || height === null))
-  ) {
+  if (size.mode.toLowerCase() === "custom") {
     switch (size.units.toLowerCase()) {
       case "pixels":
         width = size.width;
@@ -155,53 +258,14 @@ export const OpenPopoutPlayerInWindow = async (
     }
   }
 
-  const createData = {
-    width: width + WIDTH_PADDING, // manually increasing size to account for window frame
-    height: height + HEIGHT_PADDING, // manually increasing size to account for window frame
-    type: "popup",
-    url,
-  };
+  width += WIDTH_PADDING; // manually increasing size to account for window frame
+  height += HEIGHT_PADDING; // manually increasing size to account for window frame
 
-  const isFirefox = await IsFirefox();
-
-  if (isFirefox) {
-    createData.titlePreface = await Options.GetLocalOption("advanced", "title");
-  }
-
-  console.log(
-    "[Background] OpenPopoutPlayerInWindow() :: Creating Window",
-    createData
-  );
-  const result = await browser.windows.create(createData);
-
-  console.log("[Background] OpenPopoutPlayerInWindow() :: Return", result);
-  return result;
-};
-
-/**
- * Gets the URL for the popout player given a video ID and/or URL parameters
- * @param {string} [id] the video ID
- * @param {Object} [params] URL parameters
- * @returns {string} the full URL for the popout player
- */
-export const GetURLforPopoutPlayer = (id = null, params = null) => {
-  console.log("[Background] GetURLforPopoutPlayer()", id, params);
-
-  // TODO: if autoplay is disabled, we can omit the video ID from the path; as long as either `playlist` or `list` has a value, the Embedded Player will use it when the user clicks play (for single videos, this will prevent it appearing as a playlist with 2 videos, even though it is just the same video twice)
-  // TODO: there may be some other edge cases to consider, like setting the start time with autoplay disabled
-
-  let url = YOUTUBE_EMBED_URL;
-
-  if (id !== undefined && id !== null) {
-    url += id;
-  }
-
-  if (params !== undefined && params !== null) {
-    url += "?" + new URLSearchParams(params).toString();
-  }
-
-  console.log("[Background] GetURLforPopoutPlayer() :: Return", url);
-  return url;
+  console.log("[Background] GetDimensionsForPopoutPlayerWindow() :: Return", {
+    width,
+    height,
+  });
+  return { width, height };
 };
 
 export default OpenPopoutPlayer;

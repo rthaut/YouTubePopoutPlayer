@@ -294,8 +294,8 @@ const YouTubePopoutPlayer = (() => {
             id,
             list: GetPlaylistIDFromURL(window.location.href),
             time: player.getTime(),
-            width: player.getWidth(),
-            height: player.getHeight(),
+            originalVideoWidth: player.getWidth(),
+            originalVideoHeight: player.getHeight(),
           },
         });
 

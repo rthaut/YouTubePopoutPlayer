@@ -179,6 +179,12 @@
   "OptionsAdvancedTitleDescription": {
     "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
   },
+  "OptionsAdvancedOpenInBackgroundLabel": {
+    "message": "Open in Background Window/Tab"
+  },
+  "OptionsAdvancedOpenInBackgroundDescription": {
+    "message": "This setting controls whether or not the popout player opens in a background window/tab. <strong>The default for this setting is disabled.</strong>"
+  },
   "FieldMaxValuePlaceholderMessage": {
     "message": "The value of this field cannot be more than <strong>$VALUE$</strong>",
     "placeholders": {

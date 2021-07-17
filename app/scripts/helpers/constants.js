@@ -22,6 +22,7 @@ export const OPTION_DEFAULTS = {
   },
   advanced: {
     close: false,
+    background: false,
     title: "",
   },
 };

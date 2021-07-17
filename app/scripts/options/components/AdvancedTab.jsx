@@ -150,6 +150,36 @@ export default function AdvancedTab() {
     );
   }
 
+  function BackgroundTabControl() {
+    return (
+      <>
+        <FormControl>
+          <FormControlLabel
+            label={browser.i18n.getMessage("OptionsAdvancedOpenInBackgroundLabel")}
+            control={
+              <Switch
+                name="close-switch"
+                color="primary"
+                checked={options["background"]}
+                onChange={(event) =>
+                  setOption("background", event.target.checked)
+                }
+              />
+            }
+          />
+          <Typography
+            color="textSecondary"
+            dangerouslySetInnerHTML={{
+              __html: browser.i18n.getMessage(
+                "OptionsAdvancedOpenInBackgroundDescription"
+              ),
+            }}
+          />
+        </FormControl>
+      </>
+    );
+  }
+
   return (
     <Box>
       <TabPanelHeader
@@ -162,11 +192,17 @@ export default function AdvancedTab() {
       {isFirefox && (
         <>
           <Divider />
-          <Box marginTop={2}>
+          <Box marginTop={1} marginBottom={2}>
             <TitleOptionControl />
           </Box>
         </>
       )}
+      <>
+        <Divider />
+        <Box marginY={2}>
+          <BackgroundTabControl />
+        </Box>
+      </>
     </Box>
   );
 }
