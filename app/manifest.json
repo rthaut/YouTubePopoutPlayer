@@ -33,13 +33,13 @@
     },
     "open-popout-force-close-command": {
       "suggested_key": {
-        "default": "Ctrl+Shift+Up"
+        "default": "Alt+Shift+PageUp"
       },
       "description": "__MSG_OpenPopoutForceCloseCommandDescription__"
     },
     "open-popout-no-close-command": {
       "suggested_key": {
-        "default": "Ctrl+Alt+Up"
+        "default": "Alt+Shift+PageDown"
       },
       "description": "__MSG_OpenPopoutNoCloseCommandDescription__"
     }
