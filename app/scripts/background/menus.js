@@ -45,6 +45,7 @@ export const OnMenuClicked = (info) => {
     case "open-popout-player-for-video":
       OpenPopoutPlayer({
         id: GetVideoIDFromURL(info.linkUrl),
+        originalWindowID: browser.windows.WINDOW_ID_CURRENT, // TODO: this doesn't work as expected
       });
       break;
 
@@ -52,6 +53,7 @@ export const OnMenuClicked = (info) => {
       OpenPopoutPlayer({
         id: GetVideoIDFromURL(info.linkUrl),
         list: GetPlaylistIDFromURL(info.linkUrl),
+        originalWindowID: browser.windows.WINDOW_ID_CURRENT, // TODO: this doesn't work as expected
       });
       break;
   }

@@ -100,3 +100,24 @@ export const TitleCase = (string) => {
  */
 export const GreatestCommonDenominator = (a, b) =>
   b == 0 ? a : GreatestCommonDenominator(b, a % b);
+
+/**
+ * Returns a debounced version of the given function
+ * @param {function} func the function to debounce
+ * @param {number} wait the delay before executing the function
+ * @param {boolean} immediate whether or not the function should execute immediately (and then debounce)
+ * @returns the debounced function
+ */
+export function debounce(func, wait, immediate) {
+  var timeout;
+  return function () {
+    var context = this,
+      args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    }, wait);
+    if (immediate && !timeout) func.apply(context, args);
+  };
+}

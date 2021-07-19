@@ -9,12 +9,17 @@ import { GetDimensionForScreenPercentage, IsFirefox } from "../helpers/utils";
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
 
+/**
+ * Opens the popout player
+ * @returns {Promise<object>}
+ */
 export const OpenPopoutPlayer = async ({
-  id,
-  list,
-  time,
-  originalVideoWidth,
-  originalVideoHeight,
+  id = "",
+  list = "",
+  time = 0,
+  originalVideoWidth = null,
+  originalVideoHeight = null,
+  originalWindowID = -1,
 }) => {
   console.log("[Background] OpenPopoutPlayer()", {
     id,
@@ -22,6 +27,7 @@ export const OpenPopoutPlayer = async ({
     time,
     originalVideoWidth,
     originalVideoHeight,
+    originalWindowID,
   });
 
   // https://developers.google.com/youtube/player_parameters
@@ -102,7 +108,9 @@ export const OpenPopoutPlayer = async ({
           originalVideoWidth,
           originalVideoHeight
         ),
-        openInBackground
+        await GetPositionForPopoutPlayerWindow(),
+        openInBackground,
+        originalWindowID
       );
       break;
   }
@@ -115,7 +123,7 @@ export const OpenPopoutPlayer = async ({
  * Opens an Embedded Player in a new tab
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {boolean} [active] indicates if the tab should become the active tab in the window
- * @returns {Promise}
+ * @returns {Promise<object>}
  */
 export const OpenPopoutPlayerInTab = async (url, active = true) => {
   console.log("[Background] OpenPopoutPlayerInTab()", url, active);
@@ -140,7 +148,7 @@ export const OpenPopoutPlayerInTab = async (url, active = true) => {
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {object} dimensions the target width & height of the window
  * @param {boolean} [openInBackground] indicates if the window should be opened in the background
- * @returns {Promise}
+ * @returns {Promise<object>}
  */
 export const OpenPopoutPlayerInWindow = async (
   url,
@@ -148,13 +156,17 @@ export const OpenPopoutPlayerInWindow = async (
     width: OPTION_DEFAULTS.size.width,
     height: OPTION_DEFAULTS.size.height,
   },
-  openInBackground = false
+  position = { top: null, left: null },
+  openInBackground = false,
+  originalWindowID = -1
 ) => {
   console.log(
     "[Background] OpenPopoutPlayerInWindow()",
     url,
     dimensions,
-    openInBackground
+    position,
+    openInBackground,
+    originalWindowID
   );
 
   const createData = {
@@ -176,15 +188,34 @@ export const OpenPopoutPlayerInWindow = async (
   );
   let window = await browser.windows.create(createData);
 
-  if (openInBackground) {
+  if (!isNaN(position?.top) && !isNaN(position?.left)) {
     console.log(
-      "[Background] OpenPopoutPlayerInWindow() :: Moving Window to Background"
+      "[Background] OpenPopoutPlayerInWindow() :: Positioning Window",
+      position
     );
-    // TODO: maybe instead of (and/or in addition to) minimizing the popout window, we should re-focus the original window
-    window = await browser.windows.update(window.id, {
-      focused: false,
-      state: "minimized",
-    });
+    window = await browser.windows.update(window.id, position);
+  }
+
+  if (openInBackground) {
+    if (!isNaN(originalWindowID) && parseInt(originalWindowID, 10) > 0) {
+      // try to move the original window back to the foreground
+      console.log(
+        "[Background] OpenPopoutPlayerInWindow() :: Moving Original Window to Foreground"
+      );
+      browser.windows.update(originalWindowID, {
+        focused: true,
+      });
+    } else {
+      // fallback: minimize the popout player window
+      console.warn(
+        "[Background] OpenPopoutPlayerInWindow() :: Missing/Invalid ID for Original Window",
+        originalWindowID
+      );
+      window = await browser.windows.update(window.id, {
+        focused: false,
+        state: "minimized",
+      });
+    }
   }
 
   console.log("[Background] OpenPopoutPlayerInWindow() :: Return", window);
@@ -217,6 +248,12 @@ export const GetUrlForPopoutPlayer = (id = null, params = null) => {
   return url;
 };
 
+/**
+ * Gets the target width and height size values (in pixels) for the popout player window
+ * @param {number} originalVideoWidth the width of the original video player (if available)
+ * @param {number} originalVideoHeight the height of the original video player (if available)
+ * @returns {object} object containing width and height values
+ */
 export const GetDimensionsForPopoutPlayerWindow = async (
   originalVideoWidth,
   originalVideoHeight
@@ -236,7 +273,7 @@ export const GetDimensionsForPopoutPlayerWindow = async (
     size
   );
 
-  if (size.mode.toLowerCase() === "custom") {
+  if (size.mode.toLowerCase() !== "current") {
     switch (size.units.toLowerCase()) {
       case "pixels":
         width = size.width;
@@ -258,14 +295,99 @@ export const GetDimensionsForPopoutPlayerWindow = async (
     }
   }
 
-  width += WIDTH_PADDING; // manually increasing size to account for window frame
-  height += HEIGHT_PADDING; // manually increasing size to account for window frame
+  // important: manually increasing dimensions to account for window frame
+  width += WIDTH_PADDING;
+  height += HEIGHT_PADDING;
 
   console.log("[Background] GetDimensionsForPopoutPlayerWindow() :: Return", {
     width,
     height,
   });
   return { width, height };
+};
+
+/**
+ * Gets the target top and left position values (in pixels) for the popout player window
+ * @returns {object} object containing top and left values
+ */
+export const GetPositionForPopoutPlayerWindow = async () => {
+  console.log("[Background] GetPositionForPopoutPlayerWindow()");
+
+  const position = await Options.GetLocalOptionsForDomain("position");
+  console.log(
+    "[Background] GetDimensionsForPopoutPlayerWindow() :: Position options",
+    position
+  );
+
+  if (position.mode.toLowerCase() === "auto") {
+    console.log(
+      '[Background] GetDimensionsForPopoutPlayerWindow() :: Position mode is "auto"'
+    );
+    return {
+      top: null,
+      left: null,
+    };
+  }
+
+  return {
+    top: position.top,
+    left: position.left,
+  };
+};
+
+/**
+ * Store the dimensions and/or position if the applicable modes are "previous"
+ * @returns {null}
+ */
+export const StoreDimensionsAndPosition = async ({
+  dimensions = {},
+  position = {},
+}) => {
+  console.log("[Background] StoreDimensionsAndPosition()");
+
+  const sizeMode = await Options.GetLocalOption("size", "mode");
+  const positionMode = await Options.GetLocalOption("position", "mode");
+  console.log(
+    "[Background] GetDimensionsForPopoutPlayerWindow() :: Size and Position Modes",
+    {
+      sizeMode,
+      positionMode,
+    }
+  );
+
+  if (sizeMode.toLowerCase() === "previous") {
+    if (!isNaN(dimensions?.width) && !isNaN(dimensions?.height)) {
+      const size = {
+        units: "pixels",
+        ...dimensions,
+      };
+      console.log(
+        "[Background] StoreDimensionsAndPosition() :: Saving Size",
+        size
+      );
+      Options.SetLocalOptionsForDomain("size", size);
+    } else {
+      console.warn(
+        "[Background] StoreDimensionsAndPosition() :: Missing or Invalid Dimensions Data",
+        dimensions
+      );
+    }
+  }
+
+  if (positionMode.toLowerCase() === "previous") {
+    if (!isNaN(position?.top) && !isNaN(position?.left)) {
+      console.log(
+        "[Background] StoreDimensionsAndPosition() :: Saving Position",
+        position
+      );
+      Options.SetLocalOptionsForDomain("position", position);
+    } else {
+      console.warn(
+        "[Background] StoreDimensionsAndPosition() :: Missing or Invalid Position Data",
+        position
+      );
+    }
+  }
 };
 
 export default OpenPopoutPlayer;

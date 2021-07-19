@@ -1,5 +1,5 @@
 import Options from "../helpers/options";
-import OpenPopoutPlayer from "./popout";
+import OpenPopoutPlayer, { StoreDimensionsAndPosition } from "./popout";
 import { CloseTab } from "./tabs";
 
 export const OnInstalled = async (details) => {
@@ -24,13 +24,21 @@ export const OnRuntimeMessage = async (message, sender) => {
   if (message.action !== undefined) {
     switch (message.action.toLowerCase()) {
       case "open-popout":
-        return OpenPopoutPlayer(message.data);
+        return OpenPopoutPlayer({
+          ...message.data,
+          originalWindowID: sender.tab.windowId ?? browser.windows.WINDOW_ID_CURRENT,
+        });
 
       case "get-commands":
         return browser.commands.getAll();
 
       case "close-tab":
         return CloseTab(sender.tab.id, message.data.enforceDomainRestriction);
+
+      case "popout-closed":
+      case "popout-resized":
+        StoreDimensionsAndPosition(message.data);
+        return;
     }
 
     console.log(

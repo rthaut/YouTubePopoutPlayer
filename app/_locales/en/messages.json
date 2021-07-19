@@ -57,8 +57,8 @@
   "OptionsTabNameBehavior": {
     "message": "Behavior"
   },
-  "OptionsTabNameSize": {
-    "message": "Size"
+  "OptionsTabNameSize-Position": {
+    "message": "Size / Position"
   },
   "OptionsTabNameAdvanced": {
     "message": "Advanced"
@@ -68,6 +68,9 @@
   },
   "OptionsHeadingSize": {
     "message": "Popout Player Size"
+  },
+  "OptionsHeadingPosition": {
+    "message": "Popout Player Position"
   },
   "OptionsHeadingAdvanced": {
     "message": "Advanced Settings"
@@ -110,26 +113,75 @@
   "OptionsBehaviorAutoplayDescription": {
     "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong>"
   },
-  "OptionsBehaviorLoopDescription": {
-    "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
-  },
   "OptionsBehaviorLoopLabel": {
     "message": "Loop Video(s)"
   },
+  "OptionsBehaviorLoopDescription": {
+    "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
+  },
   "OptionsSettingsNotAvailableForTab": {
     "message": "These settings do not apply when the popout player is configured to open in a new tab in the current browser window."
+  },
+  "SizeModeLabel": {
+    "message": "Popout Player Size"
+  },
+  "SizeModeDescription": {
+    "message": "Use this setting to adjust the size of the popout player window when it opens. <strong>The default for this setting is $DEFAULT$.</strong>",
+    "placeholders": {
+      "default": {
+        "content": "Use Original Player Size"
+      }
+    }
   },
   "OptionsSizeModeCurrentLabel": {
     "message": "Use Original Player Size"
   },
   "OptionsSizeModeCurrentDescription": {
-    "message": "The popout player will be sized to match the original YouTube video player. <strong>This is the default setting.</strong>"
+    "message": "The popout player window will be sized to match the original YouTube video player. <strong>This is the default setting.</strong>"
+  },
+  "OptionsSizeModePreviousLabel": {
+    "message": "Use Previous Popout Player Window Size"
+  },
+  "OptionsSizeModePreviousDescription": {
+    "message": "The popout player window will remember the size it was when it was closed or resized."
   },
   "OptionsSizeModeCustomLabel": {
     "message": "Set Custom Dimensions"
   },
   "OptionsSizeModeCustomDescription": {
-    "message": "Use this setting to specify dimensions (either in pixels or percentages) for the popout player."
+    "message": "Use this setting to specify dimensions (either in pixels or percentages) for the popout player window."
+  },
+  "PositionModeLabel": {
+    "message": "Popout Player Position"
+  },
+  "PositionModeDescription": {
+    "message": "Use this setting to adjust the position of the popout player window when it opens. <strong>The default for this setting is $DEFAULT$.</strong>",
+    "placeholders": {
+      "default": {
+        "content": "Position Automatically"
+      }
+    }
+  },
+  "OptionsPositionModeAutoLabel": {
+    "message": "Position Automatically"
+  },
+  "OptionsPositionModeAutoDescription": {
+    "message": "The popout player will be positioned automatically by your browser and/or operating system. <strong>This is the default setting.</strong>"
+  },
+  "OptionsPositionModePreviousLabel": {
+    "message": "Use Previous Position"
+  },
+  "OptionsPositionModePreviousDescription": {
+    "message": "The popout player window will remember where it was positioned when it was closed."
+  },
+  "OptionsPositionModeCustomLabel": {
+    "message": "Specify Custom Position"
+  },
+  "OptionsPositionModeCustomDescription": {
+    "message": "Use this setting to specify the position (in pixels) for the popout player window."
+  },
+  "OptionsCustomPositionWarning": {
+    "message": "<strong>Use caution when setting a custom position!</strong> No restrictions are enforced, so you can configure this to open the Popout Player completely off screen."
   },
   "DimensionUnitsLabel": {
     "message": "Dimension Units"
@@ -166,6 +218,9 @@
   },
   "ButtonSaveCustomDimensionsLabel": {
     "message": "Save Custom Dimensions"
+  },
+  "ButtonSaveCustomPositionLabel": {
+    "message": "Save Custom Position"
   },
   "OptionsAdvancedCloseLabel": {
     "message": "Close Original Window/Tab"

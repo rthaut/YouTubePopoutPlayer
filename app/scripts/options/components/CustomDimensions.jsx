@@ -30,8 +30,6 @@ import {
 
 import { OPTIONS_SIZE_UNITS_VALUES } from "../../helpers/constants";
 
-import { DOMAIN } from "./SizeTab";
-
 function CustomDimensionsInfoTable({ units, width, height }) {
   if (units === "percentage") {
     width = GetDimensionForScreenPercentage("Width", width);
@@ -93,7 +91,7 @@ CustomDimensionsInfoTable.propTypes = {
 };
 
 function CustomDimensionsForm() {
-  const { options, setOptions } = useOptionsForDomain(DOMAIN);
+  const { options, setOptions } = useOptionsForDomain("size");
   console.log("CustomDimensionsForm ~ options", options);
 
   const [units, setUnits] = React.useState(options.units);
@@ -190,7 +188,7 @@ function CustomDimensionsForm() {
       height < heightRestrictions["min"] ||
       height > heightRestrictions["max"]
     ) {
-      console.warn("height is invalid", width);
+      console.warn("height is invalid", height);
       return false;
     }
 

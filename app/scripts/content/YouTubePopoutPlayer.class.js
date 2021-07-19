@@ -1,5 +1,5 @@
 import Options from "../helpers/options";
-import { IsPopoutPlayer } from "../helpers/utils";
+import { IsPopoutPlayer, debounce } from "../helpers/utils";
 import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
 import HTML5Player from "./HTML5Player.class";
 
@@ -36,6 +36,22 @@ const YouTubePopoutPlayer = (() => {
           return;
         }
       });
+
+      if (IsPopoutPlayer(window.location)) {
+        window.addEventListener("resize", debounce(() => {
+          browser.runtime.sendMessage({
+            action: "popout-resized",
+            data: this.getWindowDimensionsAndPosition(),
+          });
+        }, 400));
+
+        window.addEventListener("beforeunload", () => {
+          browser.runtime.sendMessage({
+            action: "popout-closed",
+            data: this.getWindowDimensionsAndPosition(),
+          });
+        });
+      }
 
       console.groupEnd();
     }
@@ -377,6 +393,24 @@ const YouTubePopoutPlayer = (() => {
 
       console.log("Mutation Observer watching for changes", observer);
       console.groupEnd();
+    }
+
+    /**
+     * Returns the dimensions and position of the current window
+     * @returns
+     */
+    getWindowDimensionsAndPosition() {
+      return {
+        dimensions: {
+          // important: using innerWidth/innerHeight because we manually adjust the dimensions when opening the window
+          width: window.innerWidth,
+          height: window.innerHeight,
+        },
+        position: {
+          top: window.screenY,
+          left: window.screenX,
+        },
+      };
     }
   }
 

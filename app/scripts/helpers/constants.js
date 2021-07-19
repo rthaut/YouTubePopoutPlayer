@@ -20,6 +20,11 @@ export const OPTION_DEFAULTS = {
     width: 854,
     height: 480,
   },
+  position: {
+    mode: "auto",
+    top: 0,
+    left: 0,
+  },
   advanced: {
     close: false,
     background: false,
@@ -33,5 +38,6 @@ export const OPTIONS_BEHAVIOR_CONTROLS_VALUES = [
   "standard",
   "extended",
 ];
-export const OPTIONS_SIZE_MODE_VALUES = ["current", "custom"];
+export const OPTIONS_SIZE_MODE_VALUES = ["current", "previous", "custom"];
 export const OPTIONS_SIZE_UNITS_VALUES = ["pixels", "percentage"];
+export const OPTIONS_POSITION_MODE_VALUES = ["auto", "previous", "custom"];

@@ -25,7 +25,9 @@ import ResetOptions from "./components/ResetOptions";
 import BehaviorTab, {
   DOMAIN as BehaviorDomain,
 } from "./components/BehaviorTab";
-import SizeTab, { DOMAIN as SizeDomain } from "./components/SizeTab";
+import SizePositionTab, {
+  DOMAIN as SizePositionDomain,
+} from "./components/SizePositionTab";
 import AdvancedTab, {
   DOMAIN as AdvancedDomain,
 } from "./components/AdvancedTab";
@@ -58,7 +60,7 @@ export default function OptionsApp() {
 
   const tabs = {
     [BehaviorDomain]: <BehaviorTab />,
-    [SizeDomain]: <SizeTab />,
+    [SizePositionDomain]: <SizePositionTab />,
     [AdvancedDomain]: <AdvancedTab />,
   };
 
