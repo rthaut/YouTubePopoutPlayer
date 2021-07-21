@@ -345,6 +345,17 @@ export const StoreDimensionsAndPosition = async ({
 }) => {
   console.log("[Background] StoreDimensionsAndPosition()");
 
+  // TODO: we should also (or even instead) check if this came from a popout player window (as opposed to a tab)
+  // the use case is: user opened popout player in a window, then changed to tab mode, then closed the window
+  // in theory we could still store these values, since they came from a window
+  const target = await Options.GetLocalOption("behavior", "target");
+  if (target.toLowerCase() !== "window") {
+    console.log(
+      '[Background] GetDimensionsForPopoutPlayerWindow() :: Behavior target is not "window" - skipping dimensions and position storage'
+    );
+    return;
+  }
+
   const sizeMode = await Options.GetLocalOption("size", "mode");
   const positionMode = await Options.GetLocalOption("position", "mode");
   console.log(
