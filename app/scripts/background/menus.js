@@ -40,12 +40,12 @@ export const InitMenus = () => {
  * Event handler for when a menu item is clicked
  * @param {object} info menu info
  */
-export const OnMenuClicked = (info) => {
+export const OnMenuClicked = (info, tab) => {
   switch (info.menuItemId) {
     case "open-popout-player-for-video":
       OpenPopoutPlayer({
         id: GetVideoIDFromURL(info.linkUrl),
-        originalWindowID: browser.windows.WINDOW_ID_CURRENT, // TODO: this doesn't work as expected
+        originalWindowID: tab.windowId,
       });
       break;
 
@@ -53,7 +53,7 @@ export const OnMenuClicked = (info) => {
       OpenPopoutPlayer({
         id: GetVideoIDFromURL(info.linkUrl),
         list: GetPlaylistIDFromURL(info.linkUrl),
-        originalWindowID: browser.windows.WINDOW_ID_CURRENT, // TODO: this doesn't work as expected
+        originalWindowID: tab.windowId,
       });
       break;
   }
