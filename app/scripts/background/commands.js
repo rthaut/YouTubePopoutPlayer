@@ -6,7 +6,7 @@ export const OnCommandEventHandler = async (command) => {
 
   switch (command) {
     case "open-popout-auto-close-command":
-      console.log("[Background] Instructing Active Tab to Open Popout Player");
+      console.log("[Background] Instructing active tab to open popout player");
       SendMessageToActiveTab({
         action: "open-popout-via-command",
         data: {
@@ -18,7 +18,7 @@ export const OnCommandEventHandler = async (command) => {
 
     case "open-popout-force-close-command":
       console.log(
-        "[Background] Instructing Active Tab to Open Popout Player and Close Original Tab"
+        "[Background] Instructing active tab to open popout player and close original tab"
       );
       SendMessageToActiveTab({
         action: "open-popout-via-command",
@@ -31,7 +31,7 @@ export const OnCommandEventHandler = async (command) => {
 
     case "open-popout-no-close-command":
       console.log(
-        "[Background] Instructing Active Tab to Open Popout Player without Closing Original Tab"
+        "[Background] Instructing active tab to open popout player without closing original tab"
       );
       SendMessageToActiveTab({
         action: "open-popout-via-command",

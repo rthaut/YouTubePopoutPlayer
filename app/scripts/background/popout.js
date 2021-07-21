@@ -134,7 +134,7 @@ export const OpenPopoutPlayerInTab = async (url, active = true) => {
   };
 
   console.log(
-    "[Background] OpenPopoutPlayerInTab() :: Creating Tab",
+    "[Background] OpenPopoutPlayerInTab() :: Creating tab",
     createData
   );
   const tab = await browser.tabs.create(createData);
@@ -183,14 +183,14 @@ export const OpenPopoutPlayerInWindow = async (
   }
 
   console.log(
-    "[Background] OpenPopoutPlayerInWindow() :: Creating Window",
+    "[Background] OpenPopoutPlayerInWindow() :: Creating window",
     createData
   );
   let window = await browser.windows.create(createData);
 
   if (!isNaN(position?.top) && !isNaN(position?.left)) {
     console.log(
-      "[Background] OpenPopoutPlayerInWindow() :: Positioning Window",
+      "[Background] OpenPopoutPlayerInWindow() :: Positioning window",
       position
     );
     window = await browser.windows.update(window.id, position);
@@ -200,7 +200,7 @@ export const OpenPopoutPlayerInWindow = async (
     if (!isNaN(originalWindowID) && parseInt(originalWindowID, 10) > 0) {
       // try to move the original window back to the foreground
       console.log(
-        "[Background] OpenPopoutPlayerInWindow() :: Moving Original Window to Foreground"
+        "[Background] OpenPopoutPlayerInWindow() :: Moving original window to foreground"
       );
       browser.windows.update(originalWindowID, {
         focused: true,
@@ -208,7 +208,7 @@ export const OpenPopoutPlayerInWindow = async (
     } else {
       // fallback: minimize the popout player window
       console.warn(
-        "[Background] OpenPopoutPlayerInWindow() :: Missing/Invalid ID for Original Window",
+        "[Background] OpenPopoutPlayerInWindow() :: Missing/Invalid ID for original window",
         originalWindowID
       );
       window = await browser.windows.update(window.id, {
@@ -321,7 +321,7 @@ export const GetPositionForPopoutPlayerWindow = async () => {
 
   if (position.mode.toLowerCase() === "auto") {
     console.log(
-      '[Background] GetDimensionsForPopoutPlayerWindow() :: Position mode is "auto"'
+      '[Background] GetDimensionsForPopoutPlayerWindow() :: Position mode is "auto" - returning empty position values'
     );
     return {
       top: null,
@@ -348,7 +348,7 @@ export const StoreDimensionsAndPosition = async ({
   const sizeMode = await Options.GetLocalOption("size", "mode");
   const positionMode = await Options.GetLocalOption("position", "mode");
   console.log(
-    "[Background] GetDimensionsForPopoutPlayerWindow() :: Size and Position Modes",
+    "[Background] GetDimensionsForPopoutPlayerWindow() :: Size and position modes",
     {
       sizeMode,
       positionMode,
@@ -362,13 +362,13 @@ export const StoreDimensionsAndPosition = async ({
         ...dimensions,
       };
       console.log(
-        "[Background] StoreDimensionsAndPosition() :: Saving Size",
+        "[Background] StoreDimensionsAndPosition() :: Saving size",
         size
       );
       Options.SetLocalOptionsForDomain("size", size);
     } else {
       console.warn(
-        "[Background] StoreDimensionsAndPosition() :: Missing or Invalid Dimensions Data",
+        "[Background] StoreDimensionsAndPosition() :: Missing or invalid dimensions values",
         dimensions
       );
     }
@@ -383,7 +383,7 @@ export const StoreDimensionsAndPosition = async ({
       Options.SetLocalOptionsForDomain("position", position);
     } else {
       console.warn(
-        "[Background] StoreDimensionsAndPosition() :: Missing or Invalid Position Data",
+        "[Background] StoreDimensionsAndPosition() :: Missing or invalid position values",
         position
       );
     }

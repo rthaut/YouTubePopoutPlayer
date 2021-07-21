@@ -7,12 +7,12 @@ export const OnInstalled = async (details) => {
 
   if (details.reason === "install") {
     console.log(
-      "[Background] Extension Installed :: Initializing Defaults for Options"
+      "[Background] Extension Installed :: Initializing defaults for all options"
     );
     Options.InitLocalStorageDefaults();
   } else if (details.reason === "update") {
     console.log(
-      "[Background] Extension Updated :: Initializing Defaults for New Options"
+      "[Background] Extension Updated :: Initializing defaults for new options"
     );
     Options.InitLocalStorageDefaults(false);
   }

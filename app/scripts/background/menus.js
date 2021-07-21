@@ -28,6 +28,7 @@ export const MENUS = [
  * Initializes menus and event handlers
  */
 export const InitMenus = () => {
+  console.log("[Background] InitMenus()");
   try {
     MENUS.forEach((menu) =>
       browser.contextMenus
@@ -45,6 +46,7 @@ export const InitMenus = () => {
  * @param {object} info menu info
  */
 export const OnMenuClicked = (info, tab) => {
+  console.log("[Background] OnMenuClicked()", info, tab);
   switch (info.menuItemId) {
     case COMMAND_OPEN_POPOUT_VIDEO:
       OpenPopoutPlayer({
