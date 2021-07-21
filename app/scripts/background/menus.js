@@ -1,15 +1,19 @@
+import {
+  COMMAND_OPEN_POPOUT_VIDEO,
+  COMMAND_OPEN_POPOUT_PLAYLIST,
+} from "../helpers/constants";
 import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
 import OpenPopoutPlayer from "./popout";
 
 export const MENUS = [
   {
-    id: "open-popout-player-for-video",
+    id: COMMAND_OPEN_POPOUT_VIDEO,
     title: browser.i18n.getMessage("LinkContextMenuEntry_OpenVideo_Text"),
     contexts: ["link"],
     targetUrlPatterns: ["*://youtu.be/*", "*://*.youtube.com/watch?*"],
   },
   {
-    id: "open-popout-player-for-playlist",
+    id: COMMAND_OPEN_POPOUT_PLAYLIST,
     title: browser.i18n.getMessage("LinkContextMenuEntry_OpenPlaylist_Text"),
     contexts: ["link"],
     targetUrlPatterns: [
@@ -42,14 +46,14 @@ export const InitMenus = () => {
  */
 export const OnMenuClicked = (info, tab) => {
   switch (info.menuItemId) {
-    case "open-popout-player-for-video":
+    case COMMAND_OPEN_POPOUT_VIDEO:
       OpenPopoutPlayer({
         id: GetVideoIDFromURL(info.linkUrl),
         originalWindowID: tab.windowId,
       });
       break;
 
-    case "open-popout-player-for-playlist":
+    case COMMAND_OPEN_POPOUT_PLAYLIST:
       OpenPopoutPlayer({
         id: GetVideoIDFromURL(info.linkUrl),
         list: GetPlaylistIDFromURL(info.linkUrl),
