@@ -78,7 +78,7 @@ export const OpenPopoutPlayer = async ({
   }
   params.start = time;
 
-  if (list !== undefined && list !== null) {
+  if (list !== undefined && list !== null && list !== "") {
     // `list` is the identifier for either: playlist, search, or user_uploads
     params.list = list;
   } else if (behavior.loop) {
