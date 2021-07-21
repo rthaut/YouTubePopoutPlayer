@@ -3,6 +3,29 @@ import { IsPopoutPlayer, debounce } from "../helpers/utils";
 import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
 import HTML5Player from "./HTML5Player.class";
 
+const sendWindowDimensionsAndPosition = async (action) => {
+  const data = {
+    dimensions: {
+      // important: using innerWidth/innerHeight because we manually adjust the dimensions when opening the window
+      width: window.innerWidth,
+      height: window.innerHeight,
+    },
+    position: {
+      top: window.screenY,
+      left: window.screenX,
+    },
+  };
+
+  try {
+    await browser.runtime.sendMessage({
+      action,
+      data,
+    });
+  } catch (error) {
+    void error;
+  }
+};
+
 const YouTubePopoutPlayer = (() => {
   /**
    * YouTube Popout Player library
@@ -11,49 +34,53 @@ const YouTubePopoutPlayer = (() => {
     constructor() {
       console.group("YouTubePopoutPlayer()");
 
-      this.insertControls();
-      this.watchPageChange();
+      (async () => {
+        await this.insertControls();
+        this.watchPageChange();
+      })();
 
-      browser.runtime.onMessage.addListener(async (message, sender) => {
-        console.log(
-          "[Content] YouTubePopoutPlayer Runtime Message",
-          message,
-          sender
-        );
-
-        if (message.action !== undefined) {
-          switch (message.action.toLowerCase()) {
-            case "open-popout-via-command":
-              await this.openPopout();
-              if (message.data?.closeTab) {
-                await this.closeTab(message.data?.enforceDomainRestriction);
-              }
-          }
-
-          console.log(
-            "[Content] YouTubePopoutPlayer Runtime Message :: Unhandled Action"
-          );
-          return;
-        }
-      });
+      browser.runtime.onMessage.addListener(this.onRuntimeMessage);
 
       if (IsPopoutPlayer(window.location)) {
-        window.addEventListener("resize", debounce(() => {
-          browser.runtime.sendMessage({
-            action: "popout-resized",
-            data: this.getWindowDimensionsAndPosition(),
-          });
-        }, 400));
+        window.addEventListener(
+          "resize",
+          debounce(() => {
+            sendWindowDimensionsAndPosition("popout-resized");
+          }, 400)
+        );
 
-        window.addEventListener("beforeunload", () => {
-          browser.runtime.sendMessage({
-            action: "popout-closed",
-            data: this.getWindowDimensionsAndPosition(),
-          });
-        });
+        window.addEventListener(
+          "beforeunload",
+          debounce(() => {
+            sendWindowDimensionsAndPosition("popout-closed");
+          }, 0)
+        );
       }
 
       console.groupEnd();
+    }
+
+    async onRuntimeMessage(message, sender) {
+      console.log(
+        "[Content] YouTubePopoutPlayer Runtime Message",
+        message,
+        sender
+      );
+
+      if (message.action !== undefined) {
+        switch (message.action.toLowerCase()) {
+          case "open-popout-via-command":
+            await this.openPopout();
+            if (message.data?.closeTab) {
+              await this.closeTab(message.data?.enforceDomainRestriction);
+            }
+        }
+
+        console.log(
+          "[Content] YouTubePopoutPlayer Runtime Message :: Unhandled Action"
+        );
+        return;
+      }
     }
 
     /**
@@ -280,6 +307,7 @@ const YouTubePopoutPlayer = (() => {
       event.preventDefault();
 
       await this.openPopout();
+
       if (await Options.GetLocalOption("advanced", "close")) {
         await this.closeTab(true);
       }
@@ -393,24 +421,6 @@ const YouTubePopoutPlayer = (() => {
 
       console.log("Mutation Observer watching for changes", observer);
       console.groupEnd();
-    }
-
-    /**
-     * Returns the dimensions and position of the current window
-     * @returns
-     */
-    getWindowDimensionsAndPosition() {
-      return {
-        dimensions: {
-          // important: using innerWidth/innerHeight because we manually adjust the dimensions when opening the window
-          width: window.innerWidth,
-          height: window.innerHeight,
-        },
-        position: {
-          top: window.screenY,
-          left: window.screenX,
-        },
-      };
     }
   }
 
