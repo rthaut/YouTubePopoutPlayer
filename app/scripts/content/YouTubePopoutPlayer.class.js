@@ -49,6 +49,8 @@ const YouTubePopoutPlayer = (() => {
           }, 400)
         );
 
+        // TODO: sometimes this message doesn't seem to fire in Chrome...
+        // need to see if it is a problem with the event listener, the debounce, and/or the runtime message
         window.addEventListener(
           "beforeunload",
           debounce(() => {
