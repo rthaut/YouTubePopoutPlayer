@@ -19,7 +19,7 @@ import {
   OPTIONS_POSITION_MODE_VALUES,
 } from "../../helpers/constants";
 
-export const DOMAIN = "size-position";
+export const DOMAIN = "size_position";
 
 export default function SizePositionTab() {
   const { getOptionForDomain } = useOptions();
