@@ -1,5 +1,72 @@
-import YouTubePopoutPlayer from "./content/YouTubePopoutPlayer.class";
+import {
+  OnRuntimeMessage,
+  CustomControlsClickEventHandler,
+} from "./content/YouTubePopoutPlayer";
+import { InsertControlsAndWatch } from "./content/YouTubeCustomControls";
+import { IsPopoutPlayer, debounce } from "./helpers/utils";
+
+/**
+ * Registers event listeners for when the window is resized and closed.
+ * This is done in the content script, as there is no way to get window size or position data from the background script.
+ */
+const RegisterWindowEventListeners = () => {
+  // window resize event listener (debounced for performance)
+  window.addEventListener(
+    "resize",
+    debounce(() => {
+      SendWindowDimensionsAndPosition("popout-resized");
+    }, 400)
+  );
+
+  // alternative to window close event listener (as recommended by MDN),
+  // used for situations where the user moves the window AFTER resizing it,
+  // as there is no native move / reposition event
+  // TODO: this event/message doesn't fire occasionally in Chrome (and it never fires in Edge)
+  window.addEventListener("unload", () => {
+    SendWindowDimensionsAndPosition("popout-closed");
+  });
+};
+
+const SendWindowDimensionsAndPosition = async (action) => {
+  const data = {
+    dimensions: {
+      // important: using innerWidth/innerHeight because we manually adjust the dimensions when opening the window
+      width: window.innerWidth,
+      height: window.innerHeight,
+    },
+    position: {
+      top: window.screenY,
+      left: window.screenX,
+    },
+  };
+
+  // TODO: this still records an error in the console for the "closed" event/message
+  // also tried using promises with `.then()`/`.catch()` chaining, but that made no difference
+  /*try {
+    await browser.runtime.sendMessage({
+      action,
+      data,
+    });
+  } catch (error) {
+    void error;
+  }*/
+
+  browser.runtime
+    .sendMessage({
+      action,
+      data,
+    })
+    .catch((error) => {
+      void error;
+    });
+};
 
 (async () => {
-  new YouTubePopoutPlayer();
+  await InsertControlsAndWatch(CustomControlsClickEventHandler);
+
+  browser.runtime.onMessage.addListener(OnRuntimeMessage);
+
+  if (IsPopoutPlayer(window.location)) {
+    RegisterWindowEventListeners();
+  }
 })();
