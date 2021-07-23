@@ -2,8 +2,10 @@ import {
   COMMAND_OPEN_POPOUT_VIDEO,
   COMMAND_OPEN_POPOUT_PLAYLIST,
 } from "../helpers/constants";
+import Options from "../helpers/options";
 import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
 import OpenPopoutPlayer from "./popout";
+import { CloseTab } from "./tabs";
 
 export const MENUS = [
   {
@@ -45,22 +47,37 @@ export const InitMenus = () => {
  * Event handler for when a menu item is clicked
  * @param {object} info menu info
  */
-export const OnMenuClicked = (info, tab) => {
+export const OnMenuClicked = async (info, tab) => {
   console.log("[Background] OnMenuClicked()", info, tab);
   switch (info.menuItemId) {
     case COMMAND_OPEN_POPOUT_VIDEO:
-      OpenPopoutPlayer({
-        id: GetVideoIDFromURL(info.linkUrl),
-        originalWindowID: tab.windowId,
-      });
+      await OpenPopoutMenuAction(
+        {
+          id: GetVideoIDFromURL(info.linkUrl),
+        },
+        tab
+      );
       break;
 
     case COMMAND_OPEN_POPOUT_PLAYLIST:
-      OpenPopoutPlayer({
-        id: GetVideoIDFromURL(info.linkUrl),
-        list: GetPlaylistIDFromURL(info.linkUrl),
-        originalWindowID: tab.windowId,
-      });
+      await OpenPopoutMenuAction(
+        {
+          id: GetVideoIDFromURL(info.linkUrl),
+          list: GetPlaylistIDFromURL(info.linkUrl),
+        },
+        tab
+      );
       break;
+  }
+};
+
+const OpenPopoutMenuAction = async (popoutPlayerData, tab) => {
+  await OpenPopoutPlayer({
+    ...popoutPlayerData,
+    originalWindowID: tab.windowId,
+  });
+
+  if (await Options.GetLocalOption("advanced", "close")) {
+    await CloseTab(tab.id, true);
   }
 };
