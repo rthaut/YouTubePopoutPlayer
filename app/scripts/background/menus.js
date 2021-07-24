@@ -29,13 +29,16 @@ export const MENUS = [
 /**
  * Initializes menus and event handlers
  */
-export const InitMenus = () => {
+export const InitMenus = async () => {
   console.log("[Background] InitMenus()");
   try {
-    MENUS.forEach((menu) =>
-      browser.contextMenus
-        .remove(menu.id)
-        .finally(browser.contextMenus.create(menu))
+    await Promise.all(
+      MENUS.map((menu) =>
+        browser.contextMenus
+          .remove(menu.id)
+          .catch((error) => void error)
+          .finally(browser.contextMenus.create(menu))
+      )
     );
     browser.contextMenus.onClicked.addListener(OnMenuClicked);
   } catch (ex) {
