@@ -8,7 +8,15 @@ import { OnInstalled, OnRuntimeMessage } from "./background/runtime";
 import { OnBeforeSendHeaders } from "./background/webRequest";
 
 browser.browserAction.onClicked.addListener(() => {
-  browser.runtime.openOptionsPage();
+  if (browser.runtime.openOptionsPage) {
+    browser.runtime.openOptionsPage();
+  } else {
+    browser.management
+      .getSelf()
+      .then(({ optionsUrl: url }) =>
+        browser.windows.create({ url, type: "popup" })
+      );
+  }
 });
 
 browser.commands.onCommand.addListener(OnCommandEventHandler);
