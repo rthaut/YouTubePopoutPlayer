@@ -74,19 +74,6 @@ export default function OptionsApp() {
     <ExtensionStorageProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box marginTop={1} marginBottom={2}>
-          <Alert
-            severity="info"
-            icon={<CloudOffIcon color="primary" fontSize="inherit" />}
-            // onClose={() => {}} // TODO: use a cookie here? or an extension storage item? how/when to re-display it?
-          >
-            <Typography
-              dangerouslySetInnerHTML={{
-                __html: browser.i18n.getMessage("OptionsPerDeviceWarning"),
-              }}
-            />
-          </Alert>
-        </Box>
         <Paper elevation={0} square variant="outlined">
           <TabContext value={tabValue}>
             <AppBar position="static" color="default">
@@ -107,6 +94,19 @@ export default function OptionsApp() {
             ))}
           </TabContext>
         </Paper>
+        <Box marginTop={1} marginBottom={2} marginX={1}>
+          <Alert
+            severity="info"
+            icon={<CloudOffIcon color="primary" fontSize="inherit" />}
+            // onClose={() => {}} // TODO: use a cookie here? or an extension storage item? how/when to re-display it?
+          >
+            <Typography
+              dangerouslySetInnerHTML={{
+                __html: browser.i18n.getMessage("OptionsPerDeviceWarning"),
+              }}
+            />
+          </Alert>
+        </Box>
         <Box marginTop={2} marginBottom={1}>
           <ResetOptions />
         </Box>
