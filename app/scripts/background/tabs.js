@@ -55,3 +55,16 @@ export const SendMessageToActiveTab = async (message) => {
     tabs.map((tab) => browser.tabs.sendMessage(tab.id, message))
   );
 };
+
+/**
+ * Gets the active browser tab
+ * @returns {Promise<object>}
+ */
+export const GetActiveTab = async () => {
+  const tabs = await browser.tabs.query({
+    currentWindow: true,
+    active: true,
+  });
+
+  return tabs.length > 0 ? tabs[0] : null;
+};
