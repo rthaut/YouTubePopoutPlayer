@@ -63,7 +63,8 @@
   "options_ui": {
     "__chrome__page": "pages/options.html?vendor=chrome",
     "__edge__page": "pages/options.html?vendor=edge",
-    "__firefox__page": "pages/options.html?vendor=firefox"
+    "__firefox__page": "pages/options.html?vendor=firefox",
+    "open_in_tab": false
   },
   "permissions": [
     "*://*.youtube.com/*",
