@@ -20,11 +20,11 @@
     "description": "The description for the 'open-popout-auto-close-command' extension command"
   },
   "OpenPopoutForceCloseCommandDescription": {
-    "message": "Open popout player for the current YouTube video AND close the current window/tab",
+    "message": "Open popout player and close the current window/tab",
     "description": "The description for the 'open-popout-force-close-command' extension command"
   },
   "OpenPopoutNoCloseCommandDescription": {
-    "message": "Open popout player for the current YouTube video BUT DO NOT close the current window/tab",
+    "message": "Open popout player without closing the current window/tab",
     "description": "The description for the 'open-popout-no-close-command' extension command"
   },
   "ContextMenuEntryLabel_PopoutPlayer": {
