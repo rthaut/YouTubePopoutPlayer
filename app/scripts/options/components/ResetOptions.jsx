@@ -79,7 +79,7 @@ export default function ResetOptions() {
           <Button onClick={handleClose} color="default">
             {browser.i18n.getMessage("ButtonCancelResetLabel")}
           </Button>
-          <Button onClick={handleConfirm} color="primary">
+          <Button onClick={handleConfirm} color="secondary">
             {browser.i18n.getMessage("ButtonConfirmResetLabel")}
           </Button>
         </DialogActions>
