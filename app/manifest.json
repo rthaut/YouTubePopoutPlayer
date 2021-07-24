@@ -77,7 +77,6 @@
     "tabs"
   ],
   "__chrome__minimum_chrome_version": "51.0",
-  "__edge__minimum_edge_version": "79.0.309",
   "__firefox__applications": {
     "gecko": {
       "id": "{85b42b8f-49cd-4935-aeca-a6b32dd6ac9f}",
