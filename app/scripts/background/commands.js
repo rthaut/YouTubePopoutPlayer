@@ -4,6 +4,9 @@ import { SendMessageToActiveTab } from "./tabs";
 export const OnCommandEventHandler = async (command) => {
   console.log("[Background] Command Received", command);
 
+  // TODO: these could be handled via the background script directly (like the menu actions) IF we could get the current video player's time and dimensions...
+  // that would reduce the amount of content <--> background script messaging substantially
+
   switch (command) {
     case "open-popout-auto-close-command":
       console.log("[Background] Instructing active tab to open popout player");
