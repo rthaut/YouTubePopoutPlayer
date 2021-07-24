@@ -107,6 +107,8 @@ const InsertContextMenuEntry = (clickEventHandler) => {
   const menuItemIcon = document.createElement("div");
   menuItemIcon.className = "ytp-menuitem-icon";
 
+  menuItemIcon.appendChild(GetPopoutIconSVG("menu", false));
+
   const menuItemLabel = document.createElement("div");
   menuItemLabel.className = "ytp-menuitem-label";
   menuItemLabel.innerText = browser.i18n.getMessage(
@@ -189,40 +191,6 @@ const InsertPlayerControlsButton = async (clickEventHandler) => {
     return false;
   }
 
-  const svgNS = "http://www.w3.org/2000/svg";
-
-  const playerButtonSVG = document.createElementNS(svgNS, "svg");
-  playerButtonSVG.setAttribute("width", "100%");
-  playerButtonSVG.setAttribute("height", "100%");
-  playerButtonSVG.setAttribute("viewBox", "0 0 36 36");
-  playerButtonSVG.setAttribute("version", "1.1");
-
-  const paths = {
-    frame: "m 9,10 v 16 h 18 v -4 h -2 v 2 H 11 V 12 h 3 v -2 z",
-    //'arrow': 'M 28,9 H 18 l 3,3 -6,8 2,2 8,-6 3,3 z',
-    popout: "M 16,9 V 20 H 28 V 9 Z m 2,2 h 8 v 7 h -8 z",
-  };
-
-  for (const name in paths) {
-    const pathElement = document.createElementNS(svgNS, "path");
-    pathElement.id = "ytp-svg-pop-" + name;
-    pathElement.setAttributeNS(null, "d", paths[name]);
-    pathElement.setAttributeNS(null, "class", "ytp-svg-fill");
-
-    const useElement = document.createElementNS(svgNS, "use");
-    useElement.setAttributeNS(null, "class", "ytp-svg-shadow");
-    useElement.setAttributeNS(
-      "http://www.w3.org/1999/xlink",
-      "href",
-      "#" + pathElement.id
-    );
-
-    playerButtonSVG.appendChild(useElement);
-    playerButtonSVG.appendChild(pathElement);
-  }
-
-  // TODO: see if we can re-trigger (or fake) the YT method(s) that setup custom tooltips for the buttons?
-  //       (the tooltips come from aria-label and display ABOVE the button, making them more visible)
   playerButton = document.createElement("button");
   playerButton.className = ["ytp-popout-button", "ytp-button"].join(" ");
   playerButton.setAttribute(
@@ -234,12 +202,71 @@ const InsertPlayerControlsButton = async (clickEventHandler) => {
     browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer")
   );
   playerButton.id = "popout-player-control-button";
-  playerButton.appendChild(playerButtonSVG);
+  playerButton.appendChild(GetPopoutIconSVG("button", true));
   playerButton.addEventListener("click", clickEventHandler, false);
+
+  // TODO: this doesn't work (`fullScreenButton["onmouseover"]` is null); need another way to implement the fancy tooltip
+  playerButton.addEventListener(
+    "mouseover",
+    fullScreenButton["onmouseover"],
+    false
+  );
 
   controls.insertBefore(playerButton, fullScreenButton);
 
   console.log("Inserted Button", playerButton);
   console.groupEnd();
   return true;
+};
+
+/**
+ * Gets an SVG element for the requested Popout icon
+ * @param {String} type the type of icon
+ * @param {Boolean} shadow indicates if the YouTube shadows should be applied to the SVG paths
+ * @returns {HTMLElement}
+ */
+const GetPopoutIconSVG = (type, shadow = false) => {
+  const svgNS = "http://www.w3.org/2000/svg";
+
+  const iconSVG = document.createElementNS(svgNS, "svg");
+  iconSVG.setAttribute("width", "100%");
+  iconSVG.setAttribute("height", "100%");
+  iconSVG.setAttribute("viewBox", "0 0 36 36");
+  iconSVG.setAttribute("version", "1.1");
+
+  const paths = {
+    button: {
+      // paths are inset from edges more and are narrower
+      frame: "m 9,10 v 16 h 18 v -4 h -2 v 2 H 11 V 12 h 3 v -2 z",
+      popout: "M 16,9 V 20 H 28 V 9 Z m 2,2 h 8 v 7 h -8 z",
+    },
+    menu: {
+      // paths are inset from edges less and are wider
+      frame: "m 3,5 v 28 h 28 v -9 h -3 v 6 H 6 V 8 h 6 V 5 Z",
+      popout: "M 15,3 V 21 H 33 V 3 Z m 3,3 H 30 V 18 H 18 Z",
+    },
+  };
+
+  for (const [name, path] of Object.entries(paths[type])) {
+    const pathElement = document.createElementNS(svgNS, "path");
+    pathElement.id = "ytp-svg-pop-" + name;
+    pathElement.setAttributeNS(null, "d", path);
+    pathElement.setAttributeNS(null, "class", "ytp-svg-fill");
+
+    if (shadow) {
+      const useElement = document.createElementNS(svgNS, "use");
+      useElement.setAttributeNS(null, "class", "ytp-svg-shadow");
+      useElement.setAttributeNS(
+        "http://www.w3.org/1999/xlink",
+        "href",
+        "#" + pathElement.id
+      );
+
+      iconSVG.appendChild(useElement);
+    }
+
+    iconSVG.appendChild(pathElement);
+  }
+
+  return iconSVG;
 };
