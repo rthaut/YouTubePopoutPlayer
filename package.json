@@ -31,7 +31,7 @@
   "browserslist": [
     "chrome >= 51.0",
     "edge >= 79.0.309",
-    "firefox >= 60.0"
+    "firefox >= 62.0"
   ],
   "dependencies": {
     "@material-ui/core": "^4.12.1",

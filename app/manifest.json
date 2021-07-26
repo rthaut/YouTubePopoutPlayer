@@ -81,7 +81,7 @@
   "__firefox__applications": {
     "gecko": {
       "id": "{85b42b8f-49cd-4935-aeca-a6b32dd6ac9f}",
-      "strict_min_version": "60.0"
+      "strict_min_version": "62.0"
     }
   }
 }
