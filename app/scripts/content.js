@@ -41,16 +41,6 @@ const SendWindowDimensionsAndPosition = async (action) => {
   };
 
   // TODO: this still records an error in the console for the "closed" event/message
-  // also tried using promises with `.then()`/`.catch()` chaining, but that made no difference
-  /*try {
-    await browser.runtime.sendMessage({
-      action,
-      data,
-    });
-  } catch (error) {
-    void error;
-  }*/
-
   browser.runtime
     .sendMessage({
       action,
