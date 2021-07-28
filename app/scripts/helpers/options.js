@@ -65,8 +65,8 @@ const Options = (() => {
 
     /**
      * Converts options in a nested structure to a flat structure
-     * @param {Object} options the options to convert
-     * @returns {Object} the converted options
+     * @param {object} options the options to convert
+     * @returns {object} the converted options
      */
     ConvertForStorage: function (options) {
       console.log("Options.ConvertForStorage()", options);
@@ -94,8 +94,8 @@ const Options = (() => {
 
     /**
      * Converts options in a flat structure to a nested structure
-     * @param {Object} options the options to convert
-     * @returns {Object} the converted options
+     * @param {object} options the options to convert
+     * @returns {object} the converted options
      */
     ConvertFromStorage: function (options) {
       console.log("Options.ConvertFromStorage()", options);
@@ -164,7 +164,7 @@ const Options = (() => {
 
     /**
      * Returns all options (as an object) from local storage
-     * @returns {Object}
+     * @returns {object}
      */
     GetLocalOptions: async function () {
       console.log("Options.GetLocalOptions()");
@@ -179,7 +179,7 @@ const Options = (() => {
     /**
      * Returns all options (as an object) for the specified domain from local storage
      * @param {string} domain the domain of the options
-     * @returns {Object}
+     * @returns {object}
      */
     GetLocalOptionsForDomain: async function (domain) {
       console.log("Options.GetLocalOptionsForDomain()", domain);
@@ -193,7 +193,7 @@ const Options = (() => {
 
     /**
      * Saves the options to local storage
-     * @param {Object} options options (in a nested structure)
+     * @param {object} options options (in a nested structure)
      */
     SetLocalOptionsForDomain: async function (domain, options) {
       console.log("Options.SetLocalOptionsForDomain()", domain, options);

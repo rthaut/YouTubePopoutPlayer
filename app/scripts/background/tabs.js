@@ -2,9 +2,9 @@ import { YOUTUBE_DOMAINS } from "../helpers/constants";
 
 /**
  * Closes the specified tab
- * @param {Number} tabId the ID of the tab to close
- * @param {Boolean} [enforceDomainRestriction] if the tab should only be closed if it is on a known YouTube domain
- * @returns {Boolean} if the tab was closed successfully
+ * @param {number} tabId the ID of the tab to close
+ * @param {boolean} [enforceDomainRestriction] if the tab should only be closed if it is on a known YouTube domain
+ * @returns {boolean} if the tab was closed successfully
  */
 export const CloseTab = async (tabId, enforceDomainRestriction = false) => {
   if (enforceDomainRestriction) {
@@ -42,7 +42,7 @@ export const CloseTab = async (tabId, enforceDomainRestriction = false) => {
 
 /**
  * Sends a message to the active browser tab
- * @param {Object} message the message to send to the active tab
+ * @param {object} message the message to send to the active tab
  * @returns {Promise}
  */
 export const SendMessageToActiveTab = async (message) => {

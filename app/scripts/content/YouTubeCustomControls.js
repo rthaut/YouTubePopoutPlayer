@@ -2,8 +2,13 @@ import Options from "../helpers/options";
 import { IsPopoutPlayer } from "../helpers/utils";
 
 /**
+ * @callback ControlsClickEventHandler
+ * @param {MouseEvent} event
+ */
+
+/**
  * Inserts the various control elements and watches the DOM for changes and re-inserts controls as needed
- * @param {Function} controlsClickEventHandler the click event handler function for the controls
+ * @param {ControlsClickEventHandler} controlsClickEventHandler the click event handler function for the controls
  */
 export const InsertControlsAndWatch = async (controlsClickEventHandler) => {
   await InsertControls(controlsClickEventHandler);
@@ -13,7 +18,7 @@ export default InsertControlsAndWatch;
 
 /**
  * Inserts the various control elements
- * @param {Function} controlsClickEventHandler the click event handler function for the controls
+ * @param {ControlsClickEventHandler} controlsClickEventHandler the click event handler function for the controls
  */
 export const InsertControls = async (controlsClickEventHandler) => {
   console.group("[YouTubeCustomControls] InsertControls()");
@@ -35,7 +40,7 @@ export const InsertControls = async (controlsClickEventHandler) => {
 
 /**
  * Watches the DOM for changes and re-inserts controls as needed
- * @param {Function} controlsClickEventHandler the click event handler function for the controls
+ * @param {ControlsClickEventHandler} controlsClickEventHandler the click event handler function for the controls
  */
 export const WatchForPageChanges = (controlsClickEventHandler) => {
   console.group("[YouTubeCustomControls] WatchForPageChanges()");
@@ -77,7 +82,7 @@ export const WatchForPageChanges = (controlsClickEventHandler) => {
 
 /**
  * Appends a new entry to the context (right-click) menu of the YouTube video player
- * @param {Function} clickEventHandler the click event handler function for the content menu entry
+ * @param {ControlsClickEventHandler} clickEventHandler the click event handler function for the content menu entry
  */
 const InsertContextMenuEntry = (clickEventHandler) => {
   console.group("[YouTubeCustomControls] InsertControls()");
@@ -154,7 +159,7 @@ const InsertContextMenuEntry = (clickEventHandler) => {
 /**
  * Adds a new button to the YouTube video player controls (in the lower-right corner)
  * This method checks the configurable "controls" option, so the button is only inserted when appropriate
- * @param {Function} clickEventHandler the click event handler function for the button
+ * @param {ControlsClickEventHandler} clickEventHandler the click event handler function for the button
  */
 const InsertPlayerControlsButton = async (clickEventHandler) => {
   console.group("[YouTubeCustomControls] InsertPlayerControlsButton()");
@@ -221,8 +226,8 @@ const InsertPlayerControlsButton = async (clickEventHandler) => {
 
 /**
  * Gets an SVG element for the requested Popout icon
- * @param {String} type the type of icon
- * @param {Boolean} shadow indicates if the YouTube shadows should be applied to the SVG paths
+ * @param {string} type the type of icon
+ * @param {boolean} shadow indicates if the YouTube shadows should be applied to the SVG paths
  * @returns {HTMLElement}
  */
 const GetPopoutIconSVG = (type, shadow = false) => {

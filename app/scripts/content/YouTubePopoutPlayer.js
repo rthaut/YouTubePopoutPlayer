@@ -74,7 +74,7 @@ export const OpenPopout = async () => {
 
 /**
  * Closes the current tab (via a request to the background script)
- * @param {Boolean} [enforceDomainRestriction] if the tab should only be closed if it is on a known YouTube domain
+ * @param {boolean} [enforceDomainRestriction] if the tab should only be closed if it is on a known YouTube domain
  */
 export const CloseTab = async (enforceDomainRestriction = true) => {
   console.log("[Content] YouTubePopoutPlayer CloseTab()");
