@@ -150,6 +150,38 @@ export default function AdvancedTab() {
     );
   }
 
+  function YouTubeNoCookieDomainControl() {
+    return (
+      <>
+        <FormControl>
+          <FormControlLabel
+            label={browser.i18n.getMessage(
+              "OptionsAdvancedYouTubeNoCookieDomainLabel"
+            )}
+            control={
+              <Switch
+                name="close-switch"
+                color="primary"
+                checked={options["noCookieDomain"]}
+                onChange={(event) =>
+                  setOption("noCookieDomain", event.target.checked)
+                }
+              />
+            }
+          />
+          <Typography
+            color="textSecondary"
+            dangerouslySetInnerHTML={{
+              __html: browser.i18n.getMessage(
+                "OptionsAdvancedYouTubeNoCookieDomainDescription"
+              ),
+            }}
+          />
+        </FormControl>
+      </>
+    );
+  }
+
   function ContextualIdentitySupportControl() {
     const [showPermissionError, setShowPermissionError] = React.useState(false);
 
@@ -265,6 +297,10 @@ export default function AdvancedTab() {
       <Divider />
       <Box marginY={2}>
         <BackgroundTabControl />
+      </Box>
+      <Divider />
+      <Box marginY={2}>
+        <YouTubeNoCookieDomainControl />
       </Box>
       {isFirefox && (
         <>

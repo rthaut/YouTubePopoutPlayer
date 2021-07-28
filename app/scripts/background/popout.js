@@ -2,6 +2,7 @@ import {
   START_THRESHOLD,
   OPTION_DEFAULTS,
   YOUTUBE_EMBED_URL,
+  YOUTUBE_NOCOOKIE_EMBED_URL,
 } from "../helpers/constants";
 import Options from "../helpers/options";
 import { GetDimensionForScreenPercentage, IsFirefox } from "../helpers/utils";
@@ -88,7 +89,7 @@ export const OpenPopoutPlayer = async ({
     params.playlist = id;
   }
 
-  const url = GetUrlForPopoutPlayer(id, params);
+  const url = await GetUrlForPopoutPlayer(id, params);
 
   const openInBackground = await Options.GetLocalOption(
     "advanced",
@@ -239,16 +240,18 @@ export const OpenPopoutPlayerInWindow = async (
 /**
  * Gets the URL for the popout player given a video ID and/or URL parameters
  * @param {string} [id] the video ID
- * @param {Object} [params] URL parameters
+ * @param {object} [params] URL parameters
  * @returns {string} the full URL for the popout player
  */
-export const GetUrlForPopoutPlayer = (id = null, params = null) => {
+export const GetUrlForPopoutPlayer = async (id = null, params = null) => {
   console.log("[Background] GetUrlForPopoutPlayer()", id, params);
 
   // TODO: if autoplay is disabled, we can omit the video ID from the path; as long as either `playlist` or `list` has a value, the Embedded Player will use it when the user clicks play (for single videos, this will prevent it appearing as a playlist with 2 videos, even though it is just the same video twice)
   // TODO: there may be some other edge cases to consider, like setting the start time with autoplay disabled
 
-  let url = YOUTUBE_EMBED_URL;
+  let url = (await Options.GetLocalOption("advanced", "noCookieDomain"))
+    ? YOUTUBE_NOCOOKIE_EMBED_URL
+    : YOUTUBE_EMBED_URL;
 
   if (id !== undefined && id !== null) {
     url += id;

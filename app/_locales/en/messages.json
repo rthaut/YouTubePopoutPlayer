@@ -251,6 +251,12 @@
       }
     }
   },
+  "OptionsAdvancedYouTubeNoCookieDomainLabel": {
+    "message": "Use \"No Cookie\" Version of YouTube"
+  },
+  "OptionsAdvancedYouTubeNoCookieDomainDescription": {
+    "message": "Enabling this will cause the popout player to use the alternative \"youtube-nocookie.com\" site, which is Google's attempt to provide a version of YouTube that has fewer tracking cookies. <strong>The default for this setting is disabled.</strong>"
+  },
   "FieldMaxValuePlaceholderMessage": {
     "message": "The value of this field cannot be more than <strong>$VALUE$</strong>",
     "placeholders": {

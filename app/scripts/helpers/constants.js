@@ -28,6 +28,7 @@ export const OPTION_DEFAULTS = {
   advanced: {
     background: false,
     close: false,
+    noCookieDomain: false,
     contextualIdentity: false,
     title: "",
   },
