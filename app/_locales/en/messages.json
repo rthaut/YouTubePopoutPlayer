@@ -244,7 +244,12 @@
     "message": "Multi-Account Containers Support"
   },
   "OptionsAdvancedContextualIdentityDescription": {
-    "message": "Enabling this will cause the popout player to be opened in the same multi-account container (a.k.a. contextual identity) as the original window/tab. <strong>The default for this setting is disabled.</strong>"
+    "message": "Enabling this will cause the popout player to be opened in the same <a href=\"$URL$\">multi-account container (a.k.a. contextual identity)</a> as the original window/tab. <strong>The default for this setting is disabled.</strong>",
+    "placeholders": {
+      "url": {
+        "content": "https://support.mozilla.org/en-US/kb/containers"
+      }
+    }
   },
   "FieldMaxValuePlaceholderMessage": {
     "message": "The value of this field cannot be more than <strong>$VALUE$</strong>",
