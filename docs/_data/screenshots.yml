@@ -3,13 +3,13 @@
   type: option
 
 - name: Size
-  path: /screenshots/Options-Size.png
+  path: /screenshots/Options-Size-Custom.png
   type: option
 
 - name: Position
-  path: /screenshots/Options-Position.png
+  path: /screenshots/Options-Position-Custom.png
   type: option
 
 - name: Advanced
-  path: /screenshots/Options-Advanced.png
+  path: /screenshots/Options-Advanced-Firefox.png
   type: option
