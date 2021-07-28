@@ -238,7 +238,7 @@
     "message": "Open in Background Window/Tab"
   },
   "OptionsAdvancedOpenInBackgroundDescription": {
-    "message": "This setting controls whether or not the popout player opens in a background window/tab. <strong>The default for this setting is disabled.</strong>"
+    "message": "Enabling this will cause the popout player to be opened in a background window/tab. <strong>The default for this setting is disabled.</strong>"
   },
   "FieldMaxValuePlaceholderMessage": {
     "message": "The value of this field cannot be more than <strong>$VALUE$</strong>",
