@@ -5,6 +5,7 @@ import {
 } from "../helpers/constants";
 import Options from "../helpers/options";
 import { GetDimensionForScreenPercentage, IsFirefox } from "../helpers/utils";
+import { GetCookieStoreIDForTab } from "./tabs";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
@@ -19,7 +20,7 @@ export const OpenPopoutPlayer = async ({
   time = 0,
   originalVideoWidth = null,
   originalVideoHeight = null,
-  originalWindowID = -1,
+  originTabId = -1,
 }) => {
   console.log("[Background] OpenPopoutPlayer()", {
     id,
@@ -27,7 +28,7 @@ export const OpenPopoutPlayer = async ({
     time,
     originalVideoWidth,
     originalVideoHeight,
-    originalWindowID,
+    originTabId,
   });
 
   // https://developers.google.com/youtube/player_parameters
@@ -97,7 +98,7 @@ export const OpenPopoutPlayer = async ({
   let result;
   switch (behavior.target.toLowerCase()) {
     case "tab":
-      result = OpenPopoutPlayerInTab(url, !openInBackground);
+      result = OpenPopoutPlayerInTab(url, !openInBackground, originTabId);
       break;
 
     case "window":
@@ -110,7 +111,7 @@ export const OpenPopoutPlayer = async ({
         ),
         await GetPositionForPopoutPlayerWindow(),
         openInBackground,
-        originalWindowID
+        originTabId
       );
       break;
   }
@@ -123,15 +124,23 @@ export const OpenPopoutPlayer = async ({
  * Opens an Embedded Player in a new tab
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {boolean} [active] indicates if the tab should become the active tab in the window
+ * @param {number} originTabId the ID of the tab from which the request to open the Popout Player originated
  * @returns {Promise<object>}
  */
-export const OpenPopoutPlayerInTab = async (url, active = true) => {
-  console.log("[Background] OpenPopoutPlayerInTab()", url, active);
+export const OpenPopoutPlayerInTab = async (
+  url,
+  active = true,
+  originTabId = -1
+) => {
+  console.log("[Background] OpenPopoutPlayerInTab()", url, active, originTabId);
 
-  const createData = {
-    url,
-    active,
-  };
+  const createData = await AddContextualIdentityToCreateData(
+    {
+      url,
+      active,
+    },
+    originTabId
+  );
 
   console.log(
     "[Background] OpenPopoutPlayerInTab() :: Creating tab",
@@ -148,6 +157,7 @@ export const OpenPopoutPlayerInTab = async (url, active = true) => {
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {object} dimensions the target width & height of the window
  * @param {boolean} [openInBackground] indicates if the window should be opened in the background
+ * @param {number} originTabId the ID of the tab from which the request to open the Popout Player originated
  * @returns {Promise<object>}
  */
 export const OpenPopoutPlayerInWindow = async (
@@ -158,7 +168,7 @@ export const OpenPopoutPlayerInWindow = async (
   },
   position = { top: null, left: null },
   openInBackground = false,
-  originalWindowID = -1
+  originTabId = -1
 ) => {
   console.log(
     "[Background] OpenPopoutPlayerInWindow()",
@@ -166,15 +176,18 @@ export const OpenPopoutPlayerInWindow = async (
     dimensions,
     position,
     openInBackground,
-    originalWindowID
+    originTabId
   );
 
-  const createData = {
-    url,
-    state: "normal",
-    type: "popup",
-    ...dimensions,
-  };
+  const createData = await AddContextualIdentityToCreateData(
+    {
+      url,
+      state: "normal",
+      type: "popup",
+      ...dimensions,
+    },
+    originTabId
+  );
 
   const isFirefox = await IsFirefox();
 
@@ -197,19 +210,20 @@ export const OpenPopoutPlayerInWindow = async (
   }
 
   if (openInBackground) {
-    if (!isNaN(originalWindowID) && parseInt(originalWindowID, 10) > 0) {
+    if (!isNaN(originTabId) && parseInt(originTabId, 10) > 0) {
       // try to move the original window back to the foreground
       console.log(
         "[Background] OpenPopoutPlayerInWindow() :: Moving original window to foreground"
       );
-      browser.windows.update(originalWindowID, {
+      const { windowId } = await browser.tabs.get(originTabId);
+      browser.windows.update(windowId, {
         focused: true,
       });
     } else {
       // fallback: minimize the popout player window
       console.warn(
-        "[Background] OpenPopoutPlayerInWindow() :: Missing/Invalid ID for original window",
-        originalWindowID
+        "[Background] OpenPopoutPlayerInWindow() :: Missing/Invalid ID for original tab",
+        originTabId
       );
       window = await browser.windows.update(window.id, {
         focused: false,
@@ -399,6 +413,47 @@ export const StoreDimensionsAndPosition = async ({
       );
     }
   }
+};
+
+/**
+ * Adds the contextual identify properties to the create data if appropriate
+ * @param {object} createData properties for the tab/window to be created for the Popout Player
+ * @param {number} originTabId the original tab ID (of which to match the contextual identify)
+ * @returns modified properties for the tab/window to be created for the Popout Player
+ */
+export const AddContextualIdentityToCreateData = async (
+  createData = {},
+  originTabId = -1
+) => {
+  try {
+    const isFirefox = await IsFirefox();
+    const useContextualIdentity = await Options.GetLocalOption(
+      "advanced",
+      "contextualIdentity"
+    );
+
+    if (isFirefox && useContextualIdentity) {
+      const cookieStoreId = await GetCookieStoreIDForTab(originTabId);
+      if (cookieStoreId) {
+        createData.cookieStoreId = cookieStoreId;
+        console.log(
+          "[Background] AddContextualIdentityToCreateData() :: Added cookie store ID to create data",
+          createData
+        );
+      } else {
+        console.warn(
+          "[Background] AddContextualIdentityToCreateData() :: Failed to get cookie store ID from original tab"
+        );
+      }
+    }
+  } catch (error) {
+    console.error(
+      "Failed to add contextual identity to window/tab for Popout Player",
+      error
+    );
+  }
+
+  return createData;
 };
 
 export default OpenPopoutPlayer;

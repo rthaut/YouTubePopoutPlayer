@@ -26,8 +26,7 @@ export const OnRuntimeMessage = async (message, sender) => {
       case "open-popout":
         return OpenPopoutPlayer({
           ...message.data,
-          originalWindowID:
-            sender.tab.windowId ?? browser.windows.WINDOW_ID_CURRENT,
+          originTabId: sender.tab.id,
         });
 
       case "get-commands":

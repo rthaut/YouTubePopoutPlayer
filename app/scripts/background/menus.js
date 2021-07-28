@@ -77,7 +77,7 @@ export const OnMenuClicked = async (info, tab) => {
 const OpenPopoutMenuAction = async (popoutPlayerData, tab) => {
   await OpenPopoutPlayer({
     ...popoutPlayerData,
-    originalWindowID: tab.windowId,
+    originTabId: tab.id,
   });
 
   if (await Options.GetLocalOption("advanced", "close")) {

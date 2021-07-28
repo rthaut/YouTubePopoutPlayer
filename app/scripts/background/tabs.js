@@ -68,3 +68,32 @@ export const GetActiveTab = async () => {
 
   return tabs.length > 0 ? tabs[0] : null;
 };
+
+/**
+ * Gets the value of the `cookieStoreId` property of the specified tab
+ * @param {number} tabId the ID of the tab
+ * @returns {string|null} the `cookieStoreId` property value or `null` if unavailable
+ */
+export const GetCookieStoreIDForTab = async (tabId) => {
+  console.log("[Background] GetCookieStoreIDForTab()", tabId);
+
+  if (isNaN(tabId) || parseInt(tabId, 10) <= 0) {
+    return null;
+  }
+
+  const tab = await browser.tabs.get(tabId);
+  console.log("[Background] GetCookieStoreIDForTab() :: Tab", tab);
+
+  if (!Object.prototype.hasOwnProperty.call(tab, "cookieStoreId")) {
+    console.warn(
+      "[Background] GetCookieStoreIDForTab() :: Tab data is missing cookieStoreId property"
+    );
+    return null;
+  }
+
+  console.log(
+    "[Background] GetCookieStoreIDForTab() :: Return",
+    tab.cookieStoreId
+  );
+  return tab.cookieStoreId;
+};

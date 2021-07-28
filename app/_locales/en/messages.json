@@ -228,17 +228,23 @@
   "OptionsAdvancedCloseDescription": {
     "message": "Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong>"
   },
+  "OptionsAdvancedOpenInBackgroundLabel": {
+    "message": "Open in Background Window/Tab"
+  },
+  "OptionsAdvancedOpenInBackgroundDescription": {
+    "message": "Enabling this will cause the popout player to be opened in a background window/tab. <strong>The default for this setting is disabled.</strong>"
+  },
   "OptionsAdvancedTitleLabel": {
     "message": "Window Title Text (Preface)"
   },
   "OptionsAdvancedTitleDescription": {
     "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
   },
-  "OptionsAdvancedOpenInBackgroundLabel": {
-    "message": "Open in Background Window/Tab"
+  "OptionsAdvancedContextualIdentityLabel": {
+    "message": "Multi-Account Containers Support"
   },
-  "OptionsAdvancedOpenInBackgroundDescription": {
-    "message": "Enabling this will cause the popout player to be opened in a background window/tab. <strong>The default for this setting is disabled.</strong>"
+  "OptionsAdvancedContextualIdentityDescription": {
+    "message": "Enabling this will cause the popout player to be opened in the same multi-account container (a.k.a. contextual identity) as the original window/tab. <strong>The default for this setting is disabled.</strong>"
   },
   "FieldMaxValuePlaceholderMessage": {
     "message": "The value of this field cannot be more than <strong>$VALUE$</strong>",

@@ -75,6 +75,7 @@
     "webRequestBlocking"
   ],
   "optional_permissions": [
+    "cookies",
     "tabs"
   ],
   "__chrome__minimum_chrome_version": "51.0",

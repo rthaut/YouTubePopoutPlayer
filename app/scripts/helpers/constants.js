@@ -26,8 +26,9 @@ export const OPTION_DEFAULTS = {
     left: 0,
   },
   advanced: {
-    close: false,
     background: false,
+    close: false,
+    contextualIdentity: false,
     title: "",
   },
 };

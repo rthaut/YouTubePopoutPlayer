@@ -36,79 +36,47 @@ export default function AdvancedTab() {
     })();
   }, []);
 
-  function TitleOptionControl() {
-    const [title, setTitle] = React.useState(options["title"]);
+  const handlePermissionSwitchToggle = async (
+    optionName,
+    permissionsRequest,
+    setShowPermissionError,
+    remove = false
+  ) => {
+    setShowPermissionError(false);
 
-    const saveTitle = () => {
-      if (title !== options["title"]) {
-        setOption("title", title);
-      }
-    };
+    if (remove) {
+      await browser.permissions.remove(permissionsRequest);
+      setOption(optionName, false);
+      return false;
+    }
 
-    useDebounce(saveTitle, 2000, [title, options]);
-
-    return (
-      <FormControl>
-        <InputLabel htmlFor="title-input" variant="standard">
-          {browser.i18n.getMessage("OptionsAdvancedTitleLabel")}
-        </InputLabel>
-        <Input
-          id="title-input"
-          type="text"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.code === "Enter") {
-              saveTitle();
-            }
-          }}
-          endAdornment={
-            title !== options["title"] && (
-              <InputAdornment position="end">
-                <IconButton onClick={saveTitle} edge="end">
-                  <CheckIcon />
-                </IconButton>
-              </InputAdornment>
-            )
-          }
-        />
-        <Typography
-          color="textSecondary"
-          dangerouslySetInnerHTML={{
-            __html: browser.i18n.getMessage("OptionsAdvancedTitleDescription"),
-          }}
-        />
-      </FormControl>
+    const permissionGranted = await browser.permissions.request(
+      permissionsRequest
     );
-  }
+
+    if (!permissionGranted) {
+      setShowPermissionError(true);
+      return false;
+    }
+
+    setOption(optionName, true);
+    return true;
+  };
 
   function CloseOptionControl() {
     const [showPermissionError, setShowPermissionError] = React.useState(false);
 
-    // TODO: extract this to a generic utility function for re-use? (if future optional permissions are ever introduced)
     const handleCloseSwitchToggle = async (event) => {
-      setShowPermissionError(false);
-
       const permissionsRequest = {
         permissions: ["tabs"],
       };
 
-      if (!event.target.checked) {
-        await browser.permissions.remove(permissionsRequest);
-        setOption("close", false);
-        return;
-      }
-
-      const permissionGranted = await browser.permissions.request(
-        permissionsRequest
+      handlePermissionSwitchToggle(
+        "close",
+        permissionsRequest,
+        setShowPermissionError,
+        !event.target.checked
       );
-
-      if (!permissionGranted) {
-        setShowPermissionError(true);
-        return;
-      }
-
-      setOption("close", true);
     };
 
     return (
@@ -155,7 +123,9 @@ export default function AdvancedTab() {
       <>
         <FormControl>
           <FormControlLabel
-            label={browser.i18n.getMessage("OptionsAdvancedOpenInBackgroundLabel")}
+            label={browser.i18n.getMessage(
+              "OptionsAdvancedOpenInBackgroundLabel"
+            )}
             control={
               <Switch
                 name="close-switch"
@@ -180,6 +150,109 @@ export default function AdvancedTab() {
     );
   }
 
+  function ContextualIdentitySupportControl() {
+    const [showPermissionError, setShowPermissionError] = React.useState(false);
+
+    const handleCloseSwitchToggle = async (event) => {
+      const permissionsRequest = {
+        permissions: ["cookies"],
+      };
+
+      handlePermissionSwitchToggle(
+        "contextualIdentity",
+        permissionsRequest,
+        setShowPermissionError,
+        !event.target.checked
+      );
+    };
+
+    return (
+      <>
+        <FormControl>
+          <FormControlLabel
+            label={browser.i18n.getMessage(
+              "OptionsAdvancedContextualIdentityLabel"
+            )}
+            control={
+              <Switch
+                name="contextual-identity-switch"
+                color="primary"
+                checked={options["contextualIdentity"]}
+                onChange={handleCloseSwitchToggle}
+              />
+            }
+          />
+          {showPermissionError && (
+            <Alert
+              severity="error"
+              onClose={() => {
+                setShowPermissionError(false);
+              }}
+            >
+              {browser.i18n.getMessage(
+                "FieldRequiredPermissionsNotGrantedMessage"
+              )}
+            </Alert>
+          )}
+          <Typography
+            color="textSecondary"
+            dangerouslySetInnerHTML={{
+              __html: browser.i18n.getMessage(
+                "OptionsAdvancedContextualIdentityDescription"
+              ),
+            }}
+          />
+        </FormControl>
+      </>
+    );
+  }
+
+  function TitleOptionControl() {
+    const [title, setTitle] = React.useState(options["title"]);
+
+    const saveTitle = () => {
+      if (title !== options["title"]) {
+        setOption("title", title);
+      }
+    };
+
+    useDebounce(saveTitle, 2000, [title, options]);
+
+    return (
+      <FormControl>
+        <InputLabel htmlFor="title-input" variant="standard">
+          {browser.i18n.getMessage("OptionsAdvancedTitleLabel")}
+        </InputLabel>
+        <Input
+          id="title-input"
+          type="text"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.code === "Enter") {
+              saveTitle();
+            }
+          }}
+          endAdornment={
+            title !== options["title"] && (
+              <InputAdornment position="end">
+                <IconButton onClick={saveTitle} edge="end">
+                  <CheckIcon />
+                </IconButton>
+              </InputAdornment>
+            )
+          }
+        />
+        <Typography
+          color="textSecondary"
+          dangerouslySetInnerHTML={{
+            __html: browser.i18n.getMessage("OptionsAdvancedTitleDescription"),
+          }}
+        />
+      </FormControl>
+    );
+  }
+
   return (
     <Box>
       <TabPanelHeader
@@ -189,20 +262,22 @@ export default function AdvancedTab() {
       <Box marginTop={1} marginBottom={2}>
         <CloseOptionControl />
       </Box>
+      <Divider />
+      <Box marginY={2}>
+        <BackgroundTabControl />
+      </Box>
       {isFirefox && (
         <>
           <Divider />
-          <Box marginTop={1} marginBottom={2}>
+          <Box marginY={2}>
             <TitleOptionControl />
+          </Box>
+          <Divider />
+          <Box marginY={2}>
+            <ContextualIdentitySupportControl />
           </Box>
         </>
       )}
-      <>
-        <Divider />
-        <Box marginY={2}>
-          <BackgroundTabControl />
-        </Box>
-      </>
     </Box>
   );
 }
