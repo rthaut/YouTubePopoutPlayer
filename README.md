@@ -83,9 +83,9 @@ Note you will need 2 terminal instances, one for each of the above commands, as 
 
 * * *
 
-## Contributors
+## Contributors ✨
 
-Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
