@@ -11,9 +11,10 @@
                 <h5 class="header col s12 light">{{ site.description | default: site.github.project_tagline }}</h5>
             </div>
             {% if site.links %}
+            {% assign count = (site.links | size) | integer %}
             <div class="row center">
                 {% for item in site.links %}
-                <div class="col s12 xl{{12 / (site.links | size)}}">
+                <div class="col s12 xl{{ 12 | divided_by: count }}">
 
                     <p class="hide-on-extra-large-only"></p>
 
