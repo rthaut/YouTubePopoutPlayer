@@ -8,7 +8,7 @@
     "description": "The short name of the extension (12 characters or less)."
   },
   "ExtensionDescription": {
-    "message": "Provides a simple way to open any YouTube video in a popout window",
+    "message": "Provides simple ways to open any YouTube video or playlist in a configurable popout window",
     "description": "The short description of the extension."
   },
   "BrowserActionTitle": {

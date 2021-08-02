@@ -2,7 +2,7 @@
   "name": "youtube-popout-player",
   "title": "YouTube Popout Player",
   "version": "4.0.0",
-  "description": "This browser extension provides a simple way to open any YouTube video or playlist (including videos and playlists embedded in other sites/pages) in a configurable \"popout\" window which you can freely position and resize.",
+  "description": "This browser extension provides simple ways to open any YouTube video or playlist (including videos and playlists embedded in other sites/pages) in a configurable \"popout\" window that can be freely sized and/or positioned.",
   "author": "Ryan Thaut <rthaut@gmail.com> (https://ryan.thaut.me)",
   "homepage": "https://rthaut.github.io/YouTubePopoutPlayer/",
   "license": "GPL-3.0",
