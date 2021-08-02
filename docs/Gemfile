@@ -5,7 +5,6 @@ group :jekyll_plugins do
     gem "github-pages"
     gem "jekyll-feed"
     gem "jekyll-seo-tag"
-    gem "jekyll-theme-cayman"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
