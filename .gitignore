@@ -24,3 +24,5 @@ dist
 # Miscellaneous
 certs
 Thumbs.db
+
+packages/*

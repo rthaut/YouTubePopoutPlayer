@@ -274,7 +274,6 @@ GEM
     zeitwerk (2.4.2)
 
 PLATFORMS
-  ruby
   x64-mingw32
 
 DEPENDENCIES
@@ -283,6 +282,7 @@ DEPENDENCIES
   jekyll-seo-tag
   jekyll-theme-cayman
   tzinfo-data
+  wdm (~> 0.1.0)
 
 RUBY VERSION
    ruby 3.0.1p64

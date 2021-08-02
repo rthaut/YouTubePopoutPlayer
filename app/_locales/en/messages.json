@@ -1,0 +1,308 @@
+{
+  "ExtensionName": {
+    "message": "YouTube Popout Player",
+    "description": "The name of the extension."
+  },
+  "ExtensionShortName": {
+    "message": "PopoutPlayer",
+    "description": "The short name of the extension (12 characters or less)."
+  },
+  "ExtensionDescription": {
+    "message": "Provides simple ways to open any YouTube video or playlist in a configurable popout window",
+    "description": "The short description of the extension."
+  },
+  "BrowserActionTitle": {
+    "message": "Configure YouTube Popout Player Options",
+    "description": "The title for the browser action button (displayed by the address bar by default)."
+  },
+  "OpenPopoutCommandDescription": {
+    "message": "Open popout player for the current YouTube video",
+    "description": "The description for the 'open-popout-auto-close-command' extension command"
+  },
+  "OpenPopoutForceCloseCommandDescription": {
+    "message": "Open popout player and close the current window/tab",
+    "description": "The description for the 'open-popout-force-close-command' extension command"
+  },
+  "OpenPopoutNoCloseCommandDescription": {
+    "message": "Open popout player without closing the current window/tab",
+    "description": "The description for the 'open-popout-no-close-command' extension command"
+  },
+  "ContextMenuEntryLabel_PopoutPlayer": {
+    "message": "Popout Player",
+    "description": "The label for the context menu entry that opens the popout player."
+  },
+  "PlayerControlsButtonTitle_PopoutPlayer": {
+    "message": "Popout Player",
+    "description": "The title for the player controls button that opens the popout player."
+  },
+  "LinkContextMenuEntry_OpenVideo_Text": {
+    "message": "Open Video in Popout Player",
+    "description": "The text for the context menu entry added to video links."
+  },
+  "LinkContextMenuEntry_OpenPlaylist_Text": {
+    "message": "Open Playlist in Popout Player",
+    "description": "The text for the context menu entry added to playlist links."
+  },
+  "OptionsPageTitle": {
+    "message": "$NAME$ Options",
+    "placeholders": {
+      "name": {
+        "content": "YouTube Popout Player"
+      }
+    }
+  },
+  "OptionsPerDeviceWarning": {
+    "message": "<strong>Note</strong>: All settings are per-device. If you have YouTube Popout Player installed on multiple devices, you can configure settings differently for each device."
+  },
+  "OptionsTabNameBehavior": {
+    "message": "Behavior"
+  },
+  "OptionsTabNameSize_Position": {
+    "message": "Size / Position"
+  },
+  "OptionsTabNameAdvanced": {
+    "message": "Advanced"
+  },
+  "OptionsHeadingBehavior": {
+    "message": "Popout Player Behavior"
+  },
+  "OptionsHeadingSize": {
+    "message": "Popout Player Size"
+  },
+  "OptionsHeadingPosition": {
+    "message": "Popout Player Position"
+  },
+  "OptionsHeadingAdvanced": {
+    "message": "Advanced Settings"
+  },
+  "OptionsBehaviorTargetTabLabel": {
+    "message": "Open in a Tab"
+  },
+  "OptionsBehaviorTargetTabDescription": {
+    "message": "The popout player will open in a new tab in your current browser window."
+  },
+  "OptionsBehaviorTargetWindowLabel": {
+    "message": "Open in a Popup Window"
+  },
+  "OptionsBehaviorTargetWindowDescription": {
+    "message": "The popout player will open in a new popup window. <strong>This is the default setting.</strong>"
+  },
+  "BehaviorControlsLabel": {
+    "message": "Show Controls"
+  },
+  "BehaviorControlsDescription": {
+    "message": "Use this setting to adjust which video player controls are displayed on the popout player. <strong>The default for this setting is $DEFAULT$.</strong>",
+    "placeholders": {
+      "default": {
+        "content": "Standard"
+      }
+    }
+  },
+  "BehaviorControlsExtendedOptionLabel": {
+    "message": "Extended"
+  },
+  "BehaviorControlsNoneOptionLabel": {
+    "message": "None"
+  },
+  "BehaviorControlsStandardOptionLabel": {
+    "message": "Standard"
+  },
+  "OptionsBehaviorAutoplayLabel": {
+    "message": "Autoplay Video(s)"
+  },
+  "OptionsBehaviorAutoplayDescription": {
+    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong>"
+  },
+  "OptionsBehaviorLoopLabel": {
+    "message": "Loop Video(s)"
+  },
+  "OptionsBehaviorLoopDescription": {
+    "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
+  },
+  "OptionsSettingsNotAvailableForTab": {
+    "message": "These settings do not apply when the popout player is configured to open in a new tab in the current browser window."
+  },
+  "SizeModeLabel": {
+    "message": "Popout Player Size"
+  },
+  "SizeModeDescription": {
+    "message": "Use this setting to adjust the size of the popout player window when it opens. <strong>The default for this setting is $DEFAULT$.</strong>",
+    "placeholders": {
+      "default": {
+        "content": "Use Original Player Size"
+      }
+    }
+  },
+  "OptionsSizeModeCurrentLabel": {
+    "message": "Use Original Player Size"
+  },
+  "OptionsSizeModeCurrentDescription": {
+    "message": "The popout player window will be sized to match the original YouTube video player. <strong>This is the default setting.</strong>"
+  },
+  "OptionsSizeModePreviousLabel": {
+    "message": "Use Previous Popout Player Window Size"
+  },
+  "OptionsSizeModePreviousDescription": {
+    "message": "The popout player window will remember the size it was when it was closed or resized."
+  },
+  "OptionsSizeModeCustomLabel": {
+    "message": "Set Custom Dimensions"
+  },
+  "OptionsSizeModeCustomDescription": {
+    "message": "Use this setting to specify dimensions (either in pixels or percentages) for the popout player window."
+  },
+  "PositionModeLabel": {
+    "message": "Popout Player Position"
+  },
+  "PositionModeDescription": {
+    "message": "Use this setting to adjust the position of the popout player window when it opens. <strong>The default for this setting is $DEFAULT$.</strong>",
+    "placeholders": {
+      "default": {
+        "content": "Position Automatically"
+      }
+    }
+  },
+  "OptionsPositionModeAutoLabel": {
+    "message": "Position Automatically"
+  },
+  "OptionsPositionModeAutoDescription": {
+    "message": "The popout player will be positioned automatically by your browser and/or operating system. <strong>This is the default setting.</strong>"
+  },
+  "OptionsPositionModePreviousLabel": {
+    "message": "Use Previous Position"
+  },
+  "OptionsPositionModePreviousDescription": {
+    "message": "The popout player window will remember where it was positioned when it was closed."
+  },
+  "OptionsPositionModeCustomLabel": {
+    "message": "Specify Custom Position"
+  },
+  "OptionsPositionModeCustomDescription": {
+    "message": "Use this setting to specify the position (in pixels) for the popout player window."
+  },
+  "OptionsCustomPositionWarning": {
+    "message": "<strong>Use caution when setting a custom position!</strong> No restrictions are enforced, so you can configure this to open the Popout Player completely off screen."
+  },
+  "DimensionUnitsLabel": {
+    "message": "Dimension Units"
+  },
+  "DimensionUnitsPercentageOptionLabel": {
+    "message": "Percentage (%)"
+  },
+  "DimensionUnitsPercentageUnitLabel": {
+    "message": "%"
+  },
+  "DimensionUnitsPixelsOptionLabel": {
+    "message": "Pixels (px)"
+  },
+  "DimensionUnitsPixelsUnitLabel": {
+    "message": "px"
+  },
+  "DimensionUnitsUnknownUnitLabel": {
+    "message": "?"
+  },
+  "WidthLabel": {
+    "message": "Width"
+  },
+  "HeightLabel": {
+    "message": "Height"
+  },
+  "InfoCurrentScreenResolutionLabel": {
+    "message": "Current Screen Resolution"
+  },
+  "InfoPopoutPlayerAspectRatioLabel": {
+    "message": "Popout Player Aspect Ratio"
+  },
+  "InfoPopoutPlayerWindowSizeLabel": {
+    "message": "Popout Player Window Size"
+  },
+  "ButtonSaveCustomDimensionsLabel": {
+    "message": "Save Custom Dimensions"
+  },
+  "ButtonSaveCustomPositionLabel": {
+    "message": "Save Custom Position"
+  },
+  "OptionsAdvancedCloseLabel": {
+    "message": "Close Original Window/Tab"
+  },
+  "OptionsAdvancedCloseDescription": {
+    "message": "Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong>"
+  },
+  "OptionsAdvancedOpenInBackgroundLabel": {
+    "message": "Open in Background Window/Tab"
+  },
+  "OptionsAdvancedOpenInBackgroundDescription": {
+    "message": "Enabling this will cause the popout player to be opened in a background window/tab. <strong>The default for this setting is disabled.</strong>"
+  },
+  "OptionsAdvancedTitleLabel": {
+    "message": "Window Title Text (Preface)"
+  },
+  "OptionsAdvancedTitleDescription": {
+    "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
+  },
+  "OptionsAdvancedContextualIdentityLabel": {
+    "message": "Multi-Account Containers Support"
+  },
+  "OptionsAdvancedContextualIdentityDescription": {
+    "message": "Enabling this will cause the popout player to be opened in the same <a href=\"$URL$\">multi-account container (a.k.a. contextual identity)</a> as the original window/tab. <strong>The default for this setting is disabled.</strong>",
+    "placeholders": {
+      "url": {
+        "content": "https://support.mozilla.org/en-US/kb/containers"
+      }
+    }
+  },
+  "OptionsAdvancedYouTubeNoCookieDomainLabel": {
+    "message": "Use \"No Cookie\" Version of YouTube"
+  },
+  "OptionsAdvancedYouTubeNoCookieDomainDescription": {
+    "message": "Enabling this will cause the popout player to use the alternative \"youtube-nocookie.com\" site, which is Google's attempt to provide a version of YouTube that has fewer tracking cookies. <strong>The default for this setting is disabled.</strong>"
+  },
+  "FieldMaxValuePlaceholderMessage": {
+    "message": "The value of this field cannot be more than <strong>$VALUE$</strong>",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "FieldMinValuePlaceholderMessage": {
+    "message": "The value of this field cannot be less than <strong>$VALUE$</strong>",
+    "placeholders": {
+      "value": {
+        "content": "$1"
+      }
+    }
+  },
+  "FieldPatternNumberMessage": {
+    "message": "The value of this field must be a number"
+  },
+  "FieldRequiredMessage": {
+    "message": "This field is required"
+  },
+  "FieldRequiredPermissionsNotGrantedMessage": {
+    "message": "You must grant the requested additional permission(s) when prompted to enable this setting."
+  },
+  "ButtonResetLabel": {
+    "message": "Reset All Settings to Defaults"
+  },
+  "ConfirmSettingsResetHeading": {
+    "message": "Confirm Settings Reset"
+  },
+  "ConfirmSettingsResetText": {
+    "message": "Are you sure you want to <strong>reset your settings</strong>? If you continue, all settings for $NAME$ on this device will be restored to their default values.",
+    "placeholders": {
+      "name": {
+        "content": "YouTube Popout Player"
+      }
+    }
+  },
+  "ButtonCancelResetLabel": {
+    "message": "No, I changed my mind"
+  },
+  "ButtonConfirmResetLabel": {
+    "message": "Yes, I'm sure"
+  },
+  "OptionsResetSuccessMessage": {
+    "message": "All settings reset to default values."
+  }
+}

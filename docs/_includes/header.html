@@ -13,17 +13,11 @@
             {% if site.links %}
             <div class="row center">
                 {% for item in site.links %}
-                <div class="col s12 xl6">
+                <div class="col s12 xl{{12 / (site.links | size)}}">
 
-                    {% if forloop.length > 2 and forloop.index > 2 %}
-                    <p class="hide-on-med-and-down hide-on-large-only show-on-extra-large"></p>
-                    {% endif %}
-
-                    {% if forloop.index > 1 %}
                     <p class="hide-on-extra-large-only"></p>
-                    {% endif %}
 
-                    <a href="{{ item.url }}" class="waves-effect waves-light btn-large red white-text"><i class="material-icons right">file_download</i>{{ item.name }}</a>
+                    <a href="{{ item.url }}" class="waves-effect waves-light btn-large red white-text"><i class="material-icons right">extension</i>{{ item.name }}</a>
 
                 </div>
                 {% endfor %}

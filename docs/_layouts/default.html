@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: 'en-US' }}">
     {% include head.html %}
-    <body>
+    <body class="grey lighten-3">
         {% include navbar-links-nested.html %}
 
         <main id="content" class="container">
-            <header lcass="section">
+            <header class="section">
                 {% if page.heading %}
-                <h3>{{ page.heading }}</h3>
+                <blockquote><h3>{{ page.heading }}</h3></blockquote>
                 {% else %}
-                <h3>{{ site.title }} {{ page.title }}</h3>
+                <blockquote><h3>{{ site.title }} {{ page.title }}</h3></blockquote>
                 {% endif %}
             </header>
             <div id="content-main">

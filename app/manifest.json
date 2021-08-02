@@ -1,0 +1,88 @@
+{
+  "name": "__MSG_ExtensionName__",
+  "short_name": "__MSG_ExtensionShortName__",
+  "description": "__MSG_ExtensionDescription__",
+  "homepage_url": "https://rthaut.github.io/YouTubePopoutPlayer/",
+  "manifest_version": 2,
+  "default_locale": "en",
+  "icons": {
+    "16": "images/icon-16.png",
+    "32": "images/icon-32.png",
+    "48": "images/icon-48.png",
+    "64": "images/icon-64.png",
+    "128": "images/icon-128.png"
+  },
+  "background": {
+    "scripts": [
+      "scripts/background.js"
+    ]
+  },
+  "browser_action": {
+    "default_icon": {
+      "19": "images/icon-19.png",
+      "38": "images/icon-38.png"
+    },
+    "default_title": "__MSG_BrowserActionTitle__"
+  },
+  "commands": {
+    "open-popout-auto-close-command": {
+      "suggested_key": {
+        "default": "Ctrl+Up"
+      },
+      "description": "__MSG_OpenPopoutCommandDescription__"
+    },
+    "open-popout-force-close-command": {
+      "suggested_key": {
+        "default": "Alt+Shift+PageUp"
+      },
+      "description": "__MSG_OpenPopoutForceCloseCommandDescription__"
+    },
+    "open-popout-no-close-command": {
+      "suggested_key": {
+        "default": "Alt+Shift+PageDown"
+      },
+      "description": "__MSG_OpenPopoutNoCloseCommandDescription__"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.youtube-nocookie.com/*"
+      ],
+      "css": [
+        "styles/content.css"
+      ],
+      "js": [
+        "scripts/content.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ],
+  "options_ui": {
+    "__chrome__page": "pages/options.html?vendor=chrome",
+    "__edge__page": "pages/options.html?vendor=edge",
+    "__firefox__page": "pages/options.html?vendor=firefox",
+    "open_in_tab": false
+  },
+  "permissions": [
+    "*://*.youtube.com/*",
+    "*://*.youtube-nocookie.com/*",
+    "contextMenus",
+    "storage",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "optional_permissions": [
+    "cookies",
+    "tabs"
+  ],
+  "__chrome__minimum_chrome_version": "51.0",
+  "__firefox__applications": {
+    "gecko": {
+      "id": "{85b42b8f-49cd-4935-aeca-a6b32dd6ac9f}",
+      "strict_min_version": "62.0"
+    }
+  }
+}

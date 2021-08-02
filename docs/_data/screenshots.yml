@@ -1,0 +1,15 @@
+- name: Behavior
+  path: /screenshots/Options-Behavior.png
+  type: option
+
+- name: Size
+  path: /screenshots/Options-Size-Custom.png
+  type: option
+
+- name: Position
+  path: /screenshots/Options-Position-Custom.png
+  type: option
+
+- name: Advanced
+  path: /screenshots/Options-Advanced-Firefox.png
+  type: option

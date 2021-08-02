@@ -17,7 +17,7 @@ order: 5
         </div>
 
         <div class="card-image">
-            <button data-target="modal-behavior-screenshot" class="waves-effect waves-light btn-floating btn-large halfway-fab red modal-trigger"><i class="material-icons left">image</i> Show Screenshot</button>
+            <button data-target="modal-behavior-screenshot" class="waves-effect waves-light btn-floating btn-large halfway-fab tooltipped red modal-trigger" data-tooltip="View Screenshot"><i class="material-icons left">image</i> Show Screenshot</button>
         </div>
 
         <div class="card-body">
@@ -80,11 +80,13 @@ order: 5
 
     <div class="card white">
         <div class="card-content">
-            <span class="card-title red-text"><strong>Popout Player Size</strong></span>
+            <span class="card-title red-text"><strong>Popout Player Size</strong> <span class="badge grey darken-3 white-text">Updated in v4.0</span></span>
+            <i class="small left material-icons red-text">info</i>
+            <h6>You cannot configure the size of the popout player when using the "Open in a Tab" option.</h6>
         </div>
 
         <div class="card-image">
-            <button data-target="modal-size-custom-screenshot" class="waves-effect waves-light btn-floating btn-large halfway-fab red modal-trigger"><i class="material-icons left">image</i> Show Screenshot</button>
+            <button data-target="modal-size-screenshot" class="waves-effect waves-light btn-floating btn-large halfway-fab tooltipped red modal-trigger" data-tooltip="View Screenshot"><i class="material-icons left">image</i> Show Screenshot</button>
         </div>
 
         <div class="card-body">
@@ -92,14 +94,21 @@ order: 5
                 <dt>Use Original Player Size</dt>
                 <dd>
                     <p>The popout player will be sized to match the original YouTube video player. <strong>This is the default setting.</strong></p>
-                    <p>When you select this setting, the popout player will match the size of the current video automatically when it is opened.</p>
+                    <p>When you select this setting, the popout player window will match the size of the current video automatically when it is opened.</p>
+                </dd>
+
+                <dt>Use Previous Popout Player Window Size <span class="badge red white-text">New!</span></dt>
+                <dd>
+                    <p>The popout player window will remember the size it was when it was closed or resized.</p>
+                    <p>When you select this setting, the popout player window will remember the dimensions of the popout player window whenever you resize it, and then the next time the popout player window is opened, it will be automatically sized to those dimensions.</p>
+                    <p><i class="small left material-icons red-text">lightbulb</i> <strong>Tip:</strong> This works best when also using the "Use Previous Position" mode.</p>
                 </dd>
 
                 <dt>Set Custom Dimensions</dt>
                 <dd>
                     <p>Use this setting to specify dimensions (either in pixels or percentages) for the popout player.</p>
-                    <p>When you select this setting, additional fields will appear to let you configure the size of the popout player. Some information about your screen resolution and the resulting aspect ratio will also be displayed in a table to help you set good dimensions.</p>
-
+                    <p>When you select this setting, additional fields will appear to let you configure the size of the popout player window. Some information about your screen resolution and the resulting aspect ratio will also be displayed in a table to help you set good dimensions.</p>
+                    <p><strong>Note</strong>: You must click the "Save Custom Dimensions" button after setting/updating the dimension values for your changes to take effect.</p>
                     <table class="highlight">
                         <thead>
                             <tr>
@@ -118,8 +127,61 @@ order: 5
                             </tr>
                         </tbody>
                     </table>
+                </dd>
+            </dl>
+        </div>
+    </div>
 
-                    <p><strong>Note</strong>: You must click the "Save Custom Dimensions" button after setting custom dimensions for your changes to take effect.</p>
+</section>
+
+<section id="position" class="section scrollspy">
+    <h4 class="hide">Popout Player Position</h4>
+
+    <div class="card white">
+        <div class="card-content">
+            <span class="card-title red-text"><strong>Popout Player Position</strong> <span class="badge grey darken-3 white-text">Added in v4.0</span></span>
+            <i class="small left material-icons red-text">info</i>
+            <h6>You cannot configure the position of the popout player when using the "Open in a Tab" option.</h6>
+        </div>
+
+        <div class="card-image">
+            <button data-target="modal-position-screenshot" class="waves-effect waves-light btn-floating btn-large halfway-fab tooltipped red modal-trigger" data-tooltip="View Screenshot"><i class="material-icons left">image</i> Show Screenshot</button>
+        </div>
+
+        <div class="card-body">
+            <dl>
+                <dt>Position Automatically</dt>
+                <dd>
+                    <p>The popout player will be positioned automatically by your browser and/or operating system. <strong>This is the default setting.</strong></p>
+                    <p>When you select this setting, the popout player window will be positioned by your browser, operating system, and/or window manager.</p>
+                </dd>
+
+                <dt>Use Previous Position</dt>
+                <dd>
+                    <p>The popout player window will remember where it was positioned when it was closed.</p>
+                    <p>When you select this setting, the popout player window will remember the location of the popout player window whenever you resize or close it, and then the next time the popout player window is opened, it will be automatically positioned in that same location.</p>
+                    <p><i class="small left material-icons red-text">lightbulb</i> <strong>Tip:</strong> This works best when also using the "Use Previous Popout Player Window Size" mode.</p>
+                </dd>
+
+                <dt>Specify Custom Position</dt>
+                <dd>
+                    <p>Use this setting to specify the position (in pixels) for the popout player window.</p>
+                    <p>When you select this setting, additional fields will appear to let you configure the position of the popout player window.</p>
+                    <p><strong>Note</strong>: You must click the "Save Custom Position" button after setting/updating the position values for your changes to take effect.</p>
+                    <table class="highlight">
+                        <thead>
+                            <tr>
+                                <th>Field Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Top</strong> and <strong>Left</strong></td>
+                                <td>These fields are where you enter your desired top and left positions in pixels for the popout player.</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </dd>
             </dl>
         </div>
@@ -132,12 +194,12 @@ order: 5
 
     <div class="card white">
         <div class="card-content">
-            <span class="card-title red-text"><strong>Advanced Settings</strong></span>
+            <span class="card-title red-text"><strong>Advanced Settings</strong> <span class="badge grey darken-3 white-text">Updated in v4.0</span></span>
             <p>These are the more advanced settings for configuring the YouTube Popout Player. Use caution when changing these settings, as they are a little more complex than the others.</p>
         </div>
 
         <div class="card-image">
-            <button data-target="modal-advanced-screenshot" class="waves-effect waves-light btn-floating btn-large halfway-fab red modal-trigger"><i class="material-icons left">image</i> Show Screenshot</button>
+            <button data-target="modal-advanced-screenshot" class="waves-effect waves-light btn-floating btn-large halfway-fab tooltipped red modal-trigger" data-tooltip="View Screenshot"><i class="material-icons left">image</i> Show Screenshot</button>
         </div>
 
         <div class="card-body">
@@ -148,9 +210,24 @@ order: 5
                     <p><strong>Note</strong>: Enabling this setting will prompt you to allow the use of an <a class="red-text" href="{{ '/permissions#optional' | relative_url }}">additional permission</a>. If you deny the request, this setting will be disabled automatically. You can re-toggle this setting to receive the permission request again.</p>
                 </dd>
 
+                <dt>Open in Background Window/Tab <span class="badge red white-text">New!</span></dt>
+                <dd>
+                    <p>Enabling this will cause the popout player to be opened in a background window/tab. <strong>The default for this setting is disabled.</strong></p>
+                </dd>
+
+                <dt>Use "No Cookie" Version of YouTube <span class="badge red white-text">New!</span></dt>
+                <dd>
+                    <p>Enabling this will cause the popout player to use the alternative "youtube-nocookie.com" site, which is Google's attempt to provide a version of YouTube that has fewer tracking cookies. <strong>The default for this setting is disabled.</strong></p>
+                </dd>
+
                 <dt>Window Title Text (Preface) - <em>Firefox Only</em></dt>
                 <dd>
                     <p>Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong></p>
+                </dd>
+
+                <dt>Multi-Account Containers Support - <em>Firefox Only</em> <span class="badge red white-text">New!</span></dt>
+                <dd>
+                    <p>Enabling this will cause the popout player to be opened in the same <a class="red-text" href="https://support.mozilla.org/en-US/kb/containers">multi-account container (a.k.a. contextual identity)</a> as the original window/tab. <strong>The default for this setting is disabled.</strong></p>
                 </dd>
             </dl>
         </div>
@@ -163,75 +240,64 @@ order: 5
 
     <div class="card white">
         <div class="card-content">
-            <span class="card-title red-text"><strong>Keyboard Shortcuts <em>(a.k.a. Hotkeys)</em></strong></span>
-            <p>YouTube Popout Player has a configurable keyboard shortcut for opening the popout player. The default shortcut is: <kbd>Ctrl</kbd> + <kbd>Up Arrow</kbd></p>
-        </div>
-
-        <div class="card-image">
-            <button data-target="modal-keyboard-screenshot" class="waves-effect waves-light btn-floating btn-large halfway-fab red modal-trigger"><i class="material-icons left">image</i> Show Screenshot</button>
+            <span class="card-title red-text"><strong>Keyboard Shortcuts <em>(a.k.a. Hotkeys)</em></strong> <span class="badge grey darken-3 white-text">Updated in v4.0</span></span>
+            <p>YouTube Popout Player has a configurable keyboard shortcut for opening the popout player on pages that have a YouTube video.</p>
         </div>
 
         <div class="card-body">
-            <p><strong>In Firefox</strong>, you can customize the shortcut by clicking the “Change” link that appears on the right side of the shortcut. Simply press a new combination of keys on your keyboard to set the new shortcut immediately.</p>
-
-            <p><strong>In Chrome</strong>, you must manually open <code class="red-text">chrome://extensions/shortcuts</code> in a new tab, which lets you set keyboard shortcuts for all of your installed extensions (including YouTube Popout Player).</p>
-
-            <p>Note that keyboard shortcuts require 1-2 modifier keys ( <kbd>Ctrl</kbd> , <kbd>Alt</kbd> , <kbd>Meta</kbd> , <kbd>Shift</kbd> ) and one regular key ( <kbd>A</kbd>-<kbd>Z</kbd> , <kbd>0</kbd>-<kbd>9</kbd> , <kbd>F1</kbd>-<kbd>F12</kbd> , etc.). See the <a class="red-text" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/commands#Shortcut_values">documentation for Shortcut Values on Mozilla’s developer page</a> for more information about valid keyboard shortcuts.</p>
+            <table class="highlight">
+                <thead>
+                    <tr>
+                        <th>Shortcut Description and Notes</th>
+                        <th>Default Combination</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>Open popout player for the current YouTube video</strong><br>
+                            <p>Additionally, the current window/tab will be closed:</p>
+                            <ul>
+                                <li>☑ If the "Close Original Window/Tab" setting is enabled</li>
+                                <li>☑ AND if you are viewing a page on youtube.com</li>
+                            </ul>
+                        </td>
+                        <td><kbd>Ctrl</kbd> + <kbd>Up Arrow</kbd></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="badge red white-text">New!</span>
+                            <strong>Open popout player and close the current window/tab</strong><br>
+                            <p>The current window/tab will be closed <span style="border-bottom: 1px solid">if you are viewing a page on youtube.com</span>, regardless of the "Close Original Window/Tab" setting.</p>
+                        </td>
+                        <td><kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>Page Up</kbd></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="badge red white-text">New!</span>
+                            <strong>Open popout player without closing the current window/tab</strong><br>
+                            <p>The current window/tab will not be closed, regardless of the "Close Original Window/Tab" setting.</p>
+                        </td>
+                        <td><kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>Page Down</kbd></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>You can change or disable the keyboard combination for each of the shortcuts through the "Manage Extension Shortcuts" (Firefox) or "Keyboard shortcuts" (Chrome/Edge) page.</p>
         </div>
     </div>
 
 </section>
 
-
-
 <!-- Modals with Screenshots -->
-
-<div id="modal-behavior-screenshot" class="modal">
-    <div class="modal-content center">
-        <img class="responsive-img" src="{{ '/screenshots/Options-Cropped-Behavior.png' | relative_url }}" alt="Popout Player Behavior Options Cropped Screenshot"/>
-        <p class="text-left"><em>Screenshots are taken from <strong>Version 3.1.0</strong> and may not accurately represent current functionality.</em></p>
+{% assign screenshots = site.data.screenshots | where:"type","option" %}
+{% for screenshot in screenshots %}
+<div id="modal-{{screenshot.name | slugify}}-screenshot" class="modal">
+    <div class="modal-content center white">
+        <img class="responsive-img" src="{{ screenshot.path | relative_url }}" alt="Popout Player {{screenshot.name}} Options Screenshot" />
+        <p class="text-left"><em>Screenshots are taken from <strong>Version 4.0.0</strong> and may not accurately represent current functionality.</em></p>
     </div>
     <div class="modal-footer">
         <button class="btn red modal-close"><i class="material-icons left">close</i> Close</button>
     </div>
 </div>
-
-<div id="modal-size-original-screenshot" class="modal">
-    <div class="modal-content center">
-        <img class="responsive-img" src="{{ '/screenshots/Options-Cropped-Size-Original.png' | relative_url }}" alt="Popout Player Size (Original Size) Options Cropped Screenshot"/>
-        <p class="text-left"><em>Screenshots are taken from <strong>Version 3.1.0</strong> and may not accurately represent current functionality.</em></p>
-    </div>
-    <div class="modal-footer">
-        <button class="btn red modal-close"><i class="material-icons left">close</i> Close</button>
-    </div>
-</div>
-
-<div id="modal-size-custom-screenshot" class="modal">
-    <div class="modal-content center">
-        <img class="responsive-img" src="{{ '/screenshots/Options-Cropped-Size-Custom.png' | relative_url }}" alt="Popout Player Size (Custom Dimensions) Options Cropped Screenshot"/>
-        <p class="text-left"><em>Screenshots are taken from <strong>Version 3.1.0</strong> and may not accurately represent current functionality.</em></p>
-    </div>
-    <div class="modal-footer">
-        <button class="btn red modal-close"><i class="material-icons left">close</i> Close</button>
-    </div>
-</div>
-
-<div id="modal-advanced-screenshot" class="modal">
-    <div class="modal-content center">
-        <img class="responsive-img" src="{{ '/screenshots/Options-Cropped-Advanced.png' | relative_url }}" alt="Popout Player Advanced Options Cropped Screenshot"/>
-        <p class="text-left"><em>Screenshots are taken from <strong>Version 3.1.0</strong> and may not accurately represent current functionality.</em></p>
-    </div>
-    <div class="modal-footer">
-        <button class="btn red modal-close"><i class="material-icons left">close</i> Close</button>
-    </div>
-</div>
-
-<div id="modal-keyboard-screenshot" class="modal">
-    <div class="modal-content center">
-        <img class="responsive-img" src="{{ '/screenshots/Options-Cropped-Keyboard-Shortcuts.png' | relative_url }}" alt="Keyboard Shortcuts Options Cropped Screenshot"/>
-        <p class="text-left"><em>Screenshots are taken from <strong>Version 3.1.0</strong> and may not accurately represent current functionality.</em></p>
-    </div>
-    <div class="modal-footer">
-        <button class="btn red modal-close"><i class="material-icons left">close</i> Close</button>
-    </div>
-</div>
+{% endfor %}
