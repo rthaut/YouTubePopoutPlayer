@@ -2,6 +2,8 @@
 
 # YouTube Popout Player v4.0.0
 
+[![Chrome Web Store][chrome-image-version]][chrome-url] [![Microsoft Edge Add-on][edge-image-version]][edge-url] [![Mozilla Add-on][firefox-image-version]][firefox-url]
+
 > This browser extension provides simple ways to open any YouTube video or playlist (including videos and playlists embedded in other sites/pages) in a configurable "popout" window that can be freely sized and/or positioned.
 
 * * *
@@ -30,20 +32,9 @@
 
 | Web Browser | Information | Download Link |
 | ----------- | ----------- | ------------- |
-| Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-download]][chrome-url] | [Download from the Chrome Web Store][chrome-url] |
+| Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-users]][chrome-url] | [Download from the Chrome Web Store][chrome-url] |
 | Microsoft Edge | [![Microsoft Edge Add-on][edge-image-version]][edge-url] | [Download from Microsoft Edge Add-ons][edge-url] |
-| Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-download]][firefox-url] | [Download from Mozilla Add-ons][firefox-url] |
-
-[chrome-url]: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
-[chrome-image-download]: https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
-[chrome-image-version]: https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
-
-[edge-url]: https://microsoftedge.microsoft.com/addons/detail/youtube-popout-player/mdhpmdbgkogobnebpgfbnnnbjfohiiee
-[edge-image-version]: https://img.shields.io/badge/microsoft%20edge%20add--on-v4.0.0-blue?logo=microsoftedge&style=for-the-badge
-
-[firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
-[firefox-image-download]: https://img.shields.io/amo/users/youtube-popout-player?color=green&logo=firefox&style=for-the-badge
-[firefox-image-version]: https://img.shields.io/amo/v/youtube-popout-player?color=blue&logo=firefox&style=for-the-badge
+| Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-users]][firefox-url] | [Download from Mozilla Add-ons][firefox-url] |
 
 * * *
 
@@ -53,9 +44,11 @@ Contributions are always welcome! Even if you aren't comfortable coding, you can
 
 ### Localization/Translation
 
-This extension is setup to be fully localized/translated into multiple languages, but for now English is the only language with full translations. If you are able to help localize/translate, please [check out this guide](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization). All of the text for the extension is stored [here in the `/src/_locales` directory](https://github.com/rthaut/YouTubePopoutPlayer/tree/master/src/_locales).
+This extension is setup to be fully localized/translated into multiple languages, but for now English is the only language with full translations. If you are able to help localize/translate, please [check out this guide](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization). All of the text for the extension is stored [here in the `/src/_locales` directory](https://github.com/rthaut/YouTubePopoutPlayer/tree/master/app/_locales).
 
 ### Building the Extension
+
+**This extension uses the [WebExtension Toolbox](https://github.com/webextension-toolbox/webextension-toolbox#usage) for development and build processes.**
 
 To build the extension from source code, you will need to use [Node Package Manager (npm)](https://www.npmjs.com/), which handles all of the dependencies needed for this project and is used to execute the various scripts for development/building/packaging/etc.
 
@@ -112,3 +105,14 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+[chrome-url]: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
+[chrome-image-version]: https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
+[chrome-image-users]: https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
+
+[edge-url]: https://microsoftedge.microsoft.com/addons/detail/youtube-popout-player/mdhpmdbgkogobnebpgfbnnnbjfohiiee
+[edge-image-version]: https://img.shields.io/badge/microsoft%20edge%20add--on-v4.0.0-blue?logo=microsoftedge&style=for-the-badge
+
+[firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
+[firefox-image-version]: https://img.shields.io/amo/v/youtube-popout-player?color=blue&logo=firefox&style=for-the-badge
+[firefox-image-users]: https://img.shields.io/amo/users/youtube-popout-player?color=blue&logo=firefox&style=for-the-badge
