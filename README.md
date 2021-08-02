@@ -30,11 +30,11 @@
 
 ## Installation
 
-| Web Browser | Information | Download Link |
-| ----------- | ----------- | ------------- |
-| Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-users]][chrome-url] | [Download from the Chrome Web Store][chrome-url] |
-| Microsoft Edge | [![Microsoft Edge Add-on][edge-image-version]][edge-url] | [Download from Microsoft Edge Add-ons][edge-url] |
-| Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-users]][firefox-url] | [Download from Mozilla Add-ons][firefox-url] |
+| Web Browser | Information & Downloads |
+| ----------- | ----------------------- |
+| Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-users]][chrome-url] |
+| Microsoft Edge | [![Microsoft Edge Add-on][edge-image-version]][edge-url] |
+| Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-users]][firefox-url] |
 
 * * *
 
