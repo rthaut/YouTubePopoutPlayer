@@ -1,6 +1,4 @@
-[<img align="right" src="https://travis-ci.com/rthaut/YouTubePopoutPlayer.svg?branch=master" alt="Build Status"/>](https://travis-ci.com/rthaut/YouTubePopoutPlayer)
-[<img align="right" src="https://badges.renovateapi.com/github/rthaut/YouTubePopoutPlayer" alt="Renovate Status"/>](https://renovatebot.com/)
-[<img align="right" src="https://img.shields.io/badge/all_contributors-2-orange.svg" alt="All Contributors"/>](#contributors)
+[<img align="right" src="https://img.shields.io/badge/all_contributors-8-green.svg" alt="All Contributors"/>](#contributors)
 
 # YouTube Popout Player v3.1.1
 
@@ -85,9 +83,9 @@ Note you will need 2 terminal instances, one for each of the above commands, as 
 
 * * *
 
-## Contributors
+## Contributors ✨
 
-Thanks goes to these wonderful people ([emoji key](https://github.com/all-contributors/all-contributors#emoji-key)):
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
