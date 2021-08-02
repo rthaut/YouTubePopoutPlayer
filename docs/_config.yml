@@ -2,6 +2,9 @@ repository: rthaut/YouTubePopoutPlayer
 
 title: YouTube Popout Player
 
+share_tweet_text: Power up your YouTube browsing experience with the free YouTube Popout Player browser extension by @rthaut.
+share_tweet_url: https://rthaut.github.io/YouTubePopoutPlayer/
+
 links:
   - name: Get for Chrome
     url: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
