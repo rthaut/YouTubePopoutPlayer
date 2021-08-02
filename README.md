@@ -1,8 +1,8 @@
 [<img align="right" src="https://img.shields.io/badge/all_contributors-8-green.svg" alt="All Contributors"/>](#contributors)
 
-# YouTube Popout Player v3.1.1
+# YouTube Popout Player v4.0.0
 
-> This browser extension provides a simple way to open any YouTube video or playlist (including videos and playlists embedded in other sites/pages) in a configurable "popout" window which you can freely position and resize.
+> This browser extension provides simple ways to open any YouTube video or playlist (including videos and playlists embedded in other sites/pages) in a configurable "popout" window that can be freely sized and/or positioned.
 
 * * *
 
@@ -13,13 +13,14 @@
 ### Features
 
 * Open any YouTube video (including playlists) in a popout player, either as a new browser window or a new tab in your current browser window.
+* Open links to YouTube videos and/or playlists from any website in the popout player with a convenient right-click option.
 * Show or hide the video player controls in the popout player.
 * Automatically resume playback of the video when the popout player opens.
-* Automatically loop videos (both single videos and playlists) in the popout player.
-* Customize the size of the popout player, either as a fixed size or as a percentage of your screen's resolution.
-* Close the original video when the popout player opens.
-* *Firefox Only* Add custom text to the popout player's window title (for scripting).
-* Keyboard shortcut for opening the popout player.
+* Loop videos (both single videos and playlists) in the popout player.
+* Multiple ways to customize the size and position of the popout player, with support for multiple displays/monitors/screens.
+* Optionally close the original video when the popout player opens.
+* Configurable keyboard shortcuts for opening the popout player.
+* ... ***and much more!***
 
 #### For more information, head to the [YouTube Popout Player website](https://rthaut.github.io/YouTubePopoutPlayer/).
 
@@ -30,15 +31,19 @@
 | Web Browser | Information | Download Link |
 | ----------- | ----------- | ------------- |
 | Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-download]][chrome-url] | [Download from the Chrome Web Store][chrome-url] |
+| Microsoft Edge | [![Microsoft Edge Add-on][edge-image-version]][edge-url] | [Download from Microsoft Edge Add-ons][edge-url] |
 | Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-download]][firefox-url] | [Download from Mozilla Add-ons][firefox-url] |
 
 [chrome-url]: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
-[chrome-image-download]: https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod.svg
-[chrome-image-version]: https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod.svg
+[chrome-image-download]: https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
+[chrome-image-version]: https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
+
+[edge-url]: https://microsoftedge.microsoft.com/addons/detail/youtube-popout-player/mdhpmdbgkogobnebpgfbnnnbjfohiiee
+[edge-image-version]: https://img.shields.io/badge/microsoft%20edge%20add--on-v4.0.0-blue?logo=microsoftedge&style=for-the-badge
 
 [firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
-[firefox-image-download]: https://img.shields.io/amo/d/youtube-popout-player.svg
-[firefox-image-version]: https://img.shields.io/amo/v/youtube-popout-player.svg
+[firefox-image-download]: https://img.shields.io/amo/users/youtube-popout-player?color=green&logo=firefox&style=for-the-badge
+[firefox-image-version]: https://img.shields.io/amo/v/youtube-popout-player?color=blue&logo=firefox&style=for-the-badge
 
 * * *
 
@@ -58,16 +63,16 @@ To build the extension from source code, you will need to use [Node Package Mana
 npm install
 ```
 
-Then you can generate either a development build or a production build (development builds use un-minified code and have `console.*` statements throughout for debugging, whereas production builds minify all code and remove all `console.*` usage).
+Then you can run the development process (where the extension is auto-reloaded when changes are made) for your browser of choice:
 
 ```sh
-npm run build:production
+npm run dev <chrome/edge/firefox>
 ```
 
-or
+Or you can generate a production build for your browser of choice:
 
 ```sh
-npm run build:development
+npm run build <chrome/edge/firefox>
 ```
 
 ### Development Process
@@ -75,8 +80,8 @@ npm run build:development
 To make development easier, you can start up a temporary development profile on [Mozilla Firefox](https://getfirefox.com) with the extension already loaded. Firefox will also automatically detect changes and reload the extension for you (read more about this on the [`web-ext` documentation pages](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Getting_started_with_web-ext)). Use the following commands to re-build the extension and re-load it in Firefox automatically as you make changes:
 
 ```sh
-npm run watch:development # or npm run watch:production
-npm run firefox:start
+npm run dev firefox
+npm run start:firefox
 ```
 
 Note you will need 2 terminal instances, one for each of the above commands, as they both remain running until you cancel them (use <kbd>CTRL</kbd> + <kbd>c</kbd> to cancel each process in your terminal(s)).
