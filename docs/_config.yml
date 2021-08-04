@@ -1,12 +1,27 @@
 repository: rthaut/YouTubePopoutPlayer
 
 title: YouTube Popout Player
-
-share_tweet_text: Power up your YouTube browsing experience with the free YouTube Popout Player browser extension by @rthaut.
-share_tweet_url: https://rthaut.github.io/YouTubePopoutPlayer/
+description: This browser extension provides simple ways to open any YouTube video or playlist (including videos and playlists embedded in other sites/pages) in a configurable "popout" window that can be freely sized and/or positioned.
+logo: https://rthaut.github.io/YouTubePopoutPlayer/assets/img/logo-128.png
+twitter:
+  username: rthaut
+  card: summary
+social:
+  name: Ryan Thaut
+  links:
+    - https://twitter.com/rthaut
+    - https://github.com/rthaut
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: https://rthaut.github.io/YouTubePopoutPlayer/assets/img/social-image.png
 
 links:
   - name: Get for Chrome
     url: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
   - name: Get for Firefox
     url: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
+
+share_tweet_text: Power up your YouTube browsing experience with the free YouTube Popout Player browser extension by @rthaut.
+share_tweet_url: https://rthaut.github.io/YouTubePopoutPlayer/
