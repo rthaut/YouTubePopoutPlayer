@@ -19,10 +19,13 @@ defaults:
 
 links:
   - name: Get for Chrome
+    icon: file_download
     url: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
   - name: Get for Edge
+    icon: file_download
     url: https://microsoftedge.microsoft.com/addons/detail/youtube-popout-player/mdhpmdbgkogobnebpgfbnnnbjfohiiee
   - name: Get for Firefox
+    icon: file_download
     url: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
 
 share_tweet_text: Power up your YouTube browsing experience with the free YouTube Popout Player browser extension by @rthaut.

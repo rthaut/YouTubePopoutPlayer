@@ -18,7 +18,7 @@
 
                     <p class="hide-on-extra-large-only"></p>
 
-                    <a href="{{ item.url }}" class="waves-effect waves-light btn-large red white-text"><i class="material-icons right">extension</i>{{ item.name }}</a>
+                    <a href="{{ item.url }}" class="waves-effect waves-light btn-large red white-text"><i class="material-icons right">{{ item.icon | default: link}}</i>{{ item.name }}</a>
 
                 </div>
                 {% endfor %}

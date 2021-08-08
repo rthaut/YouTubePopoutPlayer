@@ -5,7 +5,7 @@
                 {% if site.links %}
                 {% for item in site.links %}
                 <p>
-                    <a class="waves-effect waves-light btn red" href="{{ item.url }}"><i class="material-icons left">file_download</i>{{ item.name }}</a>
+                    <a class="waves-effect waves-light btn red" href="{{ item.url }}"><i class="material-icons left">{{ item.icon | default: link}}</i>{{ item.name }}</a>
                 </p>
                 {% endfor %}
                 {% endif %}
