@@ -53,6 +53,16 @@ kbd {
     vertical-align: middle;
 }
 
+.btn-floating svg {
+    width: 24px;
+    height: 40px;
+}
+
+.btn-floating.btn-large svg {
+    width: 32px;
+    height: 56px;
+}
+
 .card .card-body {
     background-color: inherit;
     border-top: 1px solid rgba(160, 160, 160, 0.2);
