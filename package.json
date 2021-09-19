@@ -11,6 +11,7 @@
     "lint": "eslint ./app/",
     "dev": "webextension-toolbox dev",
     "build": "webextension-toolbox build",
+    "build:icons": "node scripts/generate-icons",
     "start:chrome": "web-ext run --source-dir=./dist/chrome/ --target chromium",
     "start:firefox": "web-ext run --source-dir=./dist/firefox/ --target firefox-desktop",
     "start:firefox:nr": "npm run start:firefox -- --no-reload",
@@ -48,6 +49,7 @@
     "cross-env": "^7.0.3",
     "eslint-plugin-react": "^7.25.3",
     "npm-run-all": "^4.1.5",
+    "svg2png": "^4.1.1",
     "trash-cli": "^4.0.0",
     "web-ext": "^6.4.0",
     "webextension-toolbox": "github:rthaut/webextension-toolbox#browserslist-string-vendor-version"
