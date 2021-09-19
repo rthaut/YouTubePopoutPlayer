@@ -5,7 +5,8 @@
   },
   "globals": {
     "browser": true,
-    "Promise": true
+    "Promise": true,
+    "require": true
   },
   "extends": [
     "eslint:recommended",
@@ -15,6 +16,7 @@
     "ecmaVersion": 2021,
     "sourceType": "module"
   },
+  "root": true,
   "rules": {
     "no-useless-escape": "off"
   },
