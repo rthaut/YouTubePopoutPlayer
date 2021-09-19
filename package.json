@@ -34,22 +34,22 @@
     "firefox >= 62.0"
   ],
   "dependencies": {
-    "@material-ui/core": "^4.12.1",
+    "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-use": "^17.2.4",
+    "react-use": "^17.3.1",
     "webextension-polyfill": "^0.8.0"
   },
   "devDependencies": {
-    "@welldone-software/why-did-you-render": "^6.2.0",
-    "browser-sync": "^2.27.4",
+    "@welldone-software/why-did-you-render": "^6.2.1",
+    "browser-sync": "^2.27.5",
     "cross-env": "^7.0.3",
-    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react": "^7.25.3",
     "npm-run-all": "^4.1.5",
     "trash-cli": "^4.0.0",
-    "web-ext": "^6.2.0",
+    "web-ext": "^6.4.0",
     "webextension-toolbox": "github:rthaut/webextension-toolbox#browserslist-string-vendor-version"
   }
 }
