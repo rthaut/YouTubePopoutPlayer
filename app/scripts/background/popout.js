@@ -214,7 +214,14 @@ export const OpenPopoutPlayerInWindow = async (
     window = await browser.windows.update(window.id, position);
   }
 
-  if (openInBackground) {
+  if ((await Options.GetLocalOption("size", "mode")) === "maximized") {
+    console.log(
+      "[Background] OpenPopoutPlayerInWindow() :: Maximizing Popout Player window"
+    );
+    window = await browser.windows.update(window.id, {
+      state: "maximized",
+    });
+  } else if (openInBackground) {
     if (!isNaN(originTabId) && parseInt(originTabId, 10) > 0) {
       // try to move the original window back to the foreground
       console.log(

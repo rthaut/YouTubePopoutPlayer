@@ -119,6 +119,14 @@
   "OptionsBehaviorLoopDescription": {
     "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
   },
+  "OptionsSettingDisabled": {
+    "message": "This setting is not available when the following setting(s) are enabled: <strong>$SETTINGS$</strong>",
+    "placeholders": {
+      "settings": {
+        "content": "$1"
+      }
+    }
+  },
   "OptionsSettingsNotAvailableForTab": {
     "message": "These settings do not apply when the popout player is configured to open in a new tab in the current browser window."
   },
@@ -150,6 +158,12 @@
   },
   "OptionsSizeModeCustomDescription": {
     "message": "Use this setting to specify dimensions (either in pixels or percentages) for the popout player window."
+  },
+  "OptionsSizeModeMaximizedLabel": {
+    "message": "Maximize the Popout Player Window"
+  },
+  "OptionsSizeModeMaximizedDescription": {
+    "message": "Use this setting to automatically maximize (NOT fullscreen) the popout player window after positioning it."
   },
   "PositionModeLabel": {
     "message": "Popout Player Position"
