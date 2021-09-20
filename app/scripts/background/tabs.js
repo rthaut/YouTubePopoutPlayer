@@ -4,7 +4,7 @@ import { YOUTUBE_DOMAINS } from "../helpers/constants";
  * Closes the specified tab
  * @param {number} tabId the ID of the tab to close
  * @param {boolean} [enforceDomainRestriction] if the tab should only be closed if it is on a known YouTube domain
- * @returns {boolean} if the tab was closed successfully
+ * @returns {Promise<boolean>} if the tab was closed successfully
  */
 export const CloseTab = async (tabId, enforceDomainRestriction = false) => {
   if (enforceDomainRestriction) {
@@ -58,7 +58,7 @@ export const SendMessageToActiveTab = async (message) => {
 
 /**
  * Gets the active browser tab
- * @returns {Promise<object>}
+ * @returns {Promise<object>} the active browser tab
  */
 export const GetActiveTab = async () => {
   const tabs = await browser.tabs.query({
@@ -72,7 +72,7 @@ export const GetActiveTab = async () => {
 /**
  * Gets the value of the `cookieStoreId` property of the specified tab
  * @param {number} tabId the ID of the tab
- * @returns {string|null} the `cookieStoreId` property value or `null` if unavailable
+ * @returns {Promise<string|null>} the `cookieStoreId` property value or `null` if unavailable
  */
 export const GetCookieStoreIDForTab = async (tabId) => {
   console.log("[Background] GetCookieStoreIDForTab()", tabId);
