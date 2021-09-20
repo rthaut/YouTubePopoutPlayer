@@ -99,20 +99,17 @@ export const OpenPopoutPlayer = async ({
   let result;
   switch (behavior.target.toLowerCase()) {
     case "tab":
-      result = OpenPopoutPlayerInTab(url, !openInBackground, originTabId);
+      result = await OpenPopoutPlayerInTab(url, !openInBackground, originTabId);
       break;
 
     case "window":
     default:
-      result = OpenPopoutPlayerInWindow(
+      result = await OpenPopoutPlayerInWindow(
         url,
-        await GetDimensionsForPopoutPlayerWindow(
-          originalVideoWidth,
-          originalVideoHeight
-        ),
-        await GetPositionForPopoutPlayerWindow(),
         openInBackground,
-        originTabId
+        originTabId,
+        originalVideoWidth,
+        originalVideoHeight
       );
       break;
   }
@@ -156,28 +153,31 @@ export const OpenPopoutPlayerInTab = async (
 /**
  * Opens an Embedded Player in a new window (optionally matching the size of the original video player)
  * @param {string} url the URL of the Embedded Player to open in a new window
- * @param {object} dimensions the target width & height of the window
- * @param {boolean} [openInBackground] indicates if the window should be opened in the background
+ * @param {boolean} openInBackground indicates if the window should be opened in the background
  * @param {number} originTabId the ID of the tab from which the request to open the Popout Player originated
+ * @param {object} originalVideoWidth the width of the original video player
+ * @param {boolean} originalVideoHeight the height of the original video player
  * @returns {Promise<object>}
  */
 export const OpenPopoutPlayerInWindow = async (
   url,
-  dimensions = {
-    width: OPTION_DEFAULTS.size.width,
-    height: OPTION_DEFAULTS.size.height,
-  },
-  position = { top: null, left: null },
   openInBackground = false,
-  originTabId = -1
+  originTabId = -1,
+  originalVideoWidth = OPTION_DEFAULTS.size.width,
+  originalVideoHeight = OPTION_DEFAULTS.size.height
 ) => {
   console.log(
     "[Background] OpenPopoutPlayerInWindow()",
     url,
-    dimensions,
-    position,
     openInBackground,
-    originTabId
+    originTabId,
+    originalVideoWidth,
+    originalVideoHeight
+  );
+
+  const dimensions = await GetDimensionsForPopoutPlayerWindow(
+    originalVideoWidth,
+    originalVideoHeight
   );
 
   const createData = await AddContextualIdentityToCreateData(
@@ -197,14 +197,18 @@ export const OpenPopoutPlayerInWindow = async (
   }
 
   console.log(
-    "[Background] OpenPopoutPlayerInWindow() :: Creating window",
+    "[Background] OpenPopoutPlayerInWindow() :: Creating Popout Player window",
     createData
   );
   let window = await browser.windows.create(createData);
 
+  // IMPORTANT: the `top` and `left` position values are set here via `windows.update()`
+  // (instead of earlier in this function via `windows.create()`) due to a bug in Firefox
+  // (see https://bugzilla.mozilla.org/show_bug.cgi?id=1271047)
+  const position = await GetPositionForPopoutPlayerWindow();
   if (!isNaN(position?.top) && !isNaN(position?.left)) {
     console.log(
-      "[Background] OpenPopoutPlayerInWindow() :: Positioning window",
+      "[Background] OpenPopoutPlayerInWindow() :: Positioning Popout Player window",
       position
     );
     window = await browser.windows.update(window.id, position);
@@ -216,8 +220,8 @@ export const OpenPopoutPlayerInWindow = async (
       console.log(
         "[Background] OpenPopoutPlayerInWindow() :: Moving original window to foreground"
       );
-      const { windowId } = await browser.tabs.get(originTabId);
-      browser.windows.update(windowId, {
+      const { windowId: originWindowId } = await browser.tabs.get(originTabId);
+      await browser.windows.update(originWindowId, {
         focused: true,
       });
     } else {
