@@ -30,7 +30,7 @@ export const GetDimensionForScreenPercentage = (dimension, percentage) => {
  * @returns {Promise<boolean>} `true` only if the browser is successfully identified as Firefox
  */
 export const IsFirefox = async () => {
-  console.group("Utils.IsFirefox()");
+  // console.group("Utils.IsFirefox()");
 
   let isFirefox = false;
 
@@ -39,20 +39,20 @@ export const IsFirefox = async () => {
       const info = await browser.runtime.getBrowserInfo();
 
       if (info !== undefined && info !== null) {
-        console.log("Browser information", info);
+        // console.log("Browser information", info);
 
         if (info.name !== undefined && info.name.toLowerCase() === "firefox") {
-          console.log("Browser is Firefox");
+          // console.log("Browser is Firefox");
           isFirefox = true;
         }
       }
     }
   } catch (error) {
-    console.error("Failed to determine browser info", error);
+    // console.error("Failed to determine browser info", error);
   }
 
-  console.log("Return", isFirefox);
-  console.groupEnd();
+  // console.log("Return", isFirefox);
+  // console.groupEnd();
   return isFirefox;
 };
 
@@ -62,21 +62,21 @@ export const IsFirefox = async () => {
  * @returns {boolean} whether or not the given `Location` is a Popout Player
  */
 export const IsPopoutPlayer = (location) => {
-  console.group("Utils.IsPopoutPlayer()", location);
+  // console.group("Utils.IsPopoutPlayer()", location);
 
   if (location.href.startsWith(YOUTUBE_EMBED_URL)) {
     const params = new URLSearchParams(location.search.substring(1));
-    console.log("URL Search Params", params);
+    // console.log("URL Search Params", params);
 
     if (params.get("popout")) {
-      console.log("Return", true);
-      console.groupEnd();
+      // console.log("Return", true);
+      // console.groupEnd();
       return true;
     }
   }
 
-  console.log("Return", false);
-  console.groupEnd();
+  // console.log("Return", false);
+  // console.groupEnd();
   return false;
 };
 

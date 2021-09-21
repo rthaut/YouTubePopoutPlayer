@@ -4,21 +4,21 @@
  * @return {string} the video ID
  */
 export const GetVideoIDFromURL = (url) => {
-  console.group("GetVideoIDFromURL()");
+  // console.group("GetVideoIDFromURL()");
 
   let id = null;
 
   const result = new RegExp(
     /(?:(?:v=)|(?:\/embed\/)|(?:\/youtu\.be\/))([^\?\&\/]{11})/
   ).exec(url);
-  console.log("RegExp Result", result);
+  // console.log("RegExp Result", result);
 
   if (result && result[1]) {
     id = result[1];
   }
 
-  console.log("Return", id);
-  console.groupEnd();
+  // console.log("Return", id);
+  // console.groupEnd();
   return id;
 };
 
@@ -28,7 +28,7 @@ export const GetVideoIDFromURL = (url) => {
  * @return {string} the playlist ID
  */
 export const GetPlaylistIDFromURL = (url) => {
-  console.group("GetPlaylistIDFromURL()");
+  // console.group("GetPlaylistIDFromURL()");
 
   let id = null;
 
@@ -37,7 +37,7 @@ export const GetPlaylistIDFromURL = (url) => {
     id = url.searchParams.get("list");
   }
 
-  console.log("Return", id);
-  console.groupEnd();
+  // console.log("Return", id);
+  // console.groupEnd();
   return id;
 };
