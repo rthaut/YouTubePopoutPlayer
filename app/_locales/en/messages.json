@@ -163,7 +163,7 @@
     "message": "Maximize the Popout Player Window"
   },
   "OptionsSizeModeMaximizedDescription": {
-    "message": "Use this setting to automatically maximize (NOT fullscreen) the popout player window after positioning it."
+    "message": "The popout player window will be maximized (NOT fullscreen) automatically <em>immediately after</em> it is positioned."
   },
   "PositionModeLabel": {
     "message": "Popout Player Position"
