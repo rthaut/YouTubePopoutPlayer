@@ -121,3 +121,20 @@ export function debounce(func, wait, immediate) {
     if (immediate && !timeout) func.apply(context, args);
   };
 }
+
+/**
+ * Returns the string value of the specified URL parameter from the given URL
+ * @param {string} param the parameter name
+ * @param {string} url the URL
+ * @returns {string|undefined} the parameter value, or undefined
+ */
+export const GetParamFromURL = (param, url) => {
+  if (url.includes("?")) {
+    let params = new URLSearchParams(url.split("?")[1]);
+    if (params.has(param)) {
+      return params.get(param);
+    }
+  }
+
+  return undefined;
+};
