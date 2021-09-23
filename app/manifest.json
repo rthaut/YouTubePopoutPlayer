@@ -82,6 +82,7 @@
     "*://*.youtube.com/*",
     "*://*.youtube-nocookie.com/*",
     "contextMenus",
+    "notifications",
     "storage",
     "webRequest",
     "webRequestBlocking"

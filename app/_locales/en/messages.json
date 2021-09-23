@@ -43,6 +43,10 @@
     "message": "Open Playlist in Popout Player",
     "description": "The text for the context menu entry added to playlist links."
   },
+  "Notification_Error_FailedToOpen": {
+    "message": "Failed to determine the video and/or playlist to open. The Popout Player will not be opened.",
+    "description": "The text use for the notification that is displayed when the popout player cannot be opened."
+  },
   "OptionsPageTitle": {
     "message": "$NAME$ Options",
     "placeholders": {

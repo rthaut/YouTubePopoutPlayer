@@ -6,7 +6,8 @@ import {
 } from "../helpers/constants";
 import Options from "../helpers/options";
 import { GetDimensionForScreenPercentage, IsFirefox } from "../helpers/utils";
-import { GetCookieStoreIDForTab } from "./tabs";
+import { GetActiveTab, GetCookieStoreIDForTab } from "./tabs";
+import { ShowBasicNotification } from "./notifications";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
@@ -32,7 +33,14 @@ export const OpenPopoutPlayer = async ({
     originTabId,
   });
 
-  // https://developers.google.com/youtube/player_parameters
+  // if the origin tab ID wasn't explicitly provided, assume it was the active tab
+  if (isNaN(originTabId) || parseInt(originTabId, 10) <= 0) {
+    console.warn("Invalid or missing origin tab ID", originTabId);
+    originTabId = (await GetActiveTab()).id;
+  }
+
+  // https://developers.google.com/youtube/player_parameters#Parameters
+
   const params = {};
 
   // custom flag for determining if the embedded player is playing within a popout window/tab
@@ -81,12 +89,46 @@ export const OpenPopoutPlayer = async ({
   params.start = time;
 
   if (list !== undefined && list !== null && list !== "") {
-    // `list` is the identifier for either: playlist, search, or user_uploads
-    params.list = list;
+    if (list.toUpperCase() === "WL") {
+      // the embedded player does not support the Watch Later playlist natively
+      // as a workaround, get the video IDs from the DOM and make a manual playlist from them
+
+      console.log(
+        "Watch Later playlist detected; attempting to convert to manual playlist"
+      );
+
+      try {
+        const videos = await browser.tabs.sendMessage(originTabId, {
+          action: "get-playlist-videos",
+        });
+
+        if (Array.isArray(videos) && videos.length > 1) {
+          console.log("Watch Later playlist videos", videos);
+          params.playlist = videos.join(",");
+        }
+      } catch (error) {
+        // this only fails when using the context menu to open the Watch Later playlist from a link outside of YouTube
+        // since we can only get the Video IDs from the DOM, we have to be on YouTube, so there's nothing more we can do
+        void error;
+      }
+    } else {
+      // `list` is the identifier for either: playlist, search, or user_uploads (as indicated by `listType`)
+      params.list = list;
+      params.listType = "playlist";
+    }
   } else if (behavior.loop) {
-    // `playlist` is a comma-separated list of video IDs to play
-    // to loop a single video, the playlist parameter value must be set to the video's ID
+    // to loop a single video, the `playlist` parameter value must be set to the video's ID
     params.playlist = id;
+  }
+
+  // prettier-ignore
+  if (!id && !Object.keys(params).includes("list") && !Object.keys(params).includes("playlist")) {
+    const message = browser.i18n.getMessage("Notification_Error_FailedToOpen");
+    console.warn(message);
+    ShowBasicNotification({
+      message,
+    });
+    return;
   }
 
   const url = await GetUrlForPopoutPlayer(id, params);
