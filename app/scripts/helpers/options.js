@@ -4,7 +4,7 @@ const Options = (() => {
   /**
    * @param {string} type the type of writable storage (`sync`, `local`, or `managed`)
    * @param {boolean} [defaults=true] indicates if the default value(s) should be returned for missing key(s)
-   * @return {Promise<object>}
+   * @returns {Promise<object>}
    */
   const GetAllFromStorage = async function (type = "local", defaults = true) {
     const options = Options.ConvertForStorage(OPTION_DEFAULTS);
@@ -164,7 +164,7 @@ const Options = (() => {
 
     /**
      * Returns all options (as an object) from local storage
-     * @returns {object}
+     * @returns {Promise<object>}
      */
     GetLocalOptions: async function () {
       // console.log("Options.GetLocalOptions()");
@@ -179,7 +179,7 @@ const Options = (() => {
     /**
      * Returns all options (as an object) for the specified domain from local storage
      * @param {string} domain the domain of the options
-     * @returns {object}
+     * @returns {Promise<object>}
      */
     GetLocalOptionsForDomain: async function (domain) {
       // console.log("Options.GetLocalOptionsForDomain()", domain);
@@ -193,7 +193,7 @@ const Options = (() => {
 
     /**
      * Saves the options to local storage
-     * @param {object} options options (in a nested structure)
+     * @param {Promise<object>} options options (in a nested structure)
      */
     SetLocalOptionsForDomain: async function (domain, options) {
       // console.log("Options.SetLocalOptionsForDomain()", domain, options);

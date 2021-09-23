@@ -43,7 +43,7 @@ export const CloseTab = async (tabId, enforceDomainRestriction = false) => {
 /**
  * Sends a message to the active browser tab
  * @param {object} message the message to send to the active tab
- * @returns {Promise}
+ * @returns {Promise<object>[]}
  */
 export const SendMessageToActiveTab = async (message) => {
   const tabs = await browser.tabs.query({

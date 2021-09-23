@@ -40,7 +40,7 @@ const HTML5Player = (() => {
 
     /**
      * Gets the HTML5 <video> element
-     * @return {HTMLVideoElement}
+     * @returns {HTMLVideoElement}
      */
     getVideo() {
       console.group("HTML5Player.getVideo()");
@@ -53,7 +53,7 @@ const HTML5Player = (() => {
 
     /**
      * Gets the current width of the HTML5 video player
-     * @return {number}
+     * @returns {number}
      */
     getWidth() {
       console.group("HTML5Player.getWidth()");
@@ -68,7 +68,7 @@ const HTML5Player = (() => {
 
     /**
      * Gets the current height of the HTML5 video player
-     * @return {number}
+     * @returns {number}
      */
     getHeight() {
       console.group("HTML5Player.getHeight()");
@@ -83,7 +83,7 @@ const HTML5Player = (() => {
 
     /**
      * Gets the elapsed time of the playing video
-     * @return {number}
+     * @returns {number}
      */
     getTime() {
       console.group("HTML5Player.getTime()");
