@@ -1,11 +1,12 @@
-import {
-  YOUTUBE_EMBED_URL,
-  YOUTUBE_NOCOOKIE_EMBED_URL,
-} from "./helpers/constants";
 import { OnCommandEventHandler } from "./background/commands";
 import { InitMenus } from "./background/menus";
 import { OnInstalled, OnRuntimeMessage } from "./background/runtime";
-import { OnBeforeSendHeaders } from "./background/webRequest";
+import {
+  GetExtraInfoSpec,
+  GetFilter,
+  OnBeforeSendHeaders,
+  OnSendHeaders,
+} from "./background/webRequest";
 
 browser.browserAction.onClicked.addListener(() => {
   if (browser.runtime.openOptionsPage) {
@@ -27,10 +28,14 @@ browser.runtime.onMessage.addListener(OnRuntimeMessage);
 
 browser.webRequest.onBeforeSendHeaders.addListener(
   OnBeforeSendHeaders,
-  {
-    urls: [YOUTUBE_EMBED_URL + "*", YOUTUBE_NOCOOKIE_EMBED_URL + "*"],
-  },
-  ["blocking", "requestHeaders"]
+  GetFilter("onBeforeSendHeaders"),
+  GetExtraInfoSpec("onBeforeSendHeaders")
+);
+
+browser.webRequest.onSendHeaders.addListener(
+  OnSendHeaders,
+  GetFilter("onSendHeaders"),
+  GetExtraInfoSpec("onSendHeaders")
 );
 
 InitMenus();
