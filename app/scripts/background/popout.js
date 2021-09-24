@@ -294,7 +294,7 @@ export const OpenPopoutPlayerInWindow = async (
  * Gets the URL for the popout player given a video ID and/or URL parameters
  * @param {string} [id] the video ID
  * @param {object} [params] URL parameters
- * @returns {string} the full URL for the popout player
+ * @returns {Promise<string>} the full URL for the popout player
  */
 export const GetUrlForPopoutPlayer = async (id = null, params = null) => {
   console.log("[Background] GetUrlForPopoutPlayer()", id, params);
@@ -322,7 +322,7 @@ export const GetUrlForPopoutPlayer = async (id = null, params = null) => {
  * Gets the target width and height size values (in pixels) for the popout player window
  * @param {number} originalVideoWidth the width of the original video player (if available)
  * @param {number} originalVideoHeight the height of the original video player (if available)
- * @returns {object} object containing width and height values
+ * @returns {Promise<object>} object containing width and height values
  */
 export const GetDimensionsForPopoutPlayerWindow = async (
   originalVideoWidth,
@@ -378,7 +378,7 @@ export const GetDimensionsForPopoutPlayerWindow = async (
 
 /**
  * Gets the target top and left position values (in pixels) for the popout player window
- * @returns {object} object containing top and left values
+ * @returns {Promise<object>} object containing top and left values
  */
 export const GetPositionForPopoutPlayerWindow = async () => {
   console.log("[Background] GetPositionForPopoutPlayerWindow()");
@@ -407,7 +407,7 @@ export const GetPositionForPopoutPlayerWindow = async () => {
 
 /**
  * Store the dimensions and/or position if the applicable modes are "previous"
- * @returns {null}
+ * @returns {Promise<null>}
  */
 export const StoreDimensionsAndPosition = async ({
   dimensions = {},
@@ -475,7 +475,7 @@ export const StoreDimensionsAndPosition = async ({
  * Adds the contextual identify properties to the create data if appropriate
  * @param {object} createData properties for the tab/window to be created for the Popout Player
  * @param {number} originTabId the original tab ID (of which to match the contextual identify)
- * @returns modified properties for the tab/window to be created for the Popout Player
+ * @returns {Promise<object>} modified properties for the tab/window to be created for the Popout Player
  */
 export const AddContextualIdentityToCreateData = async (
   createData = {},

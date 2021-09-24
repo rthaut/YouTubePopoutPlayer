@@ -3,7 +3,7 @@ import { GetParamFromURL } from "./utils";
 /**
  * Gets the YouTube video ID from the given YouTube URL
  * @param {string} url a valid YouTube URL
- * @return {string} the video ID
+ * @returns {string} the video ID
  */
 export const GetVideoIDFromURL = (url) => {
   // console.group("GetVideoIDFromURL()");
@@ -27,7 +27,7 @@ export const GetVideoIDFromURL = (url) => {
 /**
  * Gets the YouTube playlist ID from the given YouTube URL
  * @param {string} url a valid YouTube URL
- * @return {string} the playlist ID
+ * @returns {string} the playlist ID
  */
 export const GetPlaylistIDFromURL = (url) => {
   // console.group("GetPlaylistIDFromURL()");
