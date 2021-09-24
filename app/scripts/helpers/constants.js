@@ -48,6 +48,3 @@ export const OPTIONS_SIZE_MODE_VALUES = [
 ];
 export const OPTIONS_SIZE_UNITS_VALUES = ["pixels", "percentage"];
 export const OPTIONS_POSITION_MODE_VALUES = ["auto", "previous", "custom"];
-
-export const COMMAND_OPEN_POPOUT_VIDEO = "open-popout-player-for-video";
-export const COMMAND_OPEN_POPOUT_PLAYLIST = "open-popout-player-for-playlist";
