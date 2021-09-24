@@ -1,6 +1,6 @@
 [<img align="right" src="https://img.shields.io/badge/all_contributors-8-green.svg" alt="All Contributors"/>](#contributors)
 
-# YouTube Popout Player v4.0.0
+# YouTube Popout Player v4.1.0
 
 [![Chrome Web Store][chrome-image-version]][chrome-url] [![Microsoft Edge Add-on][edge-image-version]][edge-url] [![Mozilla Add-on][firefox-image-version]][firefox-url]
 
@@ -111,7 +111,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 [chrome-image-users]: https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
 
 [edge-url]: https://microsoftedge.microsoft.com/addons/detail/youtube-popout-player/mdhpmdbgkogobnebpgfbnnnbjfohiiee
-[edge-image-version]: https://img.shields.io/badge/microsoft%20edge%20add--on-v4.0.0-blue?logo=microsoftedge&style=for-the-badge
+[edge-image-version]: https://img.shields.io/badge/microsoft%20edge%20add--on-v4.1.0-blue?logo=microsoftedge&style=for-the-badge
 
 [firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
 [firefox-image-version]: https://img.shields.io/amo/v/youtube-popout-player?color=blue&logo=firefox&style=for-the-badge
