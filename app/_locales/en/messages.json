@@ -43,6 +43,10 @@
     "message": "Open Playlist in Popout Player",
     "description": "The text for the context menu entry added to playlist links."
   },
+  "Notification_Error_FailedToOpen": {
+    "message": "Failed to determine the video and/or playlist to open. The Popout Player will not be opened.",
+    "description": "The text use for the notification that is displayed when the popout player cannot be opened."
+  },
   "OptionsPageTitle": {
     "message": "$NAME$ Options",
     "placeholders": {
@@ -119,6 +123,14 @@
   "OptionsBehaviorLoopDescription": {
     "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
   },
+  "OptionsSettingDisabled": {
+    "message": "This setting is not available when the following setting(s) are enabled: <strong>$SETTINGS$</strong>",
+    "placeholders": {
+      "settings": {
+        "content": "$1"
+      }
+    }
+  },
   "OptionsSettingsNotAvailableForTab": {
     "message": "These settings do not apply when the popout player is configured to open in a new tab in the current browser window."
   },
@@ -150,6 +162,12 @@
   },
   "OptionsSizeModeCustomDescription": {
     "message": "Use this setting to specify dimensions (either in pixels or percentages) for the popout player window."
+  },
+  "OptionsSizeModeMaximizedLabel": {
+    "message": "Maximize the Popout Player Window"
+  },
+  "OptionsSizeModeMaximizedDescription": {
+    "message": "The popout player window will be maximized (NOT fullscreen) automatically <em>immediately after</em> it is positioned."
   },
   "PositionModeLabel": {
     "message": "Popout Player Position"

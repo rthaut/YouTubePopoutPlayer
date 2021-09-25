@@ -80,7 +80,7 @@ order: 5
 
     <div class="card white">
         <div class="card-content">
-            <span class="card-title red-text"><strong>Popout Player Size</strong> <span class="badge grey darken-3 white-text">Updated in v4.0</span></span>
+            <span class="card-title red-text"><strong>Popout Player Size</strong> <span class="badge grey darken-3 white-text">Updated in v4.1</span></span>
             <i class="small left material-icons red-text">info</i>
             <h6>You cannot configure the size of the popout player when using the "Open in a Tab" option.</h6>
         </div>
@@ -97,11 +97,17 @@ order: 5
                     <p>When you select this setting, the popout player window will match the size of the current video automatically when it is opened.</p>
                 </dd>
 
-                <dt>Use Previous Popout Player Window Size <span class="badge red white-text">New!</span></dt>
+                <dt>Use Previous Popout Player Window Size <span class="badge grey darken-1 white-text">New in v4.0</span></dt>
                 <dd>
                     <p>The popout player window will remember the size it was when it was closed or resized.</p>
                     <p>When you select this setting, the popout player window will remember the dimensions of the popout player window whenever you resize it, and then the next time the popout player window is opened, it will be automatically sized to those dimensions.</p>
                     <p><i class="small left material-icons red-text">lightbulb</i> <strong>Tip:</strong> This works best when also using the "Use Previous Position" mode.</p>
+                </dd>
+
+                <dt>Maximize the Popout Player Window <span class="badge red white-text">New in v4.1</span></dt>
+                <dd>
+                    <p>The popout player window will be maximized (NOT fullscreen) automatically <em>immediately after</em> it is positioned.</p>
+                    <p>When you select this setting, the popout player window will be positioned according to the "Popout Player Position" option, then it will be maximized. This should allow you to have the popout player window use the entire screen of a secondary display/monitor.</p>
                 </dd>
 
                 <dt>Set Custom Dimensions</dt>
@@ -139,7 +145,7 @@ order: 5
 
     <div class="card white">
         <div class="card-content">
-            <span class="card-title red-text"><strong>Popout Player Position</strong> <span class="badge grey darken-3 white-text">Added in v4.0</span></span>
+            <span class="card-title red-text"><strong>Popout Player Position</strong> <span class="badge grey darken-3 white-text">New in v4.0</span></span>
             <i class="small left material-icons red-text">info</i>
             <h6>You cannot configure the position of the popout player when using the "Open in a Tab" option.</h6>
         </div>
@@ -210,12 +216,13 @@ order: 5
                     <p><strong>Note</strong>: Enabling this setting will prompt you to allow the use of an <a class="red-text" href="{{ '/permissions#optional' | relative_url }}">additional permission</a>. If you deny the request, this setting will be disabled automatically. You can re-toggle this setting to receive the permission request again.</p>
                 </dd>
 
-                <dt>Open in Background Window/Tab <span class="badge red white-text">New!</span></dt>
+                <dt>Open in Background Window/Tab <span class="badge grey darken-1 white-text">New in v4.0</span></dt>
                 <dd>
                     <p>Enabling this will cause the popout player to be opened in a background window/tab. <strong>The default for this setting is disabled.</strong></p>
+                    <p><i class="small left material-icons red-text">info</i> <strong>Note:</strong> This setting is not available when using the "Maximize the Popout Player Window" mode.</p>
                 </dd>
 
-                <dt>Use "No Cookie" Version of YouTube <span class="badge red white-text">New!</span></dt>
+                <dt>Use "No Cookie" Version of YouTube <span class="badge grey darken-1 white-text">New in v4.0</span></dt>
                 <dd>
                     <p>Enabling this will cause the popout player to use the alternative "youtube-nocookie.com" site, which is Google's attempt to provide a version of YouTube that has fewer tracking cookies. <strong>The default for this setting is disabled.</strong></p>
                 </dd>
@@ -225,7 +232,7 @@ order: 5
                     <p>Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong></p>
                 </dd>
 
-                <dt>Multi-Account Containers Support - <em>Firefox Only</em> <span class="badge red white-text">New!</span></dt>
+                <dt>Multi-Account Containers Support - <em>Firefox Only</em> <span class="badge grey darken-1 white-text">New in v4.0</span></dt>
                 <dd>
                     <p>Enabling this will cause the popout player to be opened in the same <a class="red-text" href="https://support.mozilla.org/en-US/kb/containers">multi-account container (a.k.a. contextual identity)</a> as the original window/tab. <strong>The default for this setting is disabled.</strong></p>
                 </dd>
@@ -266,7 +273,7 @@ order: 5
                     </tr>
                     <tr>
                         <td>
-                            <span class="badge red white-text">New!</span>
+                            <span class="badge grey darken-1 white-text">New in v4.0</span>
                             <strong>Open popout player and close the current window/tab</strong><br>
                             <p>The current window/tab will be closed <span style="border-bottom: 1px solid">if you are viewing a page on youtube.com</span>, regardless of the "Close Original Window/Tab" setting.</p>
                         </td>
@@ -274,7 +281,7 @@ order: 5
                     </tr>
                     <tr>
                         <td>
-                            <span class="badge red white-text">New!</span>
+                            <span class="badge grey darken-1 white-text">New in v4.0</span>
                             <strong>Open popout player without closing the current window/tab</strong><br>
                             <p>The current window/tab will not be closed, regardless of the "Close Original Window/Tab" setting.</p>
                         </td>
@@ -294,7 +301,7 @@ order: 5
 <div id="modal-{{screenshot.name | slugify}}-screenshot" class="modal">
     <div class="modal-content center white">
         <img class="responsive-img" src="{{ screenshot.path | relative_url }}" alt="Popout Player {{screenshot.name}} Options Screenshot" />
-        <p class="text-left"><em>Screenshots are taken from <strong>Version 4.0.0</strong> and may not accurately represent current functionality.</em></p>
+        <p class="text-left"><em>Screenshots are taken from <strong>v4.0</strong> and <strong>v4.1</strong> and may not accurately represent current functionality.</em></p>
     </div>
     <div class="modal-footer">
         <button class="btn red modal-close"><i class="material-icons left">close</i> Close</button>

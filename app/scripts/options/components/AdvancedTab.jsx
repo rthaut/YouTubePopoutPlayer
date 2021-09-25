@@ -17,7 +17,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 
 import TabPanelHeader from "./TabPanelHeader";
 
-import { useOptionsForDomain } from "../hooks/useOptions";
+import { useOptions, useOptionsForDomain } from "../hooks/useOptions";
 
 import { useDebounce } from "react-use";
 
@@ -29,12 +29,22 @@ export default function AdvancedTab() {
   const { options, setOption } = useOptionsForDomain(DOMAIN);
   console.log("AdvancedTab ~ options", options);
 
+  const { getOptionForDomain } = useOptions();
+  const canOpenInBackground =
+    getOptionForDomain("size", "mode") !== "maximized";
+
   const [isFirefox, setIsFirefox] = React.useState(false);
   React.useEffect(() => {
     (async () => {
       setIsFirefox(await IsFirefox());
     })();
   }, []);
+
+  React.useEffect(() => {
+    if (!canOpenInBackground) {
+      setOption("background", false);
+    }
+  }, [canOpenInBackground]);
 
   const handlePermissionSwitchToggle = async (
     optionName,
@@ -121,7 +131,7 @@ export default function AdvancedTab() {
   function BackgroundTabControl() {
     return (
       <>
-        <FormControl>
+        <FormControl disabled={!canOpenInBackground}>
           <FormControlLabel
             label={browser.i18n.getMessage(
               "OptionsAdvancedOpenInBackgroundLabel"
@@ -137,14 +147,27 @@ export default function AdvancedTab() {
               />
             }
           />
-          <Typography
-            color="textSecondary"
-            dangerouslySetInnerHTML={{
-              __html: browser.i18n.getMessage(
-                "OptionsAdvancedOpenInBackgroundDescription"
-              ),
-            }}
-          />
+          {canOpenInBackground ? (
+            <Typography
+              color="textSecondary"
+              dangerouslySetInnerHTML={{
+                __html: browser.i18n.getMessage(
+                  "OptionsAdvancedOpenInBackgroundDescription"
+                ),
+              }}
+            />
+          ) : (
+            <Alert severity="warning">
+              <Typography
+                dangerouslySetInnerHTML={{
+                  __html: browser.i18n.getMessage(
+                    "OptionsSettingDisabled",
+                    browser.i18n.getMessage("OptionsSizeModeMaximizedLabel")
+                  ),
+                }}
+              />
+            </Alert>
+          )}
         </FormControl>
       </>
     );

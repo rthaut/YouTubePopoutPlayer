@@ -1,5 +1,9 @@
 import Options from "../helpers/options";
-import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
+import {
+  GetVideoIDFromURL,
+  GetPlaylistIDFromURL,
+  GetPlaylistVideoIDsFromDOM,
+} from "../helpers/youtube";
 import HTML5Player from "./HTML5Player.class";
 
 export const OnRuntimeMessage = async (message, sender) => {
@@ -12,6 +16,10 @@ export const OnRuntimeMessage = async (message, sender) => {
         if (message.data?.closeTab) {
           await CloseTab(message.data?.enforceDomainRestriction);
         }
+        break;
+
+      case "get-playlist-videos":
+        return GetPlaylistVideoIDsFromDOM();
     }
 
     console.log(
