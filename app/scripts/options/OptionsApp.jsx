@@ -50,6 +50,18 @@ export default function OptionsApp() {
             default: prefersDarkMode ? "#303030" : "#fff",
           },
         },
+        overrides: {
+          MuiCssBaseline: {
+            "@global": {
+              a: {
+                color: prefersDarkMode ? "white" : "black",
+                '&:hover': {
+                  textDecoration: "none",
+                },
+              },
+            },
+          },
+        },
       }),
     [prefersDarkMode]
   );
