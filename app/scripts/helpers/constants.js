@@ -43,8 +43,8 @@ export const OPTIONS_BEHAVIOR_CONTROLS_VALUES = [
 export const OPTIONS_SIZE_MODE_VALUES = [
   "current",
   "previous",
-  "custom",
   "maximized",
+  "custom",
 ];
 export const OPTIONS_SIZE_UNITS_VALUES = ["pixels", "percentage"];
 export const OPTIONS_POSITION_MODE_VALUES = ["auto", "previous", "custom"];
