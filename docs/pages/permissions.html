@@ -22,33 +22,34 @@ order: 2
             <p>These are the required browser permissions for YouTube Popout Player.</p>
         </div>
 
-        <div class="card-body center">
+        <div class="card-body">
             <div class="row">
                 <div class="col s12 xl6">
-                    <h6>Permission Request in Google Chrome</h6>
-                    <img class="responsive-img z-depth-1" src="{{ '/screenshots/Permissions-Chrome-Cropped.png' | relative_url }}" alt="Popout Player Required Permissions Request (in Chrome) Cropped Screenshot"/>
+                    <ul class="collection with-header">
+                        <li class="collection-header grey lighten-4"><h6>Permissions Requested in <a href="#modal-chrome-required-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Google Chrome <i class="material-icons tiny">image</i></a> &amp; <a href="#modal-edge-required-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Microsoft Edge <i class="material-icons tiny">image</i></a></h6></li>
+                        <li class="collection-item"><i class="material-icons tiny">check</i> Read and change your data on all youtube-nocookie.com sites and all youtube.com sites</li>
+                        <li class="collection-item"><i class="material-icons tiny">check</i> Display notifications</li>
+                    </ul>
                 </div>
                 <div class="col s12 hide-on-extra-large-only">
                     <p class="divider"></p>
                 </div>
                 <div class="col s12 xl6">
-                        <h6>Permission Request in Mozilla Firefox</h6>
-                    <img class="responsive-img z-depth-1" src="{{ '/screenshots/Permissions-Firefox-Cropped.png' | relative_url }}" alt="Popout Player Required Permissions Request (in Firefox) Cropped Screenshot"/>
+                    <ul class="collection with-header">
+                        <li class="collection-header grey lighten-4"><h6>Permissions Requested in <a href="#modal-firefox-required-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Mozilla Firefox <i class="material-icons tiny">image</i></a></h6></li>
+                        <li class="collection-item"><i class="material-icons tiny">check</i> Access your data for sites in the youtube.com domain</li>
+                        <li class="collection-item"><i class="material-icons tiny">check</i> Access your data for sites in the youtube-nocookie.com domain</li>
+                        <li class="collection-item"><i class="material-icons tiny">check</i> Display notifications to you</li>
+                    </ul>
                 </div>
             </div>
         </div>
 
         <div class="card-body">
-            <dl>
-                <dt>Read and change your data on all youtube-nocookie.com sites and all youtube.com sites (<em>in Chrome</em>)</dt>
-                <span>&mdash; OR &mdash;</span>
-                <dt>Access your data for sites in the youtube.com domain (<em>in Firefox</em>)</dt>
-                <dt>Access your data for sites in the youtube-nocookie.com domain (<em>in Firefox</em>)</dt>
-                <dd>
-                    <p><strong>This extensions does not read (or collect) or modify any of your data at all.</strong></p>
-                    <p>This permission is used to add the controls (button and context menu) and listen for the keyboard shortcut, which are used to open the popout player, on YouTube videos. This permission is requested for both the primary <code class="red-text">youtube.com</code> domain and the alternate <code class="red-text">youtube-nocookie.com</code> domain (which some sites use to embed YouTube videos), as these are the domains where YouTube videos are hosted.</p>
-                </dd>
-            </dl>
+            <p><strong>Read/Access Data: This extensions does not read (or collect) or modify any of your data at all.</strong></p>
+            <p>This permission is used to add the controls (button and context menu) and listen for the keyboard shortcut, which are used to open the popout player, on YouTube videos. This permission is requested for both the primary <code class="red-text">youtube.com</code> domain and the alternate <code class="red-text">youtube-nocookie.com</code> domain (which is Google's attempt to provide a version of YouTube that has fewer tracking cookies), as these are the domains where YouTube videos are hosted.</p>
+            <p><strong>Notifications: This extensions only shows a notification if the popout player cannot be opened at all.</strong></p>
+            <p>In the extremely unlikely event that the popout player cannot be opened at all, a notification is displayed so that you know it tried but failed. Otherwise, it would seem like nothing happened at all, which can be confusing.</p>
         </div>
     </div>
 
@@ -56,42 +57,55 @@ order: 2
 
 
 <section id="optional" class="section scrollspy">
-    <h4 class="hide">Optional Permissions</h4>
+    <h4 class="hide">Additional/Optional Permissions</h4>
 
     <div class="card white">
         <div class="card-content">
-            <span class="card-title red-text"><strong>Optional Permissions</strong></span>
+            <span class="card-title red-text"><strong>Additional/Optional Permissions</strong></span>
             <p>These are the additional optional browser permissions for YouTube Popout Player. These permissions are requested when needed, and the requests can be denied if you prefer not to grant the requested permissions. Note that denying requests for these permissions will disable the corresponding functionality (as listed below).</p>
         </div>
 
-        <div class="card-body center">
+        <div class="card-body">
             <div class="row">
                 <div class="col s12 xl6">
-                    <h6>Permission Request in Google Chrome</h6>
-                    <img class="responsive-img z-depth-1" src="{{ '/screenshots/Optional-Permissions-Request-Tabs-Chrome.png' | relative_url }}" alt="Popout Player Optional Permissions Request (in Chrome) Cropped Screenshot"/>
+                    <ul class="collection with-header">
+                        <li class="collection-header grey lighten-4"><h6>Optional Tabs Permission Requested in <a href="#modal-chrome-optional-tabs-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Google Chrome <i class="material-icons tiny">image</i></a> &amp; <a href="#modal-edge-optional-tabs-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Microsoft Edge <i class="material-icons tiny">image</i></a></h6></li>
+                        <li class="collection-item"><i class="material-icons tiny">check</i> Read your browsing history</li>
+                    </ul>
                 </div>
                 <div class="col s12 hide-on-extra-large-only">
                     <p class="divider"></p>
                 </div>
                 <div class="col s12 xl6">
-                    <h6>Permission Request in Mozilla Firefox</h6>
-                    <img class="responsive-img z-depth-1" src="{{ '/screenshots/Optional-Permissions-Request-Tabs-Firefox.png' | relative_url }}" alt="Popout Player Optional Permissions Request (in Firefox) Cropped Screenshot"/>
+                    <ul class="collection with-header">
+                        <li class="collection-header grey lighten-4"><h6>Optional Tabs Permission Requested in <a href="#modal-firefox-optional-tabs-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Mozilla Firefox <i class="material-icons tiny">image</i></a></h6></li>
+                        <li class="collection-item"><i class="material-icons tiny">check</i> Access browser tabs</li>
+                    </ul>
                 </div>
             </div>
         </div>
 
         <div class="card-body">
-            <dl>
-                <dt>Read your browsing history (<em>in Chrome</em>)</dt>
-                <span>&mdash; OR &mdash;</span>
-                <dt>Access browser tabs (<em>in Firefox</em>)</dt>
-                <dd>
-                    <p><strong>This extension does not read (or collect) your browsing history at all.</strong></p>
-                    <p>The Tabs permission is used to close the original window/tab (when configured via the "Close Original Window/Tab" option) after opening the popout player.</p>
-                    <p><strong>Denying this permission</strong> will disable the use of the <a class="red-text" href="{{ '/options#advanced' | relative_url }}">"Close Original Window/Tab" setting</a>.</p>
-                </dd>
-            </dl>
+            <p><strong>This extension does not read (or collect) your browsing history at all.</strong></p>
+            <p>The Tabs permission is used to close the original window/tab (when configured via the "Close Original Window/Tab" option) after opening the popout player.</p>
+            <p><strong>Denying this permission</strong> will disable the use of the <a class="red-text" href="{{ '/options#advanced' | relative_url }}">"Close Original Window/Tab" setting</a>.</p>
         </div>
     </div>
 
 </section>
+
+<!-- Modals with Screenshots -->
+{% assign required = site.data.screenshots | where:"type","permission-required" %}
+{% assign optional = site.data.screenshots | where:"type","permission-optional" %}
+{% assign screenshots = required | concat: optional %}
+{% for screenshot in screenshots %}
+<div id="modal-{{screenshot.name | slugify}}-screenshot" class="modal">
+    <div class="modal-content center white">
+        <img class="responsive-img" src="{{ screenshot.path | relative_url }}" alt="Popout Player {{screenshot.name}}" />
+        <p class="text-left"><em>Screenshots are taken from <strong>v4.0</strong> and <strong>v4.1</strong> and may not accurately represent current functionality.</em></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn red modal-close"><i class="material-icons left">close</i> Close</button>
+    </div>
+</div>
+{% endfor %}

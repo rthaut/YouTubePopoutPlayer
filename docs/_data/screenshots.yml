@@ -13,3 +13,27 @@
 - name: Advanced
   path: /screenshots/Options-Advanced-Firefox.png
   type: option
+
+- name: Chrome Required Permissions
+  path: /screenshots/Permissions-Chrome-Cropped.png
+  type: permission-required
+
+- name: Edge Required Permissions
+  path: /screenshots/Permissions-Edge-Cropped.png
+  type: permission-required
+
+- name: Firefox Required Permissions
+  path: /screenshots/Permissions-Firefox-Cropped.png
+  type: permission-required
+
+- name: Chrome Optional Tabs Permissions
+  path: /screenshots/Optional-Permissions-Request-Tabs-Chrome.png
+  type: permission-optional
+
+- name: Edge Optional Tabs Permissions
+  path: /screenshots/Optional-Permissions-Request-Tabs-Edge.png
+  type: permission-optional
+
+- name: Firefox Optional Tabs Permissions
+  path: /screenshots/Optional-Permissions-Request-Tabs-Firefox.png
+  type: permission-optional
