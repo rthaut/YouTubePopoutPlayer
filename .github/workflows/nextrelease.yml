@@ -21,7 +21,8 @@ jobs:
     - uses: dropseed/nextrelease@v1
       with:
         prepare_cmd: |
-          npm version $NEXT_VERSION && sed -i -e "s/v$LAST_VERSION/v$NEXT_VERSION/g" README.md
+          sed -i -e "s/v$LAST_VERSION/v$NEXT_VERSION/g" README.md
+          npm version $NEXT_VERSION --no-git-tag-version --allow-same-version
         publish_cmd: |
           git tag -a v$VERSION_MAJOR -m Version $VERSION_MAJOR -f && git push origin v$VERSION_MAJOR -f
         github_token: ${{ secrets.GITHUB_TOKEN }}
