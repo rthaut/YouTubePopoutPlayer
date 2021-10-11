@@ -33,7 +33,7 @@
 | Web Browser | Information & Downloads |
 | ----------- | ----------------------- |
 | Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-users]][chrome-url] |
-| Microsoft Edge | [![Microsoft Edge Add-on][edge-image-version]][edge-url] |
+| Microsoft Edge | [![Microsoft Edge Add-on][edge-image-version]][edge-url] [![Microsoft Edge Add-on][edge-image-users]][edge-url] |
 | Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-users]][firefox-url] |
 
 * * *
@@ -111,7 +111,8 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 [chrome-image-users]: https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
 
 [edge-url]: https://microsoftedge.microsoft.com/addons/detail/youtube-popout-player/mdhpmdbgkogobnebpgfbnnnbjfohiiee
-[edge-image-version]: https://img.shields.io/badge/microsoft%20edge%20add--on-v4.1.0-blue?logo=microsoftedge&style=for-the-badge
+[edge-image-version]: https://img.shields.io/badge/dynamic/json?logo=microsoftedge&style=for-the-badge&label=edge%20add-on&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fmdhpmdbgkogobnebpgfbnnnbjfohiiee
+[edge-image-users]: https://img.shields.io/badge/dynamic/json?logo=microsoftedge&style=for-the-badge&label=users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fmdhpmdbgkogobnebpgfbnnnbjfohiiee
 
 [firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
 [firefox-image-version]: https://img.shields.io/amo/v/youtube-popout-player?color=blue&logo=firefox&style=for-the-badge
