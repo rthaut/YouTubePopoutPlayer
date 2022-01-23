@@ -114,6 +114,6 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 [edge-image-version]: https://img.shields.io/badge/dynamic/json?logo=microsoftedge&style=for-the-badge&label=edge%20add-on&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fmdhpmdbgkogobnebpgfbnnnbjfohiiee
 [edge-image-users]: https://img.shields.io/badge/dynamic/json?logo=microsoftedge&style=for-the-badge&label=users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fmdhpmdbgkogobnebpgfbnnnbjfohiiee
 
-[firefox-url]: https://addons.mozilla.org/en-US/firefox/addon/youtube-popout-player/
+[firefox-url]: https://addons.mozilla.org/firefox/addon/youtube-popout-player/
 [firefox-image-version]: https://img.shields.io/amo/v/youtube-popout-player?color=blue&logo=firefox&style=for-the-badge
 [firefox-image-users]: https://img.shields.io/amo/users/youtube-popout-player?color=blue&logo=firefox&style=for-the-badge
