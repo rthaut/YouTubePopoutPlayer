@@ -90,18 +90,22 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://wiki.mozilla.org/User:YFdyh000"><img src="https://avatars0.githubusercontent.com/u/1769875?v=4" width="100px;" alt=""/><br /><sub><b>YFdyh000</b></sub></a><br /><a href="#translation-yfdyh000" title="Translation">🌍</a></td>
-    <td align="center"><a href="https://cdcs2.com"><img src="https://avatars3.githubusercontent.com/u/8739797?v=4" width="100px;" alt=""/><br /><sub><b>CD</b></sub></a><br /><a href="#ideas-d5c4b3" title="Ideas, Planning, & Feedback">🤔</a></td>
-    <td align="center"><a href="https://github.com/201601972-kimdongwook"><img src="https://avatars0.githubusercontent.com/u/62870938?v=4" width="100px;" alt=""/><br /><sub><b>DONGWOOK KIM</b></sub></a><br /><a href="#translation-201601972-kimdongwook" title="Translation">🌍</a></td>
-    <td align="center"><a href="https://github.com/kimsoyeong"><img src="https://avatars3.githubusercontent.com/u/43427380?v=4" width="100px;" alt=""/><br /><sub><b>kimsoyeong</b></sub></a><br /><a href="#translation-kimsoyeong" title="Translation">🌍</a></td>
-    <td align="center"><a href="https://github.com/OhKyungTaek"><img src="https://avatars1.githubusercontent.com/u/48934601?v=4" width="100px;" alt=""/><br /><sub><b>OhKyungTaek</b></sub></a><br /><a href="#translation-OhKyungTaek" title="Translation">🌍</a></td>
-    <td align="center"><a href="https://github.com/Sumin971013"><img src="https://avatars3.githubusercontent.com/u/55087554?v=4" width="100px;" alt=""/><br /><sub><b>Sumin Bae</b></sub></a><br /><a href="#translation-Sumin971013" title="Translation">🌍</a></td>
-    <td align="center"><a href="https://github.com/SeongJin16"><img src="https://avatars1.githubusercontent.com/u/55086076?v=4" width="100px;" alt=""/><br /><sub><b>SJAhn_Dev</b></sub></a><br /><a href="#translation-SeongJin16" title="Translation">🌍</a></td>
+    <td align="center"><a href="http://wiki.mozilla.org/User:YFdyh000"><img src="https://avatars0.githubusercontent.com/u/1769875?v=4?s=100" width="100px;" alt=""/><br /><sub><b>YFdyh000</b></sub></a><br /><a href="#translation-yfdyh000" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://cdcs2.com"><img src="https://avatars3.githubusercontent.com/u/8739797?v=4?s=100" width="100px;" alt=""/><br /><sub><b>CD</b></sub></a><br /><a href="#ideas-d5c4b3" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/201601972-kimdongwook"><img src="https://avatars0.githubusercontent.com/u/62870938?v=4?s=100" width="100px;" alt=""/><br /><sub><b>DONGWOOK KIM</b></sub></a><br /><a href="#translation-201601972-kimdongwook" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/kimsoyeong"><img src="https://avatars3.githubusercontent.com/u/43427380?v=4?s=100" width="100px;" alt=""/><br /><sub><b>kimsoyeong</b></sub></a><br /><a href="#translation-kimsoyeong" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/OhKyungTaek"><img src="https://avatars1.githubusercontent.com/u/48934601?v=4?s=100" width="100px;" alt=""/><br /><sub><b>OhKyungTaek</b></sub></a><br /><a href="#translation-OhKyungTaek" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/Sumin971013"><img src="https://avatars3.githubusercontent.com/u/55087554?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sumin Bae</b></sub></a><br /><a href="#translation-Sumin971013" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/SeongJin16"><img src="https://avatars1.githubusercontent.com/u/55086076?v=4?s=100" width="100px;" alt=""/><br /><sub><b>SJAhn_Dev</b></sub></a><br /><a href="#translation-SeongJin16" title="Translation">🌍</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/Gitoffthelawn/Contact-Gitoffthelawn"><img src="https://avatars.githubusercontent.com/u/7672848?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gitoffthelawn</b></sub></a><br /><a href="https://github.com/rthaut/YouTubePopoutPlayer/commits?author=Gitoffthelawn" title="Documentation">📖</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
