@@ -6,7 +6,11 @@ import {
 } from "../helpers/constants";
 import Options from "../helpers/options";
 import { GetDimensionForScreenPercentage, IsFirefox } from "../helpers/utils";
-import { GetActiveTab, GetCookieStoreIDForTab } from "./tabs";
+import {
+  AddContextualIdentityToDataObject,
+  GetActiveTab,
+  GetPopoutPlayerTabs,
+} from "./tabs";
 import { ShowBasicNotification } from "./notifications";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
@@ -32,6 +36,8 @@ export const OpenPopoutPlayer = async ({
     originalVideoHeight,
     originTabId,
   });
+
+  let result;
 
   // if the origin tab ID wasn't explicitly provided, assume it was the active tab
   if (isNaN(originTabId) || parseInt(originTabId, 10) <= 0) {
@@ -133,12 +139,35 @@ export const OpenPopoutPlayer = async ({
 
   const url = await GetUrlForPopoutPlayer(id, params);
 
+  const reuseExistingWindowsTabs = await Options.GetLocalOption(
+    "advanced",
+    "reuseWindowsTabs"
+  );
+
+  if (reuseExistingWindowsTabs) {
+    const tabs = await GetPopoutPlayerTabs(originTabId);
+    if (tabs.length < 1) {
+      console.log(
+        "[Background] OpenPopoutPlayer() :: No existing popout player tabs found"
+      );
+    } else {
+      console.log(
+        "[Background] OpenPopoutPlayer() :: Re-using existing popout player tab(s)",
+        tabs
+      );
+      result = await Promise.all(
+        tabs.map((tab) => browser.tabs.update(tab.id, { url }))
+      );
+      console.log("[Background] OpenPopoutPlayer() :: Return", result);
+      return result;
+    }
+  }
+
   const openInBackground = await Options.GetLocalOption(
     "advanced",
     "background"
   );
 
-  let result;
   switch (behavior.target.toLowerCase()) {
     case "tab":
       result = await OpenPopoutPlayerInTab(url, !openInBackground, originTabId);
@@ -174,7 +203,7 @@ export const OpenPopoutPlayerInTab = async (
 ) => {
   console.log("[Background] OpenPopoutPlayerInTab()", url, active, originTabId);
 
-  const createData = await AddContextualIdentityToCreateData(
+  const createData = await AddContextualIdentityToDataObject(
     {
       url,
       active,
@@ -222,7 +251,7 @@ export const OpenPopoutPlayerInWindow = async (
     originalVideoHeight
   );
 
-  const createData = await AddContextualIdentityToCreateData(
+  const createData = await AddContextualIdentityToDataObject(
     {
       url,
       state: "normal",
@@ -469,47 +498,6 @@ export const StoreDimensionsAndPosition = async ({
       );
     }
   }
-};
-
-/**
- * Adds the contextual identify properties to the create data if appropriate
- * @param {object} createData properties for the tab/window to be created for the Popout Player
- * @param {number} originTabId the original tab ID (of which to match the contextual identify)
- * @returns {Promise<object>} modified properties for the tab/window to be created for the Popout Player
- */
-export const AddContextualIdentityToCreateData = async (
-  createData = {},
-  originTabId = -1
-) => {
-  try {
-    const isFirefox = await IsFirefox();
-    const useContextualIdentity = await Options.GetLocalOption(
-      "advanced",
-      "contextualIdentity"
-    );
-
-    if (isFirefox && useContextualIdentity) {
-      const cookieStoreId = await GetCookieStoreIDForTab(originTabId);
-      if (cookieStoreId) {
-        createData.cookieStoreId = cookieStoreId;
-        console.log(
-          "[Background] AddContextualIdentityToCreateData() :: Added cookie store ID to create data",
-          createData
-        );
-      } else {
-        console.warn(
-          "[Background] AddContextualIdentityToCreateData() :: Failed to get cookie store ID from original tab"
-        );
-      }
-    }
-  } catch (error) {
-    console.error(
-      "Failed to add contextual identity to window/tab for Popout Player",
-      error
-    );
-  }
-
-  return createData;
 };
 
 export default OpenPopoutPlayer;

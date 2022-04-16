@@ -73,6 +73,38 @@ export default function AdvancedTab() {
     return true;
   };
 
+  function ReuseExistingOptionControl() {
+    return (
+      <>
+        <FormControl>
+          <FormControlLabel
+            label={browser.i18n.getMessage(
+              "OptionsAdvancedReuseWindowsTabsLabel"
+            )}
+            control={
+              <Switch
+                name="close-switch"
+                color="primary"
+                checked={options["reuseWindowsTabs"]}
+                onChange={(event) =>
+                  setOption("reuseWindowsTabs", event.target.checked)
+                }
+              />
+            }
+          />
+          <Typography
+            color="textSecondary"
+            dangerouslySetInnerHTML={{
+              __html: browser.i18n.getMessage(
+                "OptionsAdvancedReuseWindowsTabsDescription"
+              ),
+            }}
+          />
+        </FormControl>
+      </>
+    );
+  }
+
   function CloseOptionControl() {
     const [showPermissionError, setShowPermissionError] = React.useState(false);
 
@@ -315,6 +347,10 @@ export default function AdvancedTab() {
         title={browser.i18n.getMessage("OptionsHeadingAdvanced")}
       />
       <Box marginTop={1} marginBottom={2}>
+        <ReuseExistingOptionControl />
+      </Box>
+      <Divider />
+      <Box marginY={2}>
         <CloseOptionControl />
       </Box>
       <Divider />

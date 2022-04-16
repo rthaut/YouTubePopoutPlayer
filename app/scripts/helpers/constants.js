@@ -26,6 +26,7 @@ export const OPTION_DEFAULTS = {
     left: 0,
   },
   advanced: {
+    reuseWindowsTabs: false,
     background: false,
     close: false,
     noCookieDomain: false,
