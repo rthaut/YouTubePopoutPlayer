@@ -241,7 +241,7 @@
     "message": "Save Custom Position"
   },
   "OptionsAdvancedReuseWindowsTabsLabel": {
-    "message": "Re-use Existing Window(s)/Tab(s)"
+    "message": "Re-Use Existing Window(s)/Tab(s)"
   },
   "OptionsAdvancedReuseWindowsTabsDescription": {
     "message": "Enabling this will cause the popout player to attempt to open in any (and all) existing popout player window(s)/tab(s). <strong>The default for this setting is disabled.</strong>"
