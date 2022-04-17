@@ -49,7 +49,7 @@ export const InitMenus = async () => {
 };
 
 /**
- * Helper function for opening the Popout Player (and optionally closing the original tab) via context menus
+ * Helper function for opening the popout player (and optionally closing the original tab) via context menus
  * @param {object} popoutPlayerData data for the popout player
  * @param {number} tabId the ID of the tab from which the context menu click originated
  */

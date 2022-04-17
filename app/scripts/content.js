@@ -6,7 +6,7 @@ import { InsertControlsAndWatch } from "./content/YouTubeCustomControls";
 import { IsPopoutPlayer, debounce } from "./helpers/utils";
 
 /**
- * Registers event listeners for when the Popout Player window is resized and closed.
+ * Registers event listeners for when the popout player window is resized and closed.
  * This is done in the content script, as there is no way to get window size or position data from the background script.
  */
 const RegisterEventListeners = () => {

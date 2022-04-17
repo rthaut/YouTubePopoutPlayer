@@ -44,7 +44,7 @@ export const CustomControlsClickEventHandler = async (event) => {
 };
 
 /**
- * Opens the Popout Player (via a request to the background script)
+ * Opens the popout player (via a request to the background script)
  */
 export const OpenPopout = async () => {
   console.log("[Content] YouTubePopoutPlayer OpenPopout()");

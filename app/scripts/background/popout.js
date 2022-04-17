@@ -164,7 +164,7 @@ export const OpenPopoutPlayer = async ({
  * Opens an Embedded Player in a new tab
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {boolean} [active] indicates if the tab should become the active tab in the window
- * @param {number} originTabId the ID of the tab from which the request to open the Popout Player originated
+ * @param {number} originTabId the ID of the tab from which the request to open the popout player originated
  * @returns {Promise<object>}
  */
 export const OpenPopoutPlayerInTab = async (
@@ -196,7 +196,7 @@ export const OpenPopoutPlayerInTab = async (
  * Opens an Embedded Player in a new window (optionally matching the size of the original video player)
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {boolean} openInBackground indicates if the window should be opened in the background
- * @param {number} originTabId the ID of the tab from which the request to open the Popout Player originated
+ * @param {number} originTabId the ID of the tab from which the request to open the popout player originated
  * @param {object} originalVideoWidth the width of the original video player
  * @param {boolean} originalVideoHeight the height of the original video player
  * @returns {Promise<object>}
@@ -239,7 +239,7 @@ export const OpenPopoutPlayerInWindow = async (
   }
 
   console.log(
-    "[Background] OpenPopoutPlayerInWindow() :: Creating Popout Player window",
+    "[Background] OpenPopoutPlayerInWindow() :: Creating popout player window",
     createData
   );
   let window = await browser.windows.create(createData);
@@ -250,7 +250,7 @@ export const OpenPopoutPlayerInWindow = async (
   const position = await GetPositionForPopoutPlayerWindow();
   if (!isNaN(position?.top) && !isNaN(position?.left)) {
     console.log(
-      "[Background] OpenPopoutPlayerInWindow() :: Positioning Popout Player window",
+      "[Background] OpenPopoutPlayerInWindow() :: Positioning popout player window",
       position
     );
     window = await browser.windows.update(window.id, position);
@@ -258,7 +258,7 @@ export const OpenPopoutPlayerInWindow = async (
 
   if ((await Options.GetLocalOption("size", "mode")) === "maximized") {
     console.log(
-      "[Background] OpenPopoutPlayerInWindow() :: Maximizing Popout Player window"
+      "[Background] OpenPopoutPlayerInWindow() :: Maximizing popout player window"
     );
     window = await browser.windows.update(window.id, {
       state: "maximized",
