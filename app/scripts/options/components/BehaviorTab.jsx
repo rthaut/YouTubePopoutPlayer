@@ -30,7 +30,7 @@ export const DOMAIN = "behavior";
 
 export default function BehaviorTab() {
   const { options, setOption } = useOptionsForDomain(DOMAIN);
-  console.log("BehaviorTab ~ options", options)
+  console.log("BehaviorTab ~ options", options);
 
   function TargetOptionControl() {
     return (
