@@ -149,6 +149,18 @@ export default function AdvancedTab() {
     );
   }
 
+  function AutoOpenControl() {
+    return (
+      <BasicToggleControl
+        optionName="autoOpen"
+        label={browser.i18n.getMessage("OptionsAdvancedAutoOpenLabel")}
+        description={browser.i18n.getMessage(
+          "OptionsAdvancedAutoOpenDescription"
+        )}
+      />
+    );
+  }
+
   function BackgroundTabControl() {
     return (
       <FormControl disabled={!canOpenInBackground}>
@@ -311,6 +323,10 @@ export default function AdvancedTab() {
           </Box>
         </>
       )}
+      <Divider />
+      <Box marginY={2}>
+        <AutoOpenControl />
+      </Box>
     </Box>
   );
 }

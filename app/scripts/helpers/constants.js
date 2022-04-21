@@ -36,6 +36,7 @@ export const OPTION_DEFAULTS = {
     left: 0,
   },
   advanced: {
+    autoOpen: false,
     background: false,
     close: false,
     noCookieDomain: false,

@@ -240,6 +240,12 @@
   "ButtonSaveCustomPositionLabel": {
     "message": "Save Custom Position"
   },
+  "OptionsAdvancedAutoOpenLabel": {
+    "message": "Automatically Open on Video Pages"
+  },
+  "OptionsAdvancedAutoOpenDescription": {
+    "message": "Enabling this will automatically open the popout player when navigating to a YouTube video page. <strong>The default for this setting is disabled.</strong>"
+  },
   "OptionsAdvancedCloseLabel": {
     "message": "Close Original Window/Tab"
   },
