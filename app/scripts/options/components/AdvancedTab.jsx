@@ -115,84 +115,80 @@ export default function AdvancedTab() {
     };
 
     return (
-      <>
-        <FormControl>
-          <FormControlLabel
-            label={label}
-            control={
-              <Switch
-                name={`${optionName}-switch`}
-                color="primary"
-                checked={options[optionName]}
-                onChange={onPermissionSwitchChange}
-              />
-            }
-          />
-          {showPermissionError && (
-            <Alert
-              severity="error"
-              onClose={() => {
-                setShowPermissionError(false);
-              }}
-            >
-              {browser.i18n.getMessage(
-                "FieldRequiredPermissionsNotGrantedMessage"
-              )}
-            </Alert>
-          )}
-          <Typography
-            color="textSecondary"
-            dangerouslySetInnerHTML={{
-              __html: description,
+      <FormControl>
+        <FormControlLabel
+          label={label}
+          control={
+            <Switch
+              name={`${optionName}-switch`}
+              color="primary"
+              checked={options[optionName]}
+              onChange={onPermissionSwitchChange}
+            />
+          }
+        />
+        {showPermissionError && (
+          <Alert
+            severity="error"
+            onClose={() => {
+              setShowPermissionError(false);
             }}
-          />
-        </FormControl>
-      </>
+          >
+            {browser.i18n.getMessage(
+              "FieldRequiredPermissionsNotGrantedMessage"
+            )}
+          </Alert>
+        )}
+        <Typography
+          color="textSecondary"
+          dangerouslySetInnerHTML={{
+            __html: description,
+          }}
+        />
+      </FormControl>
     );
   }
 
   function BackgroundTabControl() {
     return (
-      <>
-        <FormControl disabled={!canOpenInBackground}>
-          <FormControlLabel
-            label={browser.i18n.getMessage(
-              "OptionsAdvancedOpenInBackgroundLabel"
-            )}
-            control={
-              <Switch
-                name="close-switch"
-                color="primary"
-                checked={options["background"]}
-                onChange={(event) =>
-                  setOption("background", event.target.checked)
-                }
-              />
-            }
+      <FormControl disabled={!canOpenInBackground}>
+        <FormControlLabel
+          label={browser.i18n.getMessage(
+            "OptionsAdvancedOpenInBackgroundLabel"
+          )}
+          control={
+            <Switch
+              name="close-switch"
+              color="primary"
+              checked={options["background"]}
+              onChange={(event) =>
+                setOption("background", event.target.checked)
+              }
+            />
+          }
+        />
+        {canOpenInBackground ? (
+          <Typography
+            color="textSecondary"
+            dangerouslySetInnerHTML={{
+              __html: browser.i18n.getMessage(
+                "OptionsAdvancedOpenInBackgroundDescription"
+              ),
+            }}
           />
-          {canOpenInBackground ? (
+        ) : (
+          <Alert severity="warning">
             <Typography
-              color="textSecondary"
               dangerouslySetInnerHTML={{
                 __html: browser.i18n.getMessage(
-                  "OptionsAdvancedOpenInBackgroundDescription"
+                  "OptionsSettingDisabled",
+                  browser.i18n.getMessage("OptionsSizeModeMaximizedLabel")
                 ),
               }}
             />
-          ) : (
-            <Alert severity="warning">
-              <Typography
-                dangerouslySetInnerHTML={{
-                  __html: browser.i18n.getMessage(
-                    "OptionsSettingDisabled",
-                    browser.i18n.getMessage("OptionsSizeModeMaximizedLabel")
-                  ),
-                }}
-              />
-            </Alert>
-          )}
-        </FormControl>
-      </>
+          </Alert>
+        )}
+      </FormControl>
     );
   }
 
