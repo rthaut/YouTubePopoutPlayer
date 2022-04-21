@@ -1,4 +1,10 @@
-import { YOUTUBE_DOMAINS } from "../helpers/constants";
+import {
+  YOUTUBE_DOMAINS,
+  YOUTUBE_EMBED_URL,
+  YOUTUBE_NOCOOKIE_EMBED_URL,
+} from "../helpers/constants";
+import Options from "../helpers/options";
+import { IsFirefox } from "../helpers/utils";
 
 /**
  * Closes the specified tab
@@ -70,6 +76,22 @@ export const GetActiveTab = async () => {
 };
 
 /**
+ * Gets all existing popout player tabs
+ * @returns {Promise<object>} the popout player tabs
+ */
+export const GetPopoutPlayerTabs = async (originTabId = -1) =>
+  browser.tabs.query(
+    await AddContextualIdentityToDataObject(
+      {
+        url: [YOUTUBE_EMBED_URL, YOUTUBE_NOCOOKIE_EMBED_URL].map(
+          (url) => url + "*?*popout=1*"
+        ),
+      },
+      originTabId
+    )
+  );
+
+/**
  * Gets the value of the `cookieStoreId` property of the specified tab
  * @param {number} tabId the ID of the tab
  * @returns {Promise<string|null>} the `cookieStoreId` property value or `null` if unavailable
@@ -96,4 +118,45 @@ export const GetCookieStoreIDForTab = async (tabId) => {
     tab.cookieStoreId
   );
   return tab.cookieStoreId;
+};
+
+/**
+ * Adds the contextual identify properties to the given window/tab data object (if appropriate)
+ * @param {object} data an object for use in a window/tab function
+ * @param {number} originTabId the original tab ID (of which to match the contextual identify)
+ * @returns {Promise<object>} modified window/tab data object
+ */
+export const AddContextualIdentityToDataObject = async (
+  data = {},
+  originTabId = -1
+) => {
+  try {
+    const isFirefox = await IsFirefox();
+    const useContextualIdentity = await Options.GetLocalOption(
+      "advanced",
+      "contextualIdentity"
+    );
+
+    if (isFirefox && useContextualIdentity) {
+      const cookieStoreId = await GetCookieStoreIDForTab(originTabId);
+      if (cookieStoreId) {
+        data.cookieStoreId = cookieStoreId;
+        console.log(
+          "[Background] AddContextualIdentityToObjectData() :: Added cookie store ID to window/tab data object",
+          data
+        );
+      } else {
+        console.warn(
+          "[Background] AddContextualIdentityToObjectData() :: Failed to get cookie store ID from original tab"
+        );
+      }
+    }
+  } catch (error) {
+    console.error(
+      "Failed to add contextual identity to window/tab data object",
+      error
+    );
+  }
+
+  return data;
 };

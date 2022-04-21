@@ -39,8 +39,9 @@ export const OPTION_DEFAULTS = {
     autoOpen: false,
     background: false,
     close: false,
-    noCookieDomain: false,
     contextualIdentity: false,
+    noCookieDomain: false,
+    reuseWindowsTabs: false,
     title: "",
   },
 };
