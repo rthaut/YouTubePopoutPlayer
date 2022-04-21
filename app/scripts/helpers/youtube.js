@@ -1,18 +1,31 @@
 import { GetParamFromURL } from "./utils";
 
+export const VideoRegEx = /v=([^\?\&\/]{11})/;
+
+export const VideoLinkEmbedRegEx =
+  /(?:(?:v=)|(?:\/embed\/)|(?:\/youtu\.be\/))([^\?\&\/]{11})/;
+
+/**
+ * Indicates if the given URL is for a YouTube video
+ * @param {string} url a URL to check
+ * @param {boolean} [external=true] if the test pattern should include link and embed formats
+ * @returns {boolean} true if the URL is for a YouTube video
+ */
+export const IsVideoURL = (url, external = true) =>
+  (external ? VideoLinkEmbedRegEx : VideoRegEx).test(url);
+
 /**
  * Gets the YouTube video ID from the given YouTube URL
  * @param {string} url a valid YouTube URL
+ * @param {boolean} [external=true] if the test pattern should include link and embed formats
  * @returns {string} the video ID
  */
-export const GetVideoIDFromURL = (url) => {
+export const GetVideoIDFromURL = (url, external = true) => {
   // console.group("GetVideoIDFromURL()");
 
   let id = null;
 
-  const result = new RegExp(
-    /(?:(?:v=)|(?:\/embed\/)|(?:\/youtu\.be\/))([^\?\&\/]{11})/
-  ).exec(url);
+  const result = (external ? VideoLinkEmbedRegEx : VideoRegEx).exec(url);
   // console.log("RegExp Result", result);
 
   if (result && result[1]) {

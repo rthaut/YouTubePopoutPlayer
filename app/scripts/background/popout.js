@@ -6,15 +6,67 @@ import {
 } from "../helpers/constants";
 import Options from "../helpers/options";
 import { GetDimensionForScreenPercentage, IsFirefox } from "../helpers/utils";
-import { GetActiveTab, GetCookieStoreIDForTab } from "./tabs";
+import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
+import { CloseTab, GetActiveTab, GetCookieStoreIDForTab } from "./tabs";
 import { ShowBasicNotification } from "./notifications";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
 
 /**
+ * Helper function to open the popout player from various points in the background script
+ * @param {string} url the URL containing a video ID and/or playlist
+ * @param {number} tabId the ID of the original tab
+ * @param {boolean} allowCloseTab if the original tab can be closed (depending on the user's preference)
+ * @param {boolean} allowCloseTabOnAnyDomain if the original tab can be closed regardless of which domain it is on
+ * @returns {Promise<boolean>} if the popout player was opened
+ */
+export const OpenPopoutBackgroundHelper = async (
+  url,
+  tabId = -1,
+  allowCloseTab = true,
+  allowCloseTabOnAnyDomain = false
+) => {
+  console.log("[Background] OpenPopoutBackgroundHelper()", {
+    id,
+    list,
+    allowCloseTab,
+    allowCloseTabOnAnyDomain,
+  });
+  const id = GetVideoIDFromURL(url);
+  const list = GetPlaylistIDFromURL(url);
+
+  if (!(id || list)) {
+    console.warn("No video or playlist detected from URL", url);
+    return false;
+  }
+
+  const result = await OpenPopoutPlayer({
+    id,
+    list,
+    originTabId: tabId,
+  });
+
+  // we can't do anything if a tab ID wasn't given, as the "active" tab will now likely be the popout
+  // (unless the user has configured it to open in the background, but checking for that is not guaranteed)
+  if (parseInt(tabId, 10) > 0) {
+    if (allowCloseTab && (await Options.GetLocalOption("advanced", "close"))) {
+      // close the tab if allowed and configured
+      await CloseTab(tabId, !allowCloseTabOnAnyDomain);
+    } else {
+      // pause the video player (if there is one) in the tab
+      await browser.tabs.sendMessage(tabId, {
+        action: "pause-video-player",
+      });
+    }
+  }
+
+  return result !== undefined && result !== null;
+};
+
+/**
  * Opens the popout player
- * @returns {Promise<object>}
+ * @returns {Promise<object|null>} the opened window/tab
  */
 export const OpenPopoutPlayer = async ({
   id = "",
