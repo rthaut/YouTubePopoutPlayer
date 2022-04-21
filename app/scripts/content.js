@@ -1,6 +1,7 @@
 import {
   OpenPopoutForPageVideo,
   PauseVideoPlayer,
+  PlayVideoPlayer,
 } from "./content/YouTubePopoutPlayer";
 import { InsertControlsAndWatch } from "./content/YouTubeCustomControls";
 import Options from "./helpers/options";
@@ -126,5 +127,11 @@ const SendWindowDimensionsAndPosition = async (action) => {
 
   if (IsPopoutPlayer(window.location)) {
     RegisterEventListeners();
+    if (await Options.GetLocalOption("behavior", "autoplay")) {
+      const started = await PlayVideoPlayer();
+      if (!started) {
+        console.warn("Failed to start video in popout player");
+      }
+    }
   }
 })();
