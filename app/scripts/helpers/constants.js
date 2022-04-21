@@ -36,11 +36,12 @@ export const OPTION_DEFAULTS = {
     left: 0,
   },
   advanced: {
-    reuseWindowsTabs: false,
+    autoOpen: false,
     background: false,
     close: false,
-    noCookieDomain: false,
     contextualIdentity: false,
+    noCookieDomain: false,
+    reuseWindowsTabs: false,
     title: "",
   },
 };
