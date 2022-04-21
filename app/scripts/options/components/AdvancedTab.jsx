@@ -222,6 +222,18 @@ export default function AdvancedTab() {
     );
   }
 
+  function ReuseExistingOptionControl() {
+    return (
+      <BasicToggleControl
+        optionName="reuseWindowsTabs"
+        label={browser.i18n.getMessage("OptionsAdvancedReuseWindowsTabsLabel")}
+        description={browser.i18n.getMessage(
+          "OptionsAdvancedReuseWindowsTabsDescription"
+        )}
+      />
+    );
+  }
+
   function TitleOptionControl() {
     const [title, setTitle] = React.useState(options["title"]);
 
@@ -289,6 +301,10 @@ export default function AdvancedTab() {
         title={browser.i18n.getMessage("OptionsHeadingAdvanced")}
       />
       <Box marginTop={1} marginBottom={2}>
+        <ReuseExistingOptionControl />
+      </Box>
+      <Divider />
+      <Box marginY={2}>
         <CloseOptionControl />
       </Box>
       <Divider />
