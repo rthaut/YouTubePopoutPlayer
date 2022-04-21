@@ -73,48 +73,41 @@ export default function AdvancedTab() {
     return true;
   };
 
-  function ReuseExistingOptionControl() {
+  function BasicToggleControl({ optionName, label, description }) {
     return (
-      <>
-        <FormControl>
-          <FormControlLabel
-            label={browser.i18n.getMessage(
-              "OptionsAdvancedReuseWindowsTabsLabel"
-            )}
-            control={
-              <Switch
-                name="close-switch"
-                color="primary"
-                checked={options["reuseWindowsTabs"]}
-                onChange={(event) =>
-                  setOption("reuseWindowsTabs", event.target.checked)
-                }
-              />
-            }
-          />
-          <Typography
-            color="textSecondary"
-            dangerouslySetInnerHTML={{
-              __html: browser.i18n.getMessage(
-                "OptionsAdvancedReuseWindowsTabsDescription"
-              ),
-            }}
-          />
-        </FormControl>
-      </>
+      <FormControl>
+        <FormControlLabel
+          label={label}
+          control={
+            <Switch
+              name={`${optionName}-switch`}
+              color="primary"
+              checked={options[optionName]}
+              onChange={(event) => setOption(optionName, event.target.checked)}
+            />
+          }
+        />
+        <Typography
+          color="textSecondary"
+          dangerouslySetInnerHTML={{
+            __html: description,
+          }}
+        />
+      </FormControl>
     );
   }
 
-  function CloseOptionControl() {
+  function PermissionToggleControl({
+    optionName,
+    label,
+    description,
+    permissionsRequest,
+  }) {
     const [showPermissionError, setShowPermissionError] = React.useState(false);
 
-    const handleCloseSwitchToggle = async (event) => {
-      const permissionsRequest = {
-        permissions: ["tabs"],
-      };
-
+    const onPermissionSwitchChange = async (event) => {
       handlePermissionSwitchToggle(
-        "close",
+        optionName,
         permissionsRequest,
         setShowPermissionError,
         !event.target.checked
@@ -122,175 +115,122 @@ export default function AdvancedTab() {
     };
 
     return (
-      <>
-        <FormControl>
-          <FormControlLabel
-            label={browser.i18n.getMessage("OptionsAdvancedCloseLabel")}
-            control={
-              <Switch
-                name="close-switch"
-                color="primary"
-                checked={options["close"]}
-                onChange={handleCloseSwitchToggle}
-              />
-            }
-          />
-          {showPermissionError && (
-            <Alert
-              severity="error"
-              onClose={() => {
-                setShowPermissionError(false);
-              }}
-            >
-              {browser.i18n.getMessage(
-                "FieldRequiredPermissionsNotGrantedMessage"
-              )}
-            </Alert>
-          )}
-          <Typography
-            color="textSecondary"
-            dangerouslySetInnerHTML={{
-              __html: browser.i18n.getMessage(
-                "OptionsAdvancedCloseDescription"
-              ),
+      <FormControl>
+        <FormControlLabel
+          label={label}
+          control={
+            <Switch
+              name={`${optionName}-switch`}
+              color="primary"
+              checked={options[optionName]}
+              onChange={onPermissionSwitchChange}
+            />
+          }
+        />
+        {showPermissionError && (
+          <Alert
+            severity="error"
+            onClose={() => {
+              setShowPermissionError(false);
             }}
-          />
-        </FormControl>
-      </>
+          >
+            {browser.i18n.getMessage(
+              "FieldRequiredPermissionsNotGrantedMessage"
+            )}
+          </Alert>
+        )}
+        <Typography
+          color="textSecondary"
+          dangerouslySetInnerHTML={{
+            __html: description,
+          }}
+        />
+      </FormControl>
     );
   }
 
   function BackgroundTabControl() {
     return (
-      <>
-        <FormControl disabled={!canOpenInBackground}>
-          <FormControlLabel
-            label={browser.i18n.getMessage(
-              "OptionsAdvancedOpenInBackgroundLabel"
-            )}
-            control={
-              <Switch
-                name="close-switch"
-                color="primary"
-                checked={options["background"]}
-                onChange={(event) =>
-                  setOption("background", event.target.checked)
-                }
-              />
-            }
-          />
-          {canOpenInBackground ? (
-            <Typography
-              color="textSecondary"
-              dangerouslySetInnerHTML={{
-                __html: browser.i18n.getMessage(
-                  "OptionsAdvancedOpenInBackgroundDescription"
-                ),
-              }}
-            />
-          ) : (
-            <Alert severity="warning">
-              <Typography
-                dangerouslySetInnerHTML={{
-                  __html: browser.i18n.getMessage(
-                    "OptionsSettingDisabled",
-                    browser.i18n.getMessage("OptionsSizeModeMaximizedLabel")
-                  ),
-                }}
-              />
-            </Alert>
+      <FormControl disabled={!canOpenInBackground}>
+        <FormControlLabel
+          label={browser.i18n.getMessage(
+            "OptionsAdvancedOpenInBackgroundLabel"
           )}
-        </FormControl>
-      </>
-    );
-  }
-
-  function YouTubeNoCookieDomainControl() {
-    return (
-      <>
-        <FormControl>
-          <FormControlLabel
-            label={browser.i18n.getMessage(
-              "OptionsAdvancedYouTubeNoCookieDomainLabel"
-            )}
-            control={
-              <Switch
-                name="close-switch"
-                color="primary"
-                checked={options["noCookieDomain"]}
-                onChange={(event) =>
-                  setOption("noCookieDomain", event.target.checked)
-                }
-              />
-            }
-          />
+          control={
+            <Switch
+              name="close-switch"
+              color="primary"
+              checked={options["background"]}
+              onChange={(event) =>
+                setOption("background", event.target.checked)
+              }
+            />
+          }
+        />
+        {canOpenInBackground ? (
           <Typography
             color="textSecondary"
             dangerouslySetInnerHTML={{
               __html: browser.i18n.getMessage(
-                "OptionsAdvancedYouTubeNoCookieDomainDescription"
+                "OptionsAdvancedOpenInBackgroundDescription"
               ),
             }}
           />
-        </FormControl>
-      </>
+        ) : (
+          <Alert severity="warning">
+            <Typography
+              dangerouslySetInnerHTML={{
+                __html: browser.i18n.getMessage(
+                  "OptionsSettingDisabled",
+                  browser.i18n.getMessage("OptionsSizeModeMaximizedLabel")
+                ),
+              }}
+            />
+          </Alert>
+        )}
+      </FormControl>
+    );
+  }
+
+  function CloseOptionControl() {
+    return (
+      <PermissionToggleControl
+        optionName="close"
+        label={browser.i18n.getMessage("OptionsAdvancedCloseLabel")}
+        description={browser.i18n.getMessage("OptionsAdvancedCloseDescription")}
+        permissionsRequest={{
+          permissions: ["tabs"],
+        }}
+      />
     );
   }
 
   function ContextualIdentitySupportControl() {
-    const [showPermissionError, setShowPermissionError] = React.useState(false);
-
-    const handleCloseSwitchToggle = async (event) => {
-      const permissionsRequest = {
-        permissions: ["cookies"],
-      };
-
-      handlePermissionSwitchToggle(
-        "contextualIdentity",
-        permissionsRequest,
-        setShowPermissionError,
-        !event.target.checked
-      );
-    };
-
     return (
-      <>
-        <FormControl>
-          <FormControlLabel
-            label={browser.i18n.getMessage(
-              "OptionsAdvancedContextualIdentityLabel"
-            )}
-            control={
-              <Switch
-                name="contextual-identity-switch"
-                color="primary"
-                checked={options["contextualIdentity"]}
-                onChange={handleCloseSwitchToggle}
-              />
-            }
-          />
-          {showPermissionError && (
-            <Alert
-              severity="error"
-              onClose={() => {
-                setShowPermissionError(false);
-              }}
-            >
-              {browser.i18n.getMessage(
-                "FieldRequiredPermissionsNotGrantedMessage"
-              )}
-            </Alert>
-          )}
-          <Typography
-            color="textSecondary"
-            dangerouslySetInnerHTML={{
-              __html: browser.i18n.getMessage(
-                "OptionsAdvancedContextualIdentityDescription"
-              ),
-            }}
-          />
-        </FormControl>
-      </>
+      <PermissionToggleControl
+        optionName="contextualIdentity"
+        label={browser.i18n.getMessage(
+          "OptionsAdvancedContextualIdentityLabel"
+        )}
+        description={browser.i18n.getMessage(
+          "OptionsAdvancedContextualIdentityDescription"
+        )}
+        permissionsRequest={{
+          permissions: ["cookies"],
+        }}
+      />
+    );
+  }
+
+  function ReuseExistingOptionControl() {
+    return (
+      <BasicToggleControl
+        optionName="reuseWindowsTabs"
+        label={browser.i18n.getMessage("OptionsAdvancedReuseWindowsTabsLabel")}
+        description={browser.i18n.getMessage(
+          "OptionsAdvancedReuseWindowsTabsDescription"
+        )}
+      />
     );
   }
 
@@ -337,6 +277,20 @@ export default function AdvancedTab() {
           }}
         />
       </FormControl>
+    );
+  }
+
+  function YouTubeNoCookieDomainControl() {
+    return (
+      <BasicToggleControl
+        optionName="noCookieDomain"
+        label={browser.i18n.getMessage(
+          "OptionsAdvancedYouTubeNoCookieDomainLabel"
+        )}
+        description={browser.i18n.getMessage(
+          "OptionsAdvancedYouTubeNoCookieDomainDescription"
+        )}
+      />
     );
   }
 

@@ -5,6 +5,16 @@ export const YOUTUBE_DOMAINS = [YOUTUBE_DOMAIN, YOUTUBE_NOCOOKIE_DOMAIN];
 export const YOUTUBE_EMBED_URL = `https://www.${YOUTUBE_DOMAIN}/embed/`;
 export const YOUTUBE_NOCOOKIE_EMBED_URL = `https://www.${YOUTUBE_NOCOOKIE_DOMAIN}/embed/`;
 
+export const YOUTUBE_VIDEO_URL_PATTERNS = [
+  "*://youtu.be/*",
+  "*://*.youtube.com/watch?*",
+];
+export const YOUTUBE_PLAYLIST_URL_PATTERNS = [
+  "*://youtu.be/*list=*",
+  "*://*.youtube.com/watch?*list=*",
+  "*://*.youtube.com/playlist?*list=*",
+];
+
 export const START_THRESHOLD = 5; // TODO: should this be configurable?
 
 export const OPTION_DEFAULTS = {

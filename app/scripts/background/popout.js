@@ -6,9 +6,12 @@ import {
 } from "../helpers/constants";
 import Options from "../helpers/options";
 import { GetDimensionForScreenPercentage, IsFirefox } from "../helpers/utils";
+import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
 import {
   AddContextualIdentityToDataObject,
+  CloseTab,
   GetActiveTab,
+  GetCookieStoreIDForTab,
   GetPopoutPlayerTabs,
 } from "./tabs";
 import { ShowBasicNotification } from "./notifications";
@@ -17,8 +20,59 @@ const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it conf
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
 
 /**
+ * Helper function to open the popout player from various points in the background script
+ * @param {string} url the URL containing a video ID and/or playlist
+ * @param {number} tabId the ID of the original tab
+ * @param {boolean} allowCloseTab if the original tab can be closed (depending on the user's preference)
+ * @param {boolean} allowCloseTabOnAnyDomain if the original tab can be closed regardless of which domain it is on
+ * @returns {Promise<boolean>} if the popout player was opened
+ */
+export const OpenPopoutBackgroundHelper = async (
+  url,
+  tabId = -1,
+  allowCloseTab = true,
+  allowCloseTabOnAnyDomain = false
+) => {
+  console.log("[Background] OpenPopoutBackgroundHelper()", {
+    id,
+    list,
+    allowCloseTab,
+    allowCloseTabOnAnyDomain,
+  });
+  const id = GetVideoIDFromURL(url);
+  const list = GetPlaylistIDFromURL(url);
+
+  if (!(id || list)) {
+    console.warn("No video or playlist detected from URL", url);
+    return false;
+  }
+
+  const result = await OpenPopoutPlayer({
+    id,
+    list,
+    originTabId: tabId,
+  });
+
+  // we can't do anything if a tab ID wasn't given, as the "active" tab will now likely be the popout
+  // (unless the user has configured it to open in the background, but checking for that is not guaranteed)
+  if (parseInt(tabId, 10) > 0) {
+    if (allowCloseTab && (await Options.GetLocalOption("advanced", "close"))) {
+      // close the tab if allowed and configured
+      await CloseTab(tabId, !allowCloseTabOnAnyDomain);
+    } else {
+      // pause the video player (if there is one) in the tab
+      await browser.tabs.sendMessage(tabId, {
+        action: "pause-video-player",
+      });
+    }
+  }
+
+  return result !== undefined && result !== null;
+};
+
+/**
  * Opens the popout player
- * @returns {Promise<object>}
+ * @returns {Promise<object|null>} the opened window/tab
  */
 export const OpenPopoutPlayer = async ({
   id = "",
@@ -193,7 +247,7 @@ export const OpenPopoutPlayer = async ({
  * Opens an Embedded Player in a new tab
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {boolean} [active] indicates if the tab should become the active tab in the window
- * @param {number} originTabId the ID of the tab from which the request to open the Popout Player originated
+ * @param {number} originTabId the ID of the tab from which the request to open the popout player originated
  * @returns {Promise<object>}
  */
 export const OpenPopoutPlayerInTab = async (
@@ -225,7 +279,7 @@ export const OpenPopoutPlayerInTab = async (
  * Opens an Embedded Player in a new window (optionally matching the size of the original video player)
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {boolean} openInBackground indicates if the window should be opened in the background
- * @param {number} originTabId the ID of the tab from which the request to open the Popout Player originated
+ * @param {number} originTabId the ID of the tab from which the request to open the popout player originated
  * @param {object} originalVideoWidth the width of the original video player
  * @param {boolean} originalVideoHeight the height of the original video player
  * @returns {Promise<object>}
@@ -268,7 +322,7 @@ export const OpenPopoutPlayerInWindow = async (
   }
 
   console.log(
-    "[Background] OpenPopoutPlayerInWindow() :: Creating Popout Player window",
+    "[Background] OpenPopoutPlayerInWindow() :: Creating popout player window",
     createData
   );
   let window = await browser.windows.create(createData);
@@ -279,7 +333,7 @@ export const OpenPopoutPlayerInWindow = async (
   const position = await GetPositionForPopoutPlayerWindow();
   if (!isNaN(position?.top) && !isNaN(position?.left)) {
     console.log(
-      "[Background] OpenPopoutPlayerInWindow() :: Positioning Popout Player window",
+      "[Background] OpenPopoutPlayerInWindow() :: Positioning popout player window",
       position
     );
     window = await browser.windows.update(window.id, position);
@@ -287,7 +341,7 @@ export const OpenPopoutPlayerInWindow = async (
 
   if ((await Options.GetLocalOption("size", "mode")) === "maximized") {
     console.log(
-      "[Background] OpenPopoutPlayerInWindow() :: Maximizing Popout Player window"
+      "[Background] OpenPopoutPlayerInWindow() :: Maximizing popout player window"
     );
     window = await browser.windows.update(window.id, {
       state: "maximized",
