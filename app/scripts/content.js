@@ -1,4 +1,5 @@
 import {
+  GetVideoPlayerInfo,
   OpenPopoutForPageVideo,
   PauseVideoPlayer,
   PlayVideoPlayer,
@@ -62,6 +63,9 @@ const OnRuntimeMessage = async (message, sender) => {
 
       case "get-playlist-videos":
         return GetPlaylistVideoIDsFromDOM();
+
+      case "get-video-player-info":
+        return GetVideoPlayerInfo();
 
       case "pause-video-player":
         return PauseVideoPlayer();
