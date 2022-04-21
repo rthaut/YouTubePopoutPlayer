@@ -115,7 +115,7 @@
     "message": "Autoplay Video(s)"
   },
   "OptionsBehaviorAutoplayDescription": {
-    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong>"
+    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong><blockquote><strong>Note</strong>: Autoplaying videos with sound are commonly blocked by default in modern browsers; you may need to manually enable/allow autoplay through your browser's settings for this to work correctly.</blockquote>"
   },
   "OptionsBehaviorLoopLabel": {
     "message": "Loop Video(s)"
