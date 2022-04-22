@@ -24,13 +24,13 @@ import ResetOptions from "./components/ResetOptions";
 
 import BehaviorTab, {
   DOMAIN as BehaviorDomain,
-} from "./components/BehaviorTab";
+} from "./components/tabs/BehaviorTab";
 import SizePositionTab, {
   DOMAIN as SizePositionDomain,
-} from "./components/SizePositionTab";
+} from "./components/tabs/SizePositionTab";
 import AdvancedTab, {
   DOMAIN as AdvancedDomain,
-} from "./components/AdvancedTab";
+} from "./components/tabs/AdvancedTab";
 
 export default function OptionsApp() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -55,7 +55,7 @@ export default function OptionsApp() {
             "@global": {
               a: {
                 color: prefersDarkMode ? "white" : "black",
-                '&:hover': {
+                "&:hover": {
                   textDecoration: "none",
                 },
               },

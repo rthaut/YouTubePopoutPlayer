@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Alert from "@material-ui/lab/Alert";
 import Box from "@material-ui/core/Box";
@@ -15,13 +16,13 @@ import Typography from "@material-ui/core/Typography";
 import CheckIcon from "@material-ui/icons/Check";
 import SettingsIcon from "@material-ui/icons/Settings";
 
-import TabPanelHeader from "./TabPanelHeader";
+import TabPanelHeader from "../TabPanelHeader";
 
-import { useOptions, useOptionsForDomain } from "../hooks/useOptions";
+import { useOptions, useOptionsForDomain } from "../../hooks/useOptions";
 
 import { useDebounce } from "react-use";
 
-import { IsFirefox } from "../../helpers/utils";
+import { IsFirefox } from "../../../helpers/utils";
 
 export const DOMAIN = "advanced";
 
@@ -32,6 +33,8 @@ export default function AdvancedTab() {
   const { getOptionForDomain } = useOptions();
   const canOpenInBackground =
     getOptionForDomain("size", "mode") !== "maximized";
+
+  const popoutPlayerTarget = getOptionForDomain("behavior", "target");
 
   const [isFirefox, setIsFirefox] = React.useState(false);
   React.useEffect(() => {
@@ -73,6 +76,7 @@ export default function AdvancedTab() {
     return true;
   };
 
+  // TODO: make this into a reusable component for other tabs
   function BasicToggleControl({ optionName, label, description }) {
     return (
       <FormControl>
@@ -80,7 +84,7 @@ export default function AdvancedTab() {
           label={label}
           control={
             <Switch
-              name={`${optionName}-switch`}
+              name={`${optionName}ToggleSwitch`}
               color="primary"
               checked={options[optionName]}
               onChange={(event) => setOption(optionName, event.target.checked)}
@@ -97,6 +101,13 @@ export default function AdvancedTab() {
     );
   }
 
+  BasicToggleControl.propTypes = {
+    optionName: PropTypes.string.isRequired,
+    label: PropTypes.node.isRequired,
+    description: PropTypes.string.isRequired,
+  };
+
+  // TODO: make this into a reusable component for other tabs
   function PermissionToggleControl({
     optionName,
     label,
@@ -120,7 +131,7 @@ export default function AdvancedTab() {
           label={label}
           control={
             <Switch
-              name={`${optionName}-switch`}
+              name={`${optionName}PermissionToggleSwitch`}
               color="primary"
               checked={options[optionName]}
               onChange={onPermissionSwitchChange}
@@ -149,6 +160,15 @@ export default function AdvancedTab() {
     );
   }
 
+  PermissionToggleControl.propTypes = {
+    optionName: PropTypes.string.isRequired,
+    label: PropTypes.node.isRequired,
+    description: PropTypes.string.isRequired,
+    permissionsRequest: PropTypes.shape({
+      permissions: PropTypes.arrayOf(PropTypes.string),
+    }).isRequired,
+  };
+
   function AutoOpenControl() {
     return (
       <BasicToggleControl
@@ -166,11 +186,14 @@ export default function AdvancedTab() {
       <FormControl disabled={!canOpenInBackground}>
         <FormControlLabel
           label={browser.i18n.getMessage(
-            "OptionsAdvancedOpenInBackgroundLabel"
+            "OptionsAdvancedOpenInBackgroundLabel",
+            browser.i18n.getMessage(
+              `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`
+            )
           )}
           control={
             <Switch
-              name="close-switch"
+              name="openInBackgroundSwitch"
               color="primary"
               checked={options["background"]}
               onChange={(event) =>
@@ -184,7 +207,12 @@ export default function AdvancedTab() {
             color="textSecondary"
             dangerouslySetInnerHTML={{
               __html: browser.i18n.getMessage(
-                "OptionsAdvancedOpenInBackgroundDescription"
+                "OptionsAdvancedOpenInBackgroundDescription",
+                browser.i18n
+                  .getMessage(
+                    `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`
+                  )
+                  .toLowerCase()
               ),
             }}
           />
@@ -230,18 +258,6 @@ export default function AdvancedTab() {
         permissionsRequest={{
           permissions: ["cookies"],
         }}
-      />
-    );
-  }
-
-  function ReuseExistingOptionControl() {
-    return (
-      <BasicToggleControl
-        optionName="reuseWindowsTabs"
-        label={browser.i18n.getMessage("OptionsAdvancedReuseWindowsTabsLabel")}
-        description={browser.i18n.getMessage(
-          "OptionsAdvancedReuseWindowsTabsDescription"
-        )}
       />
     );
   }
@@ -313,10 +329,6 @@ export default function AdvancedTab() {
         title={browser.i18n.getMessage("OptionsHeadingAdvanced")}
       />
       <Box marginTop={1} marginBottom={2}>
-        <ReuseExistingOptionControl />
-      </Box>
-      <Divider />
-      <Box marginY={2}>
         <CloseOptionControl />
       </Box>
       <Divider />

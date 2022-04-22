@@ -10,7 +10,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
 
-import { useOptions } from "../hooks/useOptions";
+import { useOptions } from "../../hooks/useOptions";
 
 export function ModeOptionRadioControl({ domain, optionName, values }) {
   const { getOptionForDomain, setOptionForDomain } = useOptions();

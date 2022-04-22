@@ -7,17 +7,17 @@ import Divider from "@material-ui/core/Divider";
 import AspectRatioIcon from "@material-ui/icons/AspectRatio";
 import OpenWithIcon from "@material-ui/icons/OpenWith";
 
-import { ModeOptionRadioControl } from "./ModeOptionControls";
-import CustomDimensions from "./CustomDimensions";
-import CustomPosition from "./CustomPosition";
-import TabPanelHeader from "./TabPanelHeader";
+import { ModeOptionRadioControl } from "../controls/ModeOptionControls";
+import CustomDimensionsForm from "../forms/CustomDimensionsForm";
+import CustomPositionForm from "../forms/CustomPositionForm";
+import TabPanelHeader from "../TabPanelHeader";
 
-import { useOptions } from "../hooks/useOptions";
+import { useOptions } from "../../hooks/useOptions";
 
 import {
   OPTIONS_SIZE_MODE_VALUES,
   OPTIONS_POSITION_MODE_VALUES,
-} from "../../helpers/constants";
+} from "../../../helpers/constants";
 
 export const DOMAIN = "size_position";
 
@@ -65,7 +65,7 @@ export default function SizePositionTab() {
               <SizeModeOptionControl />
             </Box>
             {getOptionForDomain("size", "mode") === "custom" && (
-              <CustomDimensions />
+              <CustomDimensionsForm />
             )}
           </>
         )}
@@ -88,7 +88,7 @@ export default function SizePositionTab() {
               <PositionModeOptionControl />
             </Box>
             {getOptionForDomain("position", "mode") === "custom" && (
-              <CustomPosition />
+              <CustomPositionForm />
             )}
           </>
         )}

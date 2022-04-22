@@ -20,6 +20,7 @@ export const START_THRESHOLD = 5; // TODO: should this be configurable?
 export const OPTION_DEFAULTS = {
   behavior: {
     target: "window",
+    reuseWindowsTabs: false,
     controls: "standard",
     autoplay: true,
     loop: false,
@@ -36,13 +37,12 @@ export const OPTION_DEFAULTS = {
     left: 0,
   },
   advanced: {
-    autoOpen: false,
-    background: false,
     close: false,
-    contextualIdentity: false,
+    background: false,
     noCookieDomain: false,
-    reuseWindowsTabs: false,
     title: "",
+    contextualIdentity: false,
+    autoOpen: false,
   },
 };
 

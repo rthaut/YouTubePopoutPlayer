@@ -1,13 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
 import InputLabel from "@material-ui/core/InputLabel";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import MenuItem from "@material-ui/core/MenuItem";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -17,20 +15,51 @@ import Typography from "@material-ui/core/Typography";
 
 import TuneIcon from "@material-ui/icons/Tune";
 
-import TabPanelHeader from "./TabPanelHeader";
+import TabPanelHeader from "../TabPanelHeader";
 
-import { useOptionsForDomain } from "../hooks/useOptions";
+import { useOptionsForDomain } from "../../hooks/useOptions";
 
 import {
   OPTIONS_BEHAVIOR_TARGET_VALUES,
   OPTIONS_BEHAVIOR_CONTROLS_VALUES,
-} from "../../helpers/constants";
+} from "../../../helpers/constants";
 
 export const DOMAIN = "behavior";
 
 export default function BehaviorTab() {
   const { options, setOption } = useOptionsForDomain(DOMAIN);
   console.log("BehaviorTab ~ options", options);
+
+  // TODO: make this into a reusable component for other tabs
+  function BasicToggleControl({ optionName, label, description }) {
+    return (
+      <FormControl>
+        <FormControlLabel
+          label={label}
+          control={
+            <Switch
+              name={`${optionName}ToggleSwitch`}
+              color="primary"
+              checked={options[optionName]}
+              onChange={(event) => setOption(optionName, event.target.checked)}
+            />
+          }
+        />
+        <Typography
+          color="textSecondary"
+          dangerouslySetInnerHTML={{
+            __html: description,
+          }}
+        />
+      </FormControl>
+    );
+  }
+
+  BasicToggleControl.propTypes = {
+    optionName: PropTypes.string.isRequired,
+    label: PropTypes.node.isRequired,
+    description: PropTypes.string.isRequired,
+  };
 
   function TargetOptionControl() {
     return (
@@ -94,41 +123,45 @@ export default function BehaviorTab() {
     );
   }
 
-  function ToggleOptionsControls() {
-    const toggleOptions = ["autoplay", "loop"];
+  function AutoplayControl() {
     return (
-      <List>
-        {toggleOptions.map((toggleOptionName) => (
-          <ListItem key={toggleOptionName} disableGutters>
-            <FormGroup>
-              <FormControlLabel
-                key={toggleOptionName}
-                label={browser.i18n.getMessage(
-                  `OptionsBehavior${toggleOptionName}Label`
-                )}
-                control={
-                  <Switch
-                    name={toggleOptionName}
-                    color="primary"
-                    checked={options[toggleOptionName]}
-                    onChange={(event) =>
-                      setOption(toggleOptionName, event.target.checked)
-                    }
-                  />
-                }
-              />
-              <Typography
-                color="textSecondary"
-                dangerouslySetInnerHTML={{
-                  __html: browser.i18n.getMessage(
-                    `OptionsBehavior${toggleOptionName}Description`
-                  ),
-                }}
-              />
-            </FormGroup>
-          </ListItem>
-        ))}
-      </List>
+      <BasicToggleControl
+        optionName="autoplay"
+        label={browser.i18n.getMessage("OptionsBehaviorAutoplayLabel")}
+        description={browser.i18n.getMessage(
+          "OptionsBehaviorAutoplayDescription"
+        )}
+      />
+    );
+  }
+
+  function LoopControl() {
+    return (
+      <BasicToggleControl
+        optionName="loop"
+        label={browser.i18n.getMessage("OptionsBehaviorLoopLabel")}
+        description={browser.i18n.getMessage("OptionsBehaviorLoopDescription")}
+      />
+    );
+  }
+
+  function ReuseExistingOptionControl() {
+    return (
+      <BasicToggleControl
+        optionName="reuseWindowsTabs"
+        label={browser.i18n.getMessage(
+          "OptionsBehaviorReuseWindowsTabsLabel",
+          browser.i18n.getMessage(
+            `OptionsSubstitutionBehaviorTarget${options["target"]}`
+          )
+        )}
+        description={browser.i18n.getMessage(
+          "OptionsBehaviorReuseWindowsTabsDescription",
+          browser.i18n
+            .getMessage(`OptionsSubstitutionBehaviorTarget${options["target"]}`)
+            .toLowerCase()
+        )}
+      />
     );
   }
 
@@ -142,11 +175,21 @@ export default function BehaviorTab() {
         <TargetOptionControl />
       </Box>
       <Divider />
-      <Box marginTop={2}>
+      <Box marginY={2}>
+        <ReuseExistingOptionControl />
+      </Box>
+      <Divider />
+      <Box marginY={2}>
         <ShowControlsOptionControl />
       </Box>
       <Divider />
-      <ToggleOptionsControls />
+      <Box marginY={2}>
+        <AutoplayControl />
+      </Box>
+      <Divider />
+      <Box marginY={2}>
+        <LoopControl />
+      </Box>
     </Box>
   );
 }

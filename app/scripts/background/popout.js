@@ -11,7 +11,6 @@ import {
   AddContextualIdentityToDataObject,
   CloseTab,
   GetActiveTab,
-  GetCookieStoreIDForTab,
   GetPopoutPlayerTabs,
 } from "./tabs";
 import { ShowBasicNotification } from "./notifications";
@@ -194,7 +193,7 @@ export const OpenPopoutPlayer = async ({
   const url = await GetUrlForPopoutPlayer(id, params);
 
   const reuseExistingWindowsTabs = await Options.GetLocalOption(
-    "advanced",
+    "behavior",
     "reuseWindowsTabs"
   );
 

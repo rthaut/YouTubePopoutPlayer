@@ -21,14 +21,14 @@ import TextField from "@material-ui/core/TextField";
 
 import SaveIcon from "@material-ui/icons/Save";
 
-import { useOptionsForDomain } from "../hooks/useOptions";
+import { useOptionsForDomain } from "../../hooks/useOptions";
 
 import {
   GetDimensionForScreenPercentage,
   GreatestCommonDenominator,
-} from "../../helpers/utils";
+} from "../../../helpers/utils";
 
-import { OPTIONS_SIZE_UNITS_VALUES } from "../../helpers/constants";
+import { OPTIONS_SIZE_UNITS_VALUES } from "../../../helpers/constants";
 
 function CustomDimensionsInfoTable({ units, width, height }) {
   if (units === "percentage") {
@@ -306,10 +306,4 @@ function CustomDimensionsForm() {
   );
 }
 
-export default function CustomDimensions() {
-  return (
-    <>
-      <CustomDimensionsForm />
-    </>
-  );
-}
+export default CustomDimensionsForm;

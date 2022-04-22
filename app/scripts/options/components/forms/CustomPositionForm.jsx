@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import SaveIcon from "@material-ui/icons/Save";
 import WarningIcon from "@material-ui/icons/Warning";
 
-import { useOptionsForDomain } from "../hooks/useOptions";
+import { useOptionsForDomain } from "../../hooks/useOptions";
 
 function CustomPositionForm() {
   const { options, setOptions } = useOptionsForDomain("position");
@@ -136,10 +136,4 @@ function CustomPositionForm() {
   );
 }
 
-export default function CustomDimensions() {
-  return (
-    <>
-      <CustomPositionForm />
-    </>
-  );
-}
+export default CustomPositionForm;

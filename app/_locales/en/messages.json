@@ -91,6 +91,28 @@
   "OptionsBehaviorTargetWindowDescription": {
     "message": "The popout player will open in a popup window. <strong>This is the default setting.</strong>"
   },
+  "OptionsSubstitutionBehaviorTargetTab": {
+    "message": "Tab"
+  },
+  "OptionsSubstitutionBehaviorTargetWindow": {
+    "message": "Window"
+  },
+  "OptionsBehaviorReuseWindowsTabsLabel": {
+    "message": "Re-Use Existing $TARGET$",
+    "placeholders": {
+      "target": {
+        "content": "$1"
+      }
+    }
+  },
+  "OptionsBehaviorReuseWindowsTabsDescription": {
+    "message": "Enabling this will cause the popout player $TARGET$ to be re-used (if it is already open) instead of always opening in a new $TARGET$. <strong>The default for this setting is disabled.</strong>",
+    "placeholders": {
+      "target": {
+        "content": "$1"
+      }
+    }
+  },
   "BehaviorControlsLabel": {
     "message": "Show Controls"
   },
@@ -264,16 +286,20 @@
     }
   },
   "OptionsAdvancedOpenInBackgroundLabel": {
-    "message": "Open in Background Window/Tab"
+    "message": "Open in Background $TARGET$",
+    "placeholders": {
+      "target": {
+        "content": "$1"
+      }
+    }
   },
   "OptionsAdvancedOpenInBackgroundDescription": {
-    "message": "Enabling this will cause the popout player to be opened in a background window/tab. <strong>The default for this setting is disabled.</strong>"
-  },
-  "OptionsAdvancedReuseWindowsTabsLabel": {
-    "message": "Re-Use Existing Window(s)/Tab(s)"
-  },
-  "OptionsAdvancedReuseWindowsTabsDescription": {
-    "message": "Enabling this will cause the popout player to attempt to open in any (and all) existing popout player window(s)/tab(s). <strong>The default for this setting is disabled.</strong>"
+    "message": "Enabling this will cause the popout player to be opened in a background $TARGET$. <strong>The default for this setting is disabled.</strong>",
+    "placeholders": {
+      "target": {
+        "content": "$1"
+      }
+    }
   },
   "OptionsAdvancedTitleLabel": {
     "message": "Window Title Text (Preface)"
