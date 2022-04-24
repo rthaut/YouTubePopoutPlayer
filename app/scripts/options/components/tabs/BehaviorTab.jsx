@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
@@ -10,14 +9,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Select from "@material-ui/core/Select";
-import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 
 import TuneIcon from "@material-ui/icons/Tune";
 
 import TabPanelHeader from "../TabPanelHeader";
+import BasicToggleControl from "../controls/BasicToggleControl";
 
-import { useOptionsForDomain } from "../../hooks/useOptions";
+import { useOptionsForDomain } from "../../stores/optionsStore";
 
 import {
   OPTIONS_BEHAVIOR_TARGET_VALUES,
@@ -27,39 +26,8 @@ import {
 export const DOMAIN = "behavior";
 
 export default function BehaviorTab() {
-  const { options, setOption } = useOptionsForDomain(DOMAIN);
+  const [options, { setOption }] = useOptionsForDomain(DOMAIN);
   console.log("BehaviorTab ~ options", options);
-
-  // TODO: make this into a reusable component for other tabs
-  function BasicToggleControl({ optionName, label, description }) {
-    return (
-      <FormControl>
-        <FormControlLabel
-          label={label}
-          control={
-            <Switch
-              name={`${optionName}ToggleSwitch`}
-              color="primary"
-              checked={options[optionName]}
-              onChange={(event) => setOption(optionName, event.target.checked)}
-            />
-          }
-        />
-        <Typography
-          color="textSecondary"
-          dangerouslySetInnerHTML={{
-            __html: description,
-          }}
-        />
-      </FormControl>
-    );
-  }
-
-  BasicToggleControl.propTypes = {
-    optionName: PropTypes.string.isRequired,
-    label: PropTypes.node.isRequired,
-    description: PropTypes.string.isRequired,
-  };
 
   function TargetOptionControl() {
     return (
@@ -126,6 +94,7 @@ export default function BehaviorTab() {
   function AutoplayControl() {
     return (
       <BasicToggleControl
+        domain={DOMAIN}
         optionName="autoplay"
         label={browser.i18n.getMessage("OptionsBehaviorAutoplayLabel")}
         description={browser.i18n.getMessage(
@@ -138,6 +107,7 @@ export default function BehaviorTab() {
   function LoopControl() {
     return (
       <BasicToggleControl
+        domain={DOMAIN}
         optionName="loop"
         label={browser.i18n.getMessage("OptionsBehaviorLoopLabel")}
         description={browser.i18n.getMessage("OptionsBehaviorLoopDescription")}
@@ -148,6 +118,7 @@ export default function BehaviorTab() {
   function ReuseExistingOptionControl() {
     return (
       <BasicToggleControl
+        domain={DOMAIN}
         optionName="reuseWindowsTabs"
         label={browser.i18n.getMessage(
           "OptionsBehaviorReuseWindowsTabsLabel",

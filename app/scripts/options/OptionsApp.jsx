@@ -18,8 +18,6 @@ import Typography from "@material-ui/core/Typography";
 
 import CloudOffIcon from "@material-ui/icons/CloudOff";
 
-import { ExtensionStorageProvider } from "./contexts/ExtensionStorage";
-
 import ResetOptions from "./components/ResetOptions";
 
 import BehaviorTab, {
@@ -83,46 +81,44 @@ export default function OptionsApp() {
   };
 
   return (
-    <ExtensionStorageProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Paper elevation={0} square variant="outlined">
-          <TabContext value={tabValue}>
-            <AppBar position="static" color="default">
-              <TabList onChange={handleTabChange} variant="fullWidth">
-                {Object.keys(tabs).map((tab) => (
-                  <Tab
-                    label={browser.i18n.getMessage(`OptionsTabName${tab}`)}
-                    value={tab}
-                    key={tab}
-                  />
-                ))}
-              </TabList>
-            </AppBar>
-            {Object.entries(tabs).map(([domain, panel]) => (
-              <TabPanel value={domain} key={domain}>
-                {panel}
-              </TabPanel>
-            ))}
-          </TabContext>
-        </Paper>
-        <Box marginTop={1} marginBottom={2} marginX={1}>
-          <Alert
-            severity="info"
-            icon={<CloudOffIcon color="primary" fontSize="inherit" />}
-            // onClose={() => {}} // TODO: use a cookie here? or an extension storage item? how/when to re-display it?
-          >
-            <Typography
-              dangerouslySetInnerHTML={{
-                __html: browser.i18n.getMessage("OptionsPerDeviceWarning"),
-              }}
-            />
-          </Alert>
-        </Box>
-        <Box marginTop={2} marginBottom={1}>
-          <ResetOptions />
-        </Box>
-      </ThemeProvider>
-    </ExtensionStorageProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Paper elevation={0} square variant="outlined">
+        <TabContext value={tabValue}>
+          <AppBar position="static" color="default">
+            <TabList onChange={handleTabChange} variant="fullWidth">
+              {Object.keys(tabs).map((tab) => (
+                <Tab
+                  label={browser.i18n.getMessage(`OptionsTabName${tab}`)}
+                  value={tab}
+                  key={tab}
+                />
+              ))}
+            </TabList>
+          </AppBar>
+          {Object.entries(tabs).map(([domain, panel]) => (
+            <TabPanel value={domain} key={domain}>
+              {panel}
+            </TabPanel>
+          ))}
+        </TabContext>
+      </Paper>
+      <Box marginTop={1} marginBottom={2} marginX={1}>
+        <Alert
+          severity="info"
+          icon={<CloudOffIcon color="primary" fontSize="inherit" />}
+          // onClose={() => {}} // TODO: use a cookie here? or an extension storage item? how/when to re-display it?
+        >
+          <Typography
+            dangerouslySetInnerHTML={{
+              __html: browser.i18n.getMessage("OptionsPerDeviceWarning"),
+            }}
+          />
+        </Alert>
+      </Box>
+      <Box marginTop={2} marginBottom={1}>
+        <ResetOptions />
+      </Box>
+    </ThemeProvider>
   );
 }

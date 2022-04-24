@@ -21,7 +21,7 @@ import TextField from "@material-ui/core/TextField";
 
 import SaveIcon from "@material-ui/icons/Save";
 
-import { useOptionsForDomain } from "../../hooks/useOptions";
+import { useOptionsForDomain } from "../../stores/optionsStore";
 
 import {
   GetDimensionForScreenPercentage,
@@ -91,7 +91,7 @@ CustomDimensionsInfoTable.propTypes = {
 };
 
 function CustomDimensionsForm() {
-  const { options, setOptions } = useOptionsForDomain("size");
+  const [options, { setOptions }] = useOptionsForDomain("size");
   console.log("CustomDimensionsForm ~ options", options);
 
   const [units, setUnits] = React.useState(options.units);

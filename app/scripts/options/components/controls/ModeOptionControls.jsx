@@ -10,29 +10,24 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
 
-import { useOptions } from "../../hooks/useOptions";
+import { useOption } from "../../stores/optionsStore";
 
 export function ModeOptionRadioControl({ domain, optionName, values }) {
-  const { getOptionForDomain, setOptionForDomain } = useOptions();
-  const [value, setValue] = React.useState(
-    getOptionForDomain(domain, optionName)
-  );
+  const [value, setValue] = useOption(domain, optionName);
+  const [controlValue, setControlValue] = React.useState(value);
 
   React.useEffect(() => {
-    if (
-      values.includes(value) &&
-      value !== getOptionForDomain(domain, optionName)
-    ) {
-      setOptionForDomain(domain, optionName, value);
+    if (values.includes(controlValue) && controlValue !== value) {
+      setValue(controlValue);
     }
-  }, [value]);
+  }, [controlValue]);
 
   return (
     <FormControl component="fieldset">
       <RadioGroup
         name={`${domain}-mode`}
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
+        value={controlValue}
+        onChange={(event) => setControlValue(event.target.value)}
       >
         {values.map((option) => (
           <React.Fragment key={option}>
@@ -60,19 +55,14 @@ export function ModeOptionRadioControl({ domain, optionName, values }) {
 }
 
 export function ModeOptionSelectControl({ domain, optionName, values }) {
-  const { getOptionForDomain, setOptionForDomain } = useOptions();
-  const [value, setValue] = React.useState(
-    getOptionForDomain(domain, optionName)
-  );
+  const [value, setValue] = useOption(domain, optionName);
+  const [controlValue, setControlValue] = React.useState(value);
 
   React.useEffect(() => {
-    if (
-      values.includes(value) &&
-      value !== getOptionForDomain(domain, optionName)
-    ) {
-      setOptionForDomain(domain, optionName, value);
+    if (values.includes(controlValue) && controlValue !== value) {
+      setValue(controlValue);
     }
-  }, [value]);
+  }, [controlValue]);
 
   return (
     <FormControl fullWidth>
@@ -82,8 +72,8 @@ export function ModeOptionSelectControl({ domain, optionName, values }) {
       <Select
         labelId={`${domain}-mode-label`}
         id={`${domain}-mode-select`}
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
+        value={controlValue}
+        onChange={(event) => setControlValue(event.target.value)}
       >
         {values.map((option) => (
           <MenuItem value={option} key={option}>
