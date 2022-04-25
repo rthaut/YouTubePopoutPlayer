@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Alert from "@material-ui/lab/Alert";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import FormControl from "@material-ui/core/FormControl";
@@ -17,6 +17,7 @@ import CheckIcon from "@material-ui/icons/Check";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 import TabPanelHeader from "../TabPanelHeader";
+import ConditionalTooltipWrapper from "../controls/ConditionalTooltipWrapper";
 
 import { useOptions, useOptionsForDomain } from "../../hooks/useOptions";
 
@@ -26,7 +27,17 @@ import { IsFirefox } from "../../../helpers/utils";
 
 export const DOMAIN = "advanced";
 
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    disabled: {
+      color: theme.palette.text.disabled,
+    },
+  })
+);
+
 export default function AdvancedTab() {
+  const classes = useStyles();
+
   const { options, setOption } = useOptionsForDomain(DOMAIN);
   console.log("AdvancedTab ~ options", options);
 
@@ -184,50 +195,46 @@ export default function AdvancedTab() {
   function BackgroundTabControl() {
     return (
       <FormControl disabled={!canOpenInBackground}>
-        <FormControlLabel
-          label={browser.i18n.getMessage(
-            "OptionsAdvancedOpenInBackgroundLabel",
-            browser.i18n.getMessage(
-              `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`
-            )
+        <ConditionalTooltipWrapper
+          condition={!canOpenInBackground}
+          html={browser.i18n.getMessage(
+            "OptionsSettingDisabled",
+            browser.i18n.getMessage("OptionsSizeModeMaximizedLabel")
           )}
-          control={
-            <Switch
-              name="openInBackgroundSwitch"
-              color="primary"
-              checked={options["background"]}
-              onChange={(event) =>
-                setOption("background", event.target.checked)
-              }
-            />
-          }
-        />
-        {canOpenInBackground ? (
-          <Typography
-            color="textSecondary"
-            dangerouslySetInnerHTML={{
-              __html: browser.i18n.getMessage(
-                "OptionsAdvancedOpenInBackgroundDescription",
-                browser.i18n
-                  .getMessage(
-                    `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`
-                  )
-                  .toLowerCase()
-              ),
-            }}
+        >
+          <FormControlLabel
+            label={browser.i18n.getMessage(
+              "OptionsAdvancedOpenInBackgroundLabel",
+              browser.i18n.getMessage(
+                `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`
+              )
+            )}
+            control={
+              <Switch
+                name="openInBackgroundSwitch"
+                color="primary"
+                checked={options["background"]}
+                onChange={(event) =>
+                  setOption("background", event.target.checked)
+                }
+              />
+            }
           />
-        ) : (
-          <Alert severity="warning">
-            <Typography
-              dangerouslySetInnerHTML={{
-                __html: browser.i18n.getMessage(
-                  "OptionsSettingDisabled",
-                  browser.i18n.getMessage("OptionsSizeModeMaximizedLabel")
-                ),
-              }}
-            />
-          </Alert>
-        )}
+        </ConditionalTooltipWrapper>
+        <Typography
+          color={canOpenInBackground ? "textSecondary" : "inherit"}
+          className={canOpenInBackground ? "" : classes.disabled}
+          dangerouslySetInnerHTML={{
+            __html: browser.i18n.getMessage(
+              "OptionsAdvancedOpenInBackgroundDescription",
+              browser.i18n
+                .getMessage(
+                  `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`
+                )
+                .toLowerCase()
+            ),
+          }}
+        />
       </FormControl>
     );
   }
@@ -273,33 +280,44 @@ export default function AdvancedTab() {
 
     useDebounce(saveTitle, 2000, [title, options]);
 
+    const canSetTitle = popoutPlayerTarget === "window";
+
     return (
-      <FormControl>
+      <FormControl disabled={!canSetTitle}>
         <InputLabel htmlFor="title-input" variant="standard">
           {browser.i18n.getMessage("OptionsAdvancedTitleLabel")}
         </InputLabel>
-        <Input
-          id="title-input"
-          type="text"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.code === "Enter") {
-              saveTitle();
+        <ConditionalTooltipWrapper
+          condition={!canSetTitle}
+          html={browser.i18n.getMessage(
+            "OptionsSettingDisabled",
+            browser.i18n.getMessage("OptionsBehaviorTargetTabLabel")
+          )}
+        >
+          <Input
+            id="title-input"
+            type="text"
+            value={canSetTitle ? title : ""}
+            onChange={(event) => setTitle(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.code === "Enter") {
+                saveTitle();
+              }
+            }}
+            endAdornment={
+              title !== options["title"] && (
+                <InputAdornment position="end">
+                  <IconButton onClick={saveTitle} edge="end">
+                    <CheckIcon />
+                  </IconButton>
+                </InputAdornment>
+              )
             }
-          }}
-          endAdornment={
-            title !== options["title"] && (
-              <InputAdornment position="end">
-                <IconButton onClick={saveTitle} edge="end">
-                  <CheckIcon />
-                </IconButton>
-              </InputAdornment>
-            )
-          }
-        />
+          />
+        </ConditionalTooltipWrapper>
         <Typography
-          color="textSecondary"
+          color={canSetTitle ? "textSecondary" : "inherit"}
+          className={canSetTitle ? "" : classes.disabled}
           dangerouslySetInnerHTML={{
             __html: browser.i18n.getMessage("OptionsAdvancedTitleDescription"),
           }}
