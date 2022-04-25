@@ -41,8 +41,8 @@ export const createOptionsStore = (type) => {
      * @param {string} name the name of the option
      * @param {*} value the value of the option
      */
-    const setOption = (domain, name, value) => {
-      browser.storage[type].set({ [`${domain}.${name}`]: value });
+    const setOption = async (domain, name, value) => {
+      await browser.storage[type].set({ [`${domain}.${name}`]: value });
       set((state) => ({
         ...state,
         [`${domain}.${name}`]: value,
@@ -53,9 +53,9 @@ export const createOptionsStore = (type) => {
      * Sets multiple options (from an object), both in the store/state and in extension storage
      * @param {object} options the options to set
      */
-    const setOptions = (options) => {
+    const setOptions = async (options) => {
       options = Options.ConvertForStorage(options);
-      browser.storage[type].set(options);
+      await browser.storage[type].set(options);
       set((state) => ({
         ...state,
         ...options,
