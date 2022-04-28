@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0] - 2022-28-04
+
+### New Features
+
+* Added new option to re-use any existing popout player window(s)/tab(s) instead of always opening a new one (closes #379)
+* Added new option to automatically open the popout player when navigating to any video page (re #367)
+
 ## [4.1.0] - 2021-24-09
 
 ### New Features
@@ -126,7 +133,8 @@ The extension/add-on now supports translations. Currently the only translation o
 
 A new icon has been added to the lower right corner to allow opening the current video in a popout player. This should work for all YouTube videos, both directly on youtube.com and embedded in other web pages.
 
-[Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.2.0...HEAD
+[4.2.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v3.1.1...v4.0.0
 [3.1.1]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v3.1.0...v3.1.1
