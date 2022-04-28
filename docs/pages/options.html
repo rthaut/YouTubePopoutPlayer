@@ -12,7 +12,7 @@ order: 5
 
     <div class="card white">
         <div class="card-content">
-            <span class="card-title red-text"><strong>Popout Player Behavior</strong></span>
+            <span class="card-title red-text"><strong>Popout Player Behavior</strong> <span class="badge grey darken-3 white-text">Updated in v4.2</span></span>
             <p>These are the basic settings for configuring the YouTube Popout Player. You can control where the popout player opens, which controls are shown for video(s) in the popout player (if any), and whether or not video(s) start playing automatically and/or loop indefinitely.</p>
         </div>
 
@@ -30,6 +30,11 @@ order: 5
                 <dt>Open in a Tab</dt>
                 <dd>
                     <p>The popout player will open in a new tab in your current browser window.</p>
+                </dd>
+
+                <dt>Re-Use Existing Window/Tab <span class="badge red white-text">New in v4.2</span></dt>
+                <dd>
+                    <p>Enabling this will cause the popout player window/tab to be re-used (if it is already open) instead of always opening in a new window/tab. <strong>The default for this setting is disabled.</strong></p>
                 </dd>
 
                 <dt>Show Controls</dt>
@@ -210,11 +215,6 @@ order: 5
 
         <div class="card-body">
             <dl>
-                <dt>Re-Use Existing Window(s)/Tab(s) <span class="badge red white-text">New in v4.2</span></dt>
-                <dd>
-                    <p>Enabling this will cause the popout player to attempt to open in any (and all) existing popout player window(s)/tab(s). <strong>The default for this setting is disabled.</strong></p>
-                </dd>
-
                 <dt>Close Original Window/Tab</dt>
                 <dd>
                     <p>Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong></p>
