@@ -1,6 +1,6 @@
 [<img align="right" src="https://img.shields.io/badge/all_contributors-8-green.svg" alt="All Contributors"/>](#contributors)
 
-# YouTube Popout Player v4.1.0
+# YouTube Popout Player v4.2.0
 
 [![Chrome Web Store][chrome-image-version]][chrome-url] [![Microsoft Edge Add-on][edge-image-version]][edge-url] [![Mozilla Add-on][firefox-image-version]][firefox-url]
 
@@ -30,11 +30,11 @@
 
 ## Installation
 
-| Web Browser | Information & Downloads |
-| ----------- | ----------------------- |
-| Google Chrome | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-users]][chrome-url] |
-| Microsoft Edge | [![Microsoft Edge Add-on][edge-image-version]][edge-url] [![Microsoft Edge Add-on][edge-image-users]][edge-url] |
-| Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-users]][firefox-url] |
+| Web Browser     | Information & Downloads                                                                                         |
+| --------------- | --------------------------------------------------------------------------------------------------------------- |
+| Google Chrome   | [![Chrome Web Store][chrome-image-version]][chrome-url] [![Chrome Web Store][chrome-image-users]][chrome-url]   |
+| Microsoft Edge  | [![Microsoft Edge Add-on][edge-image-version]][edge-url] [![Microsoft Edge Add-on][edge-image-users]][edge-url] |
+| Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-users]][firefox-url]   |
 
 * * *
 
