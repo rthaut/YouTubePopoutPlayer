@@ -12,7 +12,7 @@ order: 5
 
     <div class="card white">
         <div class="card-content">
-            <span class="card-title red-text"><strong>Popout Player Behavior</strong></span>
+            <span class="card-title red-text"><strong>Popout Player Behavior</strong> <span class="badge grey darken-3 white-text">Updated in v4.2</span></span>
             <p>These are the basic settings for configuring the YouTube Popout Player. You can control where the popout player opens, which controls are shown for video(s) in the popout player (if any), and whether or not video(s) start playing automatically and/or loop indefinitely.</p>
         </div>
 
@@ -30,6 +30,11 @@ order: 5
                 <dt>Open in a Tab</dt>
                 <dd>
                     <p>The popout player will open in a new tab in your current browser window.</p>
+                </dd>
+
+                <dt>Re-Use Existing Window/Tab <span class="badge red white-text">New in v4.2</span></dt>
+                <dd>
+                    <p>Enabling this will cause the popout player window/tab to be re-used (if it is already open) instead of always opening in a new window/tab. <strong>The default for this setting is disabled.</strong></p>
                 </dd>
 
                 <dt>Show Controls</dt>
@@ -104,7 +109,7 @@ order: 5
                     <p><i class="small left material-icons red-text">lightbulb</i> <strong>Tip:</strong> This works best when also using the "Use Previous Position" mode.</p>
                 </dd>
 
-                <dt>Maximize the Popout Player Window <span class="badge red white-text">New in v4.1</span></dt>
+                <dt>Maximize the Popout Player Window <span class="badge grey darken-1 white-text">New in v4.1</span></dt>
                 <dd>
                     <p>The popout player window will be maximized (NOT fullscreen) automatically <em>immediately after</em> it is positioned.</p>
                     <p>When you select this setting, the popout player window will be positioned according to the "Popout Player Position" option, then it will be maximized. This should allow you to have the popout player window use the entire screen of a secondary display/monitor.</p>
@@ -200,7 +205,7 @@ order: 5
 
     <div class="card white">
         <div class="card-content">
-            <span class="card-title red-text"><strong>Advanced Settings</strong> <span class="badge grey darken-3 white-text">Updated in v4.0</span></span>
+            <span class="card-title red-text"><strong>Advanced Settings</strong> <span class="badge grey darken-3 white-text">Updated in v4.2</span></span>
             <p>These are the more advanced settings for configuring the YouTube Popout Player. Use caution when changing these settings, as they are a little more complex than the others.</p>
         </div>
 
@@ -235,6 +240,11 @@ order: 5
                 <dt>Multi-Account Containers Support - <em>Firefox Only</em> <span class="badge grey darken-1 white-text">New in v4.0</span></dt>
                 <dd>
                     <p>Enabling this will cause the popout player to be opened in the same <a class="red-text" href="https://support.mozilla.org/en-US/kb/containers">multi-account container (a.k.a. contextual identity)</a> as the original window/tab. <strong>The default for this setting is disabled.</strong></p>
+                </dd>
+
+                <dt>Automatically Open on Video Pages <span class="badge red white-text">New in v4.2</span></dt>
+                <dd>
+                    <p>Enabling this will automatically open the popout player when navigating to a YouTube video page. <strong>The default for this setting is disabled.</strong></p>
                 </dd>
             </dl>
         </div>
@@ -301,7 +311,7 @@ order: 5
 <div id="modal-{{screenshot.name | slugify}}-screenshot" class="modal">
     <div class="modal-content center white">
         <img class="responsive-img" src="{{ screenshot.path | relative_url }}" alt="Popout Player {{screenshot.name}} Options Screenshot" />
-        <p class="text-left"><em>Screenshots are taken from <strong>v4.0</strong> and <strong>v4.1</strong> and may not accurately represent current functionality.</em></p>
+        <p class="text-left"><em>Screenshots are taken from <strong>v4.0</strong>, <strong>v4.1</strong>, and <strong>v4.2</strong> and may not accurately represent current functionality.</em></p>
     </div>
     <div class="modal-footer">
         <button class="btn red modal-close"><i class="material-icons left">close</i> Close</button>

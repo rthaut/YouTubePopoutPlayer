@@ -1,107 +1,121 @@
-import Options from "../helpers/options";
-import {
-  GetVideoIDFromURL,
-  GetPlaylistIDFromURL,
-  GetPlaylistVideoIDsFromDOM,
-} from "../helpers/youtube";
-import HTML5Player from "./HTML5Player.class";
-
-export const OnRuntimeMessage = async (message, sender) => {
-  console.log("[Content] YouTubePopoutPlayer Runtime Message", message, sender);
-
-  if (message.action !== undefined) {
-    switch (message.action.toLowerCase()) {
-      case "open-popout-via-command":
-        await OpenPopout();
-        if (message.data?.closeTab) {
-          await CloseTab(message.data?.enforceDomainRestriction);
-        }
-        break;
-
-      case "get-playlist-videos":
-        return GetPlaylistVideoIDsFromDOM();
-    }
-
-    console.log(
-      "[Content] YouTubePopoutPlayer Runtime Message :: Unhandled Action"
-    );
-    return;
-  }
-};
+import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
 
 /**
- * Click event handler for the context menu entry and the controls button
- * @param {MouseEvent} event the original click event
+ * Gets the video element for the primary video player on a YouTube video page
+ * @returns {HTMLVideoElement}
  */
-export const CustomControlsClickEventHandler = async (event) => {
-  event.preventDefault();
+export const GetPageVideo = () => {
+  console.log("[Content] YouTubePopoutPlayer GetPageVideo()");
 
-  await OpenPopout();
+  const video = document.querySelector("#movie_player video, #player video");
 
-  if (await Options.GetLocalOption("advanced", "close")) {
-    await CloseTab(true);
+  console.log("[Content] YouTubePopoutPlayer GetPageVideo() :: Return", video);
+  return video;
+};
+
+export const GetVideoPlayerInfo = () => {
+  console.log("[Content] YouTubePopoutPlayer GetVideoPlayerInfo()");
+
+  let info;
+
+  const video = GetPageVideo();
+  if (video) {
+    info = {
+      time: parseInt(video.currentTime, 10),
+      width: video.clientWidth,
+      height: video.clientHeight,
+      paused: video.paused,
+    };
   }
+
+  console.log(
+    "[Content] YouTubePopoutPlayer GetVideoPlayerInfo() :: Return",
+    info
+  );
+  return info;
 };
 
 /**
  * Opens the popout player (via a request to the background script)
+ * @param {object} data parameters to send with the "open-popout" action payload
+ * @returns {Promise<boolean>} if the popout was opened successfully
  */
-export const OpenPopout = async () => {
-  console.log("[Content] YouTubePopoutPlayer OpenPopout()");
-
-  const container =
-    document.getElementById("movie_player") ||
-    document.getElementById("player");
-  const video = container.querySelector("video");
-  const player = new HTML5Player(video);
+export const OpenPopoutFromContentScript = async (data) => {
+  console.log("[Content] YouTubePopoutPlayer OpenPopoutFromContentScript()");
 
   try {
     const response = await browser.runtime.sendMessage({
       action: "open-popout",
-      data: {
-        id: GetVideoIDFromURL(window.location.href),
-        list: GetPlaylistIDFromURL(window.location.href),
-        time: player.getTime(),
-        originalVideoWidth: player.getWidth(),
-        originalVideoHeight: player.getHeight(),
-      },
+      data,
     });
 
     if (response !== undefined) {
       console.log(
-        '[Content] YouTubePopoutPlayer OpenPopout() :: Action "open-popout" response',
+        '[Content] YouTubePopoutPlayer OpenPopoutFromContentScript() :: Action "open-popout" response',
         response
       );
     }
 
-    player.pause();
+    return true;
   } catch (error) {
-    console.error("[Content] YouTubePopoutPlayer OpenPopout() :: Error", error);
+    console.error(
+      "[Content] YouTubePopoutPlayer OpenPopoutFromContentScript() :: Error",
+      error
+    );
   }
+
+  return false;
 };
 
 /**
- * Closes the current tab (via a request to the background script)
- * @param {boolean} [enforceDomainRestriction] if the tab should only be closed if it is on a known YouTube domain
+ * Opens the popout player (via a request to the background script)
+ * @returns {Promise<boolean>} if the popout was opened successfully
  */
-export const CloseTab = async (enforceDomainRestriction = true) => {
-  console.log("[Content] YouTubePopoutPlayer CloseTab()");
+export const OpenPopoutForPageVideo = async () => {
+  console.log("[Content] YouTubePopoutPlayer OpenPopoutForPageVideo()");
 
-  try {
-    const response = await browser.runtime.sendMessage({
-      action: "close-tab",
-      data: {
-        enforceDomainRestriction,
-      },
-    });
+  const data = {
+    id: GetVideoIDFromURL(window.location.href),
+    list: GetPlaylistIDFromURL(window.location.href),
+  };
 
-    if (response !== undefined) {
-      console.log(
-        '[Content] YouTubePopoutPlayer CloseTab() :: Action "close-tab" response',
-        response
-      );
-    }
-  } catch (error) {
-    console.error("[Content] YouTubePopoutPlayer CloseTab() :: Error", error);
+  const playerInfo = GetVideoPlayerInfo();
+  if (playerInfo) {
+    data.time = playerInfo.time;
+    data.originalVideoWidth = playerInfo.width;
+    data.originalVideoHeight = playerInfo.height;
   }
+
+  const success = await OpenPopoutFromContentScript(data);
+
+  if (success) {
+    const paused = await PauseVideoPlayer();
+    if (!paused) {
+      console.warn("Failed to pause original video player");
+    }
+  }
+
+  return success;
+};
+
+export const PauseVideoPlayer = () => {
+  const video = GetPageVideo();
+  if (video) {
+    const promise = video.pause();
+    if (promise !== undefined) {
+      return promise.then(() => true).catch(() => false);
+    }
+  }
+  return false;
+};
+
+export const PlayVideoPlayer = () => {
+  const video = GetPageVideo();
+  if (video) {
+    const promise = video.play();
+    if (promise !== undefined) {
+      return promise.then(() => true).catch(() => false);
+    }
+  }
+  return false;
 };

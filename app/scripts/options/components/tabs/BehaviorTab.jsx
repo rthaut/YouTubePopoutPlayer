@@ -4,32 +4,29 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
 import InputLabel from "@material-ui/core/InputLabel";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import MenuItem from "@material-ui/core/MenuItem";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Select from "@material-ui/core/Select";
-import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 
 import TuneIcon from "@material-ui/icons/Tune";
 
-import TabPanelHeader from "./TabPanelHeader";
+import TabPanelHeader from "../TabPanelHeader";
+import BasicToggleControl from "../controls/BasicToggleControl";
 
-import { useOptionsForDomain } from "../hooks/useOptions";
+import { useOptionsForDomain } from "../../stores/optionsStore";
 
 import {
   OPTIONS_BEHAVIOR_TARGET_VALUES,
   OPTIONS_BEHAVIOR_CONTROLS_VALUES,
-} from "../../helpers/constants";
+} from "../../../helpers/constants";
 
 export const DOMAIN = "behavior";
 
 export default function BehaviorTab() {
-  const { options, setOption } = useOptionsForDomain(DOMAIN);
+  const [options, { setOption }] = useOptionsForDomain(DOMAIN);
   console.log("BehaviorTab ~ options", options);
 
   function TargetOptionControl() {
@@ -94,41 +91,48 @@ export default function BehaviorTab() {
     );
   }
 
-  function ToggleOptionsControls() {
-    const toggleOptions = ["autoplay", "loop"];
+  function AutoplayControl() {
     return (
-      <List>
-        {toggleOptions.map((toggleOptionName) => (
-          <ListItem key={toggleOptionName} disableGutters>
-            <FormGroup>
-              <FormControlLabel
-                key={toggleOptionName}
-                label={browser.i18n.getMessage(
-                  `OptionsBehavior${toggleOptionName}Label`
-                )}
-                control={
-                  <Switch
-                    name={toggleOptionName}
-                    color="primary"
-                    checked={options[toggleOptionName]}
-                    onChange={(event) =>
-                      setOption(toggleOptionName, event.target.checked)
-                    }
-                  />
-                }
-              />
-              <Typography
-                color="textSecondary"
-                dangerouslySetInnerHTML={{
-                  __html: browser.i18n.getMessage(
-                    `OptionsBehavior${toggleOptionName}Description`
-                  ),
-                }}
-              />
-            </FormGroup>
-          </ListItem>
-        ))}
-      </List>
+      <BasicToggleControl
+        domain={DOMAIN}
+        optionName="autoplay"
+        label={browser.i18n.getMessage("OptionsBehaviorAutoplayLabel")}
+        description={browser.i18n.getMessage(
+          "OptionsBehaviorAutoplayDescription"
+        )}
+      />
+    );
+  }
+
+  function LoopControl() {
+    return (
+      <BasicToggleControl
+        domain={DOMAIN}
+        optionName="loop"
+        label={browser.i18n.getMessage("OptionsBehaviorLoopLabel")}
+        description={browser.i18n.getMessage("OptionsBehaviorLoopDescription")}
+      />
+    );
+  }
+
+  function ReuseExistingOptionControl() {
+    return (
+      <BasicToggleControl
+        domain={DOMAIN}
+        optionName="reuseWindowsTabs"
+        label={browser.i18n.getMessage(
+          "OptionsBehaviorReuseWindowsTabsLabel",
+          browser.i18n.getMessage(
+            `OptionsSubstitutionBehaviorTarget${options["target"]}`
+          )
+        )}
+        description={browser.i18n.getMessage(
+          "OptionsBehaviorReuseWindowsTabsDescription",
+          browser.i18n
+            .getMessage(`OptionsSubstitutionBehaviorTarget${options["target"]}`)
+            .toLowerCase()
+        )}
+      />
     );
   }
 
@@ -142,11 +146,21 @@ export default function BehaviorTab() {
         <TargetOptionControl />
       </Box>
       <Divider />
-      <Box marginTop={2}>
+      <Box marginY={2}>
+        <ReuseExistingOptionControl />
+      </Box>
+      <Divider />
+      <Box marginY={2}>
         <ShowControlsOptionControl />
       </Box>
       <Divider />
-      <ToggleOptionsControls />
+      <Box marginY={2}>
+        <AutoplayControl />
+      </Box>
+      <Divider />
+      <Box marginY={2}>
+        <LoopControl />
+      </Box>
     </Box>
   );
 }

@@ -5,11 +5,22 @@ export const YOUTUBE_DOMAINS = [YOUTUBE_DOMAIN, YOUTUBE_NOCOOKIE_DOMAIN];
 export const YOUTUBE_EMBED_URL = `https://www.${YOUTUBE_DOMAIN}/embed/`;
 export const YOUTUBE_NOCOOKIE_EMBED_URL = `https://www.${YOUTUBE_NOCOOKIE_DOMAIN}/embed/`;
 
+export const YOUTUBE_VIDEO_URL_PATTERNS = [
+  "*://youtu.be/*",
+  "*://*.youtube.com/watch?*",
+];
+export const YOUTUBE_PLAYLIST_URL_PATTERNS = [
+  "*://youtu.be/*list=*",
+  "*://*.youtube.com/watch?*list=*",
+  "*://*.youtube.com/playlist?*list=*",
+];
+
 export const START_THRESHOLD = 5; // TODO: should this be configurable?
 
 export const OPTION_DEFAULTS = {
   behavior: {
     target: "window",
+    reuseWindowsTabs: false,
     controls: "standard",
     autoplay: true,
     loop: false,
@@ -26,11 +37,12 @@ export const OPTION_DEFAULTS = {
     left: 0,
   },
   advanced: {
-    background: false,
     close: false,
+    background: false,
     noCookieDomain: false,
-    contextualIdentity: false,
     title: "",
+    contextualIdentity: false,
+    autoOpen: false,
   },
 };
 

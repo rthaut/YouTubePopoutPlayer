@@ -11,10 +11,10 @@ import Typography from "@material-ui/core/Typography";
 import SaveIcon from "@material-ui/icons/Save";
 import WarningIcon from "@material-ui/icons/Warning";
 
-import { useOptionsForDomain } from "../hooks/useOptions";
+import { useOptionsForDomain } from "../../stores/optionsStore";
 
 function CustomPositionForm() {
-  const { options, setOptions } = useOptionsForDomain("position");
+  const [options, { setOptions }] = useOptionsForDomain("position");
   console.log("CustomPositionForm ~ options", options);
 
   const [top, setTop] = React.useState(options.top);
@@ -136,10 +136,4 @@ function CustomPositionForm() {
   );
 }
 
-export default function CustomDimensions() {
-  return (
-    <>
-      <CustomPositionForm />
-    </>
-  );
-}
+export default CustomPositionForm;
