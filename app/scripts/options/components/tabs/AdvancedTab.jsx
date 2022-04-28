@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
@@ -17,9 +16,13 @@ import CheckIcon from "@material-ui/icons/Check";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 import TabPanelHeader from "../TabPanelHeader";
+import BasicToggleControl from "../controls/BasicToggleControl";
+import PermissionToggleControl from "../controls/PermissionToggleControl";
 import ConditionalTooltipWrapper from "../controls/ConditionalTooltipWrapper";
 
-import { useOptions, useOptionsForDomain } from "../../hooks/useOptions";
+import useOptionsStore, {
+  useOptionsForDomain,
+} from "../../stores/optionsStore";
 
 import { useDebounce } from "react-use";
 
@@ -38,14 +41,15 @@ const useStyles = makeStyles((theme) =>
 export default function AdvancedTab() {
   const classes = useStyles();
 
-  const { options, setOption } = useOptionsForDomain(DOMAIN);
+  const [options, { setOption }] = useOptionsForDomain(DOMAIN);
   console.log("AdvancedTab ~ options", options);
 
-  const { getOptionForDomain } = useOptions();
   const canOpenInBackground =
-    getOptionForDomain("size", "mode") !== "maximized";
+    useOptionsStore((store) => store["size.mode"]) !== "maximized";
 
-  const popoutPlayerTarget = getOptionForDomain("behavior", "target");
+  const popoutPlayerTarget = useOptionsStore(
+    (store) => store["behavior.target"]
+  );
 
   const [isFirefox, setIsFirefox] = React.useState(false);
   React.useEffect(() => {
@@ -60,129 +64,10 @@ export default function AdvancedTab() {
     }
   }, [canOpenInBackground]);
 
-  const handlePermissionSwitchToggle = async (
-    optionName,
-    permissionsRequest,
-    setShowPermissionError,
-    remove = false
-  ) => {
-    setShowPermissionError(false);
-
-    if (remove) {
-      await browser.permissions.remove(permissionsRequest);
-      setOption(optionName, false);
-      return false;
-    }
-
-    const permissionGranted = await browser.permissions.request(
-      permissionsRequest
-    );
-
-    if (!permissionGranted) {
-      setShowPermissionError(true);
-      return false;
-    }
-
-    setOption(optionName, true);
-    return true;
-  };
-
-  // TODO: make this into a reusable component for other tabs
-  function BasicToggleControl({ optionName, label, description }) {
-    return (
-      <FormControl>
-        <FormControlLabel
-          label={label}
-          control={
-            <Switch
-              name={`${optionName}ToggleSwitch`}
-              color="primary"
-              checked={options[optionName]}
-              onChange={(event) => setOption(optionName, event.target.checked)}
-            />
-          }
-        />
-        <Typography
-          color="textSecondary"
-          dangerouslySetInnerHTML={{
-            __html: description,
-          }}
-        />
-      </FormControl>
-    );
-  }
-
-  BasicToggleControl.propTypes = {
-    optionName: PropTypes.string.isRequired,
-    label: PropTypes.node.isRequired,
-    description: PropTypes.string.isRequired,
-  };
-
-  // TODO: make this into a reusable component for other tabs
-  function PermissionToggleControl({
-    optionName,
-    label,
-    description,
-    permissionsRequest,
-  }) {
-    const [showPermissionError, setShowPermissionError] = React.useState(false);
-
-    const onPermissionSwitchChange = async (event) => {
-      handlePermissionSwitchToggle(
-        optionName,
-        permissionsRequest,
-        setShowPermissionError,
-        !event.target.checked
-      );
-    };
-
-    return (
-      <FormControl>
-        <FormControlLabel
-          label={label}
-          control={
-            <Switch
-              name={`${optionName}PermissionToggleSwitch`}
-              color="primary"
-              checked={options[optionName]}
-              onChange={onPermissionSwitchChange}
-            />
-          }
-        />
-        {showPermissionError && (
-          <Alert
-            severity="error"
-            onClose={() => {
-              setShowPermissionError(false);
-            }}
-          >
-            {browser.i18n.getMessage(
-              "FieldRequiredPermissionsNotGrantedMessage"
-            )}
-          </Alert>
-        )}
-        <Typography
-          color="textSecondary"
-          dangerouslySetInnerHTML={{
-            __html: description,
-          }}
-        />
-      </FormControl>
-    );
-  }
-
-  PermissionToggleControl.propTypes = {
-    optionName: PropTypes.string.isRequired,
-    label: PropTypes.node.isRequired,
-    description: PropTypes.string.isRequired,
-    permissionsRequest: PropTypes.shape({
-      permissions: PropTypes.arrayOf(PropTypes.string),
-    }).isRequired,
-  };
-
   function AutoOpenControl() {
     return (
       <BasicToggleControl
+        domain={DOMAIN}
         optionName="autoOpen"
         label={browser.i18n.getMessage("OptionsAdvancedAutoOpenLabel")}
         description={browser.i18n.getMessage(
@@ -242,6 +127,7 @@ export default function AdvancedTab() {
   function CloseOptionControl() {
     return (
       <PermissionToggleControl
+        domain={DOMAIN}
         optionName="close"
         label={browser.i18n.getMessage("OptionsAdvancedCloseLabel")}
         description={browser.i18n.getMessage("OptionsAdvancedCloseDescription")}
@@ -255,6 +141,7 @@ export default function AdvancedTab() {
   function ContextualIdentitySupportControl() {
     return (
       <PermissionToggleControl
+        domain={DOMAIN}
         optionName="contextualIdentity"
         label={browser.i18n.getMessage(
           "OptionsAdvancedContextualIdentityLabel"
@@ -329,6 +216,7 @@ export default function AdvancedTab() {
   function YouTubeNoCookieDomainControl() {
     return (
       <BasicToggleControl
+        domain={DOMAIN}
         optionName="noCookieDomain"
         label={browser.i18n.getMessage(
           "OptionsAdvancedYouTubeNoCookieDomainLabel"

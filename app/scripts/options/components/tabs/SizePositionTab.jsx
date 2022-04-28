@@ -12,7 +12,7 @@ import CustomDimensionsForm from "../forms/CustomDimensionsForm";
 import CustomPositionForm from "../forms/CustomPositionForm";
 import TabPanelHeader from "../TabPanelHeader";
 
-import { useOptions } from "../../hooks/useOptions";
+import useOptionsStore from "../../stores/optionsStore";
 
 import {
   OPTIONS_SIZE_MODE_VALUES,
@@ -22,9 +22,10 @@ import {
 export const DOMAIN = "size_position";
 
 export default function SizePositionTab() {
-  const { getOptionForDomain } = useOptions();
-
-  const targetIsTab = getOptionForDomain("behavior", "target") === "tab";
+  const sizeMode = useOptionsStore((store) => store["size.mode"]);
+  const positionMode = useOptionsStore((store) => store["position.mode"]);
+  const targetIsTab =
+    useOptionsStore((store) => store["behavior.target"]) === "tab";
 
   function SizeModeOptionControl() {
     return (
@@ -64,9 +65,7 @@ export default function SizePositionTab() {
             <Box marginY={1}>
               <SizeModeOptionControl />
             </Box>
-            {getOptionForDomain("size", "mode") === "custom" && (
-              <CustomDimensionsForm />
-            )}
+            {sizeMode === "custom" && <CustomDimensionsForm />}
           </>
         )}
       </Box>
@@ -87,9 +86,7 @@ export default function SizePositionTab() {
             <Box marginY={1}>
               <PositionModeOptionControl />
             </Box>
-            {getOptionForDomain("position", "mode") === "custom" && (
-              <CustomPositionForm />
-            )}
+            {positionMode === "custom" && <CustomPositionForm />}
           </>
         )}
       </Box>
