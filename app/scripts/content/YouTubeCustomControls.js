@@ -167,7 +167,7 @@ const InsertPlayerControlsButton = async (clickEventHandler) => {
   if (IsPopoutPlayer(window.location)) {
     const controls = await Options.GetLocalOption("behavior", "controls");
     if (controls.toLowerCase() !== "extended") {
-      console.info('Popout Player controls option is NOT set to "extended"');
+      console.info('Popout player controls option is NOT set to "extended"');
       console.groupEnd();
       return false;
     }

@@ -11,9 +11,10 @@ import Snackbar from "@material-ui/core/Snackbar";
 
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 
-import Options from "../../helpers/options";
+import useOptionsStore from "../stores/optionsStore";
 
 export default function ResetOptions() {
+  const resetOptions = useOptionsStore((store) => store.reset);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [showResetSuccess, setShowResetSuccess] = React.useState(false);
 
@@ -35,7 +36,7 @@ export default function ResetOptions() {
   };
 
   const handleConfirm = async () => {
-    await Options.InitLocalStorageDefaults(true);
+    await resetOptions();
     setDialogOpen(false);
     setShowResetSuccess(true);
   };
@@ -60,11 +61,7 @@ export default function ResetOptions() {
           </Button>
         </Grid>
       </Grid>
-      <Dialog
-        open={dialogOpen}
-        onClose={handleClose}
-        keepMounted
-      >
+      <Dialog open={dialogOpen} onClose={handleClose} keepMounted>
         <DialogTitle>
           {browser.i18n.getMessage("ConfirmSettingsResetHeading")}
         </DialogTitle>

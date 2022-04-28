@@ -44,7 +44,7 @@
     "description": "The text for the context menu entry added to playlist links."
   },
   "Notification_Error_FailedToOpen": {
-    "message": "Failed to determine the video and/or playlist to open. The Popout Player will not be opened.",
+    "message": "Failed to determine the video and/or playlist to open. The popout player will not be opened.",
     "description": "The text use for the notification that is displayed when the popout player cannot be opened."
   },
   "OptionsPageTitle": {
@@ -83,13 +83,35 @@
     "message": "Open in a Tab"
   },
   "OptionsBehaviorTargetTabDescription": {
-    "message": "The popout player will open in a new tab in your current browser window."
+    "message": "The popout player will open in a tab in your current browser window."
   },
   "OptionsBehaviorTargetWindowLabel": {
     "message": "Open in a Popup Window"
   },
   "OptionsBehaviorTargetWindowDescription": {
-    "message": "The popout player will open in a new popup window. <strong>This is the default setting.</strong>"
+    "message": "The popout player will open in a popup window. <strong>This is the default setting.</strong>"
+  },
+  "OptionsSubstitutionBehaviorTargetTab": {
+    "message": "Tab"
+  },
+  "OptionsSubstitutionBehaviorTargetWindow": {
+    "message": "Window"
+  },
+  "OptionsBehaviorReuseWindowsTabsLabel": {
+    "message": "Re-Use Existing $TARGET$",
+    "placeholders": {
+      "target": {
+        "content": "$1"
+      }
+    }
+  },
+  "OptionsBehaviorReuseWindowsTabsDescription": {
+    "message": "Enabling this will cause the popout player $TARGET$ to be re-used (if it is already open) instead of always opening in a new $TARGET$. <strong>The default for this setting is disabled.</strong>",
+    "placeholders": {
+      "target": {
+        "content": "$1"
+      }
+    }
   },
   "BehaviorControlsLabel": {
     "message": "Show Controls"
@@ -115,7 +137,7 @@
     "message": "Autoplay Video(s)"
   },
   "OptionsBehaviorAutoplayDescription": {
-    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong>"
+    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong><blockquote><strong>Note</strong>: Autoplaying videos with sound are commonly blocked by default in modern browsers; you may need to manually enable/allow autoplay through your browser's settings for this to work correctly.</blockquote>"
   },
   "OptionsBehaviorLoopLabel": {
     "message": "Loop Video(s)"
@@ -132,7 +154,7 @@
     }
   },
   "OptionsSettingsNotAvailableForTab": {
-    "message": "These settings do not apply when the popout player is configured to open in a new tab in the current browser window."
+    "message": "These settings do not apply when the popout player is configured to open in a tab in the current browser window."
   },
   "SizeModeLabel": {
     "message": "Popout Player Size"
@@ -199,7 +221,7 @@
     "message": "Use this setting to specify the position (in pixels) for the popout player window."
   },
   "OptionsCustomPositionWarning": {
-    "message": "<strong>Use caution when setting a custom position!</strong> No restrictions are enforced, so you can configure this to open the Popout Player completely off screen."
+    "message": "<strong>Use caution when setting a custom position!</strong> No restrictions are enforced, so you can configure this to open the popout player completely off screen."
   },
   "DimensionUnitsLabel": {
     "message": "Dimension Units"
@@ -240,23 +262,17 @@
   "ButtonSaveCustomPositionLabel": {
     "message": "Save Custom Position"
   },
+  "OptionsAdvancedAutoOpenLabel": {
+    "message": "Automatically Open on Video Pages"
+  },
+  "OptionsAdvancedAutoOpenDescription": {
+    "message": "Enabling this will automatically open the popout player when navigating to a YouTube video page. <strong>The default for this setting is disabled.</strong>"
+  },
   "OptionsAdvancedCloseLabel": {
     "message": "Close Original Window/Tab"
   },
   "OptionsAdvancedCloseDescription": {
     "message": "Enabling this will cause the original YouTube window/tab to be closed when the popout player is opened. This does NOT apply to videos embedded in other pages/sites. <strong>The default for this setting is disabled.</strong>"
-  },
-  "OptionsAdvancedOpenInBackgroundLabel": {
-    "message": "Open in Background Window/Tab"
-  },
-  "OptionsAdvancedOpenInBackgroundDescription": {
-    "message": "Enabling this will cause the popout player to be opened in a background window/tab. <strong>The default for this setting is disabled.</strong>"
-  },
-  "OptionsAdvancedTitleLabel": {
-    "message": "Window Title Text (Preface)"
-  },
-  "OptionsAdvancedTitleDescription": {
-    "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
   },
   "OptionsAdvancedContextualIdentityLabel": {
     "message": "Multi-Account Containers Support"
@@ -268,6 +284,28 @@
         "content": "https://support.mozilla.org/en-US/kb/containers"
       }
     }
+  },
+  "OptionsAdvancedOpenInBackgroundLabel": {
+    "message": "Open in Background $TARGET$",
+    "placeholders": {
+      "target": {
+        "content": "$1"
+      }
+    }
+  },
+  "OptionsAdvancedOpenInBackgroundDescription": {
+    "message": "Enabling this will cause the popout player to be opened in a background $TARGET$. <strong>The default for this setting is disabled.</strong>",
+    "placeholders": {
+      "target": {
+        "content": "$1"
+      }
+    }
+  },
+  "OptionsAdvancedTitleLabel": {
+    "message": "Window Title Text (Preface)"
+  },
+  "OptionsAdvancedTitleDescription": {
+    "message": "Specify text to be automatically inserted into the title of the popout player window. This can be used for window manipulation scripting. <strong>This text does NOT replace the standard title text.</strong>"
   },
   "OptionsAdvancedYouTubeNoCookieDomainLabel": {
     "message": "Use \"No Cookie\" Version of YouTube"

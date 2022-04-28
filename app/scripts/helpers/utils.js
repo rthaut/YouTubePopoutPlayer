@@ -57,9 +57,9 @@ export const IsFirefox = async () => {
 };
 
 /**
- * Determines if the given `Location` is for a Popout Player
+ * Determines if the given `Location` is for a popout player
  * @param {Location} location window/document `Location`
- * @returns {boolean} whether or not the given `Location` is a Popout Player
+ * @returns {boolean} whether or not the given `Location` is a popout player
  */
 export const IsPopoutPlayer = (location) => {
   // console.group("Utils.IsPopoutPlayer()", location);
