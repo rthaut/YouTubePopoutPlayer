@@ -1,3 +1,4 @@
+import { IsVisible } from "../helpers/utils";
 import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
 
 /**
@@ -7,10 +8,24 @@ import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
 export const GetPageVideo = () => {
   console.log("[Content] YouTubePopoutPlayer GetPageVideo()");
 
-  const video = document.querySelector("#movie_player video, #player video");
+  const videos = document.querySelectorAll(
+    "#shorts-player video, #movie_player video, #player video"
+  );
 
-  console.log("[Content] YouTubePopoutPlayer GetPageVideo() :: Return", video);
-  return video;
+  for (const video of videos) {
+    if (IsVisible(video)) {
+      console.log(
+        "[Content] YouTubePopoutPlayer GetPageVideo() :: Return",
+        video
+      );
+      return video;
+    }
+  }
+
+  console.warn(
+    "[Content] YouTubePopoutPlayer GetPageVideo() :: Failed to Get Video Player"
+  );
+  return undefined;
 };
 
 export const GetVideoPlayerInfo = () => {

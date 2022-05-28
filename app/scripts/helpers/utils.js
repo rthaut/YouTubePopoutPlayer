@@ -138,3 +138,15 @@ export const GetParamFromURL = (param, url) => {
 
   return undefined;
 };
+
+/**
+ * Determines if the given element is visible
+ * @param {Element} elem the element to check
+ * @returns {boolean} true if the element is visible
+ */
+export const IsVisible = (elem) =>
+  elem.offsetWidth > 0 &&
+  elem.offsetHeight > 0 &&
+  !["none", "hidden"].includes(
+    getComputedStyle(elem).getPropertyValue("display")
+  );
