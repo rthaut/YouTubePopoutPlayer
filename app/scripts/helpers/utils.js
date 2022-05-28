@@ -30,8 +30,6 @@ export const GetDimensionForScreenPercentage = (dimension, percentage) => {
  * @returns {Promise<boolean>} `true` only if the browser is successfully identified as Firefox
  */
 export const IsFirefox = async () => {
-  // console.group("Utils.IsFirefox()");
-
   let isFirefox = false;
 
   try {
@@ -39,20 +37,15 @@ export const IsFirefox = async () => {
       const info = await browser.runtime.getBrowserInfo();
 
       if (info !== undefined && info !== null) {
-        // console.log("Browser information", info);
-
         if (info.name !== undefined && info.name.toLowerCase() === "firefox") {
-          // console.log("Browser is Firefox");
           isFirefox = true;
         }
       }
     }
   } catch (error) {
-    // console.error("Failed to determine browser info", error);
+    console.warn("Failed to determine if browser is Firefox", error);
   }
 
-  // console.log("Return", isFirefox);
-  // console.groupEnd();
   return isFirefox;
 };
 
@@ -62,21 +55,13 @@ export const IsFirefox = async () => {
  * @returns {boolean} whether or not the given `Location` is a popout player
  */
 export const IsPopoutPlayer = (location) => {
-  // console.group("Utils.IsPopoutPlayer()", location);
-
   if (location.href.startsWith(YOUTUBE_EMBED_URL)) {
     const params = new URLSearchParams(location.search.substring(1));
-    // console.log("URL Search Params", params);
-
     if (params.get("popout")) {
-      // console.log("Return", true);
-      // console.groupEnd();
       return true;
     }
   }
 
-  // console.log("Return", false);
-  // console.groupEnd();
   return false;
 };
 
@@ -85,12 +70,11 @@ export const IsPopoutPlayer = (location) => {
  * @param {string} string the `string` to convert to Title Case
  * @returns {string} the `string` in Title Case
  */
-export const TitleCase = (string) => {
-  return string.replace(
+export const TitleCase = (string) =>
+  string.replace(
     /\b\w+/g,
-    (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
   );
-};
 
 /**
  * Computes the greatest common denominator for a pair of numbers
@@ -138,3 +122,15 @@ export const GetParamFromURL = (param, url) => {
 
   return undefined;
 };
+
+/**
+ * Determines if the given element is visible
+ * @param {Element} elem the element to check
+ * @returns {boolean} true if the element is visible
+ */
+export const IsVisible = (elem) =>
+  elem.offsetWidth > 0 &&
+  elem.offsetHeight > 0 &&
+  !["none", "hidden"].includes(
+    getComputedStyle(elem).getPropertyValue("display")
+  );
