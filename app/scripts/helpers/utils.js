@@ -70,12 +70,11 @@ export const IsPopoutPlayer = (location) => {
  * @param {string} string the `string` to convert to Title Case
  * @returns {string} the `string` in Title Case
  */
-export const TitleCase = (string) => {
-  return string.replace(
+export const TitleCase = (string) =>
+  string.replace(
     /\b\w+/g,
-    (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
   );
-};
 
 /**
  * Computes the greatest common denominator for a pair of numbers
