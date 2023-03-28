@@ -11,19 +11,31 @@ import { IsPopoutPlayer } from "../helpers/utils";
  * Inserts the various control elements and watches the DOM for changes to re-insert controls as needed
  * @param {object} params
  * @param {PopoutControlClickEventHandler} params.openPopoutPlayerClickHandler the click event handler for the popout player controls
+ * @param {boolean} [params.insertVideoRotationControls=false] if the video rotation controls should be inserted
  */
 export const InsertControlsAndWatch = async ({
   openPopoutPlayerClickHandler,
+  insertVideoRotationControls = false,
 }) => {
-  await InsertControls(openPopoutPlayerClickHandler);
-  WatchForPageChanges(openPopoutPlayerClickHandler);
+  await InsertControls(
+    openPopoutPlayerClickHandler,
+    insertVideoRotationControls
+  );
+  WatchForPageChanges(
+    openPopoutPlayerClickHandler,
+    insertVideoRotationControls
+  );
 };
 
 /**
  * Inserts the various control elements
  * @param {PopoutControlClickEventHandler} openPopoutPlayerClickHandler the click event handler for the controls
+ * @param {boolean} [insertVideoRotationControls=false] if the video rotation controls should be inserted
  */
-export const InsertControls = async (openPopoutPlayerClickHandler) => {
+export const InsertControls = async (
+  openPopoutPlayerClickHandler,
+  insertVideoRotationControls = false
+) => {
   console.group("[YouTubeCustomControls] InsertControls()");
 
   try {
@@ -38,14 +50,22 @@ export const InsertControls = async (openPopoutPlayerClickHandler) => {
     console.error("Failed to insert button control", error);
   }
 
+  if (insertVideoRotationControls) {
+    InsertRotationButtonsIntoPlayerControls();
+  }
+
   console.groupEnd();
 };
 
 /**
  * Watches the DOM for changes and re-inserts controls as needed
  * @param {PopoutControlClickEventHandler} openPopoutPlayerClickHandler the click event handler for the controls
+ * @param {boolean} [insertVideoRotationControls=false] if the video rotation controls should be re-inserted
  */
-export const WatchForPageChanges = (openPopoutPlayerClickHandler) => {
+export const WatchForPageChanges = (
+  openPopoutPlayerClickHandler,
+  insertVideoRotationControls = false
+) => {
   console.group("[YouTubeCustomControls] WatchForPageChanges()");
 
   const observer = new MutationObserver((mutations) => {
@@ -70,6 +90,9 @@ export const WatchForPageChanges = (openPopoutPlayerClickHandler) => {
               InsertPopoutButtonIntoPlayerControls(
                 openPopoutPlayerClickHandler
               );
+              if (insertVideoRotationControls) {
+                InsertRotationButtonsIntoPlayerControls();
+              }
               break;
           }
         }
@@ -237,6 +260,83 @@ const InsertPopoutButtonIntoPlayerControls = async (clickEventHandler) => {
   return true;
 };
 
+const InsertRotationButtonsIntoPlayerControls = () => {
+  try {
+    console.group(
+      "[YouTubeCustomControls] InsertRotationButtonsIntoPlayerControls()"
+    );
+
+    const controls = document.getElementsByClassName("ytp-right-controls")[0];
+    if (!controls) {
+      console.info("Missing player controls");
+      console.groupEnd();
+      return false;
+    }
+
+    const directions = ["left", "right"].reverse();
+    for (const direction of directions) {
+      let button = controls.querySelector(
+        "#ytp-rotate-" + direction + "-button"
+      );
+      if (button) {
+        console.info(
+          "#ytp-rotate-" + direction + "-button already exists",
+          button
+        );
+        console.groupEnd();
+        continue;
+      }
+
+      button = document.createElement("button");
+      button.className = [
+        "ytp-rotate-" + direction + "-button",
+        "ytp-rotate-button",
+        "ytp-button",
+      ].join(" ");
+      button.setAttribute(
+        "aria-label",
+        browser.i18n.getMessage("PopoutPlayerControls_RotateVideo_" + direction)
+      );
+      button.setAttribute(
+        "title",
+        browser.i18n.getMessage("PopoutPlayerControls_RotateVideo_" + direction)
+      );
+      button.id = "ytp-rotate-" + direction + "-button";
+      button.appendChild(GetRotateIconSVG(direction, true));
+      button.addEventListener(
+        "click",
+        () => {
+          let rotation =
+            +document.documentElement.getAttribute("data-ytp-rotation");
+          switch (direction) {
+            case "left":
+              rotation -= 90;
+              break;
+            case "right":
+              rotation += 90;
+              break;
+          }
+          rotation = (rotation + 360) % 360; // convert to position rotation between 0-360
+          document.documentElement.setAttribute("data-ytp-rotation", rotation);
+        },
+        false
+      );
+
+      controls.insertBefore(button, controls.querySelector("button"));
+      console.log("Inserted rotate " + direction + " button", button);
+    }
+
+    console.groupEnd();
+    return true;
+  } catch (error) {
+    console.error(
+      "Failed to insert video rotation buttons into player controls",
+      error
+    );
+    return false;
+  }
+};
+
 /**
  * Gets an SVG element for the requested Popout icon
  * @param {string} type the type of icon
@@ -268,6 +368,54 @@ const GetPopoutIconSVG = (type, shadow = false) => {
   for (const [name, path] of Object.entries(paths[type])) {
     const pathElement = document.createElementNS(svgNS, "path");
     pathElement.id = "ytp-svg-pop-" + name;
+    pathElement.setAttributeNS(null, "d", path);
+    pathElement.setAttributeNS(null, "class", "ytp-svg-fill");
+
+    if (shadow) {
+      const useElement = document.createElementNS(svgNS, "use");
+      useElement.setAttributeNS(null, "class", "ytp-svg-shadow");
+      useElement.setAttributeNS(
+        "http://www.w3.org/1999/xlink",
+        "href",
+        "#" + pathElement.id
+      );
+
+      iconSVG.appendChild(useElement);
+    }
+
+    iconSVG.appendChild(pathElement);
+  }
+
+  return iconSVG;
+};
+
+/**
+ * Gets an SVG element for the requested rotation icon
+ * @param {string} direction the direction of icon
+ * @param {boolean} shadow indicates if the YouTube shadows should be applied to the SVG paths
+ * @returns {HTMLElement}
+ */
+const GetRotateIconSVG = (direction, shadow = false) => {
+  const svgNS = "http://www.w3.org/2000/svg";
+
+  const iconSVG = document.createElementNS(svgNS, "svg");
+  iconSVG.setAttribute("width", "100%");
+  iconSVG.setAttribute("height", "100%");
+  iconSVG.setAttribute("viewBox", "0 0 24 24");
+  iconSVG.setAttribute("version", "1.1");
+
+  const paths = {
+    left: {
+      main: "M6.23706 2.0007C6.78897 2.02117 7.21978 2.48517 7.19931 3.03708L7.10148 5.67483C8.45455 4.62548 10.154 4.00001 12 4.00001C16.4183 4.00001 20 7.58174 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 11.4477 4.44772 11 5 11C5.55228 11 6 11.4477 6 12C6 15.3137 8.68629 18 12 18C15.3137 18 18 15.3137 18 12C18 8.68631 15.3137 6.00001 12 6.00001C10.4206 6.00001 8.98317 6.60994 7.91098 7.60891L11.3161 8.00677C11.8646 8.07087 12.2573 8.56751 12.1932 9.11607C12.1291 9.66462 11.6325 10.0574 11.0839 9.99326L5.88395 9.38567C5.36588 9.32514 4.98136 8.87659 5.00069 8.35536L5.20069 2.96295C5.22116 2.41104 5.68516 1.98023 6.23706 2.0007Z",
+    },
+    right: {
+      main: "M17.7629 2.0007C17.211 2.02117 16.7802 2.48517 16.8007 3.03708L16.8985 5.67483C15.5455 4.62548 13.846 4.00001 12 4.00001C7.58172 4.00001 4 7.58174 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 15.3137 15.3137 18 12 18C8.68629 18 6 15.3137 6 12C6 8.68631 8.68629 6.00001 12 6.00001C13.5794 6.00001 15.0168 6.60994 16.089 7.60891L12.6839 8.00677C12.1354 8.07087 11.7427 8.56751 11.8068 9.11607C11.8709 9.66462 12.3675 10.0574 12.9161 9.99326L18.1161 9.38567C18.6341 9.32514 19.0186 8.87659 18.9993 8.35536L18.7993 2.96295C18.7788 2.41104 18.3148 1.98023 17.7629 2.0007Z",
+    },
+  };
+
+  for (const [name, path] of Object.entries(paths[direction])) {
+    const pathElement = document.createElementNS(svgNS, "path");
+    pathElement.id = "ytp-svg-rotate-" + direction + "-" + name;
     pathElement.setAttributeNS(null, "d", path);
     pathElement.setAttributeNS(null, "class", "ytp-svg-fill");
 

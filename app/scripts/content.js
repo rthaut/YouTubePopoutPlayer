@@ -132,13 +132,23 @@ const SendWindowDimensionsAndPosition = async (action) => {
 
 (async () => {
   const isPopoutPlayer = IsPopoutPlayer(window.location);
+
+  // TODO: need a way to insert buttons and context menus into a **normal** video to open the popout player already rotated...
   InsertControlsAndWatch({
     openPopoutPlayerClickHandler: OpenPopoutPlayerControlClickEventHandler,
+    insertVideoRotationControls: isPopoutPlayer, // TODO: need to ALSO check a configurable option
   });
 
   browser.runtime.onMessage.addListener(OnRuntimeMessage);
 
   if (isPopoutPlayer) {
     RegisterEventListeners();
+    const query = new URLSearchParams(window.location.search);
+    if (query.has("rotation")) {
+      document.documentElement.setAttribute(
+        "data-ytp-rotation",
+        parseInt(query.get("rotation"), 10)
+      );
+    }
   }
 })();

@@ -44,5 +44,7 @@ export const OnCommandEventHandler = async (command) => {
         },
       });
       break;
+
+    // TODO: new commands for auto-rotating the video?
   }
 };

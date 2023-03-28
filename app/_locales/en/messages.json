@@ -43,9 +43,25 @@
     "message": "Open Playlist in Popout Player",
     "description": "The text for the context menu entry added to playlist links."
   },
+  "LinkContextMenuEntry_OpenVideoRotateLeft_Text": {
+    "message": "Open Video in Popout Player (Rotated Left)",
+    "description": "The text for the context menu entry added to video links to open the video rotated left by 90 degrees."
+  },
+  "LinkContextMenuEntry_OpenVideoRotateRight_Text": {
+    "message": "Open Video in Popout Player(Rotated Right)",
+    "description": "The text for the context menu entry added to video links to open the video rotated right by 90 degrees."
+  },
   "Notification_Error_FailedToOpen": {
     "message": "Failed to determine the video and/or playlist to open. The popout player will not be opened.",
     "description": "The text used for the notification that is displayed when the popout player cannot be opened."
+  },
+  "PopoutPlayerControls_RotateVideo_Left": {
+    "message": "Rotate video left by 90 degrees",
+    "description": "The title for the player controls button that rotates the video in the popout player to the left by 90 degrees."
+  },
+  "PopoutPlayerControls_RotateVideo_Right": {
+    "message": "Rotate video right by 90 degrees",
+    "description": "The title for the player controls button that rotates the video in the popout player to the right by 90 degrees."
   },
   "OptionsPageTitle": {
     "message": "$NAME$ Options",

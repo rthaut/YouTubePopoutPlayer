@@ -22,6 +22,27 @@ export const GetMenus = async () => {
     },
   ];
 
+  if (await Promise.resolve(true)) { // TODO: replace this with an actual configurable option
+    menus.push({
+      title: browser.i18n.getMessage(
+        "LinkContextMenuEntry_OpenVideoRotateLeft_Text"
+      ),
+      contexts: ["link"],
+      targetUrlPatterns: YOUTUBE_VIDEO_URL_PATTERNS,
+      onclick: (info, tab) =>
+        OpenPopoutBackgroundHelper(info.linkUrl, tab.id, true, false, 270),
+    });
+    menus.push({
+      title: browser.i18n.getMessage(
+        "LinkContextMenuEntry_OpenVideoRotateRight_Text"
+      ),
+      contexts: ["link"],
+      targetUrlPatterns: YOUTUBE_VIDEO_URL_PATTERNS,
+      onclick: (info, tab) =>
+        OpenPopoutBackgroundHelper(info.linkUrl, tab.id, true, false, 90),
+    });
+  }
+
   return menus;
 };
 
