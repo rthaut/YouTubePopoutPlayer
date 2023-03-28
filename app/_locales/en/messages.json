@@ -45,7 +45,7 @@
   },
   "Notification_Error_FailedToOpen": {
     "message": "Failed to determine the video and/or playlist to open. The popout player will not be opened.",
-    "description": "The text use for the notification that is displayed when the popout player cannot be opened."
+    "description": "The text used for the notification that is displayed when the popout player cannot be opened."
   },
   "OptionsPageTitle": {
     "message": "$NAME$ Options",

@@ -37,11 +37,12 @@ const CloseTab = async (enforceDomainRestriction = true) => {
 /**
  * Click event handler for the context menu entry and the controls button
  * @param {MouseEvent} event the original click event
+ * @param {object} [data={}] optional data for opening popout player
  */
-const CustomControlsClickEventHandler = async (event) => {
+const OpenPopoutPlayerControlClickEventHandler = async (event, data = {}) => {
   event.preventDefault();
 
-  await OpenPopoutForPageVideo();
+  await OpenPopoutForPageVideo(data);
 
   if (await Options.GetLocalOption("advanced", "close")) {
     await CloseTab(true);
@@ -54,9 +55,15 @@ const OnRuntimeMessage = async (message, sender) => {
   if (message.action !== undefined) {
     switch (message.action.toLowerCase()) {
       case "open-popout-via-command":
-        await OpenPopoutForPageVideo();
-        if (message.data?.closeTab) {
-          await CloseTab(message.data?.enforceDomainRestriction);
+        // eslint-disable-next-line no-case-declarations
+        const {
+          closeTab = false,
+          enforceDomainRestriction = true,
+          ...data
+        } = message.data ?? {};
+        await OpenPopoutForPageVideo(data);
+        if (closeTab) {
+          await CloseTab(enforceDomainRestriction);
         }
         break;
 
@@ -124,11 +131,14 @@ const SendWindowDimensionsAndPosition = async (action) => {
 };
 
 (async () => {
-  InsertControlsAndWatch(CustomControlsClickEventHandler);
+  const isPopoutPlayer = IsPopoutPlayer(window.location);
+  InsertControlsAndWatch({
+    openPopoutPlayerClickHandler: OpenPopoutPlayerControlClickEventHandler,
+  });
 
   browser.runtime.onMessage.addListener(OnRuntimeMessage);
 
-  if (IsPopoutPlayer(window.location)) {
+  if (isPopoutPlayer) {
     RegisterEventListeners();
   }
 })();

@@ -4,20 +4,26 @@ import {
   YOUTUBE_PLAYLIST_URL_PATTERNS,
 } from "../helpers/constants";
 
-export const MENUS = [
-  {
-    title: browser.i18n.getMessage("LinkContextMenuEntry_OpenVideo_Text"),
-    contexts: ["link"],
-    targetUrlPatterns: YOUTUBE_VIDEO_URL_PATTERNS,
-    onclick: (info, tab) => OpenPopoutBackgroundHelper(info.linkUrl, tab.id),
-  },
-  {
-    title: browser.i18n.getMessage("LinkContextMenuEntry_OpenPlaylist_Text"),
-    contexts: ["link"],
-    targetUrlPatterns: YOUTUBE_PLAYLIST_URL_PATTERNS,
-    onclick: (info, tab) => OpenPopoutBackgroundHelper(info.linkUrl, tab.id),
-  },
-];
+export const GetMenus = async () => {
+  const menus = [
+    {
+      title: browser.i18n.getMessage("LinkContextMenuEntry_OpenVideo_Text"),
+      contexts: ["link"],
+      targetUrlPatterns: YOUTUBE_VIDEO_URL_PATTERNS,
+      onclick: (info, tab) =>
+        OpenPopoutBackgroundHelper(info.linkUrl, tab.id, true, false),
+    },
+    {
+      title: browser.i18n.getMessage("LinkContextMenuEntry_OpenPlaylist_Text"),
+      contexts: ["link"],
+      targetUrlPatterns: YOUTUBE_PLAYLIST_URL_PATTERNS,
+      onclick: (info, tab) =>
+        OpenPopoutBackgroundHelper(info.linkUrl, tab.id, true, false),
+    },
+  ];
+
+  return menus;
+};
 
 /**
  * Initializes menus and event handlers
@@ -25,8 +31,9 @@ export const MENUS = [
 export const InitMenus = async () => {
   console.log("[Background] InitMenus()");
   try {
+    const menus = await GetMenus();
     await browser.contextMenus.removeAll();
-    MENUS.forEach((menu) => browser.contextMenus.create(menu));
+    menus.forEach((menu) => browser.contextMenus.create(menu));
   } catch (ex) {
     console.error("Failed to initialize context menus", ex);
   }

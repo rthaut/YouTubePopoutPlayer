@@ -2,35 +2,38 @@ import Options from "../helpers/options";
 import { IsPopoutPlayer } from "../helpers/utils";
 
 /**
- * @callback ControlsClickEventHandler
+ * @callback PopoutControlClickEventHandler
  * @param {MouseEvent} event
+ * @param {object} [data={}] optional data for opening popout player
  */
 
 /**
- * Inserts the various control elements and watches the DOM for changes and re-inserts controls as needed
- * @param {ControlsClickEventHandler} controlsClickEventHandler the click event handler function for the controls
+ * Inserts the various control elements and watches the DOM for changes to re-insert controls as needed
+ * @param {object} params
+ * @param {PopoutControlClickEventHandler} params.openPopoutPlayerClickHandler the click event handler for the popout player controls
  */
-export const InsertControlsAndWatch = async (controlsClickEventHandler) => {
-  await InsertControls(controlsClickEventHandler);
-  WatchForPageChanges(controlsClickEventHandler);
+export const InsertControlsAndWatch = async ({
+  openPopoutPlayerClickHandler,
+}) => {
+  await InsertControls(openPopoutPlayerClickHandler);
+  WatchForPageChanges(openPopoutPlayerClickHandler);
 };
-export default InsertControlsAndWatch;
 
 /**
  * Inserts the various control elements
- * @param {ControlsClickEventHandler} controlsClickEventHandler the click event handler function for the controls
+ * @param {PopoutControlClickEventHandler} openPopoutPlayerClickHandler the click event handler for the controls
  */
-export const InsertControls = async (controlsClickEventHandler) => {
+export const InsertControls = async (openPopoutPlayerClickHandler) => {
   console.group("[YouTubeCustomControls] InsertControls()");
 
   try {
-    InsertContextMenuEntry(controlsClickEventHandler);
+    InsertPopoutEntryIntoContextMenu(openPopoutPlayerClickHandler);
   } catch (error) {
     console.error("Failed to insert context menu entry control", error);
   }
 
   try {
-    await InsertPlayerControlsButton(controlsClickEventHandler);
+    await InsertPopoutButtonIntoPlayerControls(openPopoutPlayerClickHandler);
   } catch (error) {
     console.error("Failed to insert button control", error);
   }
@@ -40,14 +43,15 @@ export const InsertControls = async (controlsClickEventHandler) => {
 
 /**
  * Watches the DOM for changes and re-inserts controls as needed
- * @param {ControlsClickEventHandler} controlsClickEventHandler the click event handler function for the controls
+ * @param {PopoutControlClickEventHandler} openPopoutPlayerClickHandler the click event handler for the controls
  */
-export const WatchForPageChanges = (controlsClickEventHandler) => {
+export const WatchForPageChanges = (openPopoutPlayerClickHandler) => {
   console.group("[YouTubeCustomControls] WatchForPageChanges()");
 
   const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.addedNodes != null) {
+    mutations
+      .filter((mutation) => mutation.addedNodes !== null)
+      .forEach((mutation) => {
         for (const node of mutation.addedNodes) {
           switch (node.className) {
             case "ytp-popup ytp-contextmenu":
@@ -55,7 +59,7 @@ export const WatchForPageChanges = (controlsClickEventHandler) => {
                 "[YouTubeCustomControls] WatchForPageChanges() :: Mutation observed for context menu",
                 node
               );
-              InsertContextMenuEntry(controlsClickEventHandler);
+              InsertPopoutEntryIntoContextMenu(openPopoutPlayerClickHandler);
               break;
 
             case "ytp-right-controls":
@@ -63,12 +67,13 @@ export const WatchForPageChanges = (controlsClickEventHandler) => {
                 "[YouTubeCustomControls] WatchForPageChanges() :: Mutation observed for player controls",
                 node
               );
-              InsertPlayerControlsButton(controlsClickEventHandler);
+              InsertPopoutButtonIntoPlayerControls(
+                openPopoutPlayerClickHandler
+              );
               break;
           }
         }
-      }
-    });
+      });
   });
 
   observer.observe(document.body, {
@@ -82,9 +87,9 @@ export const WatchForPageChanges = (controlsClickEventHandler) => {
 
 /**
  * Appends a new entry to the context (right-click) menu of the YouTube video player
- * @param {ControlsClickEventHandler} clickEventHandler the click event handler function for the content menu entry
+ * @param {PopoutControlClickEventHandler} clickEventHandler the click event handler for the content menu entry
  */
-const InsertContextMenuEntry = (clickEventHandler) => {
+const InsertPopoutEntryIntoContextMenu = (clickEventHandler) => {
   console.group("[YouTubeCustomControls] InsertControls()");
 
   const contextmenu = document.getElementsByClassName("ytp-contextmenu")[0];
@@ -126,7 +131,11 @@ const InsertContextMenuEntry = (clickEventHandler) => {
   menuItem.appendChild(menuItemIcon);
   menuItem.appendChild(menuItemLabel);
   menuItem.appendChild(menuItemContent);
-  menuItem.addEventListener("click", clickEventHandler, false);
+  menuItem.addEventListener(
+    "click",
+    (event) => clickEventHandler(event),
+    false
+  );
 
   const menu = contextmenu
     .getElementsByClassName("ytp-panel")[0]
@@ -151,7 +160,7 @@ const InsertContextMenuEntry = (clickEventHandler) => {
   contextMenuPanel.style.height = height + "px";
   contextMenuPanelMenu.style.height = height + "px";
 
-  console.log("Inserted Context Menu Item", menuItem);
+  console.log("Inserted open popout player context menu item", menuItem);
   console.groupEnd();
   return true;
 };
@@ -159,9 +168,9 @@ const InsertContextMenuEntry = (clickEventHandler) => {
 /**
  * Adds a new button to the YouTube video player controls (in the lower-right corner)
  * This method checks the configurable "controls" option, so the button is only inserted when appropriate
- * @param {ControlsClickEventHandler} clickEventHandler the click event handler function for the button
+ * @param {PopoutControlClickEventHandler} clickEventHandler the click event handler for the button
  */
-const InsertPlayerControlsButton = async (clickEventHandler) => {
+const InsertPopoutButtonIntoPlayerControls = async (clickEventHandler) => {
   console.group("[YouTubeCustomControls] InsertPlayerControlsButton()");
 
   if (IsPopoutPlayer(window.location)) {
@@ -208,7 +217,11 @@ const InsertPlayerControlsButton = async (clickEventHandler) => {
   );
   playerButton.id = "popout-player-control-button";
   playerButton.appendChild(GetPopoutIconSVG("button", true));
-  playerButton.addEventListener("click", clickEventHandler, false);
+  playerButton.addEventListener(
+    "click",
+    (event) => clickEventHandler(event),
+    false
+  );
 
   // TODO: this doesn't work (`fullScreenButton["onmouseover"]` is null); need another way to implement the fancy tooltip
   playerButton.addEventListener(
@@ -219,7 +232,7 @@ const InsertPlayerControlsButton = async (clickEventHandler) => {
 
   controls.insertBefore(playerButton, fullScreenButton);
 
-  console.log("Inserted Button", playerButton);
+  console.log("Inserted open popout player button", playerButton);
   console.groupEnd();
   return true;
 };

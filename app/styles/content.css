@@ -1,7 +1,6 @@
 /**
- * Animate the popout player button's icon
- * NOTE: currently not in use; the shadow doesn't move with the path, so it looks weird
- * A build step would need to be introduced to copy this file to /dist
+ * Animations for the popout player button's icon
+ * These are taken from the CSS for the standard fullscreen button
  */
 #ytp-svg-pop-arrow,
 #ytp-svg-pop-popout {
@@ -12,7 +11,7 @@
             transform: none;
 }
 
-@keyframes ytp-svg-pop-popout-animation {
+@keyframes ytp-svg-pop-animation {
     50% {
         -webkit-transform: translate(1px, -1px);
            -moz-transform: translate(1px, -1px);
@@ -24,9 +23,9 @@
 
 .ytp-popout-button:hover #ytp-svg-pop-arrow,
 .ytp-popout-button:hover #ytp-svg-pop-popout {
-    -webkit-animation: ytp-svg-pop-popout-animation .4s cubic-bezier(.25, .1, .25, 1);
-       -moz-animation: ytp-svg-pop-popout-animation .4s cubic-bezier(.25, .1, .25, 1);
-        -ms-animation: ytp-svg-pop-popout-animation .4s cubic-bezier(.25, .1, .25, 1);
-         -o-animation: ytp-svg-pop-popout-animation .4s cubic-bezier(.25, .1, .25, 1);
-            animation: ytp-svg-pop-popout-animation .4s cubic-bezier(.25, .1, .25, 1);
+    -webkit-animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
+       -moz-animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
+        -ms-animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
+         -o-animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
+            animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
 }

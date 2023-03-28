@@ -21,9 +21,9 @@ const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it con
 /**
  * Helper function to open the popout player from various points in the background script
  * @param {string} url the URL containing a video ID and/or playlist
- * @param {number} tabId the ID of the original tab
- * @param {boolean} allowCloseTab if the original tab can be closed (depending on the user's preference)
- * @param {boolean} allowCloseTabOnAnyDomain if the original tab can be closed regardless of which domain it is on
+ * @param {number} [tabId=-1] the ID of the original tab
+ * @param {boolean} [allowCloseTab=true] if the original tab can be closed (depending on the user's preference)
+ * @param {boolean} [allowCloseTabOnAnyDomain=false] if the original tab can be closed regardless of which domain it is on
  * @returns {Promise<boolean>} if the popout player was opened
  */
 export const OpenPopoutBackgroundHelper = async (
@@ -33,8 +33,8 @@ export const OpenPopoutBackgroundHelper = async (
   allowCloseTabOnAnyDomain = false
 ) => {
   console.log("[Background] OpenPopoutBackgroundHelper()", {
-    id,
-    list,
+    url,
+    tabId,
     allowCloseTab,
     allowCloseTabOnAnyDomain,
   });

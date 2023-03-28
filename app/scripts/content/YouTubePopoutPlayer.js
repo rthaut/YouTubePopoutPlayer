@@ -56,7 +56,10 @@ export const GetVideoPlayerInfo = () => {
  * @returns {Promise<boolean>} if the popout was opened successfully
  */
 export const OpenPopoutFromContentScript = async (data) => {
-  console.log("[Content] YouTubePopoutPlayer OpenPopoutFromContentScript()");
+  console.log(
+    "[Content] YouTubePopoutPlayer OpenPopoutFromContentScript()",
+    data
+  );
 
   try {
     const response = await browser.runtime.sendMessage({
@@ -84,24 +87,29 @@ export const OpenPopoutFromContentScript = async (data) => {
 
 /**
  * Opens the popout player (via a request to the background script)
+ * @param {object} [data={}] optional data to pass to background script, overrides gathered data
  * @returns {Promise<boolean>} if the popout was opened successfully
  */
-export const OpenPopoutForPageVideo = async () => {
-  console.log("[Content] YouTubePopoutPlayer OpenPopoutForPageVideo()");
+export const OpenPopoutForPageVideo = async (data = {}) => {
+  console.log("[Content] YouTubePopoutPlayer OpenPopoutForPageVideo()", data);
 
-  const data = {
-    id: GetVideoIDFromURL(window.location.href),
-    list: GetPlaylistIDFromURL(window.location.href),
-  };
+  const id = GetVideoIDFromURL(window.location.href);
+  const list = GetPlaylistIDFromURL(window.location.href);
 
-  const playerInfo = GetVideoPlayerInfo();
-  if (playerInfo) {
-    data.time = playerInfo.time;
-    data.originalVideoWidth = playerInfo.width;
-    data.originalVideoHeight = playerInfo.height;
-  }
+  const {
+    time,
+    width: originalVideoWidth,
+    height: originalVideoHeight,
+  } = GetVideoPlayerInfo() ?? {};
 
-  const success = await OpenPopoutFromContentScript(data);
+  const success = await OpenPopoutFromContentScript({
+    id,
+    list,
+    time,
+    originalVideoWidth,
+    originalVideoHeight,
+    ...data,
+  });
 
   if (success) {
     const paused = await PauseVideoPlayer();
