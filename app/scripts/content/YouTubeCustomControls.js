@@ -26,17 +26,9 @@ export const InsertControlsAndWatch = async ({
 export const InsertControls = async (openPopoutPlayerClickHandler) => {
   console.group("[YouTubeCustomControls] InsertControls()");
 
-  try {
-    InsertPopoutEntryIntoContextMenu(openPopoutPlayerClickHandler);
-  } catch (error) {
-    console.error("Failed to insert context menu entry control", error);
-  }
+  InsertPopoutEntryIntoContextMenu(openPopoutPlayerClickHandler);
 
-  try {
-    await InsertPopoutButtonIntoPlayerControls(openPopoutPlayerClickHandler);
-  } catch (error) {
-    console.error("Failed to insert button control", error);
-  }
+  InsertPopoutButtonIntoPlayerControls(openPopoutPlayerClickHandler);
 
   console.groupEnd();
 };
@@ -90,79 +82,87 @@ export const WatchForPageChanges = (openPopoutPlayerClickHandler) => {
  * @param {PopoutControlClickEventHandler} clickEventHandler the click event handler for the content menu entry
  */
 const InsertPopoutEntryIntoContextMenu = (clickEventHandler) => {
-  console.group("[YouTubeCustomControls] InsertControls()");
+  try {
+    console.group("[YouTubeCustomControls] InsertControls()");
 
-  const contextmenu = document.getElementsByClassName("ytp-contextmenu")[0];
+    const contextmenu = document.getElementsByClassName("ytp-contextmenu")[0];
 
-  if (!contextmenu) {
-    console.info("Missing context menu");
+    if (!contextmenu) {
+      console.info("Missing context menu");
+      console.groupEnd();
+      return false;
+    }
+
+    let menuItem = document.getElementById("popout-player-context-menu-item");
+    if (menuItem) {
+      console.info("#popout-player-context-menu-item already exists", menuItem);
+      console.groupEnd();
+      return false;
+    }
+
+    menuItem = document.createElement("div");
+    menuItem.className = "ytp-menuitem";
+    menuItem.setAttribute("aria-haspopup", false);
+    menuItem.setAttribute("role", "menuitem");
+    menuItem.setAttribute("tabindex", 0);
+    menuItem.id = "popout-player-context-menu-item";
+
+    const menuItemIcon = document.createElement("div");
+    menuItemIcon.className = "ytp-menuitem-icon";
+
+    menuItemIcon.appendChild(GetPopoutIconSVG("menu", false));
+
+    const menuItemLabel = document.createElement("div");
+    menuItemLabel.className = "ytp-menuitem-label";
+    menuItemLabel.innerText = browser.i18n.getMessage(
+      "ContextMenuEntryLabel_PopoutPlayer"
+    );
+
+    const menuItemContent = document.createElement("div");
+    menuItemContent.className = "ytp-menuitem-content";
+
+    menuItem.appendChild(menuItemIcon);
+    menuItem.appendChild(menuItemLabel);
+    menuItem.appendChild(menuItemContent);
+    menuItem.addEventListener(
+      "click",
+      (event) => clickEventHandler(event),
+      false
+    );
+
+    const menu = contextmenu
+      .getElementsByClassName("ytp-panel")[0]
+      .getElementsByClassName("ytp-panel-menu")[0];
+
+    menu.appendChild(menuItem);
+    console.info("Inserting context menu entry", menuItem);
+
+    const contextMenus = document.getElementsByClassName("ytp-contextmenu");
+    const contextMenu = contextMenus[contextMenus.length - 1];
+    const contextMenuPanel = contextMenu.getElementsByClassName("ytp-panel")[0];
+    const contextMenuPanelMenu =
+      contextMenuPanel.getElementsByClassName("ytp-panel-menu")[0];
+
+    const height = contextMenu.offsetHeight + menuItem.offsetHeight;
+    console.info(
+      "Modifying context menu height to " + height + "px",
+      contextMenu
+    );
+
+    contextMenu.style.height = height + "px";
+    contextMenuPanel.style.height = height + "px";
+    contextMenuPanelMenu.style.height = height + "px";
+
+    console.log("Inserted open popout player context menu item", menuItem);
     console.groupEnd();
+    return true;
+  } catch (error) {
+    console.error(
+      "Failed to insert popout player entry into context menu",
+      error
+    );
     return false;
   }
-
-  let menuItem = document.getElementById("popout-player-context-menu-item");
-  if (menuItem) {
-    console.info("#popout-player-context-menu-item already exists", menuItem);
-    console.groupEnd();
-    return false;
-  }
-
-  menuItem = document.createElement("div");
-  menuItem.className = "ytp-menuitem";
-  menuItem.setAttribute("aria-haspopup", false);
-  menuItem.setAttribute("role", "menuitem");
-  menuItem.setAttribute("tabindex", 0);
-  menuItem.id = "popout-player-context-menu-item";
-
-  const menuItemIcon = document.createElement("div");
-  menuItemIcon.className = "ytp-menuitem-icon";
-
-  menuItemIcon.appendChild(GetPopoutIconSVG("menu", false));
-
-  const menuItemLabel = document.createElement("div");
-  menuItemLabel.className = "ytp-menuitem-label";
-  menuItemLabel.innerText = browser.i18n.getMessage(
-    "ContextMenuEntryLabel_PopoutPlayer"
-  );
-
-  const menuItemContent = document.createElement("div");
-  menuItemContent.className = "ytp-menuitem-content";
-
-  menuItem.appendChild(menuItemIcon);
-  menuItem.appendChild(menuItemLabel);
-  menuItem.appendChild(menuItemContent);
-  menuItem.addEventListener(
-    "click",
-    (event) => clickEventHandler(event),
-    false
-  );
-
-  const menu = contextmenu
-    .getElementsByClassName("ytp-panel")[0]
-    .getElementsByClassName("ytp-panel-menu")[0];
-
-  menu.appendChild(menuItem);
-  console.info("Inserting context menu entry", menuItem);
-
-  const contextMenus = document.getElementsByClassName("ytp-contextmenu");
-  const contextMenu = contextMenus[contextMenus.length - 1];
-  const contextMenuPanel = contextMenu.getElementsByClassName("ytp-panel")[0];
-  const contextMenuPanelMenu =
-    contextMenuPanel.getElementsByClassName("ytp-panel-menu")[0];
-
-  const height = contextMenu.offsetHeight + menuItem.offsetHeight;
-  console.info(
-    "Modifying context menu height to " + height + "px",
-    contextMenu
-  );
-
-  contextMenu.style.height = height + "px";
-  contextMenuPanel.style.height = height + "px";
-  contextMenuPanelMenu.style.height = height + "px";
-
-  console.log("Inserted open popout player context menu item", menuItem);
-  console.groupEnd();
-  return true;
 };
 
 /**
@@ -171,70 +171,81 @@ const InsertPopoutEntryIntoContextMenu = (clickEventHandler) => {
  * @param {PopoutControlClickEventHandler} clickEventHandler the click event handler for the button
  */
 const InsertPopoutButtonIntoPlayerControls = async (clickEventHandler) => {
-  console.group("[YouTubeCustomControls] InsertPlayerControlsButton()");
+  try {
+    console.group("[YouTubeCustomControls] InsertPlayerControlsButton()");
 
-  if (IsPopoutPlayer(window.location)) {
-    const controls = await Options.GetLocalOption("behavior", "controls");
-    if (controls.toLowerCase() !== "extended") {
-      console.info('Popout player controls option is NOT set to "extended"');
+    if (IsPopoutPlayer(window.location)) {
+      const controls = await Options.GetLocalOption("behavior", "controls");
+      if (controls.toLowerCase() !== "extended") {
+        console.info('Popout player controls option is NOT set to "extended"');
+        console.groupEnd();
+        return false;
+      }
+    }
+
+    const controls = document.getElementsByClassName("ytp-right-controls")[0];
+    if (!controls) {
+      console.info("Missing player controls");
       console.groupEnd();
       return false;
     }
-  }
 
-  const controls = document.getElementsByClassName("ytp-right-controls")[0];
-  if (!controls) {
-    console.info("Missing player controls");
+    let playerButton = controls.getElementsByClassName("ytp-popout-button")[0];
+    if (playerButton) {
+      console.info(
+        "#popout-player-control-button already exists",
+        playerButton
+      );
+      console.groupEnd();
+      return false;
+    }
+
+    const fullScreenButton = controls.getElementsByClassName(
+      "ytp-fullscreen-button"
+    )[0];
+    if (!fullScreenButton) {
+      console.info("Missing player controls full screen button");
+      console.groupEnd();
+      return false;
+    }
+
+    playerButton = document.createElement("button");
+    playerButton.className = ["ytp-popout-button", "ytp-button"].join(" ");
+    playerButton.setAttribute(
+      "aria-label",
+      browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer")
+    );
+    playerButton.setAttribute(
+      "title",
+      browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer")
+    );
+    playerButton.id = "popout-player-control-button";
+    playerButton.appendChild(GetPopoutIconSVG("button", true));
+    playerButton.addEventListener(
+      "click",
+      (event) => clickEventHandler(event),
+      false
+    );
+
+    // TODO: this doesn't work (`fullScreenButton["onmouseover"]` is null); need another way to implement the fancy tooltip
+    playerButton.addEventListener(
+      "mouseover",
+      fullScreenButton["onmouseover"],
+      false
+    );
+
+    controls.insertBefore(playerButton, fullScreenButton);
+
+    console.log("Inserted open popout player button", playerButton);
     console.groupEnd();
+    return true;
+  } catch (error) {
+    console.error(
+      "Failed to insert popout player button into player controls",
+      error
+    );
     return false;
   }
-
-  let playerButton = controls.getElementsByClassName("ytp-popout-button")[0];
-  if (playerButton) {
-    console.info("#popout-player-control-button already exists", playerButton);
-    console.groupEnd();
-    return false;
-  }
-
-  const fullScreenButton = controls.getElementsByClassName(
-    "ytp-fullscreen-button"
-  )[0];
-  if (!fullScreenButton) {
-    console.info("Missing player controls full screen button");
-    console.groupEnd();
-    return false;
-  }
-
-  playerButton = document.createElement("button");
-  playerButton.className = ["ytp-popout-button", "ytp-button"].join(" ");
-  playerButton.setAttribute(
-    "aria-label",
-    browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer")
-  );
-  playerButton.setAttribute(
-    "title",
-    browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer")
-  );
-  playerButton.id = "popout-player-control-button";
-  playerButton.appendChild(GetPopoutIconSVG("button", true));
-  playerButton.addEventListener(
-    "click",
-    (event) => clickEventHandler(event),
-    false
-  );
-
-  // TODO: this doesn't work (`fullScreenButton["onmouseover"]` is null); need another way to implement the fancy tooltip
-  playerButton.addEventListener(
-    "mouseover",
-    fullScreenButton["onmouseover"],
-    false
-  );
-
-  controls.insertBefore(playerButton, fullScreenButton);
-
-  console.log("Inserted open popout player button", playerButton);
-  console.groupEnd();
-  return true;
 };
 
 /**
