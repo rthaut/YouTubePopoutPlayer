@@ -54,6 +54,18 @@
         "default": "Alt+Shift+PageDown"
       },
       "description": "__MSG_OpenPopoutNoCloseCommandDescription__"
+    },
+    "rotate-video-left": {
+      "suggested_key": {
+        "default": "Alt+Shift+A"
+      },
+      "description": "__MSG_RotateVideoLeftCommandDescription__"
+    },
+    "rotate-video-right": {
+      "suggested_key": {
+        "default": "Alt+Shift+D"
+      },
+      "description": "__MSG_RotateVideoRightCommandDescription__"
     }
   },
   "content_scripts": [

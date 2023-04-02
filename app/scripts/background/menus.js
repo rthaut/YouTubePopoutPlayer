@@ -1,8 +1,11 @@
 import { OpenPopoutBackgroundHelper } from "./popout";
+
 import {
   YOUTUBE_VIDEO_URL_PATTERNS,
   YOUTUBE_PLAYLIST_URL_PATTERNS,
 } from "../helpers/constants";
+
+import Options from "../helpers/options";
 
 export const GetMenus = async () => {
   const menus = [
@@ -22,7 +25,11 @@ export const GetMenus = async () => {
     },
   ];
 
-  if (await Promise.resolve(true)) { // TODO: replace this with an actual configurable option
+  const showRotationMenus = await Options.GetLocalOption(
+    "behavior",
+    "showRotationMenus"
+  );
+  if (showRotationMenus !== false) {
     menus.push({
       title: browser.i18n.getMessage(
         "LinkContextMenuEntry_OpenVideoRotateLeft_Text"
@@ -51,11 +58,23 @@ export const GetMenus = async () => {
  */
 export const InitMenus = async () => {
   console.log("[Background] InitMenus()");
-  try {
-    const menus = await GetMenus();
-    await browser.contextMenus.removeAll();
-    menus.forEach((menu) => browser.contextMenus.create(menu));
-  } catch (ex) {
-    console.error("Failed to initialize context menus", ex);
-  }
+
+  const createMenus = async (reset = true) => {
+    try {
+      if (reset) {
+        await browser.contextMenus.removeAll();
+      }
+      const menus = await GetMenus();
+      menus.forEach((menu) => browser.contextMenus.create(menu));
+    } catch (ex) {
+      console.error("Failed to initialize context menus", ex);
+    }
+  };
+
+  createMenus();
+  browser.storage.local.onChanged.addListener((changes) => {
+    if (Object.keys(changes).includes("behavior.showRotationMenus")) {
+      createMenus(true);
+    }
+  });
 };

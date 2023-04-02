@@ -27,6 +27,14 @@
     "message": "Open popout player without closing the current window/tab",
     "description": "The description for the 'open-popout-no-close-command' extension command"
   },
+  "RotateVideoLeftCommandDescription": {
+    "message": "Rotate the current video to the left by 90 degrees",
+    "description": "The description for the 'rotate-video-left' extension command"
+  },
+  "RotateVideoRightCommandDescription": {
+    "message": "Rotate the current video to the right by 90 degrees",
+    "description": "The description for the 'rotate-video-right' extension command"
+  },
   "ContextMenuEntryLabel_PopoutPlayer": {
     "message": "Popout Player",
     "description": "The label for the context menu entry that opens the popout player."
@@ -160,6 +168,18 @@
   },
   "OptionsBehaviorLoopDescription": {
     "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
+  },
+  "OptionsBehaviorShowRotationButtonsLabel": {
+    "message": "Show Rotation Buttons"
+  },
+  "OptionsBehaviorShowRotationButtonsDescription": {
+    "message": "This setting controls whether or not buttons to rotate the video left or right are shown in the popout player. <strong>The default for this setting is enabled.</strong>"
+  },
+  "OptionsBehaviorShowRotationMenusLabel": {
+    "message": "Show Rotation Menu Items"
+  },
+  "OptionsBehaviorShowRotationMenusDescription": {
+    "message": "This setting controls whether or not context (right-click) menu options to open the popout player initially rotated left or right are shown on video links. <strong>The default for this setting is disabled.</strong>"
   },
   "OptionsSettingDisabled": {
     "message": "This setting is not available when the following setting(s) are enabled: <strong>$SETTINGS$</strong>",

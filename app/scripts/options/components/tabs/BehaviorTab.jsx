@@ -136,6 +136,33 @@ export default function BehaviorTab() {
     );
   }
 
+  function RotationControls() {
+    return (
+      <Box>
+        <BasicToggleControl
+          domain={DOMAIN}
+          optionName="showRotationButtons"
+          label={browser.i18n.getMessage(
+            "OptionsBehaviorShowRotationButtonsLabel"
+          )}
+          description={browser.i18n.getMessage(
+            "OptionsBehaviorShowRotationButtonsDescription"
+          )}
+        />
+        <BasicToggleControl
+          domain={DOMAIN}
+          optionName="showRotationMenus"
+          label={browser.i18n.getMessage(
+            "OptionsBehaviorShowRotationMenusLabel"
+          )}
+          description={browser.i18n.getMessage(
+            "OptionsBehaviorShowRotationMenusDescription"
+          )}
+        />
+      </Box>
+    );
+  }
+
   return (
     <Box>
       <TabPanelHeader
@@ -160,6 +187,10 @@ export default function BehaviorTab() {
       <Divider />
       <Box marginY={2}>
         <LoopControl />
+      </Box>
+      <Divider />
+      <Box marginY={2}>
+        <RotationControls />
       </Box>
     </Box>
   );

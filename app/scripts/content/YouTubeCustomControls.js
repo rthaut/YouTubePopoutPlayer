@@ -1,69 +1,53 @@
+import {
+  OpenPopoutForPageVideo,
+  RotateVideoPlayer,
+} from "./YouTubePopoutPlayer";
+import { CloseTab } from "../content";
+
 import Options from "../helpers/options";
 import { IsPopoutPlayer } from "../helpers/utils";
 
 /**
- * @callback PopoutControlClickEventHandler
- * @param {MouseEvent} event
- * @param {object} [data={}] optional data for opening popout player
+ * Click event handler for the context menu entry and the controls button
+ * @param {MouseEvent} event the original click event
  */
+const OpenPopoutPlayerControlsClickEventHandler = async (event) => {
+  event.preventDefault();
+
+  await OpenPopoutForPageVideo();
+
+  if (await Options.GetLocalOption("advanced", "close")) {
+    await CloseTab(true);
+  }
+};
 
 /**
  * Inserts the various control elements and watches the DOM for changes to re-insert controls as needed
- * @param {object} params
- * @param {PopoutControlClickEventHandler} params.openPopoutPlayerClickHandler the click event handler for the popout player controls
- * @param {boolean} [params.insertVideoRotationControls=false] if the video rotation controls should be inserted
  */
-export const InsertControlsAndWatch = async ({
-  openPopoutPlayerClickHandler,
-  insertVideoRotationControls = false,
-}) => {
-  await InsertControls(
-    openPopoutPlayerClickHandler,
-    insertVideoRotationControls
-  );
-  WatchForPageChanges(
-    openPopoutPlayerClickHandler,
-    insertVideoRotationControls
-  );
+export const InsertControlsAndWatch = async () => {
+  await InsertControls();
+  WatchForPageChanges();
 };
 
 /**
  * Inserts the various control elements
- * @param {PopoutControlClickEventHandler} openPopoutPlayerClickHandler the click event handler for the controls
- * @param {boolean} [insertVideoRotationControls=false] if the video rotation controls should be inserted
  */
-export const InsertControls = async (
-  openPopoutPlayerClickHandler,
-  insertVideoRotationControls = false
-) => {
+export const InsertControls = async () => {
   console.group("[YouTubeCustomControls] InsertControls()");
 
-  InsertPopoutEntryIntoContextMenu(openPopoutPlayerClickHandler);
-
-  InsertPopoutButtonIntoPlayerControls(openPopoutPlayerClickHandler);
-
-  if (insertVideoRotationControls) {
-    InsertRotationButtonsIntoPlayerControls();
-  }
-
-  console.groupEnd();
+  InsertPopoutEntryIntoContextMenu();
+  await InsertPopoutButtonIntoPlayerControls();
+  await InsertRotationButtonsIntoPlayerControls();
 };
 
 /**
  * Watches the DOM for changes and re-inserts controls as needed
- * @param {PopoutControlClickEventHandler} openPopoutPlayerClickHandler the click event handler for the controls
- * @param {boolean} [insertVideoRotationControls=false] if the video rotation controls should be re-inserted
  */
-export const WatchForPageChanges = (
-  openPopoutPlayerClickHandler,
-  insertVideoRotationControls = false
-) => {
-  console.group("[YouTubeCustomControls] WatchForPageChanges()");
-
+export const WatchForPageChanges = () => {
   const observer = new MutationObserver((mutations) => {
     mutations
       .filter((mutation) => mutation.addedNodes !== null)
-      .forEach((mutation) => {
+      .forEach(async (mutation) => {
         for (const node of mutation.addedNodes) {
           switch (node.className) {
             case "ytp-popup ytp-contextmenu":
@@ -71,7 +55,7 @@ export const WatchForPageChanges = (
                 "[YouTubeCustomControls] WatchForPageChanges() :: Mutation observed for context menu",
                 node
               );
-              InsertPopoutEntryIntoContextMenu(openPopoutPlayerClickHandler);
+              InsertPopoutEntryIntoContextMenu();
               break;
 
             case "ytp-right-controls":
@@ -79,12 +63,8 @@ export const WatchForPageChanges = (
                 "[YouTubeCustomControls] WatchForPageChanges() :: Mutation observed for player controls",
                 node
               );
-              InsertPopoutButtonIntoPlayerControls(
-                openPopoutPlayerClickHandler
-              );
-              if (insertVideoRotationControls) {
-                InsertRotationButtonsIntoPlayerControls();
-              }
+              await InsertPopoutButtonIntoPlayerControls();
+              await InsertRotationButtonsIntoPlayerControls();
               break;
           }
         }
@@ -95,31 +75,22 @@ export const WatchForPageChanges = (
     childList: true,
     subtree: true,
   });
-
-  console.log("Mutation Observer watching for changes", observer);
-  console.groupEnd();
 };
 
 /**
  * Appends a new entry to the context (right-click) menu of the YouTube video player
- * @param {PopoutControlClickEventHandler} clickEventHandler the click event handler for the content menu entry
  */
-const InsertPopoutEntryIntoContextMenu = (clickEventHandler) => {
+const InsertPopoutEntryIntoContextMenu = () => {
   try {
-    console.group("[YouTubeCustomControls] InsertControls()");
-
     const contextmenu = document.getElementsByClassName("ytp-contextmenu")[0];
-
     if (!contextmenu) {
-      console.info("Missing context menu");
-      console.groupEnd();
+      console.warn("Missing context menu");
       return false;
     }
 
     let menuItem = document.getElementById("popout-player-context-menu-item");
     if (menuItem) {
-      console.info("#popout-player-context-menu-item already exists", menuItem);
-      console.groupEnd();
+      console.warn("#popout-player-context-menu-item already exists", menuItem);
       return false;
     }
 
@@ -149,7 +120,7 @@ const InsertPopoutEntryIntoContextMenu = (clickEventHandler) => {
     menuItem.appendChild(menuItemContent);
     menuItem.addEventListener(
       "click",
-      (event) => clickEventHandler(event),
+      OpenPopoutPlayerControlsClickEventHandler,
       false
     );
 
@@ -158,7 +129,6 @@ const InsertPopoutEntryIntoContextMenu = (clickEventHandler) => {
       .getElementsByClassName("ytp-panel-menu")[0];
 
     menu.appendChild(menuItem);
-    console.info("Inserting context menu entry", menuItem);
 
     const contextMenus = document.getElementsByClassName("ytp-contextmenu");
     const contextMenu = contextMenus[contextMenus.length - 1];
@@ -167,18 +137,9 @@ const InsertPopoutEntryIntoContextMenu = (clickEventHandler) => {
       contextMenuPanel.getElementsByClassName("ytp-panel-menu")[0];
 
     const height = contextMenu.offsetHeight + menuItem.offsetHeight;
-    console.info(
-      "Modifying context menu height to " + height + "px",
-      contextMenu
-    );
-
     contextMenu.style.height = height + "px";
     contextMenuPanel.style.height = height + "px";
     contextMenuPanelMenu.style.height = height + "px";
-
-    console.log("Inserted open popout player context menu item", menuItem);
-    console.groupEnd();
-    return true;
   } catch (error) {
     console.error(
       "Failed to insert popout player entry into context menu",
@@ -186,40 +147,43 @@ const InsertPopoutEntryIntoContextMenu = (clickEventHandler) => {
     );
     return false;
   }
+
+  return true;
 };
 
 /**
  * Adds a new button to the YouTube video player controls (in the lower-right corner)
  * This method checks the configurable "controls" option, so the button is only inserted when appropriate
- * @param {PopoutControlClickEventHandler} clickEventHandler the click event handler for the button
  */
-const InsertPopoutButtonIntoPlayerControls = async (clickEventHandler) => {
-  try {
-    console.group("[YouTubeCustomControls] InsertPlayerControlsButton()");
-
-    if (IsPopoutPlayer(window.location)) {
+const InsertPopoutButtonIntoPlayerControls = async () => {
+  if (IsPopoutPlayer(window.location)) {
+    try {
       const controls = await Options.GetLocalOption("behavior", "controls");
       if (controls.toLowerCase() !== "extended") {
         console.info('Popout player controls option is NOT set to "extended"');
-        console.groupEnd();
         return false;
       }
+    } catch (error) {
+      console.error(
+        `Failed to get "behavior.controls" option from local storage`,
+        error
+      );
     }
+  }
 
+  try {
     const controls = document.getElementsByClassName("ytp-right-controls")[0];
     if (!controls) {
-      console.info("Missing player controls");
-      console.groupEnd();
+      console.warn("Missing player controls");
       return false;
     }
 
     let playerButton = controls.getElementsByClassName("ytp-popout-button")[0];
     if (playerButton) {
-      console.info(
+      console.warn(
         "#popout-player-control-button already exists",
         playerButton
       );
-      console.groupEnd();
       return false;
     }
 
@@ -227,8 +191,7 @@ const InsertPopoutButtonIntoPlayerControls = async (clickEventHandler) => {
       "ytp-fullscreen-button"
     )[0];
     if (!fullScreenButton) {
-      console.info("Missing player controls full screen button");
-      console.groupEnd();
+      console.warn("Missing player controls full screen button");
       return false;
     }
 
@@ -246,7 +209,7 @@ const InsertPopoutButtonIntoPlayerControls = async (clickEventHandler) => {
     playerButton.appendChild(GetPopoutIconSVG("button", true));
     playerButton.addEventListener(
       "click",
-      (event) => clickEventHandler(event),
+      OpenPopoutPlayerControlsClickEventHandler,
       false
     );
 
@@ -258,10 +221,6 @@ const InsertPopoutButtonIntoPlayerControls = async (clickEventHandler) => {
     );
 
     controls.insertBefore(playerButton, fullScreenButton);
-
-    console.log("Inserted open popout player button", playerButton);
-    console.groupEnd();
-    return true;
   } catch (error) {
     console.error(
       "Failed to insert popout player button into player controls",
@@ -269,18 +228,38 @@ const InsertPopoutButtonIntoPlayerControls = async (clickEventHandler) => {
     );
     return false;
   }
+
+  return true;
 };
 
-const InsertRotationButtonsIntoPlayerControls = () => {
-  try {
-    console.group(
-      "[YouTubeCustomControls] InsertRotationButtonsIntoPlayerControls()"
+const InsertRotationButtonsIntoPlayerControls = async () => {
+  if (!IsPopoutPlayer(window.location)) {
+    console.info(
+      "Video player rotation controls are currently only supported within the popout player"
     );
+    return false;
+  }
 
+  try {
+    const showRotationButtons = await Options.GetLocalOption(
+      "behavior",
+      "showRotationButtons"
+    );
+    if (showRotationButtons === false) {
+      console.info(`Options "behavior.showRotationButtons" is disabled`);
+      return false;
+    }
+  } catch (error) {
+    console.error(
+      `Failed to get "behavior.showRotationButtons" option from local storage`,
+      error
+    );
+  }
+
+  try {
     const controls = document.getElementsByClassName("ytp-right-controls")[0];
     if (!controls) {
-      console.info("Missing player controls");
-      console.groupEnd();
+      console.warn("Missing player controls");
       return false;
     }
 
@@ -290,11 +269,10 @@ const InsertRotationButtonsIntoPlayerControls = () => {
         "#ytp-rotate-" + direction + "-button"
       );
       if (button) {
-        console.info(
+        console.warn(
           "#ytp-rotate-" + direction + "-button already exists",
           button
         );
-        console.groupEnd();
         continue;
       }
 
@@ -316,29 +294,22 @@ const InsertRotationButtonsIntoPlayerControls = () => {
       button.appendChild(GetRotateIconSVG(direction, true));
       button.addEventListener(
         "click",
-        () => {
-          let rotation =
-            +document.documentElement.getAttribute("data-ytp-rotation");
+        (event) => {
+          event.preventDefault();
           switch (direction) {
             case "left":
-              rotation -= 90;
+              RotateVideoPlayer(-90);
               break;
             case "right":
-              rotation += 90;
+              RotateVideoPlayer(+90);
               break;
           }
-          rotation = (rotation + 360) % 360; // convert to position rotation between 0-360
-          document.documentElement.setAttribute("data-ytp-rotation", rotation);
         },
         false
       );
 
       controls.insertBefore(button, controls.querySelector("button"));
-      console.log("Inserted rotate " + direction + " button", button);
     }
-
-    console.groupEnd();
-    return true;
   } catch (error) {
     console.error(
       "Failed to insert video rotation buttons into player controls",
@@ -346,6 +317,8 @@ const InsertRotationButtonsIntoPlayerControls = () => {
     );
     return false;
   }
+
+  return true;
 };
 
 /**

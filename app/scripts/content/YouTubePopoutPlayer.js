@@ -121,6 +121,18 @@ export const OpenPopoutForPageVideo = async (data = {}) => {
   return success;
 };
 
+/**
+ * Rotates the video player (by adjusting the `data-ytp-rotation` attribute on the HTML tag)
+ * @param {number} rotationAmount the amount (in degrees) by which to rotate the video
+ */
+export const RotateVideoPlayer = (rotationAmount = 0) => {
+  const currentRotation =
+    +document.documentElement.getAttribute("data-ytp-rotation") ?? 0;
+  const newRotation = currentRotation + rotationAmount;
+  const fixedRotation = (newRotation + 360) % 360; // convert to positive rotation between 0-360
+  document.documentElement.setAttribute("data-ytp-rotation", fixedRotation);
+};
+
 export const PauseVideoPlayer = () => {
   const video = GetPageVideo();
   if (video) {

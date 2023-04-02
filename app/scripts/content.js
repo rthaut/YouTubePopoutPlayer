@@ -1,10 +1,10 @@
 import {
   GetVideoPlayerInfo,
   OpenPopoutForPageVideo,
+  RotateVideoPlayer,
   PauseVideoPlayer,
 } from "./content/YouTubePopoutPlayer";
 import { InsertControlsAndWatch } from "./content/YouTubeCustomControls";
-import Options from "./helpers/options";
 import { debounce, IsPopoutPlayer } from "./helpers/utils";
 import { GetPlaylistVideoIDsFromDOM } from "./helpers/youtube";
 
@@ -12,9 +12,7 @@ import { GetPlaylistVideoIDsFromDOM } from "./helpers/youtube";
  * Closes the current tab (via a request to the background script)
  * @param {boolean} [enforceDomainRestriction] if the tab should only be closed if it is on a known YouTube domain
  */
-const CloseTab = async (enforceDomainRestriction = true) => {
-  console.log("[Content] YouTubePopoutPlayer CloseTab()");
-
+export const CloseTab = async (enforceDomainRestriction = true) => {
   try {
     const response = await browser.runtime.sendMessage({
       action: "close-tab",
@@ -31,21 +29,6 @@ const CloseTab = async (enforceDomainRestriction = true) => {
     }
   } catch (error) {
     console.error("[Content] YouTubePopoutPlayer CloseTab() :: Error", error);
-  }
-};
-
-/**
- * Click event handler for the context menu entry and the controls button
- * @param {MouseEvent} event the original click event
- * @param {object} [data={}] optional data for opening popout player
- */
-const OpenPopoutPlayerControlClickEventHandler = async (event, data = {}) => {
-  event.preventDefault();
-
-  await OpenPopoutForPageVideo(data);
-
-  if (await Options.GetLocalOption("advanced", "close")) {
-    await CloseTab(true);
   }
 };
 
@@ -75,6 +58,11 @@ const OnRuntimeMessage = async (message, sender) => {
 
       case "pause-video-player":
         return PauseVideoPlayer();
+
+      case "rotate-video-player":
+        if (IsPopoutPlayer(window.location)) {
+          return RotateVideoPlayer(message.data.rotationAmount);
+        }
     }
 
     console.log(
@@ -131,17 +119,11 @@ const SendWindowDimensionsAndPosition = async (action) => {
 };
 
 (async () => {
-  const isPopoutPlayer = IsPopoutPlayer(window.location);
-
-  // TODO: need a way to insert buttons and context menus into a **normal** video to open the popout player already rotated...
-  InsertControlsAndWatch({
-    openPopoutPlayerClickHandler: OpenPopoutPlayerControlClickEventHandler,
-    insertVideoRotationControls: isPopoutPlayer, // TODO: need to ALSO check a configurable option
-  });
+  InsertControlsAndWatch();
 
   browser.runtime.onMessage.addListener(OnRuntimeMessage);
 
-  if (isPopoutPlayer) {
+  if (IsPopoutPlayer(window.location)) {
     RegisterEventListeners();
     const query = new URLSearchParams(window.location.search);
     if (query.has("rotation")) {
