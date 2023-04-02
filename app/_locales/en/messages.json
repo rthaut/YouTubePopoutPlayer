@@ -48,7 +48,7 @@
     "description": "The text for the context menu entry added to video links to open the video rotated left by 90 degrees."
   },
   "LinkContextMenuEntry_OpenVideoRotateRight_Text": {
-    "message": "Open Video in Popout Player(Rotated Right)",
+    "message": "Open Video in Popout Player (Rotated Right)",
     "description": "The text for the context menu entry added to video links to open the video rotated right by 90 degrees."
   },
   "Notification_Error_FailedToOpen": {
