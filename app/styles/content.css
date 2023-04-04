@@ -35,9 +35,6 @@
  * Animations for the rotation buttons' icons
  */
 button.ytp-rotate-button svg {
-    /* TODO: it would be better to just have padding built into the SVG so the first 2 properties aren't needed in CSS... */
-    box-sizing: border-box;
-    padding: 25%;
     -webkit-transform: none;
        -moz-transform: none;
         -ms-transform: none;
