@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.0] - 2023-06-19
+
+### New Features
+
+* Added functionality for rotating videos in the Popout Player
+
 ## [4.3.0] - 2022-05-28
 
 ### New Features
@@ -140,6 +146,7 @@ The extension/add-on now supports translations. Currently the only translation o
 A new icon has been added to the lower right corner to allow opening the current video in a popout player. This should work for all YouTube videos, both directly on youtube.com and embedded in other web pages.
 
 [Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.3.0...HEAD
+[4.4.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.0.0...v4.1.0
