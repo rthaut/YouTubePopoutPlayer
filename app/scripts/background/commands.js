@@ -4,8 +4,9 @@ import { SendMessageToActiveTab } from "./tabs";
 export const OnCommandEventHandler = async (command) => {
   console.log("[Background] Command Received", command);
 
-  // TODO: these could be handled via the background script directly (like the menu actions) IF we could get the current video player's time and dimensions...
-  // that would reduce the amount of content <--> background script messaging substantially
+  // TODO: these "open-popout-*" commands could be handled via the background script directly (like the menu actions)
+  // *IF* we could get the current video player's time and dimensions...
+  // doing so would reduce the amount of content <--> background script messaging substantially
 
   switch (command) {
     case "open-popout-auto-close-command":
@@ -41,6 +42,30 @@ export const OnCommandEventHandler = async (command) => {
         data: {
           closeTab: false,
           enforceDomainRestriction: false,
+        },
+      });
+      break;
+
+    case "rotate-video-left":
+      console.log(
+        "[Background] Instructing active tab to rotate video to the left (by -90 degrees)"
+      );
+      SendMessageToActiveTab({
+        action: "rotate-video-player",
+        data: {
+          rotationAmount: -90,
+        },
+      });
+      break;
+
+    case "rotate-video-right":
+      console.log(
+        "[Background] Instructing active tab to rotate video to the right (by +90 degrees)"
+      );
+      SendMessageToActiveTab({
+        action: "rotate-video-player",
+        data: {
+          rotationAmount: +90,
         },
       });
       break;

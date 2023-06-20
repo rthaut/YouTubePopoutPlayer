@@ -1,7 +1,6 @@
 /**
- * Animate the popout player button's icon
- * NOTE: currently not in use; the shadow doesn't move with the path, so it looks weird
- * A build step would need to be introduced to copy this file to /dist
+ * Animations for the popout player button's icon
+ * These are taken from the CSS for the standard fullscreen button
  */
 #ytp-svg-pop-arrow,
 #ytp-svg-pop-popout {
@@ -12,7 +11,7 @@
             transform: none;
 }
 
-@keyframes ytp-svg-pop-popout-animation {
+@keyframes ytp-svg-pop-animation {
     50% {
         -webkit-transform: translate(1px, -1px);
            -moz-transform: translate(1px, -1px);
@@ -24,9 +23,110 @@
 
 .ytp-popout-button:hover #ytp-svg-pop-arrow,
 .ytp-popout-button:hover #ytp-svg-pop-popout {
-    -webkit-animation: ytp-svg-pop-popout-animation .4s cubic-bezier(.25, .1, .25, 1);
-       -moz-animation: ytp-svg-pop-popout-animation .4s cubic-bezier(.25, .1, .25, 1);
-        -ms-animation: ytp-svg-pop-popout-animation .4s cubic-bezier(.25, .1, .25, 1);
-         -o-animation: ytp-svg-pop-popout-animation .4s cubic-bezier(.25, .1, .25, 1);
-            animation: ytp-svg-pop-popout-animation .4s cubic-bezier(.25, .1, .25, 1);
+    -webkit-animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
+       -moz-animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
+        -ms-animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
+         -o-animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
+            animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
+}
+
+
+/**
+ * Animations for the rotation buttons' icons
+ */
+button.ytp-rotate-button svg {
+    -webkit-transform: none;
+       -moz-transform: none;
+        -ms-transform: none;
+         -o-transform: none;
+            transform: none;
+}
+
+@keyframes ytp-svg-rotate-left-animation {
+    100% {
+        -webkit-transform: rotate(-30deg);
+           -moz-transform: rotate(-30deg);
+            -ms-transform: rotate(-30deg);
+             -o-transform: rotate(-30deg);
+                transform: rotate(-30deg);
+    }
+}
+
+button.ytp-rotate-button.ytp-rotate-left-button:hover svg {
+    -webkit-animation: ytp-svg-rotate-left-animation .4s cubic-bezier(.25, .1, .25, 1);
+       -moz-animation: ytp-svg-rotate-left-animation .4s cubic-bezier(.25, .1, .25, 1);
+        -ms-animation: ytp-svg-rotate-left-animation .4s cubic-bezier(.25, .1, .25, 1);
+         -o-animation: ytp-svg-rotate-left-animation .4s cubic-bezier(.25, .1, .25, 1);
+            animation: ytp-svg-rotate-left-animation .4s cubic-bezier(.25, .1, .25, 1);
+}
+
+@keyframes ytp-svg-rotate-right-animation {
+    100% {
+        -webkit-transform: rotate(30deg);
+           -moz-transform: rotate(30deg);
+            -ms-transform: rotate(30deg);
+             -o-transform: rotate(30deg);
+                transform: rotate(30deg);
+    }
+}
+
+button.ytp-rotate-button.ytp-rotate-right-button:hover svg {
+    -webkit-animation: ytp-svg-rotate-right-animation .4s cubic-bezier(.25, .1, .25, 1);
+       -moz-animation: ytp-svg-rotate-right-animation .4s cubic-bezier(.25, .1, .25, 1);
+        -ms-animation: ytp-svg-rotate-right-animation .4s cubic-bezier(.25, .1, .25, 1);
+         -o-animation: ytp-svg-rotate-right-animation .4s cubic-bezier(.25, .1, .25, 1);
+            animation: ytp-svg-rotate-right-animation .4s cubic-bezier(.25, .1, .25, 1);
+}
+
+
+/**
+ * Video rotation support
+ * This is handled as CSS with !important rules due to YouTube setting inline styles whenever the window is resized
+ */
+html[data-ytp-rotation] #movie_player:not(.unstarted-mode) video {
+    width: 100% !important;
+    height: 100% !important;
+    inset: 0 !important;
+    object-fit: contain !important;
+}
+
+html[data-ytp-rotation] #movie_player:not(.unstarted-mode) .html5-video-container,
+html[data-ytp-rotation] #movie_player .ytp-cued-thumbnail-overlay-image {
+    transform-origin: top left !important; /* explicitly using top-left corner as origin AND for translation amounts */
+    inset: 0 !important;
+}
+
+html[data-ytp-rotation="90"] #movie_player:not(.unstarted-mode) .html5-video-container,
+html[data-ytp-rotation="90"] #movie_player .ytp-cued-thumbnail-overlay-image,
+html[data-ytp-rotation="270"] #movie_player:not(.unstarted-mode) .html5-video-container,
+html[data-ytp-rotation="270"] #movie_player .ytp-cued-thumbnail-overlay-image {
+    width: 100vh !important; /* NOTE: using viewport height as player width, since it will be rotated */
+    height: 100vw !important; /* NOTE: using viewport width as player height, since it will be rotated */
+}
+
+html[data-ytp-rotation="0"] #movie_player:not(.unstarted-mode) .html5-video-container,
+html[data-ytp-rotation="0"] #movie_player .ytp-cued-thumbnail-overlay-image,
+html[data-ytp-rotation="180"] #movie_player:not(.unstarted-mode) .html5-video-container,
+html[data-ytp-rotation="180"] #movie_player .ytp-cued-thumbnail-overlay-image {
+    width: 100vw !important;
+    height: 100vh !important;
+}
+
+html[data-ytp-rotation="90"] #movie_player:not(.unstarted-mode) .html5-video-container,
+html[data-ytp-rotation="90"] #movie_player .ytp-cued-thumbnail-overlay-image {
+    transform: rotate(90deg) !important;
+    left: 100% !important;
+}
+
+html[data-ytp-rotation="270"] #movie_player:not(.unstarted-mode) .html5-video-container,
+html[data-ytp-rotation="270"] #movie_player .ytp-cued-thumbnail-overlay-image {
+    transform: rotate(-90deg) !important;
+    top: 100% !important;
+}
+
+html[data-ytp-rotation="180"] #movie_player:not(.unstarted-mode) .html5-video-container,
+html[data-ytp-rotation="180"] #movie_player .ytp-cued-thumbnail-overlay-image {
+    transform: rotate(180deg) !important;
+    top: 100% !important;
+    left: 100% !important;
 }

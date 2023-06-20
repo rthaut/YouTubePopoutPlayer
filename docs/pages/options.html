@@ -12,7 +12,7 @@ order: 5
 
     <div class="card white">
         <div class="card-content">
-            <span class="card-title red-text"><strong>Popout Player Behavior</strong> <span class="badge grey darken-3 white-text">Updated in v4.2</span></span>
+            <span class="card-title red-text"><strong>Popout Player Behavior</strong> <span class="badge grey darken-3 white-text">Updated in v4.4</span></span>
             <p>These are the basic settings for configuring the YouTube Popout Player. You can control where the popout player opens, which controls are shown for video(s) in the popout player (if any), and whether or not video(s) start playing automatically and/or loop indefinitely.</p>
         </div>
 
@@ -32,7 +32,7 @@ order: 5
                     <p>The popout player will open in a new tab in your current browser window.</p>
                 </dd>
 
-                <dt>Re-Use Existing Window/Tab <span class="badge red white-text">New in v4.2</span></dt>
+                <dt>Re-Use Existing Window/Tab <span class="badge grey darken-1 white-text">New in v4.2</span></dt>
                 <dd>
                     <p>Enabling this will cause the popout player window/tab to be re-used (if it is already open) instead of always opening in a new window/tab. <strong>The default for this setting is disabled.</strong></p>
                 </dd>
@@ -73,6 +73,16 @@ order: 5
                 <dt>Loop Video(s)</dt>
                 <dd>
                     <p>This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong></p>
+                </dd>
+
+                <dt>Show Rotation Buttons <span class="badge red white-text">New in v4.4</span></dt>
+                <dd>
+                    <p>This setting controls whether or not buttons to rotate the video left or right are shown in the popout player. <strong>The default for this setting is enabled.</strong></p>
+                </dd>
+
+                <dt>Show Rotation Menu Items <span class="badge red white-text">New in v4.4</span></dt>
+                <dd>
+                    <p>This setting controls whether or not context (right-click) menu options to open the popout player initially rotated left or right are shown on video links. <strong>The default for this setting is disabled.</strong></p>
                 </dd>
             </dl>
         </div>
@@ -242,7 +252,7 @@ order: 5
                     <p>Enabling this will cause the popout player to be opened in the same <a class="red-text" href="https://support.mozilla.org/en-US/kb/containers">multi-account container (a.k.a. contextual identity)</a> as the original window/tab. <strong>The default for this setting is disabled.</strong></p>
                 </dd>
 
-                <dt>Automatically Open on Video Pages <span class="badge red white-text">New in v4.2</span></dt>
+                <dt>Automatically Open on Video Pages <span class="badge grey darken-1 white-text">New in v4.2</span></dt>
                 <dd>
                     <p>Enabling this will automatically open the popout player when navigating to a YouTube video page. <strong>The default for this setting is disabled.</strong></p>
                 </dd>
@@ -311,7 +321,7 @@ order: 5
 <div id="modal-{{screenshot.name | slugify}}-screenshot" class="modal">
     <div class="modal-content center white">
         <img class="responsive-img" src="{{ screenshot.path | relative_url }}" alt="Popout Player {{screenshot.name}} Options Screenshot" />
-        <p class="text-left"><em>Screenshots are taken from <strong>v4.0</strong>, <strong>v4.1</strong>, and <strong>v4.2</strong> and may not accurately represent current functionality.</em></p>
+        <p class="text-left"><em>Screenshots are taken from <strong>v4.0</strong> to <strong>v4.4</strong> and may not accurately represent current functionality.</em></p>
     </div>
     <div class="modal-footer">
         <button class="btn red modal-close"><i class="material-icons left">close</i> Close</button>

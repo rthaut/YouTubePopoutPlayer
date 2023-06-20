@@ -21,22 +21,25 @@ const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it con
 /**
  * Helper function to open the popout player from various points in the background script
  * @param {string} url the URL containing a video ID and/or playlist
- * @param {number} tabId the ID of the original tab
- * @param {boolean} allowCloseTab if the original tab can be closed (depending on the user's preference)
- * @param {boolean} allowCloseTabOnAnyDomain if the original tab can be closed regardless of which domain it is on
+ * @param {number} [tabId=-1] the ID of the original tab
+ * @param {boolean} [allowCloseTab=true] if the original tab can be closed (depending on the user's preference)
+ * @param {boolean} [allowCloseTabOnAnyDomain=false] if the original tab can be closed regardless of which domain it is on
+ * @param {number} [rotation=0] the initial video rotation amount
  * @returns {Promise<boolean>} if the popout player was opened
  */
 export const OpenPopoutBackgroundHelper = async (
   url,
   tabId = -1,
   allowCloseTab = true,
-  allowCloseTabOnAnyDomain = false
+  allowCloseTabOnAnyDomain = false,
+  rotation = 0
 ) => {
   console.log("[Background] OpenPopoutBackgroundHelper()", {
-    id,
-    list,
+    url,
+    tabId,
     allowCloseTab,
     allowCloseTabOnAnyDomain,
+    rotation,
   });
   const id = GetVideoIDFromURL(url);
   const list = GetPlaylistIDFromURL(url);
@@ -49,6 +52,7 @@ export const OpenPopoutBackgroundHelper = async (
   const result = await OpenPopoutPlayer({
     id,
     list,
+    rotation,
     originTabId: tabId,
   });
 
@@ -79,6 +83,7 @@ export const OpenPopoutPlayer = async ({
   time = 0,
   originalVideoWidth = null,
   originalVideoHeight = null,
+  rotation = 0,
   originTabId = -1,
 }) => {
   console.log("[Background] OpenPopoutPlayer()", {
@@ -87,6 +92,7 @@ export const OpenPopoutPlayer = async ({
     time,
     originalVideoWidth,
     originalVideoHeight,
+    rotation,
     originTabId,
   });
 
@@ -178,6 +184,10 @@ export const OpenPopoutPlayer = async ({
   } else if (behavior.loop) {
     // to loop a single video, the `playlist` parameter value must be set to the video's ID
     params.playlist = id;
+  }
+
+  if (!isNaN(rotation) && rotation !== 0) {
+    params.rotation = rotation;
   }
 
   // prettier-ignore

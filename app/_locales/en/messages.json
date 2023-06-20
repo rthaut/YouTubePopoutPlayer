@@ -27,6 +27,14 @@
     "message": "Open popout player without closing the current window/tab",
     "description": "The description for the 'open-popout-no-close-command' extension command"
   },
+  "RotateVideoLeftCommandDescription": {
+    "message": "Rotate the current video to the left by 90 degrees",
+    "description": "The description for the 'rotate-video-left' extension command"
+  },
+  "RotateVideoRightCommandDescription": {
+    "message": "Rotate the current video to the right by 90 degrees",
+    "description": "The description for the 'rotate-video-right' extension command"
+  },
   "ContextMenuEntryLabel_PopoutPlayer": {
     "message": "Popout Player",
     "description": "The label for the context menu entry that opens the popout player."
@@ -43,9 +51,25 @@
     "message": "Open Playlist in Popout Player",
     "description": "The text for the context menu entry added to playlist links."
   },
+  "LinkContextMenuEntry_OpenVideoRotateLeft_Text": {
+    "message": "Open Video in Popout Player (Rotated Left)",
+    "description": "The text for the context menu entry added to video links to open the video rotated left by 90 degrees."
+  },
+  "LinkContextMenuEntry_OpenVideoRotateRight_Text": {
+    "message": "Open Video in Popout Player (Rotated Right)",
+    "description": "The text for the context menu entry added to video links to open the video rotated right by 90 degrees."
+  },
   "Notification_Error_FailedToOpen": {
     "message": "Failed to determine the video and/or playlist to open. The popout player will not be opened.",
-    "description": "The text use for the notification that is displayed when the popout player cannot be opened."
+    "description": "The text used for the notification that is displayed when the popout player cannot be opened."
+  },
+  "PopoutPlayerControls_RotateVideo_Left": {
+    "message": "Rotate video left by 90 degrees",
+    "description": "The title for the player controls button that rotates the video in the popout player to the left by 90 degrees."
+  },
+  "PopoutPlayerControls_RotateVideo_Right": {
+    "message": "Rotate video right by 90 degrees",
+    "description": "The title for the player controls button that rotates the video in the popout player to the right by 90 degrees."
   },
   "OptionsPageTitle": {
     "message": "$NAME$ Options",
@@ -144,6 +168,18 @@
   },
   "OptionsBehaviorLoopDescription": {
     "message": "This setting controls whether or not the video(s) in the popout player loop infinitely (until the popout player is closed). <strong>The default for this setting is disabled.</strong>"
+  },
+  "OptionsBehaviorShowRotationButtonsLabel": {
+    "message": "Show Rotation Buttons"
+  },
+  "OptionsBehaviorShowRotationButtonsDescription": {
+    "message": "This setting controls whether or not buttons to rotate the video left or right are shown in the popout player. <strong>The default for this setting is enabled.</strong>"
+  },
+  "OptionsBehaviorShowRotationMenusLabel": {
+    "message": "Show Rotation Menu Items"
+  },
+  "OptionsBehaviorShowRotationMenusDescription": {
+    "message": "This setting controls whether or not context (right-click) menu options to open the popout player initially rotated left or right are shown on video links. <strong>The default for this setting is disabled.</strong>"
   },
   "OptionsSettingDisabled": {
     "message": "This setting is not available when the following setting(s) are enabled: <strong>$SETTINGS$</strong>",

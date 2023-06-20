@@ -1,4 +1,4 @@
-import { YOUTUBE_EMBED_URL } from "./constants";
+import { YOUTUBE_EMBED_URL, YOUTUBE_NOCOOKIE_EMBED_URL } from "./constants";
 
 /**
  * Returns the number of pixels a given percentage is for the screen (in the specified dimension)
@@ -55,7 +55,10 @@ export const IsFirefox = async () => {
  * @returns {boolean} whether or not the given `Location` is a popout player
  */
 export const IsPopoutPlayer = (location) => {
-  if (location.href.startsWith(YOUTUBE_EMBED_URL)) {
+  if (
+    location.href.startsWith(YOUTUBE_EMBED_URL) ||
+    location.href.startsWith(YOUTUBE_NOCOOKIE_EMBED_URL)
+  ) {
     const params = new URLSearchParams(location.search.substring(1));
     if (params.get("popout")) {
       return true;

@@ -1,10 +1,10 @@
 import {
   GetVideoPlayerInfo,
   OpenPopoutForPageVideo,
+  RotateVideoPlayer,
   PauseVideoPlayer,
 } from "./content/YouTubePopoutPlayer";
 import { InsertControlsAndWatch } from "./content/YouTubeCustomControls";
-import Options from "./helpers/options";
 import { debounce, IsPopoutPlayer } from "./helpers/utils";
 import { GetPlaylistVideoIDsFromDOM } from "./helpers/youtube";
 
@@ -12,9 +12,7 @@ import { GetPlaylistVideoIDsFromDOM } from "./helpers/youtube";
  * Closes the current tab (via a request to the background script)
  * @param {boolean} [enforceDomainRestriction] if the tab should only be closed if it is on a known YouTube domain
  */
-const CloseTab = async (enforceDomainRestriction = true) => {
-  console.log("[Content] YouTubePopoutPlayer CloseTab()");
-
+export const CloseTab = async (enforceDomainRestriction = true) => {
   try {
     const response = await browser.runtime.sendMessage({
       action: "close-tab",
@@ -34,29 +32,21 @@ const CloseTab = async (enforceDomainRestriction = true) => {
   }
 };
 
-/**
- * Click event handler for the context menu entry and the controls button
- * @param {MouseEvent} event the original click event
- */
-const CustomControlsClickEventHandler = async (event) => {
-  event.preventDefault();
-
-  await OpenPopoutForPageVideo();
-
-  if (await Options.GetLocalOption("advanced", "close")) {
-    await CloseTab(true);
-  }
-};
-
 const OnRuntimeMessage = async (message, sender) => {
   console.log("[Content] YouTubePopoutPlayer Runtime Message", message, sender);
 
   if (message.action !== undefined) {
     switch (message.action.toLowerCase()) {
       case "open-popout-via-command":
-        await OpenPopoutForPageVideo();
-        if (message.data?.closeTab) {
-          await CloseTab(message.data?.enforceDomainRestriction);
+        // eslint-disable-next-line no-case-declarations
+        const {
+          closeTab = false,
+          enforceDomainRestriction = true,
+          ...data
+        } = message.data ?? {};
+        await OpenPopoutForPageVideo(data);
+        if (closeTab) {
+          await CloseTab(enforceDomainRestriction);
         }
         break;
 
@@ -68,6 +58,11 @@ const OnRuntimeMessage = async (message, sender) => {
 
       case "pause-video-player":
         return PauseVideoPlayer();
+
+      case "rotate-video-player":
+        if (IsPopoutPlayer(window.location)) {
+          return RotateVideoPlayer(message.data.rotationAmount);
+        }
     }
 
     console.log(
@@ -124,11 +119,18 @@ const SendWindowDimensionsAndPosition = async (action) => {
 };
 
 (async () => {
-  InsertControlsAndWatch(CustomControlsClickEventHandler);
+  InsertControlsAndWatch();
 
   browser.runtime.onMessage.addListener(OnRuntimeMessage);
 
   if (IsPopoutPlayer(window.location)) {
     RegisterEventListeners();
+    const query = new URLSearchParams(window.location.search);
+    if (query.has("rotation")) {
+      document.documentElement.setAttribute(
+        "data-ytp-rotation",
+        parseInt(query.get("rotation"), 10)
+      );
+    }
   }
 })();

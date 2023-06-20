@@ -26,6 +26,8 @@ export const OPTION_DEFAULTS = {
     controls: "standard",
     autoplay: true,
     loop: false,
+    showRotationButtons: true,
+    showRotationMenus: false,
   },
   size: {
     mode: "current",
