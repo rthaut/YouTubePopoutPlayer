@@ -1,7 +1,6 @@
 import { GetParamFromURL } from "./utils";
 
-export const VideoIDRegEx =
-  /(?:(?:v=)|(?:\/embed\/)|(?:\/shorts\/))([^\?\&\/]{11})/;
+export const VideoIDRegEx = /(?:(?:v=)|(?:\/shorts\/))([^\?\&\/]{11})/;
 
 export const VideoLinkOrEmbedRegEx =
   /(?:(?:v=)|(?:\/embed\/)|(?:\/shorts\/)|(?:\/youtu\.be\/))([^\?\&\/]{11})/;
