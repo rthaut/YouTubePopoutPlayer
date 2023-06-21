@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.1] - 2023-06-21
+
+### Bug Fixes
+
+* Fix "Automatically Open on Video Pages" functionality in Chromium browsers
+* Only request optional `cookies` permission in Firefox (for multi-account containers support)
+* Remove default keyboard shortcuts for the following commands in Chromium browsers
+    * "Open popout player and close the current window/tab"
+    * "Open popout player without closing the current window/tab" 
+
 ## [4.4.0] - 2023-06-19
 
 ### New Features
@@ -145,7 +155,8 @@ The extension/add-on now supports translations. Currently the only translation o
 
 A new icon has been added to the lower right corner to allow opening the current video in a popout player. This should work for all YouTube videos, both directly on youtube.com and embedded in other web pages.
 
-[Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.3.0...HEAD
+[Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.1...HEAD
+[4.4.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.0...v4.4.1
 [4.4.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.1.0...v4.2.0
