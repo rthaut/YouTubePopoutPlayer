@@ -44,13 +44,13 @@
       "description": "__MSG_OpenPopoutCommandDescription__"
     },
     "open-popout-force-close-command": {
-      "suggested_key": {
+      "__firefox__suggested_key": {
         "default": "Alt+Shift+PageUp"
       },
       "description": "__MSG_OpenPopoutForceCloseCommandDescription__"
     },
     "open-popout-no-close-command": {
-      "suggested_key": {
+      "__firefox__suggested_key": {
         "default": "Alt+Shift+PageDown"
       },
       "description": "__MSG_OpenPopoutNoCloseCommandDescription__"
