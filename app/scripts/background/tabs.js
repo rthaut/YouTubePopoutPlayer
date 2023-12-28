@@ -20,7 +20,7 @@ export const CloseTab = async (tabId, enforceDomainRestriction = false) => {
       // if the "tabs" permission is not granted, the tab object does NOT include the `url` property
       // we cannot request that permission now, as we might be outside a synchronous user input handler
       console.error(
-        '[Background] CloseTab() :: Unable to determine if original window/tab should be closed (likely due to the "tabs" permission not being granted)'
+        '[Background] CloseTab() :: Unable to determine if original window/tab should be closed (likely due to the "tabs" permission not being granted)',
       );
       return false;
     }
@@ -30,7 +30,7 @@ export const CloseTab = async (tabId, enforceDomainRestriction = false) => {
 
     if (!YOUTUBE_DOMAINS.includes(domain)) {
       console.info(
-        "[Background] CloseTab() :: Original tab is NOT a YouTube domain"
+        "[Background] CloseTab() :: Original tab is NOT a YouTube domain",
       );
       return false;
     }
@@ -58,7 +58,7 @@ export const SendMessageToActiveTab = async (message) => {
   });
 
   return await Promise.all(
-    tabs.map((tab) => browser.tabs.sendMessage(tab.id, message))
+    tabs.map((tab) => browser.tabs.sendMessage(tab.id, message)),
   );
 };
 
@@ -84,11 +84,11 @@ export const GetPopoutPlayerTabs = async (originTabId = -1) =>
     await AddContextualIdentityToDataObject(
       {
         url: [YOUTUBE_EMBED_URL, YOUTUBE_NOCOOKIE_EMBED_URL].map(
-          (url) => url + "*?*popout=1*"
+          (url) => url + "*?*popout=1*",
         ),
       },
-      originTabId
-    )
+      originTabId,
+    ),
   );
 
 /**
@@ -108,14 +108,14 @@ export const GetCookieStoreIDForTab = async (tabId) => {
 
   if (!Object.prototype.hasOwnProperty.call(tab, "cookieStoreId")) {
     console.warn(
-      "[Background] GetCookieStoreIDForTab() :: Tab data is missing cookieStoreId property"
+      "[Background] GetCookieStoreIDForTab() :: Tab data is missing cookieStoreId property",
     );
     return null;
   }
 
   console.log(
     "[Background] GetCookieStoreIDForTab() :: Return",
-    tab.cookieStoreId
+    tab.cookieStoreId,
   );
   return tab.cookieStoreId;
 };
@@ -128,13 +128,13 @@ export const GetCookieStoreIDForTab = async (tabId) => {
  */
 export const AddContextualIdentityToDataObject = async (
   data = {},
-  originTabId = -1
+  originTabId = -1,
 ) => {
   try {
     const isFirefox = await IsFirefox();
     const useContextualIdentity = await Options.GetLocalOption(
       "advanced",
-      "contextualIdentity"
+      "contextualIdentity",
     );
 
     if (isFirefox && useContextualIdentity) {
@@ -143,18 +143,18 @@ export const AddContextualIdentityToDataObject = async (
         data.cookieStoreId = cookieStoreId;
         console.log(
           "[Background] AddContextualIdentityToObjectData() :: Added cookie store ID to window/tab data object",
-          data
+          data,
         );
       } else {
         console.warn(
-          "[Background] AddContextualIdentityToObjectData() :: Failed to get cookie store ID from original tab"
+          "[Background] AddContextualIdentityToObjectData() :: Failed to get cookie store ID from original tab",
         );
       }
     }
   } catch (error) {
     console.error(
       "Failed to add contextual identity to window/tab data object",
-      error
+      error,
     );
   }
 

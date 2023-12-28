@@ -1,11 +1,9 @@
-import { OpenPopoutBackgroundHelper } from "./popout";
-
 import {
-  YOUTUBE_VIDEO_URL_PATTERNS,
   YOUTUBE_PLAYLIST_URL_PATTERNS,
+  YOUTUBE_VIDEO_URL_PATTERNS,
 } from "../helpers/constants";
-
 import Options from "../helpers/options";
+import { OpenPopoutBackgroundHelper } from "./popout";
 
 export const GetMenus = async () => {
   const menus = [
@@ -27,12 +25,12 @@ export const GetMenus = async () => {
 
   const showRotationMenus = await Options.GetLocalOption(
     "behavior",
-    "showRotationMenus"
+    "showRotationMenus",
   );
   if (showRotationMenus !== false) {
     menus.push({
       title: browser.i18n.getMessage(
-        "LinkContextMenuEntry_OpenVideoRotateLeft_Text"
+        "LinkContextMenuEntry_OpenVideoRotateLeft_Text",
       ),
       contexts: ["link"],
       targetUrlPatterns: YOUTUBE_VIDEO_URL_PATTERNS,
@@ -41,7 +39,7 @@ export const GetMenus = async () => {
     });
     menus.push({
       title: browser.i18n.getMessage(
-        "LinkContextMenuEntry_OpenVideoRotateRight_Text"
+        "LinkContextMenuEntry_OpenVideoRotateRight_Text",
       ),
       contexts: ["link"],
       targetUrlPatterns: YOUTUBE_VIDEO_URL_PATTERNS,

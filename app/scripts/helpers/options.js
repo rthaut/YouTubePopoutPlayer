@@ -21,7 +21,7 @@ const Options = (() => {
       // console.log("Options.InitDefaults()");
 
       const defaults = this.ConvertForStorage(
-        Object.assign({}, OPTION_DEFAULTS)
+        Object.assign({}, OPTION_DEFAULTS),
       );
 
       if (reset) {
@@ -156,7 +156,7 @@ const Options = (() => {
       // console.log("Options.SetLocalOption()", domain, name);
 
       const option = this.ConvertForStorage(
-        Object.assign({}, { [domain]: { [name]: value } })
+        Object.assign({}, { [domain]: { [name]: value } }),
       );
 
       await browser.storage.local.set(option);
@@ -199,7 +199,7 @@ const Options = (() => {
       // console.log("Options.SetLocalOptionsForDomain()", domain, options);
 
       options = this.ConvertForStorage(
-        Object.assign({}, { [domain]: options })
+        Object.assign({}, { [domain]: options }),
       );
 
       await browser.storage.local.set(options);

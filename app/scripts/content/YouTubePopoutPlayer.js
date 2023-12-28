@@ -1,5 +1,5 @@
 import { IsVisible } from "../helpers/utils";
-import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
+import { GetPlaylistIDFromURL, GetVideoIDFromURL } from "../helpers/youtube";
 
 /**
  * Gets the video element for the primary video player on a YouTube video page
@@ -9,21 +9,21 @@ export const GetPageVideo = () => {
   console.log("[Content] YouTubePopoutPlayer GetPageVideo()");
 
   const videos = document.querySelectorAll(
-    "#shorts-player video, #movie_player video, #player video"
+    "#shorts-player video, #movie_player video, #player video",
   );
 
   for (const video of videos) {
     if (IsVisible(video)) {
       console.log(
         "[Content] YouTubePopoutPlayer GetPageVideo() :: Return",
-        video
+        video,
       );
       return video;
     }
   }
 
   console.warn(
-    "[Content] YouTubePopoutPlayer GetPageVideo() :: Failed to Get Video Player"
+    "[Content] YouTubePopoutPlayer GetPageVideo() :: Failed to Get Video Player",
   );
   return undefined;
 };
@@ -45,7 +45,7 @@ export const GetVideoPlayerInfo = () => {
 
   console.log(
     "[Content] YouTubePopoutPlayer GetVideoPlayerInfo() :: Return",
-    info
+    info,
   );
   return info;
 };
@@ -58,7 +58,7 @@ export const GetVideoPlayerInfo = () => {
 export const OpenPopoutFromContentScript = async (data) => {
   console.log(
     "[Content] YouTubePopoutPlayer OpenPopoutFromContentScript()",
-    data
+    data,
   );
 
   try {
@@ -70,7 +70,7 @@ export const OpenPopoutFromContentScript = async (data) => {
     if (response !== undefined) {
       console.log(
         '[Content] YouTubePopoutPlayer OpenPopoutFromContentScript() :: Action "open-popout" response',
-        response
+        response,
       );
     }
 
@@ -78,7 +78,7 @@ export const OpenPopoutFromContentScript = async (data) => {
   } catch (error) {
     console.error(
       "[Content] YouTubePopoutPlayer OpenPopoutFromContentScript() :: Error",
-      error
+      error,
     );
   }
 

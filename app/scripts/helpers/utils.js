@@ -76,7 +76,7 @@ export const IsPopoutPlayer = (location) => {
 export const TitleCase = (string) =>
   string.replace(
     /\b\w+/g,
-    (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase()
+    (txt) => txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase(),
   );
 
 /**
@@ -135,5 +135,5 @@ export const IsVisible = (elem) =>
   elem.offsetWidth > 0 &&
   elem.offsetHeight > 0 &&
   !["none", "hidden"].includes(
-    getComputedStyle(elem).getPropertyValue("display")
+    getComputedStyle(elem).getPropertyValue("display"),
   );
