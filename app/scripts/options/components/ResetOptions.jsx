@@ -1,93 +1,81 @@
 import React from "react";
-
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Grid from "@material-ui/core/Grid";
-import Snackbar from "@material-ui/core/Snackbar";
-
-import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogCloseButton,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
+  Center,
+  Icon,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
+import { MdOutlineHighlightOff as ResetIcon } from "react-icons/md";
 
 import useOptionsStore from "../stores/optionsStore";
 
 export default function ResetOptions() {
   const resetOptions = useOptionsStore((store) => store.reset);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [showResetSuccess, setShowResetSuccess] = React.useState(false);
 
-  const handleResetButtonClick = () => {
-    setShowResetSuccess(false);
-    setDialogOpen(true);
-  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
-  const handleClose = (event, reason) => {
-    switch (reason) {
-      case "escapeKeyDown":
-      case "backdropClick":
-        return;
+  const cancelRef = React.useRef();
 
-      default:
-        setDialogOpen(false);
-        break;
-    }
-  };
-
-  const handleConfirm = async () => {
+  const onConfirm = async () => {
     await resetOptions();
-    setDialogOpen(false);
-    setShowResetSuccess(true);
+    onClose();
+
+    toast({
+      description: browser.i18n.getMessage("OptionsResetSuccessMessage"),
+      status: "success",
+      duration: 3_000,
+      isClosable: true,
+    });
   };
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        spacing={0}
+      <Center>
+        <Button
+          colorScheme="red"
+          leftIcon={<Icon as={ResetIcon} boxSize={6} />}
+          onClick={onOpen}
+        >
+          {browser.i18n.getMessage("ButtonResetLabel")}
+        </Button>
+      </Center>
+      <AlertDialog
+        isOpen={isOpen}
+        onClose={onClose}
+        leastDestructiveRef={cancelRef}
+        isCentered
       >
-        <Grid item xs>
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<HighlightOffIcon />}
-            onClick={handleResetButtonClick}
-          >
-            {browser.i18n.getMessage("ButtonResetLabel")}
-          </Button>
-        </Grid>
-      </Grid>
-      <Dialog open={dialogOpen} onClose={handleClose} keepMounted>
-        <DialogTitle>
-          {browser.i18n.getMessage("ConfirmSettingsResetHeading")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText
-            dangerouslySetInnerHTML={{
-              __html: browser.i18n.getMessage("ConfirmSettingsResetText"),
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="default">
-            {browser.i18n.getMessage("ButtonCancelResetLabel")}
-          </Button>
-          <Button onClick={handleConfirm} color="secondary">
-            {browser.i18n.getMessage("ButtonConfirmResetLabel")}
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={showResetSuccess}
-        autoHideDuration={3000}
-        onClose={() => setShowResetSuccess(false)}
-        message={browser.i18n.getMessage("OptionsResetSuccessMessage")}
-      />
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              {browser.i18n.getMessage("ConfirmSettingsResetHeading")}
+            </AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody
+              dangerouslySetInnerHTML={{
+                __html: browser.i18n.getMessage("ConfirmSettingsResetText"),
+              }}
+            />
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                {browser.i18n.getMessage("ButtonCancelResetLabel")}
+              </Button>
+              <Button onClick={onConfirm} colorScheme="red" ml={3}>
+                {browser.i18n.getMessage("ButtonConfirmResetLabel")}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </>
   );
 }

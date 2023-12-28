@@ -1,46 +1,37 @@
 import React from "react";
-
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import InputLabel from "@material-ui/core/InputLabel";
-import Switch from "@material-ui/core/Switch";
-import Typography from "@material-ui/core/Typography";
-
-import CheckIcon from "@material-ui/icons/Check";
-import SettingsIcon from "@material-ui/icons/Settings";
-
-import TabPanelHeader from "../TabPanelHeader";
-import BasicToggleControl from "../controls/BasicToggleControl";
-import PermissionToggleControl from "../controls/PermissionToggleControl";
-import ConditionalTooltipWrapper from "../controls/ConditionalTooltipWrapper";
-
-import useOptionsStore, {
-  useOptionsForDomain,
-} from "../../stores/optionsStore";
-
+import {
+  Box,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Icon,
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+  StackDivider,
+  Text,
+  useColorModeValue,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
+import {
+  MdCheckCircleOutline as CheckIcon,
+  MdSettings as SettingsIcon,
+} from "react-icons/md";
 import { useDebounce } from "react-use";
 
 import { IsFirefox } from "../../../helpers/utils";
+import useOptionsStore, {
+  useOptionsForDomain,
+} from "../../stores/optionsStore";
+import BasicToggleControl from "../controls/BasicToggleControl";
+import PermissionToggleControl from "../controls/PermissionToggleControl";
+import TabPanelHeader from "../TabPanelHeader";
 
 export const DOMAIN = "advanced";
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    disabled: {
-      color: theme.palette.text.disabled,
-    },
-  })
-);
-
 export default function AdvancedTab() {
-  const classes = useStyles();
-
   const [options, { setOption }] = useOptionsForDomain(DOMAIN);
   console.log("AdvancedTab ~ options", options);
 
@@ -48,7 +39,7 @@ export default function AdvancedTab() {
     useOptionsStore((store) => store["size.mode"]) !== "maximized";
 
   const popoutPlayerTarget = useOptionsStore(
-    (store) => store["behavior.target"]
+    (store) => store["behavior.target"],
   );
 
   const [isFirefox, setIsFirefox] = React.useState(false);
@@ -64,6 +55,12 @@ export default function AdvancedTab() {
     }
   }, [canOpenInBackground]);
 
+  const disabledTipBgColor = useColorModeValue("orange.100", "whiteAlpha.100");
+  const disabledTipBorderColor = useColorModeValue(
+    "orange.200",
+    "whiteAlpha.300",
+  );
+
   function AutoOpenControl() {
     return (
       <BasicToggleControl
@@ -71,7 +68,7 @@ export default function AdvancedTab() {
         optionName="autoOpen"
         label={browser.i18n.getMessage("OptionsAdvancedAutoOpenLabel")}
         description={browser.i18n.getMessage(
-          "OptionsAdvancedAutoOpenDescription"
+          "OptionsAdvancedAutoOpenDescription",
         )}
       />
     );
@@ -79,48 +76,45 @@ export default function AdvancedTab() {
 
   function BackgroundTabControl() {
     return (
-      <FormControl disabled={!canOpenInBackground}>
-        <ConditionalTooltipWrapper
-          condition={!canOpenInBackground}
-          html={browser.i18n.getMessage(
-            "OptionsSettingDisabled",
-            browser.i18n.getMessage("OptionsSizeModeMaximizedLabel")
-          )}
-        >
-          <FormControlLabel
-            label={browser.i18n.getMessage(
-              "OptionsAdvancedOpenInBackgroundLabel",
-              browser.i18n.getMessage(
-                `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`
-              )
-            )}
-            control={
-              <Switch
-                name="openInBackgroundSwitch"
-                color="primary"
-                checked={options["background"]}
-                onChange={(event) =>
-                  setOption("background", event.target.checked)
-                }
-              />
-            }
-          />
-        </ConditionalTooltipWrapper>
-        <Typography
-          color={canOpenInBackground ? "textSecondary" : "inherit"}
-          className={canOpenInBackground ? "" : classes.disabled}
-          dangerouslySetInnerHTML={{
-            __html: browser.i18n.getMessage(
-              "OptionsAdvancedOpenInBackgroundDescription",
-              browser.i18n
-                .getMessage(
-                  `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`
-                )
-                .toLowerCase()
+      <>
+        <BasicToggleControl
+          domain={DOMAIN}
+          optionName="background"
+          label={browser.i18n.getMessage(
+            "OptionsAdvancedOpenInBackgroundLabel",
+            browser.i18n.getMessage(
+              `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`,
             ),
-          }}
+          )}
+          description={browser.i18n.getMessage(
+            "OptionsAdvancedOpenInBackgroundDescription",
+            browser.i18n
+              .getMessage(
+                `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`,
+              )
+              .toLowerCase(),
+          )}
+          isDisabled={!canOpenInBackground}
         />
-      </FormControl>
+        {!canOpenInBackground && (
+          <Box
+            bg={disabledTipBgColor}
+            p={2}
+            mt={2}
+            borderWidth={1}
+            borderColor={disabledTipBorderColor}
+          >
+            <Text
+              dangerouslySetInnerHTML={{
+                __html: browser.i18n.getMessage(
+                  "OptionsSettingDisabled",
+                  browser.i18n.getMessage("OptionsSizeModeMaximizedLabel"),
+                ),
+              }}
+            />
+          </Box>
+        )}
+      </>
     );
   }
 
@@ -144,10 +138,10 @@ export default function AdvancedTab() {
         domain={DOMAIN}
         optionName="contextualIdentity"
         label={browser.i18n.getMessage(
-          "OptionsAdvancedContextualIdentityLabel"
+          "OptionsAdvancedContextualIdentityLabel",
         )}
         description={browser.i18n.getMessage(
-          "OptionsAdvancedContextualIdentityDescription"
+          "OptionsAdvancedContextualIdentityDescription",
         )}
         permissionsRequest={{
           permissions: ["cookies"],
@@ -159,9 +153,21 @@ export default function AdvancedTab() {
   function TitleOptionControl() {
     const [title, setTitle] = React.useState(options["title"]);
 
+    const toast = useToast();
+
     const saveTitle = () => {
       if (title !== options["title"]) {
         setOption("title", title);
+        toast({
+          description: browser.i18n.getMessage(
+            "OptionsSettingSavedSuccess",
+            browser.i18n.getMessage("OptionsAdvancedTitleLabel"),
+          ),
+          status: "success",
+          duration: 3_000,
+          isClosable: true,
+          position: "top",
+        });
       }
     };
 
@@ -170,46 +176,59 @@ export default function AdvancedTab() {
     const canSetTitle = popoutPlayerTarget === "window";
 
     return (
-      <FormControl disabled={!canSetTitle}>
-        <InputLabel htmlFor="title-input" variant="standard">
-          {browser.i18n.getMessage("OptionsAdvancedTitleLabel")}
-        </InputLabel>
-        <ConditionalTooltipWrapper
-          condition={!canSetTitle}
-          html={browser.i18n.getMessage(
-            "OptionsSettingDisabled",
-            browser.i18n.getMessage("OptionsBehaviorTargetTabLabel")
-          )}
-        >
-          <Input
-            id="title-input"
-            type="text"
-            value={canSetTitle ? title : ""}
-            onChange={(event) => setTitle(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.code === "Enter") {
-                saveTitle();
-              }
+      <>
+        <FormControl isDisabled={!canSetTitle}>
+          <FormLabel htmlFor="title-input" variant="standard">
+            {browser.i18n.getMessage("OptionsAdvancedTitleLabel")}
+          </FormLabel>
+          <InputGroup>
+            <Input
+              id="title-input"
+              type="text"
+              value={canSetTitle ? title : ""}
+              onChange={(event) => setTitle(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.code === "Enter") {
+                  saveTitle();
+                }
+              }}
+            />
+            <InputRightElement>
+              <IconButton
+                isDisabled={!canSetTitle || title === options["title"]}
+                onClick={saveTitle}
+                icon={<Icon as={CheckIcon} />}
+              />
+            </InputRightElement>
+          </InputGroup>
+          <FormHelperText
+            opacity={canSetTitle ? undefined : "0.4"}
+            dangerouslySetInnerHTML={{
+              __html: browser.i18n.getMessage(
+                "OptionsAdvancedTitleDescription",
+              ),
             }}
-            endAdornment={
-              title !== options["title"] && (
-                <InputAdornment position="end">
-                  <IconButton onClick={saveTitle} edge="end">
-                    <CheckIcon />
-                  </IconButton>
-                </InputAdornment>
-              )
-            }
           />
-        </ConditionalTooltipWrapper>
-        <Typography
-          color={canSetTitle ? "textSecondary" : "inherit"}
-          className={canSetTitle ? "" : classes.disabled}
-          dangerouslySetInnerHTML={{
-            __html: browser.i18n.getMessage("OptionsAdvancedTitleDescription"),
-          }}
-        />
-      </FormControl>
+        </FormControl>
+        {!canSetTitle && (
+          <Box
+            bg={disabledTipBgColor}
+            p={2}
+            mt={2}
+            borderWidth={1}
+            borderColor={disabledTipBorderColor}
+          >
+            <Text
+              dangerouslySetInnerHTML={{
+                __html: browser.i18n.getMessage(
+                  "OptionsSettingDisabled",
+                  browser.i18n.getMessage("OptionsBehaviorTargetTabLabel"),
+                ),
+              }}
+            />
+          </Box>
+        )}
+      </>
     );
   }
 
@@ -219,49 +238,50 @@ export default function AdvancedTab() {
         domain={DOMAIN}
         optionName="noCookieDomain"
         label={browser.i18n.getMessage(
-          "OptionsAdvancedYouTubeNoCookieDomainLabel"
+          "OptionsAdvancedYouTubeNoCookieDomainLabel",
         )}
         description={browser.i18n.getMessage(
-          "OptionsAdvancedYouTubeNoCookieDomainDescription"
+          "OptionsAdvancedYouTubeNoCookieDomainDescription",
         )}
       />
     );
   }
 
   return (
-    <Box>
+    <VStack align="stretch">
       <TabPanelHeader
-        icon={<SettingsIcon />}
+        icon={SettingsIcon}
         title={browser.i18n.getMessage("OptionsHeadingAdvanced")}
       />
-      <Box marginTop={1} marginBottom={2}>
-        <CloseOptionControl />
-      </Box>
-      <Divider />
-      <Box marginY={2}>
-        <BackgroundTabControl />
-      </Box>
-      <Divider />
-      <Box marginY={2}>
-        <YouTubeNoCookieDomainControl />
-      </Box>
-      {isFirefox && (
-        <>
-          <Divider />
-          <Box marginY={2}>
+      <VStack
+        divider={<StackDivider borderColor="gray.200" />}
+        spacing={6}
+        align="stretch"
+      >
+        <Box>
+          <CloseOptionControl />
+        </Box>
+        <Box>
+          <BackgroundTabControl />
+        </Box>
+        <Box>
+          <YouTubeNoCookieDomainControl />
+        </Box>
+        {isFirefox && (
+          <Box>
             <TitleOptionControl />
           </Box>
-          <Divider />
-          <Box marginY={2}>
+        )}
+        {isFirefox && (
+          <Box>
             <ContextualIdentitySupportControl />
           </Box>
-        </>
-      )}
-      <Divider />
-      <Box marginY={2}>
-        <AutoOpenControl />
-      </Box>
-    </Box>
+        )}
+        <Box>
+          <AutoOpenControl />
+        </Box>
+      </VStack>
+    </VStack>
   );
 }
 

@@ -1,15 +1,24 @@
 import React from "react";
-
-import Alert from "@material-ui/lab/Alert";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-
-import SaveIcon from "@material-ui/icons/Save";
-import WarningIcon from "@material-ui/icons/Warning";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Icon,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  VStack,
+} from "@chakra-ui/react";
+import { MdSave as SaveIcon } from "react-icons/md";
 
 import { useOptionsForDomain } from "../../stores/optionsStore";
 
@@ -20,9 +29,8 @@ function CustomPositionForm() {
   const [top, setTop] = React.useState(options.top);
   const [left, setLeft] = React.useState(options.left);
 
-  const handlePositionInputChange = (dimension) => (event) => {
-    const value =
-      event.target.value !== "" ? parseInt(event.target.value, 10) : 0;
+  const handlePositionInputChange = (dimension) => (newValue) => {
+    const value = newValue !== "" ? parseInt(newValue, 10) : 0;
     switch (dimension) {
       case "top":
         setTop(value);
@@ -52,76 +60,65 @@ function CustomPositionForm() {
     top !== options["top"] || left !== options["left"];
 
   return (
-    <Box padding={2}>
-      <Alert
-        severity="info"
-        icon={<WarningIcon color="secondary" fontSize="inherit" />}
-      >
-        <Typography
+    <VStack align="stretch" gap={6} p={6}>
+      <Alert status="warning">
+        <AlertIcon />
+        <AlertDescription
           dangerouslySetInnerHTML={{
             __html: browser.i18n.getMessage("OptionsCustomPositionWarning"),
           }}
         />
       </Alert>
-      <Grid
-        container
-        spacing={2}
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
-      >
-        <Grid item xs>
-          <TextField
-            required
-            fullWidth
-            id="position-top-text-field"
-            label="Top"
-            type="number"
-            margin="normal"
-            value={parseInt(top, 10)}
-            onChange={handlePositionInputChange("top")}
-            InputLabelProps={{}}
-            InputProps={{
-              inputProps: {},
-              endAdornment: (
-                <InputAdornment position="end">
-                  {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
-        <Grid item xs>
-          <TextField
-            required
-            fullWidth
-            id="size-left-text-field"
-            label="Left"
-            type="number"
-            margin="normal"
-            value={parseInt(left, 10)}
-            onChange={handlePositionInputChange("left")}
-            InputLabelProps={{}}
-            InputProps={{
-              inputProps: {},
-              endAdornment: (
-                <InputAdornment position="end">
-                  {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
+      <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+        <GridItem>
+          <InputGroup>
+            <InputLeftAddon>
+              {browser.i18n.getMessage("TopLabel")}
+            </InputLeftAddon>
+            <NumberInput
+              value={parseInt(top, 10)}
+              onChange={handlePositionInputChange("top")}
+              allowMouseWheel
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <InputRightAddon>
+              {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
+            </InputRightAddon>
+          </InputGroup>
+        </GridItem>
+        <GridItem>
+          <InputGroup>
+            <InputLeftAddon>
+              {browser.i18n.getMessage("LeftLabel")}
+            </InputLeftAddon>
+            <NumberInput
+              value={parseInt(left, 10)}
+              onChange={handlePositionInputChange("left")}
+              allowMouseWheel
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <InputRightAddon>
+              {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
+            </InputRightAddon>
+          </InputGroup>
+        </GridItem>
       </Grid>
 
-      <Box paddingX={8}>
+      <Box px={8}>
         <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          startIcon={<SaveIcon />}
-          fullWidth
-          disabled={!validatePositions() || !positionChanged()}
+          width="100%"
+          rightIcon={<Icon as={SaveIcon} />}
+          isDisabled={!validatePositions() || !positionChanged()}
           onClick={() =>
             setOptions({
               top: parseInt(top, 10),
@@ -132,7 +129,7 @@ function CustomPositionForm() {
           {browser.i18n.getMessage("ButtonSaveCustomPositionLabel")}
         </Button>
       </Box>
-    </Box>
+    </VStack>
   );
 }
 

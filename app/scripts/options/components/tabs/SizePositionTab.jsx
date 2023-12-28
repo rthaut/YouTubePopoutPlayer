@@ -1,23 +1,19 @@
 import React from "react";
+import { Alert, Box, VStack } from "@chakra-ui/react";
+import {
+  MdAspectRatio as AspectRatioIcon,
+  MdOpenWith as OpenWithIcon,
+} from "react-icons/md";
 
-import Alert from "@material-ui/lab/Alert";
-import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
-
-import AspectRatioIcon from "@material-ui/icons/AspectRatio";
-import OpenWithIcon from "@material-ui/icons/OpenWith";
-
+import {
+  OPTIONS_POSITION_MODE_VALUES,
+  OPTIONS_SIZE_MODE_VALUES,
+} from "../../../helpers/constants";
+import useOptionsStore from "../../stores/optionsStore";
 import { ModeOptionRadioControl } from "../controls/ModeOptionControls";
 import CustomDimensionsForm from "../forms/CustomDimensionsForm";
 import CustomPositionForm from "../forms/CustomPositionForm";
 import TabPanelHeader from "../TabPanelHeader";
-
-import useOptionsStore from "../../stores/optionsStore";
-
-import {
-  OPTIONS_SIZE_MODE_VALUES,
-  OPTIONS_POSITION_MODE_VALUES,
-} from "../../../helpers/constants";
 
 export const DOMAIN = "size_position";
 
@@ -48,49 +44,40 @@ export default function SizePositionTab() {
   }
 
   return (
-    <>
-      <Box>
-        <TabPanelHeader
-          icon={<AspectRatioIcon />}
-          title={browser.i18n.getMessage("OptionsHeadingSize")}
-        />
+    <VStack align="stretch">
+      <TabPanelHeader
+        icon={AspectRatioIcon}
+        title={browser.i18n.getMessage("OptionsHeadingSize")}
+      />
+      <Box mb={12}>
         {targetIsTab ? (
-          <Box marginY={1}>
-            <Alert severity="warning">
-              {browser.i18n.getMessage("OptionsSettingsNotAvailableForTab")}
-            </Alert>
-          </Box>
+          <Alert status="warning">
+            {browser.i18n.getMessage("OptionsSettingsNotAvailableForTab")}
+          </Alert>
         ) : (
           <>
-            <Box marginY={1}>
-              <SizeModeOptionControl />
-            </Box>
+            <SizeModeOptionControl />
             {sizeMode === "custom" && <CustomDimensionsForm />}
           </>
         )}
       </Box>
-      <Divider />
-      <Box marginTop={2}>
-        <TabPanelHeader
-          icon={<OpenWithIcon />}
-          title={browser.i18n.getMessage("OptionsHeadingPosition")}
-        />
+      <TabPanelHeader
+        icon={OpenWithIcon}
+        title={browser.i18n.getMessage("OptionsHeadingPosition")}
+      />
+      <Box>
         {targetIsTab ? (
-          <Box marginY={1}>
-            <Alert severity="warning">
-              {browser.i18n.getMessage("OptionsSettingsNotAvailableForTab")}
-            </Alert>
-          </Box>
+          <Alert severity="warning">
+            {browser.i18n.getMessage("OptionsSettingsNotAvailableForTab")}
+          </Alert>
         ) : (
           <>
-            <Box marginY={1}>
-              <PositionModeOptionControl />
-            </Box>
+            <PositionModeOptionControl />
             {positionMode === "custom" && <CustomPositionForm />}
           </>
         )}
       </Box>
-    </>
+    </VStack>
   );
 }
 

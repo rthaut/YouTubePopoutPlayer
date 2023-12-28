@@ -1,27 +1,26 @@
 import React from "react";
-
-import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Select from "@material-ui/core/Select";
-import Typography from "@material-ui/core/Typography";
-
-import TuneIcon from "@material-ui/icons/Tune";
-
-import TabPanelHeader from "../TabPanelHeader";
-import BasicToggleControl from "../controls/BasicToggleControl";
-
-import { useOptionsForDomain } from "../../stores/optionsStore";
+import {
+  Alert,
+  Box,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Select,
+  StackDivider,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { MdTune as TuneIcon } from "react-icons/md";
 
 import {
-  OPTIONS_BEHAVIOR_TARGET_VALUES,
   OPTIONS_BEHAVIOR_CONTROLS_VALUES,
+  OPTIONS_BEHAVIOR_TARGET_VALUES,
 } from "../../../helpers/constants";
+import { useOptionsForDomain } from "../../stores/optionsStore";
+import BasicToggleControl from "../controls/BasicToggleControl";
+import TabPanelHeader from "../TabPanelHeader";
 
 export const DOMAIN = "behavior";
 
@@ -31,32 +30,31 @@ export default function BehaviorTab() {
 
   function TargetOptionControl() {
     return (
-      <FormControl component="fieldset">
+      <FormControl>
         <RadioGroup
           name="target"
           value={options["target"]}
-          onChange={(event) => setOption("target", event.target.value)}
+          onChange={(newValue) => setOption("target", newValue)}
         >
-          {OPTIONS_BEHAVIOR_TARGET_VALUES.map((targetOptionName) => (
-            <React.Fragment key={targetOptionName}>
-              <FormControlLabel
-                value={targetOptionName}
-                control={<Radio color="primary" />}
-                label={browser.i18n.getMessage(
-                  `OptionsBehaviorTarget${targetOptionName}Label`
-                )}
-              />
-              <Typography
-                color="textSecondary"
-                gutterBottom
-                dangerouslySetInnerHTML={{
-                  __html: browser.i18n.getMessage(
-                    `OptionsBehaviorTarget${targetOptionName}Description`
-                  ),
-                }}
-              />
-            </React.Fragment>
-          ))}
+          <VStack spacing={6} align="stretch">
+            {OPTIONS_BEHAVIOR_TARGET_VALUES.map((targetOptionName) => (
+              <Box key={targetOptionName}>
+                <Radio value={targetOptionName}>
+                  {browser.i18n.getMessage(
+                    `OptionsBehaviorTarget${targetOptionName}Label`,
+                  )}
+                </Radio>
+                <Text
+                  fontSize="md"
+                  dangerouslySetInnerHTML={{
+                    __html: browser.i18n.getMessage(
+                      `OptionsBehaviorTarget${targetOptionName}Description`,
+                    ),
+                  }}
+                />
+              </Box>
+            ))}
+          </VStack>
         </RadioGroup>
       </FormControl>
     );
@@ -64,25 +62,22 @@ export default function BehaviorTab() {
 
   function ShowControlsOptionControl() {
     return (
-      <FormControl fullWidth>
-        <InputLabel id="behavior-controls-label">
+      <FormControl>
+        <FormLabel htmlFor="behavior-controls-label">
           {browser.i18n.getMessage("BehaviorControlsLabel")}
-        </InputLabel>
+        </FormLabel>
         <Select
-          labelId="behavior-controls-label"
           id="behavior-controls-select"
           value={options["controls"]}
           onChange={(event) => setOption("controls", event.target.value)}
         >
           {OPTIONS_BEHAVIOR_CONTROLS_VALUES.map((option) => (
-            <MenuItem value={option} key={option}>
+            <option value={option} key={option}>
               {browser.i18n.getMessage(`BehaviorControls${option}OptionLabel`)}
-            </MenuItem>
+            </option>
           ))}
         </Select>
-        <Typography
-          color="textSecondary"
-          paragraph
+        <FormHelperText
           dangerouslySetInnerHTML={{
             __html: browser.i18n.getMessage("BehaviorControlsDescription"),
           }}
@@ -93,14 +88,23 @@ export default function BehaviorTab() {
 
   function AutoplayControl() {
     return (
-      <BasicToggleControl
-        domain={DOMAIN}
-        optionName="autoplay"
-        label={browser.i18n.getMessage("OptionsBehaviorAutoplayLabel")}
-        description={browser.i18n.getMessage(
-          "OptionsBehaviorAutoplayDescription"
-        )}
-      />
+      <Box>
+        <BasicToggleControl
+          domain={DOMAIN}
+          optionName="autoplay"
+          label={browser.i18n.getMessage("OptionsBehaviorAutoplayLabel")}
+          description={browser.i18n.getMessage(
+            "OptionsBehaviorAutoplayDescription",
+          )}
+        />
+        <Alert status="warning" mt={2}>
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: browser.i18n.getMessage("AutoplayVideosBlockedTip"),
+            }}
+          />
+        </Alert>
+      </Box>
     );
   }
 
@@ -123,14 +127,14 @@ export default function BehaviorTab() {
         label={browser.i18n.getMessage(
           "OptionsBehaviorReuseWindowsTabsLabel",
           browser.i18n.getMessage(
-            `OptionsSubstitutionBehaviorTarget${options["target"]}`
-          )
+            `OptionsSubstitutionBehaviorTarget${options["target"]}`,
+          ),
         )}
         description={browser.i18n.getMessage(
           "OptionsBehaviorReuseWindowsTabsDescription",
           browser.i18n
             .getMessage(`OptionsSubstitutionBehaviorTarget${options["target"]}`)
-            .toLowerCase()
+            .toLowerCase(),
         )}
       />
     );
@@ -138,61 +142,66 @@ export default function BehaviorTab() {
 
   function RotationControls() {
     return (
-      <Box>
+      <VStack
+        divider={<StackDivider borderColor="gray.200" />}
+        spacing={6}
+        align="stretch"
+      >
         <BasicToggleControl
           domain={DOMAIN}
           optionName="showRotationButtons"
           label={browser.i18n.getMessage(
-            "OptionsBehaviorShowRotationButtonsLabel"
+            "OptionsBehaviorShowRotationButtonsLabel",
           )}
           description={browser.i18n.getMessage(
-            "OptionsBehaviorShowRotationButtonsDescription"
+            "OptionsBehaviorShowRotationButtonsDescription",
           )}
         />
         <BasicToggleControl
           domain={DOMAIN}
           optionName="showRotationMenus"
           label={browser.i18n.getMessage(
-            "OptionsBehaviorShowRotationMenusLabel"
+            "OptionsBehaviorShowRotationMenusLabel",
           )}
           description={browser.i18n.getMessage(
-            "OptionsBehaviorShowRotationMenusDescription"
+            "OptionsBehaviorShowRotationMenusDescription",
           )}
         />
-      </Box>
+      </VStack>
     );
   }
 
   return (
-    <Box>
+    <VStack align="stretch">
       <TabPanelHeader
-        icon={<TuneIcon />}
+        icon={TuneIcon}
         title={browser.i18n.getMessage("OptionsHeadingBehavior")}
       />
-      <Box marginTop={1} marginBottom={2}>
-        <TargetOptionControl />
-      </Box>
-      <Divider />
-      <Box marginY={2}>
-        <ReuseExistingOptionControl />
-      </Box>
-      <Divider />
-      <Box marginY={2}>
-        <ShowControlsOptionControl />
-      </Box>
-      <Divider />
-      <Box marginY={2}>
-        <AutoplayControl />
-      </Box>
-      <Divider />
-      <Box marginY={2}>
-        <LoopControl />
-      </Box>
-      <Divider />
-      <Box marginY={2}>
-        <RotationControls />
-      </Box>
-    </Box>
+      <VStack
+        divider={<StackDivider borderColor="gray.200" />}
+        spacing={6}
+        align="stretch"
+      >
+        <Box>
+          <TargetOptionControl />
+        </Box>
+        <Box>
+          <ReuseExistingOptionControl />
+        </Box>
+        <Box>
+          <ShowControlsOptionControl />
+        </Box>
+        <Box>
+          <AutoplayControl />
+        </Box>
+        <Box>
+          <LoopControl />
+        </Box>
+        <Box>
+          <RotationControls />
+        </Box>
+      </VStack>
+    </VStack>
   );
 }
 

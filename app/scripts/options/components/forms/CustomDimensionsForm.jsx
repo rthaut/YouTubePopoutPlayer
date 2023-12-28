@@ -1,34 +1,38 @@
 import React from "react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Grid,
+  GridItem,
+  Icon,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Select,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Tr,
+  VStack,
+} from "@chakra-ui/react";
 import PropTypes from "prop-types";
-
+import { MdSave as SaveIcon } from "react-icons/md";
 import { usePrevious } from "react-use";
 
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import Grid from "@material-ui/core/Grid";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Paper from "@material-ui/core/Paper";
-import Select from "@material-ui/core/Select";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableRow from "@material-ui/core/TableRow";
-import TextField from "@material-ui/core/TextField";
-
-import SaveIcon from "@material-ui/icons/Save";
-
-import { useOptionsForDomain } from "../../stores/optionsStore";
-
+import { OPTIONS_SIZE_UNITS_VALUES } from "../../../helpers/constants";
 import {
   GetDimensionForScreenPercentage,
   GreatestCommonDenominator,
 } from "../../../helpers/utils";
-
-import { OPTIONS_SIZE_UNITS_VALUES } from "../../../helpers/constants";
+import { useOptionsForDomain } from "../../stores/optionsStore";
 
 function CustomDimensionsInfoTable({ units, width, height }) {
   if (units === "percentage") {
@@ -39,48 +43,44 @@ function CustomDimensionsInfoTable({ units, width, height }) {
   const ratio = GreatestCommonDenominator(width, height);
 
   return (
-    <Paper variant="outlined">
+    <Box>
       <TableContainer>
-        <Table size="small">
-          <TableBody>
-            <TableRow>
-              <TableCell component="th" scope="row">
+        <Table size="sm">
+          <Tbody>
+            <Tr>
+              <Td component="th" scope="row">
                 {browser.i18n.getMessage("InfoCurrentScreenResolutionLabel")}
-              </TableCell>
-              <TableCell>
+              </Td>
+              <Td>
                 <strong>
                   {window.screen.width} &times; {window.screen.height}
                 </strong>
-              </TableCell>
-            </TableRow>
-
-            {units === "percentage" && (
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  {browser.i18n.getMessage("InfoPopoutPlayerWindowSizeLabel")}
-                </TableCell>
-                <TableCell>
-                  <strong>
-                    {width} &times; {height}
-                  </strong>
-                </TableCell>
-              </TableRow>
-            )}
-
-            <TableRow>
-              <TableCell component="th" scope="row">
+              </Td>
+            </Tr>
+            <Tr>
+              <Td component="th" scope="row">
+                {browser.i18n.getMessage("InfoPopoutPlayerWindowSizeLabel")}
+              </Td>
+              <Td>
+                <strong>
+                  {width} &times; {height}
+                </strong>
+              </Td>
+            </Tr>
+            <Tr>
+              <Td component="th" scope="row">
                 {browser.i18n.getMessage("InfoPopoutPlayerAspectRatioLabel")}
-              </TableCell>
-              <TableCell>
+              </Td>
+              <Td>
                 <strong>
                   {width / ratio}:{height / ratio}
                 </strong>
-              </TableCell>
-            </TableRow>
-          </TableBody>
+              </Td>
+            </Tr>
+          </Tbody>
         </Table>
       </TableContainer>
-    </Paper>
+    </Box>
   );
 }
 
@@ -143,9 +143,8 @@ function CustomDimensionsForm() {
     }
   }, [units]);
 
-  const handleDimensionInputChange = (dimension) => (event) => {
-    const value =
-      event.target.value !== "" ? parseInt(event.target.value, 10) : 0;
+  const handleDimensionInputChange = (dimension) => (newValue) => {
+    const value = newValue !== "" ? parseInt(newValue, 10) : 0;
     switch (dimension) {
       case "width":
         setWidth(value);
@@ -201,81 +200,74 @@ function CustomDimensionsForm() {
     height !== options["height"];
 
   return (
-    <Box padding={2}>
-      <FormControl fullWidth>
-        <InputLabel id="size-units-label">
-          {browser.i18n.getMessage("DimensionUnitsLabel")}
-        </InputLabel>
-        <Select
-          labelId="size-units-label"
-          id="size-units-select"
-          value={units}
-          onChange={(event) => setUnits(event.target.value)}
-        >
-          {OPTIONS_SIZE_UNITS_VALUES.map((unit) => (
-            <MenuItem value={unit} key={unit}>
-              {browser.i18n.getMessage(`DimensionUnits${unit}OptionLabel`)}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      <Grid
-        container
-        spacing={2}
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
-      >
-        <Grid item xs>
-          <TextField
-            required
-            fullWidth
-            id="size-width-text-field"
-            label="Width"
-            type="number"
-            margin="normal"
-            value={parseInt(width, 10)}
-            onChange={handleDimensionInputChange("width")}
-            InputLabelProps={{}}
-            InputProps={{
-              inputProps: {
-                ...widthRestrictions,
-              },
-              endAdornment: (
-                <InputAdornment position="end">
-                  {browser.i18n.getMessage(`DimensionUnits${units}UnitLabel`)}
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
-        <Grid item xs>
-          <TextField
-            required
-            fullWidth
-            id="size-height-text-field"
-            label="Height"
-            type="number"
-            margin="normal"
-            value={parseInt(height, 10)}
-            onChange={handleDimensionInputChange("height")}
-            InputLabelProps={{}}
-            InputProps={{
-              inputProps: {
-                ...heightRestrictions,
-              },
-              endAdornment: (
-                <InputAdornment position="end">
-                  {browser.i18n.getMessage(`DimensionUnits${units}UnitLabel`)}
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
+    <VStack align="stretch" gap={6} p={6}>
+      <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+        <GridItem colSpan={2}>
+          <FormControl>
+            <FormLabel htmlFor="size-units-label">
+              {browser.i18n.getMessage("DimensionUnitsLabel")}
+            </FormLabel>
+            <Select
+              id="size-units-select"
+              value={units}
+              onChange={(event) => setUnits(event.target.value)}
+            >
+              {OPTIONS_SIZE_UNITS_VALUES.map((unit) => (
+                <option value={unit} key={unit}>
+                  {browser.i18n.getMessage(`DimensionUnits${unit}OptionLabel`)}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+        </GridItem>
+        <GridItem>
+          <InputGroup>
+            <InputLeftAddon>
+              {browser.i18n.getMessage("WidthLabel")}
+            </InputLeftAddon>
+            <NumberInput
+              min={widthRestrictions["min"]}
+              max={widthRestrictions["max"]}
+              value={parseInt(width, 10)}
+              onChange={handleDimensionInputChange("width")}
+              allowMouseWheel
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <InputRightAddon>
+              {browser.i18n.getMessage(`DimensionUnits${units}UnitLabel`)}
+            </InputRightAddon>
+          </InputGroup>
+        </GridItem>
+        <GridItem>
+          <InputGroup>
+            <InputLeftAddon>
+              {browser.i18n.getMessage("HeightLabel")}
+            </InputLeftAddon>
+            <NumberInput
+              min={heightRestrictions["min"]}
+              max={heightRestrictions["max"]}
+              value={parseInt(height, 10)}
+              onChange={handleDimensionInputChange("height")}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <InputRightAddon>
+              {browser.i18n.getMessage(`DimensionUnits${units}UnitLabel`)}
+            </InputRightAddon>
+          </InputGroup>
+        </GridItem>
       </Grid>
 
-      <Box padding={2}>
+      <Box p={2}>
         <CustomDimensionsInfoTable
           units={units}
           width={width}
@@ -283,14 +275,11 @@ function CustomDimensionsForm() {
         />
       </Box>
 
-      <Box paddingX={8}>
+      <Box px={8}>
         <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          startIcon={<SaveIcon />}
-          fullWidth
-          disabled={!validateDimensions() || !dimensionsChanged()}
+          width="100%"
+          rightIcon={<Icon as={SaveIcon} />}
+          isDisabled={!validateDimensions() || !dimensionsChanged()}
           onClick={() =>
             setOptions({
               units,
@@ -302,7 +291,7 @@ function CustomDimensionsForm() {
           {browser.i18n.getMessage("ButtonSaveCustomDimensionsLabel")}
         </Button>
       </Box>
-    </Box>
+    </VStack>
   );
 }
 

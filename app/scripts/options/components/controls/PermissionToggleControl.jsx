@@ -1,82 +1,95 @@
 import React from "react";
+import {
+  Alert,
+  AlertDescription,
+  Box,
+  CloseButton,
+  Flex,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Switch,
+  VStack,
+} from "@chakra-ui/react";
 import PropTypes from "prop-types";
-
-import Alert from "@material-ui/lab/Alert";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import Typography from "@material-ui/core/Typography";
 
 import { useOption } from "../../stores/optionsStore";
 
-function PermissionToggleControl({
-  domain,
-  optionName,
-  label,
-  description,
-  permissionsRequest,
-}) {
-  const [value, setValue] = useOption(domain, optionName);
-  const [showPermissionError, setShowPermissionError] = React.useState(false);
+const PermissionToggleControl = React.forwardRef(
+  function PermissionToggleControl(
+    { domain, optionName, label, description, permissionsRequest },
+    ref,
+  ) {
+    const [value, setValue] = useOption(domain, optionName);
+    const [showPermissionError, setShowPermissionError] = React.useState(false);
 
-  const handlePermissionSwitchToggle = async (remove = false) => {
-    setShowPermissionError(false);
+    const handlePermissionSwitchToggle = async (remove = false) => {
+      setShowPermissionError(false);
 
-    if (remove) {
-      await browser.permissions.remove(permissionsRequest);
-      setValue(false);
-      return false;
-    }
+      if (remove) {
+        await browser.permissions.remove(permissionsRequest);
+        setValue(false);
+        return false;
+      }
 
-    const permissionGranted = await browser.permissions.request(
-      permissionsRequest
-    );
+      const permissionGranted =
+        await browser.permissions.request(permissionsRequest);
 
-    if (!permissionGranted) {
-      setShowPermissionError(true);
-      return false;
-    }
+      if (!permissionGranted) {
+        setShowPermissionError(true);
+        return false;
+      }
 
-    setValue(true);
-    return true;
-  };
+      setValue(true);
+      return true;
+    };
 
-  const onPermissionSwitchChange = async (event) => {
-    handlePermissionSwitchToggle(!event.target.checked);
-  };
+    const onPermissionSwitchChange = async (event) => {
+      await handlePermissionSwitchToggle(!event.target.checked);
+    };
 
-  return (
-    <FormControl>
-      <FormControlLabel
-        label={label}
-        control={
-          <Switch
-            name={`${optionName}PermissionToggleSwitch`}
-            color="primary"
-            checked={value}
-            onChange={onPermissionSwitchChange}
+    return (
+      <FormControl ref={ref}>
+        <VStack align="stretch">
+          <Flex gap={2} alignItems="center">
+            <Switch
+              id={`${optionName}PermissionToggleSwitch`}
+              name={`${optionName}PermissionToggleSwitch`}
+              color="primary"
+              isChecked={value && !showPermissionError}
+              onChange={onPermissionSwitchChange}
+            />
+            <FormLabel htmlFor={`${optionName}PermissionToggleSwitch`} mb="0">
+              {label}
+            </FormLabel>
+          </Flex>
+          {showPermissionError && (
+            <Alert status="error" display="flex" flexDirection="row">
+              <Box flexGrow={1}>
+                <AlertDescription>
+                  {browser.i18n.getMessage(
+                    "FieldRequiredPermissionsNotGrantedMessage",
+                  )}
+                </AlertDescription>
+              </Box>
+              <CloseButton
+                onClick={() => {
+                  setShowPermissionError(false);
+                  setValue(false);
+                }}
+              />
+            </Alert>
+          )}
+          <FormHelperText
+            dangerouslySetInnerHTML={{
+              __html: description,
+            }}
           />
-        }
-      />
-      {showPermissionError && (
-        <Alert
-          severity="error"
-          onClose={() => {
-            setShowPermissionError(false);
-          }}
-        >
-          {browser.i18n.getMessage("FieldRequiredPermissionsNotGrantedMessage")}
-        </Alert>
-      )}
-      <Typography
-        color="textSecondary"
-        dangerouslySetInnerHTML={{
-          __html: description,
-        }}
-      />
-    </FormControl>
-  );
-}
+        </VStack>
+      </FormControl>
+    );
+  },
+);
 
 PermissionToggleControl.propTypes = {
   domain: PropTypes.string.isRequired,
