@@ -1,15 +1,15 @@
 import React from "react";
 
-import Alert from "@material-ui/lab/Alert";
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+import Alert from "@mui/lab/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 
-import SaveIcon from "@material-ui/icons/Save";
-import WarningIcon from "@material-ui/icons/Warning";
+import SaveIcon from "@mui/icons-material/Save";
+import WarningIcon from "@mui/icons-material/Warning";
 
 import { useOptionsForDomain } from "../../stores/optionsStore";
 
@@ -75,7 +75,7 @@ function CustomPositionForm() {
             required
             fullWidth
             id="position-top-text-field"
-            label="Top"
+            label={browser.i18n.getMessage("TopLabel")}
             type="number"
             margin="normal"
             value={parseInt(top, 10)}
@@ -96,7 +96,7 @@ function CustomPositionForm() {
             required
             fullWidth
             id="size-left-text-field"
-            label="Left"
+            label={browser.i18n.getMessage("LeftLabel")}
             type="number"
             margin="normal"
             value={parseInt(left, 10)}

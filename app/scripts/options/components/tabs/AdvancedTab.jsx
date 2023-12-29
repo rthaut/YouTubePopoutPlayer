@@ -1,19 +1,18 @@
 import React from "react";
 
-import { makeStyles, createStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import InputLabel from "@material-ui/core/InputLabel";
-import Switch from "@material-ui/core/Switch";
-import Typography from "@material-ui/core/Typography";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import IconButton from "@mui/material/IconButton";
+import Input from "@mui/material/Input";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 
-import CheckIcon from "@material-ui/icons/Check";
-import SettingsIcon from "@material-ui/icons/Settings";
+import CheckIcon from "@mui/icons-material/Check";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import TabPanelHeader from "../TabPanelHeader";
 import BasicToggleControl from "../controls/BasicToggleControl";
@@ -194,7 +193,7 @@ export default function AdvancedTab() {
             endAdornment={
               title !== options["title"] && (
                 <InputAdornment position="end">
-                  <IconButton onClick={saveTitle} edge="end">
+                  <IconButton onClick={saveTitle} edge="end" size="large">
                     <CheckIcon />
                   </IconButton>
                 </InputAdornment>

@@ -1,17 +1,18 @@
 import React from "react";
 
-import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Select from "@material-ui/core/Select";
-import Typography from "@material-ui/core/Typography";
+import Alert from "@mui/lab/Alert";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Select from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
 
-import TuneIcon from "@material-ui/icons/Tune";
+import TuneIcon from "@mui/icons-material/Tune";
 
 import TabPanelHeader from "../TabPanelHeader";
 import BasicToggleControl from "../controls/BasicToggleControl";
@@ -69,6 +70,7 @@ export default function BehaviorTab() {
           {browser.i18n.getMessage("BehaviorControlsLabel")}
         </InputLabel>
         <Select
+          label={browser.i18n.getMessage("BehaviorControlsLabel")}
           labelId="behavior-controls-label"
           id="behavior-controls-select"
           value={options["controls"]}
@@ -93,14 +95,25 @@ export default function BehaviorTab() {
 
   function AutoplayControl() {
     return (
-      <BasicToggleControl
-        domain={DOMAIN}
-        optionName="autoplay"
-        label={browser.i18n.getMessage("OptionsBehaviorAutoplayLabel")}
-        description={browser.i18n.getMessage(
-          "OptionsBehaviorAutoplayDescription"
-        )}
-      />
+      <>
+        <BasicToggleControl
+          domain={DOMAIN}
+          optionName="autoplay"
+          label={browser.i18n.getMessage("OptionsBehaviorAutoplayLabel")}
+          description={browser.i18n.getMessage(
+            "OptionsBehaviorAutoplayDescription"
+          )}
+        />
+        <Box mt={1}>
+          <Alert severity="warning" icon={false}>
+            <Typography
+              dangerouslySetInnerHTML={{
+                __html: browser.i18n.getMessage("AutoplayVideosBlockedTip"),
+              }}
+            />
+          </Alert>
+        </Box>
+      </>
     );
   }
 
