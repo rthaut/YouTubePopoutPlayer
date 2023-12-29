@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Alert from "@material-ui/lab/Alert";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import Typography from "@material-ui/core/Typography";
+import Alert from "@mui/lab/Alert";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 
 import { useOption } from "../../stores/optionsStore";
 
@@ -28,9 +28,8 @@ function PermissionToggleControl({
       return false;
     }
 
-    const permissionGranted = await browser.permissions.request(
-      permissionsRequest
-    );
+    const permissionGranted =
+      await browser.permissions.request(permissionsRequest);
 
     if (!permissionGranted) {
       setShowPermissionError(true);

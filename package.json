@@ -30,14 +30,17 @@
     "url": "https://github.com/rthaut/YouTubePopoutPlayer/issues"
   },
   "browserslist": [
-    "chrome >= 51.0",
-    "edge >= 79.0.309",
-    "firefox >= 62.0"
+    "chrome >= 90.0",
+    "edge >= 91.0",
+    "firefox >= 109.0"
   ],
   "dependencies": {
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "@material-ui/lab": "^4.0.0-alpha.61",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.2",
+    "@mui/lab": "^5.0.0-alpha.158",
+    "@mui/material": "^5.15.2",
+    "@mui/styles": "^5.15.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-use": "^17.4.0",

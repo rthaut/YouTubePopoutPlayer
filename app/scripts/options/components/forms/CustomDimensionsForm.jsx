@@ -3,23 +3,23 @@ import PropTypes from "prop-types";
 
 import { usePrevious } from "react-use";
 
-import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import Grid from "@material-ui/core/Grid";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Paper from "@material-ui/core/Paper";
-import Select from "@material-ui/core/Select";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableRow from "@material-ui/core/TableRow";
-import TextField from "@material-ui/core/TextField";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
+import InputAdornment from "@mui/material/InputAdornment";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableRow from "@mui/material/TableRow";
+import TextField from "@mui/material/TextField";
 
-import SaveIcon from "@material-ui/icons/Save";
+import SaveIcon from "@mui/icons-material/Save";
 
 import { useOptionsForDomain } from "../../stores/optionsStore";
 
@@ -207,6 +207,7 @@ function CustomDimensionsForm() {
           {browser.i18n.getMessage("DimensionUnitsLabel")}
         </InputLabel>
         <Select
+          label={browser.i18n.getMessage("DimensionUnitsLabel")}
           labelId="size-units-label"
           id="size-units-select"
           value={units}
@@ -232,7 +233,7 @@ function CustomDimensionsForm() {
             required
             fullWidth
             id="size-width-text-field"
-            label="Width"
+            label={browser.i18n.getMessage("WidthLabel")}
             type="number"
             margin="normal"
             value={parseInt(width, 10)}
@@ -255,7 +256,7 @@ function CustomDimensionsForm() {
             required
             fullWidth
             id="size-height-text-field"
-            label="Height"
+            label={browser.i18n.getMessage("HeightLabel")}
             type="number"
             margin="normal"
             value={parseInt(height, 10)}
