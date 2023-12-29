@@ -41,6 +41,4 @@ BasicToggleControl.propTypes = {
   description: PropTypes.string.isRequired,
 };
 
-BasicToggleControl.whyDidYouRender = true;
-
 export default BasicToggleControl;

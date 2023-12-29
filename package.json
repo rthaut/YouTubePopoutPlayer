@@ -48,7 +48,6 @@
     "zustand": "^4.3.6"
   },
   "devDependencies": {
-    "@welldone-software/why-did-you-render": "^7.0.1",
     "browser-sync": "^2.29.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.36.0",

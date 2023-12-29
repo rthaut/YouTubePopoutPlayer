@@ -93,5 +93,3 @@ export default function SizePositionTab() {
     </>
   );
 }
-
-SizePositionTab.whyDidYouRender = true;

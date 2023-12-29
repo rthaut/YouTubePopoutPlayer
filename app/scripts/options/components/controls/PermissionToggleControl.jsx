@@ -87,6 +87,4 @@ PermissionToggleControl.propTypes = {
   }).isRequired,
 };
 
-PermissionToggleControl.whyDidYouRender = true;
-
 export default PermissionToggleControl;

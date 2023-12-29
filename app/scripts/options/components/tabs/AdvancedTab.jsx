@@ -251,5 +251,3 @@ export default function AdvancedTab() {
     </Box>
   );
 }
-
-AdvancedTab.whyDidYouRender = true;

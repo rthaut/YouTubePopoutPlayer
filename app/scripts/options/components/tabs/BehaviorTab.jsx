@@ -208,5 +208,3 @@ export default function BehaviorTab() {
     </Box>
   );
 }
-
-BehaviorTab.whyDidYouRender = true;
