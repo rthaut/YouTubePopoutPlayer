@@ -15,3 +15,6 @@ insert_final_newline = false
 
 [*.{pem,pub}]
 insert_final_newline = false
+
+[*.css]
+tab_width = 4

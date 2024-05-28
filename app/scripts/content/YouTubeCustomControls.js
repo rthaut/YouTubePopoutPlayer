@@ -1,11 +1,10 @@
+import { CloseTab } from "../content";
+import Options from "../helpers/options";
+import { IsPopoutPlayer } from "../helpers/utils";
 import {
   OpenPopoutForPageVideo,
   RotateVideoPlayer,
 } from "./YouTubePopoutPlayer";
-import { CloseTab } from "../content";
-
-import Options from "../helpers/options";
-import { IsPopoutPlayer } from "../helpers/utils";
 
 /**
  * Click event handler for the context menu entry and the controls button
@@ -53,7 +52,7 @@ export const WatchForPageChanges = () => {
             case "ytp-popup ytp-contextmenu":
               console.log(
                 "[YouTubeCustomControls] WatchForPageChanges() :: Mutation observed for context menu",
-                node
+                node,
               );
               InsertPopoutEntryIntoContextMenu();
               break;
@@ -61,7 +60,7 @@ export const WatchForPageChanges = () => {
             case "ytp-right-controls":
               console.log(
                 "[YouTubeCustomControls] WatchForPageChanges() :: Mutation observed for player controls",
-                node
+                node,
               );
               await InsertPopoutButtonIntoPlayerControls();
               await InsertRotationButtonsIntoPlayerControls();
@@ -109,7 +108,7 @@ const InsertPopoutEntryIntoContextMenu = () => {
     const menuItemLabel = document.createElement("div");
     menuItemLabel.className = "ytp-menuitem-label";
     menuItemLabel.innerText = browser.i18n.getMessage(
-      "ContextMenuEntryLabel_PopoutPlayer"
+      "ContextMenuEntryLabel_PopoutPlayer",
     );
 
     const menuItemContent = document.createElement("div");
@@ -121,7 +120,7 @@ const InsertPopoutEntryIntoContextMenu = () => {
     menuItem.addEventListener(
       "click",
       OpenPopoutPlayerControlsClickEventHandler,
-      false
+      false,
     );
 
     const menu = contextmenu
@@ -143,7 +142,7 @@ const InsertPopoutEntryIntoContextMenu = () => {
   } catch (error) {
     console.error(
       "Failed to insert popout player entry into context menu",
-      error
+      error,
     );
     return false;
   }
@@ -166,7 +165,7 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
     } catch (error) {
       console.error(
         `Failed to get "behavior.controls" option from local storage`,
-        error
+        error,
       );
     }
   }
@@ -182,13 +181,13 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
     if (playerButton) {
       console.warn(
         "#popout-player-control-button already exists",
-        playerButton
+        playerButton,
       );
       return false;
     }
 
     const fullScreenButton = controls.getElementsByClassName(
-      "ytp-fullscreen-button"
+      "ytp-fullscreen-button",
     )[0];
     if (!fullScreenButton) {
       console.warn("Missing player controls full screen button");
@@ -199,32 +198,32 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
     playerButton.className = ["ytp-popout-button", "ytp-button"].join(" ");
     playerButton.setAttribute(
       "aria-label",
-      browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer")
+      browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer"),
     );
     playerButton.setAttribute(
       "title",
-      browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer")
+      browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer"),
     );
     playerButton.id = "popout-player-control-button";
     playerButton.appendChild(GetPopoutIconSVG("button", true));
     playerButton.addEventListener(
       "click",
       OpenPopoutPlayerControlsClickEventHandler,
-      false
+      false,
     );
 
     // TODO: this doesn't work (`fullScreenButton["onmouseover"]` is null); need another way to implement the fancy tooltip
     playerButton.addEventListener(
       "mouseover",
       fullScreenButton["onmouseover"],
-      false
+      false,
     );
 
     controls.insertBefore(playerButton, fullScreenButton);
   } catch (error) {
     console.error(
       "Failed to insert popout player button into player controls",
-      error
+      error,
     );
     return false;
   }
@@ -235,7 +234,7 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
 const InsertRotationButtonsIntoPlayerControls = async () => {
   if (!IsPopoutPlayer(window.location)) {
     console.info(
-      "Video player rotation controls are currently only supported within the popout player"
+      "Video player rotation controls are currently only supported within the popout player",
     );
     return false;
   }
@@ -243,7 +242,7 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
   try {
     const showRotationButtons = await Options.GetLocalOption(
       "behavior",
-      "showRotationButtons"
+      "showRotationButtons",
     );
     if (showRotationButtons === false) {
       console.info(`Options "behavior.showRotationButtons" is disabled`);
@@ -252,7 +251,7 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
   } catch (error) {
     console.error(
       `Failed to get "behavior.showRotationButtons" option from local storage`,
-      error
+      error,
     );
   }
 
@@ -266,12 +265,12 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
     const directions = ["left", "right"].reverse();
     for (const direction of directions) {
       let button = controls.querySelector(
-        "#ytp-rotate-" + direction + "-button"
+        "#ytp-rotate-" + direction + "-button",
       );
       if (button) {
         console.warn(
           "#ytp-rotate-" + direction + "-button already exists",
-          button
+          button,
         );
         continue;
       }
@@ -284,11 +283,15 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
       ].join(" ");
       button.setAttribute(
         "aria-label",
-        browser.i18n.getMessage("PopoutPlayerControls_RotateVideo_" + direction)
+        browser.i18n.getMessage(
+          "PopoutPlayerControls_RotateVideo_" + direction,
+        ),
       );
       button.setAttribute(
         "title",
-        browser.i18n.getMessage("PopoutPlayerControls_RotateVideo_" + direction)
+        browser.i18n.getMessage(
+          "PopoutPlayerControls_RotateVideo_" + direction,
+        ),
       );
       button.id = "ytp-rotate-" + direction + "-button";
       button.appendChild(GetRotateIconSVG(direction, true));
@@ -305,7 +308,7 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
               break;
           }
         },
-        false
+        false,
       );
 
       controls.insertBefore(button, controls.querySelector("button"));
@@ -313,7 +316,7 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
   } catch (error) {
     console.error(
       "Failed to insert video rotation buttons into player controls",
-      error
+      error,
     );
     return false;
   }
@@ -361,7 +364,7 @@ const GetPopoutIconSVG = (type, shadow = false) => {
       useElement.setAttributeNS(
         "http://www.w3.org/1999/xlink",
         "href",
-        "#" + pathElement.id
+        "#" + pathElement.id,
       );
 
       iconSVG.appendChild(useElement);
@@ -415,7 +418,7 @@ const GetRotateIconSVG = (direction, shadow = false) => {
       useElement.setAttributeNS(
         "http://www.w3.org/1999/xlink",
         "href",
-        "#" + pathElement.id
+        "#" + pathElement.id,
       );
 
       iconSVG.appendChild(useElement);

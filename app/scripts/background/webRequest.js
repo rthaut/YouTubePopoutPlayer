@@ -43,7 +43,7 @@ export const GetExtraInfoSpec = (eventName) => {
     if (
       Object.prototype.hasOwnProperty.call(
         chrome?.webRequest?.OnBeforeSendHeadersOptions,
-        "EXTRA_HEADERS"
+        "EXTRA_HEADERS",
       )
     ) {
       extraInfoSpec.push("extraHeaders");
@@ -78,14 +78,14 @@ export const OnBeforeSendHeaders = (details) => {
 
   const HasHeader = (name) =>
     requestHeaders.some(
-      (header) => header.name.toLowerCase() === name.toLowerCase()
+      (header) => header.name.toLowerCase() === name.toLowerCase(),
     );
 
   const AddHeader = (header) => {
     if (!HasHeader(header.name)) {
       console.log(
         `[Background] OnBeforeSendHeaders() :: Setting "${header.name}" header`,
-        header
+        header,
       );
       requestHeaders.push(header);
     }
@@ -95,7 +95,7 @@ export const OnBeforeSendHeaders = (details) => {
   if (parseInt(url.searchParams.get("popout"), 10) === 1) {
     console.log(
       "[Background] OnBeforeSendHeaders() :: Request is for popout player",
-      url
+      url,
     );
 
     // the `Referer` header is required to avoid the "Video unavailable" error in the popout player

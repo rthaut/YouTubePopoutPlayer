@@ -22,7 +22,7 @@ export const OnCommandEventHandler = async (command) => {
 
     case "open-popout-force-close-command":
       console.log(
-        "[Background] Instructing active tab to open popout player and close original tab"
+        "[Background] Instructing active tab to open popout player and close original tab",
       );
       SendMessageToActiveTab({
         action: "open-popout-via-command",
@@ -35,7 +35,7 @@ export const OnCommandEventHandler = async (command) => {
 
     case "open-popout-no-close-command":
       console.log(
-        "[Background] Instructing active tab to open popout player without closing original tab"
+        "[Background] Instructing active tab to open popout player without closing original tab",
       );
       SendMessageToActiveTab({
         action: "open-popout-via-command",
@@ -48,7 +48,7 @@ export const OnCommandEventHandler = async (command) => {
 
     case "rotate-video-left":
       console.log(
-        "[Background] Instructing active tab to rotate video to the left (by -90 degrees)"
+        "[Background] Instructing active tab to rotate video to the left (by -90 degrees)",
       );
       SendMessageToActiveTab({
         action: "rotate-video-player",
@@ -60,7 +60,7 @@ export const OnCommandEventHandler = async (command) => {
 
     case "rotate-video-right":
       console.log(
-        "[Background] Instructing active tab to rotate video to the right (by +90 degrees)"
+        "[Background] Instructing active tab to rotate video to the right (by +90 degrees)",
       );
       SendMessageToActiveTab({
         action: "rotate-video-player",
