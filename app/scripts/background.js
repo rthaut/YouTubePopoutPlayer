@@ -11,7 +11,7 @@ import {
 import Options from "./helpers/options";
 import { IsVideoURL } from "./helpers/youtube";
 
-browser.browserAction.onClicked.addListener(() => {
+browser.action.onClicked.addListener(() => {
   if (browser.runtime.openOptionsPage) {
     browser.runtime.openOptionsPage();
   } else {
