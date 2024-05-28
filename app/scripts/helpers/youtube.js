@@ -66,12 +66,12 @@ export const GetPlaylistVideoIDsFromDOM = () => {
           [
             'ytd-playlist-panel-renderer a[href*="v="]',
             'ytd-playlist-video-list-renderer a[href*="v="]',
-          ].join(",")
-        )
+          ].join(","),
+        ),
       )
         .map((elem) => GetParamFromURL("v", elem.getAttribute("href")))
-        .filter(Boolean)
-    )
+        .filter(Boolean),
+    ),
   );
 
   // console.log("Return", IDs);

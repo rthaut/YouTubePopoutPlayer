@@ -8,8 +8,8 @@ import {
   OnBeforeSendHeaders,
   OnSendHeaders,
 } from "./background/webRequest";
-import { IsVideoURL } from "./helpers/youtube";
 import Options from "./helpers/options";
+import { IsVideoURL } from "./helpers/youtube";
 
 browser.browserAction.onClicked.addListener(() => {
   if (browser.runtime.openOptionsPage) {
@@ -18,7 +18,7 @@ browser.browserAction.onClicked.addListener(() => {
     browser.management
       .getSelf()
       .then(({ optionsUrl: url }) =>
-        browser.windows.create({ url, type: "popup" })
+        browser.windows.create({ url, type: "popup" }),
       );
   }
 });
@@ -32,13 +32,13 @@ browser.runtime.onMessage.addListener(OnRuntimeMessage);
 browser.webRequest.onBeforeSendHeaders.addListener(
   OnBeforeSendHeaders,
   GetFilter("onBeforeSendHeaders"),
-  GetExtraInfoSpec("onBeforeSendHeaders")
+  GetExtraInfoSpec("onBeforeSendHeaders"),
 );
 
 browser.webRequest.onSendHeaders.addListener(
   OnSendHeaders,
   GetFilter("onSendHeaders"),
-  GetExtraInfoSpec("onSendHeaders")
+  GetExtraInfoSpec("onSendHeaders"),
 );
 
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {

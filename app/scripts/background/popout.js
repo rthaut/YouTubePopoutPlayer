@@ -1,19 +1,19 @@
 import {
-  START_THRESHOLD,
   OPTION_DEFAULTS,
+  START_THRESHOLD,
   YOUTUBE_EMBED_URL,
   YOUTUBE_NOCOOKIE_EMBED_URL,
 } from "../helpers/constants";
 import Options from "../helpers/options";
 import { GetDimensionForScreenPercentage, IsFirefox } from "../helpers/utils";
-import { GetVideoIDFromURL, GetPlaylistIDFromURL } from "../helpers/youtube";
+import { GetPlaylistIDFromURL, GetVideoIDFromURL } from "../helpers/youtube";
+import { ShowBasicNotification } from "./notifications";
 import {
   AddContextualIdentityToDataObject,
   CloseTab,
   GetActiveTab,
   GetPopoutPlayerTabs,
 } from "./tabs";
-import { ShowBasicNotification } from "./notifications";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
@@ -32,7 +32,7 @@ export const OpenPopoutBackgroundHelper = async (
   tabId = -1,
   allowCloseTab = true,
   allowCloseTabOnAnyDomain = false,
-  rotation = 0
+  rotation = 0,
 ) => {
   console.log("[Background] OpenPopoutBackgroundHelper()", {
     url,
@@ -137,7 +137,7 @@ export const OpenPopoutPlayer = async ({
     default:
       console.warn(
         '[Background] OpenPopoutPlayer() :: Invalid value for "behavior.controls" option',
-        behavior.controls
+        behavior.controls,
       );
       // use values for "standard" configuration
       params.controls = 1;
@@ -147,7 +147,7 @@ export const OpenPopoutPlayer = async ({
 
   if (time <= START_THRESHOLD) {
     console.info(
-      "[Background] OpenPopoutPlayer() :: Popout video will start from beginning"
+      "[Background] OpenPopoutPlayer() :: Popout video will start from beginning",
     );
     time = 0;
   }
@@ -159,7 +159,7 @@ export const OpenPopoutPlayer = async ({
       // as a workaround, get the video IDs from the DOM and make a manual playlist from them
 
       console.log(
-        "Watch Later playlist detected; attempting to convert to manual playlist"
+        "Watch Later playlist detected; attempting to convert to manual playlist",
       );
 
       try {
@@ -204,22 +204,22 @@ export const OpenPopoutPlayer = async ({
 
   const reuseExistingWindowsTabs = await Options.GetLocalOption(
     "behavior",
-    "reuseWindowsTabs"
+    "reuseWindowsTabs",
   );
 
   if (reuseExistingWindowsTabs) {
     const tabs = await GetPopoutPlayerTabs(originTabId);
     if (tabs.length < 1) {
       console.log(
-        "[Background] OpenPopoutPlayer() :: No existing popout player tabs found"
+        "[Background] OpenPopoutPlayer() :: No existing popout player tabs found",
       );
     } else {
       console.log(
         "[Background] OpenPopoutPlayer() :: Re-using existing popout player tab(s)",
-        tabs
+        tabs,
       );
       result = await Promise.all(
-        tabs.map((tab) => browser.tabs.update(tab.id, { url }))
+        tabs.map((tab) => browser.tabs.update(tab.id, { url })),
       );
       console.log("[Background] OpenPopoutPlayer() :: Return", result);
       return result;
@@ -228,7 +228,7 @@ export const OpenPopoutPlayer = async ({
 
   const openInBackground = await Options.GetLocalOption(
     "advanced",
-    "background"
+    "background",
   );
 
   switch (behavior.target.toLowerCase()) {
@@ -243,7 +243,7 @@ export const OpenPopoutPlayer = async ({
         openInBackground,
         originTabId,
         originalVideoWidth,
-        originalVideoHeight
+        originalVideoHeight,
       );
       break;
   }
@@ -262,7 +262,7 @@ export const OpenPopoutPlayer = async ({
 export const OpenPopoutPlayerInTab = async (
   url,
   active = true,
-  originTabId = -1
+  originTabId = -1,
 ) => {
   console.log("[Background] OpenPopoutPlayerInTab()", url, active, originTabId);
 
@@ -271,12 +271,12 @@ export const OpenPopoutPlayerInTab = async (
       url,
       active,
     },
-    originTabId
+    originTabId,
   );
 
   console.log(
     "[Background] OpenPopoutPlayerInTab() :: Creating tab",
-    createData
+    createData,
   );
   const tab = await browser.tabs.create(createData);
 
@@ -298,7 +298,7 @@ export const OpenPopoutPlayerInWindow = async (
   openInBackground = false,
   originTabId = -1,
   originalVideoWidth = OPTION_DEFAULTS.size.width,
-  originalVideoHeight = OPTION_DEFAULTS.size.height
+  originalVideoHeight = OPTION_DEFAULTS.size.height,
 ) => {
   console.log(
     "[Background] OpenPopoutPlayerInWindow()",
@@ -306,12 +306,12 @@ export const OpenPopoutPlayerInWindow = async (
     openInBackground,
     originTabId,
     originalVideoWidth,
-    originalVideoHeight
+    originalVideoHeight,
   );
 
   const dimensions = await GetDimensionsForPopoutPlayerWindow(
     originalVideoWidth,
-    originalVideoHeight
+    originalVideoHeight,
   );
 
   const createData = await AddContextualIdentityToDataObject(
@@ -321,7 +321,7 @@ export const OpenPopoutPlayerInWindow = async (
       type: "popup",
       ...dimensions,
     },
-    originTabId
+    originTabId,
   );
 
   const isFirefox = await IsFirefox();
@@ -332,7 +332,7 @@ export const OpenPopoutPlayerInWindow = async (
 
   console.log(
     "[Background] OpenPopoutPlayerInWindow() :: Creating popout player window",
-    createData
+    createData,
   );
   let window = await browser.windows.create(createData);
 
@@ -343,14 +343,14 @@ export const OpenPopoutPlayerInWindow = async (
   if (!isNaN(position?.top) && !isNaN(position?.left)) {
     console.log(
       "[Background] OpenPopoutPlayerInWindow() :: Positioning popout player window",
-      position
+      position,
     );
     window = await browser.windows.update(window.id, position);
   }
 
   if ((await Options.GetLocalOption("size", "mode")) === "maximized") {
     console.log(
-      "[Background] OpenPopoutPlayerInWindow() :: Maximizing popout player window"
+      "[Background] OpenPopoutPlayerInWindow() :: Maximizing popout player window",
     );
     window = await browser.windows.update(window.id, {
       state: "maximized",
@@ -359,7 +359,7 @@ export const OpenPopoutPlayerInWindow = async (
     if (!isNaN(originTabId) && parseInt(originTabId, 10) > 0) {
       // try to move the original window back to the foreground
       console.log(
-        "[Background] OpenPopoutPlayerInWindow() :: Moving original window to foreground"
+        "[Background] OpenPopoutPlayerInWindow() :: Moving original window to foreground",
       );
       const { windowId: originWindowId } = await browser.tabs.get(originTabId);
       await browser.windows.update(originWindowId, {
@@ -369,7 +369,7 @@ export const OpenPopoutPlayerInWindow = async (
       // fallback: minimize the popout player window
       console.warn(
         "[Background] OpenPopoutPlayerInWindow() :: Missing/Invalid ID for original tab",
-        originTabId
+        originTabId,
       );
       window = await browser.windows.update(window.id, {
         focused: false,
@@ -418,12 +418,12 @@ export const GetUrlForPopoutPlayer = async (id = null, params = null) => {
  */
 export const GetDimensionsForPopoutPlayerWindow = async (
   originalVideoWidth,
-  originalVideoHeight
+  originalVideoHeight,
 ) => {
   console.log(
     "[Background] GetDimensionsForPopoutPlayerWindow()",
     originalVideoWidth,
-    originalVideoHeight
+    originalVideoHeight,
   );
 
   let width = originalVideoWidth ?? OPTION_DEFAULTS.size.width;
@@ -432,7 +432,7 @@ export const GetDimensionsForPopoutPlayerWindow = async (
   const size = await Options.GetLocalOptionsForDomain("size");
   console.log(
     "[Background] GetDimensionsForPopoutPlayerWindow() :: Size options",
-    size
+    size,
   );
 
   if (size.mode.toLowerCase() !== "current") {
@@ -450,7 +450,7 @@ export const GetDimensionsForPopoutPlayerWindow = async (
       default:
         console.warn(
           '[Background] OpenPopoutPlayerInWindow() :: Invalid value for "size.units" option',
-          size.units
+          size.units,
         );
         // do nothing; use the original video player's dimensions instead
         break;
@@ -478,12 +478,12 @@ export const GetPositionForPopoutPlayerWindow = async () => {
   const position = await Options.GetLocalOptionsForDomain("position");
   console.log(
     "[Background] GetDimensionsForPopoutPlayerWindow() :: Position options",
-    position
+    position,
   );
 
   if (position.mode.toLowerCase() === "auto") {
     console.log(
-      '[Background] GetDimensionsForPopoutPlayerWindow() :: Position mode is "auto" - returning empty position values'
+      '[Background] GetDimensionsForPopoutPlayerWindow() :: Position mode is "auto" - returning empty position values',
     );
     return {
       top: null,
@@ -513,7 +513,7 @@ export const StoreDimensionsAndPosition = async ({
   const target = await Options.GetLocalOption("behavior", "target");
   if (target.toLowerCase() !== "window") {
     console.log(
-      '[Background] GetDimensionsForPopoutPlayerWindow() :: Behavior target is not "window" - skipping dimensions and position storage'
+      '[Background] GetDimensionsForPopoutPlayerWindow() :: Behavior target is not "window" - skipping dimensions and position storage',
     );
     return;
   }
@@ -525,7 +525,7 @@ export const StoreDimensionsAndPosition = async ({
     {
       sizeMode,
       positionMode,
-    }
+    },
   );
 
   if (sizeMode.toLowerCase() === "previous") {
@@ -536,13 +536,13 @@ export const StoreDimensionsAndPosition = async ({
       };
       console.log(
         "[Background] StoreDimensionsAndPosition() :: Saving size",
-        size
+        size,
       );
       Options.SetLocalOptionsForDomain("size", size);
     } else {
       console.warn(
         "[Background] StoreDimensionsAndPosition() :: Missing or invalid dimensions values",
-        dimensions
+        dimensions,
       );
     }
   }
@@ -551,13 +551,13 @@ export const StoreDimensionsAndPosition = async ({
     if (!isNaN(position?.top) && !isNaN(position?.left)) {
       console.log(
         "[Background] StoreDimensionsAndPosition() :: Saving Position",
-        position
+        position,
       );
       Options.SetLocalOptionsForDomain("position", position);
     } else {
       console.warn(
         "[Background] StoreDimensionsAndPosition() :: Missing or invalid position values",
-        position
+        position,
       );
     }
   }

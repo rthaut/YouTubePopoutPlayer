@@ -1,10 +1,10 @@
+import { InsertControlsAndWatch } from "./content/YouTubeCustomControls";
 import {
   GetVideoPlayerInfo,
   OpenPopoutForPageVideo,
-  RotateVideoPlayer,
   PauseVideoPlayer,
+  RotateVideoPlayer,
 } from "./content/YouTubePopoutPlayer";
-import { InsertControlsAndWatch } from "./content/YouTubeCustomControls";
 import { debounce, IsPopoutPlayer } from "./helpers/utils";
 import { GetPlaylistVideoIDsFromDOM } from "./helpers/youtube";
 
@@ -24,7 +24,7 @@ export const CloseTab = async (enforceDomainRestriction = true) => {
     if (response !== undefined) {
       console.log(
         '[Content] YouTubePopoutPlayer CloseTab() :: Action "close-tab" response',
-        response
+        response,
       );
     }
   } catch (error) {
@@ -66,7 +66,7 @@ const OnRuntimeMessage = async (message, sender) => {
     }
 
     console.log(
-      "[Content] YouTubePopoutPlayer Runtime Message :: Unhandled Action"
+      "[Content] YouTubePopoutPlayer Runtime Message :: Unhandled Action",
     );
     return;
   }
@@ -82,7 +82,7 @@ const RegisterEventListeners = () => {
     "resize",
     debounce(() => {
       SendWindowDimensionsAndPosition("popout-resized");
-    }, 400)
+    }, 400),
   );
 
   // alternative to window close event listener (as recommended by MDN),
@@ -129,7 +129,7 @@ const SendWindowDimensionsAndPosition = async (action) => {
     if (query.has("rotation")) {
       document.documentElement.setAttribute(
         "data-ytp-rotation",
-        parseInt(query.get("rotation"), 10)
+        parseInt(query.get("rotation"), 10),
       );
     }
   }
