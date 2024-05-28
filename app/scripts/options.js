@@ -1,9 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import * as React from "react";
+import { createRoot } from "react-dom/client";
 
 import OptionsApp from "./options/OptionsApp";
 
-ReactDOM.render(<OptionsApp />, document.querySelector("#root"));
+const container = document.querySelector("#root");
+const root = createRoot(container);
+root.render(<OptionsApp />);
 
 const params = new URL(document.location).searchParams;
 const vendor = params.get("vendor");

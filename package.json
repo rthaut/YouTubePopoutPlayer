@@ -35,14 +35,13 @@
     "firefox >= 109.0"
   ],
   "dependencies": {
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.15.2",
-    "@mui/lab": "^5.0.0-alpha.158",
-    "@mui/material": "^5.15.2",
-    "@mui/styles": "^5.15.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.18",
+    "@mui/lab": "^5.0.0-alpha.170",
+    "@mui/material": "^5.15.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-use": "^17.4.0",
     "webextension-polyfill": "^0.10.0",
     "zustand": "^4.3.6"
