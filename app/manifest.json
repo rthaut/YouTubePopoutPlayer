@@ -18,8 +18,8 @@
     "128": "images/icon-128.png"
   },
   "background": {
-    "__firefox__scripts": ["scripts/background.js"],
-    "__chrome|edge__service_worker": "scripts/background.js"
+    "__chrome|edge__service_worker": "scripts/background.js",
+    "__firefox__scripts": ["scripts/background.js"]
   },
   "action": {
     "default_icon": {
@@ -89,16 +89,22 @@
     "__firefox__page": "pages/options.html?vendor=firefox",
     "open_in_tab": false
   },
+  "declarative_net_request" : {
+    "rule_resources" : [{
+      "id": "rules",
+      "enabled": true,
+      "path": "rules.json"
+    }]
+  },
   "host_permissions": [
     "*://*.youtube.com/*",
     "*://*.youtube-nocookie.com/*"
   ],
   "permissions": [
     "contextMenus",
+    "declarativeNetRequest",
     "notifications",
-    "storage",
-    "webRequest",
-    "webRequestBlocking"
+    "storage"
   ],
   "optional_permissions": [
     "tabs"
@@ -112,7 +118,7 @@
   "__firefox__browser_specific_settings": {
     "gecko": {
       "id": "{85b42b8f-49cd-4935-aeca-a6b32dd6ac9f}",
-      "strict_min_version": "109"
+      "strict_min_version": "109.0"
     }
   }
 }
