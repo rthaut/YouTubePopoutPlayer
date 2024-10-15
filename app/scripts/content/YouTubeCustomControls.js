@@ -34,9 +34,11 @@ export const InsertControlsAndWatch = async () => {
 export const InsertControls = async () => {
   console.group("[YouTubeCustomControls] InsertControls()");
 
-  InsertPopoutEntryIntoContextMenu();
-  await InsertPopoutButtonIntoPlayerControls();
-  await InsertRotationButtonsIntoPlayerControls();
+  if (document.querySelector("video")) {
+    InsertPopoutEntryIntoContextMenu();
+    await InsertPopoutButtonIntoPlayerControls();
+    await InsertRotationButtonsIntoPlayerControls();
+  }
 };
 
 /**

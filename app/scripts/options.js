@@ -1,18 +1,11 @@
-import React from "react";
-
-/* global process */
-if (process.env.NODE_ENV === "development") {
-  const whyDidYouRender = require('@welldone-software/why-did-you-render');
-  whyDidYouRender(React, {
-    trackAllPureComponents: true,
-  });
-}
-
-import ReactDOM from "react-dom";
+import * as React from "react";
+import { createRoot } from "react-dom/client";
 
 import OptionsApp from "./options/OptionsApp";
 
-ReactDOM.render(<OptionsApp />, document.querySelector("#root"));
+const container = document.querySelector("#root");
+const root = createRoot(container);
+root.render(<OptionsApp />);
 
 const params = new URL(document.location).searchParams;
 const vendor = params.get("vendor");

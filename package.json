@@ -1,7 +1,7 @@
 {
   "name": "youtube-popout-player",
   "title": "YouTube Popout Player",
-  "version": "4.4.1",
+  "version": "5.0.0",
   "description": "This browser extension provides simple ways to open any YouTube video or playlist (including videos and playlists embedded in other sites/pages) in a configurable \"popout\" window that can be freely sized and/or positioned.",
   "author": "Ryan Thaut <rthaut@gmail.com> (https://ryan.thaut.me)",
   "homepage": "https://rthaut.github.io/YouTubePopoutPlayer/",
@@ -9,8 +9,8 @@
   "private": true,
   "scripts": {
     "lint": "eslint ./app/",
-    "dev": "webextension-toolbox dev",
-    "build": "webextension-toolbox build",
+    "dev": "webextension-toolbox dev --config webextension-toolbox.config.js",
+    "build": "webextension-toolbox build --config webextension-toolbox.config.js",
     "build:icons": "node scripts/generate-icons",
     "start:chrome": "web-ext run --source-dir=./dist/chrome/ --target chromium",
     "start:firefox": "web-ext run --source-dir=./dist/firefox/ --target firefox-desktop",
@@ -30,34 +30,36 @@
     "url": "https://github.com/rthaut/YouTubePopoutPlayer/issues"
   },
   "browserslist": [
-    "chrome >= 51.0",
-    "edge >= 79.0.309",
-    "firefox >= 62.0"
+    "chrome >= 90.0",
+    "edge >= 91.0",
+    "firefox >= 109.0"
   ],
   "dependencies": {
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "@material-ui/lab": "^4.0.0-alpha.61",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-use": "^17.4.0",
-    "webextension-polyfill": "^0.10.0",
-    "zustand": "^4.3.6"
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^5.16.7",
+    "@mui/lab": "^5.0.0-alpha.173",
+    "@mui/material": "^5.16.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-use": "^17.5.1",
+    "webextension-polyfill": "^0.12.0",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.23.3",
-    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
+    "@babel/preset-react": "^7.25.7",
     "@webextension-toolbox/webextension-toolbox": "^6.2.0",
-    "browser-sync": "^3.0.2",
+    "browser-sync": "^3.0.3",
+    "copy-webpack-plugin": "^12.0.2",
     "cross-env": "^7.0.3",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.2",
-    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^3.1.1",
-    "svg2png": "^4.1.1",
-    "trash-cli": "^5.0.0",
-    "web-ext": "^7.9.0"
+    "prettier": "^3.3.3",
+    "sharp": "^0.33.5",
+    "trash-cli": "^6.0.0",
+    "web-ext": "^8.3.0"
   }
 }

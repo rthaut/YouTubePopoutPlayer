@@ -1,15 +1,15 @@
 import React from "react";
 
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Grid from "@material-ui/core/Grid";
-import Snackbar from "@material-ui/core/Snackbar";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Snackbar from "@mui/material/Snackbar";
 
-import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 import useOptionsStore from "../stores/optionsStore";
 
@@ -43,24 +43,16 @@ export default function ResetOptions() {
 
   return (
     <>
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        spacing={0}
-      >
-        <Grid item xs>
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<HighlightOffIcon />}
-            onClick={handleResetButtonClick}
-          >
-            {browser.i18n.getMessage("ButtonResetLabel")}
-          </Button>
-        </Grid>
-      </Grid>
+      <Box mx={2}>
+        <Button
+          variant="contained"
+          color="secondary"
+          startIcon={<HighlightOffIcon />}
+          onClick={handleResetButtonClick}
+        >
+          {browser.i18n.getMessage("ButtonResetLabel")}
+        </Button>
+      </Box>
       <Dialog open={dialogOpen} onClose={handleClose} keepMounted>
         <DialogTitle>
           {browser.i18n.getMessage("ConfirmSettingsResetHeading")}
@@ -73,7 +65,7 @@ export default function ResetOptions() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="default">
+          <Button onClick={handleClose}>
             {browser.i18n.getMessage("ButtonCancelResetLabel")}
           </Button>
           <Button onClick={handleConfirm} color="secondary">

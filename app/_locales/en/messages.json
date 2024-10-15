@@ -82,6 +82,9 @@
   "OptionsPerDeviceWarning": {
     "message": "<strong>Note</strong>: All settings are per-device. If you have YouTube Popout Player installed on multiple devices, you can configure settings differently for each device."
   },
+  "OptionsPageForceDarkMode": {
+    "message": "Force Dark Mode for Options panel"
+  },
   "OptionsTabNameBehavior": {
     "message": "Behavior"
   },
@@ -161,7 +164,10 @@
     "message": "Autoplay Video(s)"
   },
   "OptionsBehaviorAutoplayDescription": {
-    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong><blockquote><strong>Note</strong>: Autoplaying videos with sound are commonly blocked by default in modern browsers; you may need to manually enable/allow autoplay through your browser's settings for this to work correctly.</blockquote>"
+    "message": "This setting controls whether or not the video in the popout player begins playing automatically when the popout player is opened. <strong>The default for this setting is enabled.</strong>"
+  },
+  "AutoplayVideosBlockedTip": {
+    "message": "<strong>Note</strong>: Autoplaying videos with sound are commonly blocked by default in modern browsers; you may need to manually enable/allow autoplay through your browser's settings for this to work correctly."
   },
   "OptionsBehaviorLoopLabel": {
     "message": "Loop Video(s)"
@@ -282,6 +288,12 @@
   },
   "HeightLabel": {
     "message": "Height"
+  },
+  "TopLabel": {
+    "message": "Top"
+  },
+  "LeftLabel": {
+    "message": "Left"
   },
   "InfoCurrentScreenResolutionLabel": {
     "message": "Current Screen Resolution"

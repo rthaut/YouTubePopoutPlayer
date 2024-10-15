@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Select from "@material-ui/core/Select";
-import Typography from "@material-ui/core/Typography";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Select from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
 
 import { useOption } from "../../stores/optionsStore";
 
@@ -35,7 +35,7 @@ export function ModeOptionRadioControl({ domain, optionName, values }) {
               value={option}
               control={<Radio color="primary" />}
               label={browser.i18n.getMessage(
-                `Options${domain}Mode${option}Label`
+                `Options${domain}Mode${option}Label`,
               )}
             />
             <Typography
@@ -43,7 +43,7 @@ export function ModeOptionRadioControl({ domain, optionName, values }) {
               gutterBottom
               dangerouslySetInnerHTML={{
                 __html: browser.i18n.getMessage(
-                  `Options${domain}Mode${option}Description`
+                  `Options${domain}Mode${option}Description`,
                 ),
               }}
             />
@@ -70,6 +70,7 @@ export function ModeOptionSelectControl({ domain, optionName, values }) {
         {browser.i18n.getMessage(`${domain}ModeLabel`)}
       </InputLabel>
       <Select
+        label={browser.i18n.getMessage(`${domain}ModeLabel`)}
         labelId={`${domain}-mode-label`}
         id={`${domain}-mode-select`}
         value={controlValue}

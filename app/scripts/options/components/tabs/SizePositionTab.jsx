@@ -1,11 +1,11 @@
 import React from "react";
 
-import Alert from "@material-ui/lab/Alert";
-import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
+import Alert from "@mui/lab/Alert";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 
-import AspectRatioIcon from "@material-ui/icons/AspectRatio";
-import OpenWithIcon from "@material-ui/icons/OpenWith";
+import AspectRatioIcon from "@mui/icons-material/AspectRatio";
+import OpenWithIcon from "@mui/icons-material/OpenWith";
 
 import { ModeOptionRadioControl } from "../controls/ModeOptionControls";
 import CustomDimensionsForm from "../forms/CustomDimensionsForm";
@@ -93,5 +93,3 @@ export default function SizePositionTab() {
     </>
   );
 }
-
-SizePositionTab.whyDidYouRender = true;
