@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2024-10-15
+
+### Other
+
+* Migrate to Manifest v3
+* Updated to Material UI v5 (and React 18)
+
 ## [4.4.1] - 2023-06-21
 
 ### Bug Fixes
@@ -156,6 +163,7 @@ The extension/add-on now supports translations. Currently the only translation o
 A new icon has been added to the lower right corner to allow opening the current video in a popout player. This should work for all YouTube videos, both directly on youtube.com and embedded in other web pages.
 
 [Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.1...HEAD
+[5.0.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.1...v5.0.0
 [4.4.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.0...v4.4.1
 [4.4.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.2.0...v4.3.0
