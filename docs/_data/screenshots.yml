@@ -26,6 +26,18 @@
   path: /screenshots/Permissions-Firefox-Cropped.png
   type: permission-required
 
+- name: Chrome Updated Permissions
+  path: /screenshots/Permissions-Updated-Chrome-Cropped.png
+  type: permission-updated
+
+- name: Edge Updated Permissions
+  path: /screenshots/Permissions-Updated-Edge-Cropped.png
+  type: permission-updated
+
+- name: Firefox Updated Permissions
+  path: /screenshots/Permissions-Updated-Firefox-Cropped.png
+  type: permission-updated
+
 - name: Chrome Optional Tabs Permissions
   path: /screenshots/Optional-Permissions-Request-Tabs-Chrome.png
   type: permission-optional

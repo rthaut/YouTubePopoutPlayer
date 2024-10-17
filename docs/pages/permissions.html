@@ -28,6 +28,7 @@ order: 2
                     <ul class="collection with-header">
                         <li class="collection-header grey lighten-4"><h6>Permissions Requested in <a href="#modal-chrome-required-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Google Chrome <i class="material-icons tiny">image</i></a> &amp; <a href="#modal-edge-required-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Microsoft Edge <i class="material-icons tiny">image</i></a></h6></li>
                         <li class="collection-item"><i class="material-icons tiny">check</i> Read and change your data on all youtube-nocookie.com sites and all youtube.com sites</li>
+                        <li class="collection-item"><i class="material-icons tiny">check</i> Block content on any page <span class="badge red white-text">New in v5.0</span></li>
                         <li class="collection-item"><i class="material-icons tiny">check</i> Display notifications</li>
                     </ul>
                 </div>
@@ -39,18 +40,32 @@ order: 2
                         <li class="collection-header grey lighten-4"><h6>Permissions Requested in <a href="#modal-firefox-required-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Mozilla Firefox <i class="material-icons tiny">image</i></a></h6></li>
                         <li class="collection-item"><i class="material-icons tiny">check</i> Access your data for sites in the youtube.com domain</li>
                         <li class="collection-item"><i class="material-icons tiny">check</i> Access your data for sites in the youtube-nocookie.com domain</li>
+                        <li class="collection-item"><i class="material-icons tiny">check</i> Block content on any page <span class="badge red white-text">New in v5.0</span></li>
                         <li class="collection-item"><i class="material-icons tiny">check</i> Display notifications to you</li>
                     </ul>
                 </div>
             </div>
+            <div class="valign-wrapper">
+                <i class="small material-icons red-text">report</i>&nbsp;<span>Screenshots of new permissions when updating YouTube Popout Player in <a href="#modal-chrome-updated-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Google Chrome <i class="material-icons tiny">image</i></a> and <a href="#modal-firefox-updated-permissions-screenshot" class="red-text modal-trigger tooltipped" data-tooltip="View Screenshot">Mozilla Firefox <i class="material-icons tiny">image</i></a></span></div>
         </div>
 
-        <div class="card-body">
-            <p><strong>Read/Access Data: This extensions does not read (or collect) or modify any of your data at all.</strong></p>
-            <p>This permission is used to add the controls (button and context menu) and listen for the keyboard shortcut, which are used to open the popout player, on YouTube videos. This permission is requested for both the primary <code class="red-text">youtube.com</code> domain and the alternate <code class="red-text">youtube-nocookie.com</code> domain (which is Google's attempt to provide a version of YouTube that has fewer tracking cookies), as these are the domains where YouTube videos are hosted.</p>
-            <p><strong>Notifications: This extensions only shows a notification if the popout player cannot be opened at all.</strong></p>
-            <p>In the extremely unlikely event that the popout player cannot be opened at all, a notification is displayed so that you know it tried but failed. Otherwise, it would seem like nothing happened at all, which can be confusing.</p>
-        </div>
+        <dl class="card-body">
+            <dt style="font-weight: 600;">Read/Access Data:<br>This extensions does not read (or collect) or modify any of your data at all.</dt>
+            <dd>
+                <p>This permission is used to add the controls (button and context menu) and listen for the keyboard shortcut, which are used to open the popout player, on YouTube videos. This permission is requested for both the primary <code class="red-text">youtube.com</code> domain and the alternate <code class="red-text">youtube-nocookie.com</code> domain (which is Google's attempt to provide a version of YouTube that has fewer tracking cookies), as these are the domains where YouTube videos are hosted.</p>
+            </dd>
+            <dt style="font-weight: 600;">Block Content:<span class="badge red white-text">New in v5.0</span><br>This extension does not block any content at all, nor does it run on any pages other than the popout player.</dt>
+            <dd>
+                <p>This is part of the big Manifest v3 changes that Chrome has pushed. The permission is "<code>declarativeNetRequest</code>" and is needed to set the "<code>Referer</code>" header for the popup player; without that header being set, many videos do not play in the popout player.</strong></p>
+                <p>This was previously accomplished via the "<code>webRequest</code>" and "<code>webRequestBlocking</code>" permissions that allowed code to run when the network requests were being executed (similar to how ad-blockers function), but those permissions and the corresponding functionality have been removed in Chrome for Manifest v3.</p>
+                <p>This is only used for the embedded player page on the primary <code class="red-text">youtube.com</code> domain and the alternate <code class="red-text">youtube-nocookie.com</code> domain.</p>
+                <p>You can view the <strong>static rules</strong> file associated with the "<code>declarativeNetRequest</code>" permission here: <a class="red-text" href="https://github.com/rthaut/YouTubePopoutPlayer/blob/master/app/rules.json" rel="nofollow">rules.json</a></p>
+            </dd>
+            <dt style="font-weight: 600;">Notifications:<br>This extensions only shows a notification if the popout player cannot be opened at all.</dt>
+            <dd>
+                <p>In the extremely unlikely event that the popout player cannot be opened at all, a notification is displayed so that you know it tried but failed. Otherwise, it would seem like nothing happened at all, which can be confusing.</p>
+            </dd>
+        </dl>
     </div>
 
 </section>
@@ -85,24 +100,27 @@ order: 2
             </div>
         </div>
 
-        <div class="card-body">
-            <p><strong>This extension does not read (or collect) your browsing history at all.</strong></p>
-            <p>The Tabs permission is used to close the original window/tab (when configured via the "Close Original Window/Tab" option) after opening the popout player.</p>
-            <p><strong>Denying this permission</strong> will disable the use of the <a class="red-text" href="{{ '/options#advanced' | relative_url }}">"Close Original Window/Tab" setting</a>.</p>
-        </div>
+        <dl class="card-body">
+            <dt style="font-weight: 600;">Browser History/Tabs:<br>This extension does not read (or collect) your browsing history at all.</dt>
+            <dd>
+                <p>The Tabs permission is used to close the original window/tab (when configured via the "Close Original Window/Tab" option) after opening the popout player.</p>
+                <p><strong>Denying this permission</strong> will disable the use of the <a class="red-text" href="{{ '/options#advanced' | relative_url }}">"Close Original Window/Tab" setting</a>.</p>
+            </dd>
+        </dl>
     </div>
 
 </section>
 
 <!-- Modals with Screenshots -->
 {% assign required = site.data.screenshots | where:"type","permission-required" %}
+{% assign updated = site.data.screenshots | where:"type","permission-updated" %}
 {% assign optional = site.data.screenshots | where:"type","permission-optional" %}
-{% assign screenshots = required | concat: optional %}
+{% assign screenshots = required | concat: updated | concat: optional %}
 {% for screenshot in screenshots %}
 <div id="modal-{{screenshot.name | slugify}}-screenshot" class="modal">
     <div class="modal-content center white">
         <img class="responsive-img" src="{{ screenshot.path | relative_url }}" alt="Popout Player {{screenshot.name}}" />
-        <p class="text-left"><em>Screenshots are taken from <strong>v4.0</strong> and <strong>v4.1</strong> and may not accurately represent current functionality.</em></p>
+        <p class="text-left"><em>Screenshots are taken from <strong>v4.0</strong>, <strong>v4.1</strong>, and <strong>v5.0</strong>, and may not accurately represent current functionality.</em></p>
     </div>
     <div class="modal-footer">
         <button class="btn red modal-close"><i class="material-icons left">close</i> Close</button>
