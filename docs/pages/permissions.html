@@ -56,7 +56,7 @@ order: 2
             </dd>
             <dt style="font-weight: 600;">Block Content:<span class="badge red white-text">New in v5.0</span><br>This extension does not block any content at all, nor does it run on any pages other than the popout player.</dt>
             <dd>
-                <p>This is part of the big Manifest v3 changes that Chrome has pushed. The permission is "<code>declarativeNetRequest</code>" and is needed to set the "<code>Referer</code>" header for the popup player; without that header being set, many videos do not play in the popout player.</strong></p>
+                <p>This is part of the big Manifest v3 changes that Chrome has pushed. The permission is "<code>declarativeNetRequest</code>" and is needed to set the "<code>Referer</code>" header for the popout player window/tab; without that header being set, many videos do not play in the popout player.</strong></p>
                 <p>This was previously accomplished via the "<code>webRequest</code>" and "<code>webRequestBlocking</code>" permissions that allowed code to run when the network requests were being executed (similar to how ad-blockers function), but those permissions and the corresponding functionality have been removed in Chrome for Manifest v3.</p>
                 <p>This is only used for the embedded player page on the primary <code class="red-text">youtube.com</code> domain and the alternate <code class="red-text">youtube-nocookie.com</code> domain.</p>
                 <p>You can view the <strong>static rules</strong> file associated with the "<code>declarativeNetRequest</code>" permission here: <a class="red-text" href="https://github.com/rthaut/YouTubePopoutPlayer/blob/master/app/rules.json" rel="nofollow">rules.json</a></p>
