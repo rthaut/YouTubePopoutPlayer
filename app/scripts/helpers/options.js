@@ -18,17 +18,11 @@ const Options = (() => {
      * @param {boolean} [reset=false] indicates if local storage should be reset
      */
     InitLocalStorageDefaults: async function (reset = false) {
-      // console.log("Options.InitDefaults()");
-
       const defaults = this.ConvertForStorage(
         Object.assign({}, OPTION_DEFAULTS),
       );
 
       if (reset) {
-        // console.log(
-        //   "Options.InitDefaults() :: Setting all options to default values",
-        //   defaults
-        // );
         await browser.storage.local.clear();
         await browser.storage.local.set(defaults);
       } else {
@@ -38,11 +32,6 @@ const Options = (() => {
 
         Object.keys(defaults).forEach((option) => {
           if (options[option] === undefined || options[option] === null) {
-            // console.log(
-            //   `Options.InitDefaults() :: Setting "${option}" to default value`,
-            //   defaults[option]
-            // );
-
             const opt = {};
             opt[option] = defaults[option];
             promises.push(browser.storage.local.set(opt));
@@ -51,10 +40,6 @@ const Options = (() => {
 
         Object.keys(options).forEach((option) => {
           if (defaults[option] === undefined || defaults[option] === null) {
-            // console.log(
-            //   `Options.InitDefaults() :: Removing unknown/invalid option "${option}"`
-            // );
-
             promises.push(browser.storage.local.remove(option));
           }
         });
