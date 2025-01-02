@@ -21,19 +21,13 @@ export const IsVideoURL = (url, external = true) =>
  * @returns {string} the video ID
  */
 export const GetVideoIDFromURL = (url, external = true) => {
-  // console.group("GetVideoIDFromURL()");
-
   let id = null;
 
   const result = (external ? VideoLinkOrEmbedRegEx : VideoIDRegEx).exec(url);
-  // console.log("RegExp Result", result);
-
   if (result && result[1]) {
     id = result[1];
   }
 
-  // console.log("Return", id);
-  // console.groupEnd();
   return id;
 };
 
@@ -43,12 +37,7 @@ export const GetVideoIDFromURL = (url, external = true) => {
  * @returns {string} the playlist ID
  */
 export const GetPlaylistIDFromURL = (url) => {
-  // console.group("GetPlaylistIDFromURL()");
-
   const id = GetParamFromURL("list", url);
-
-  // console.log("Return", id);
-  // console.groupEnd();
   return id;
 };
 
@@ -57,8 +46,6 @@ export const GetPlaylistIDFromURL = (url) => {
  * @return {string[]} the video IDs
  */
 export const GetPlaylistVideoIDsFromDOM = () => {
-  // console.group("GetPlaylistVideoIDsFromDOM()");
-
   const IDs = Array.from(
     new Set(
       Array.from(
@@ -74,7 +61,5 @@ export const GetPlaylistVideoIDsFromDOM = () => {
     ),
   );
 
-  // console.log("Return", IDs);
-  // console.groupEnd();
   return IDs;
 };
