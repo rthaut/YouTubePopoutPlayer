@@ -1,9 +1,9 @@
 import { GetParamFromURL } from "./utils";
 
-export const VideoIDRegEx = /(?:(?:v=)|(?:\/shorts\/))([^\?\&\/]{11})/;
+export const VideoIDRegEx = /(?:(?:v=)|(?:\/live\/)|(?:\/shorts\/))([^\?\&\/]{11})/;
 
 export const VideoLinkOrEmbedRegEx =
-  /(?:(?:v=)|(?:\/embed\/)|(?:\/shorts\/)|(?:\/youtu\.be\/))([^\?\&\/]{11})/;
+  /(?:(?:v=)|(?:\/embed\/)|(?:\/live\/)|(?:\/shorts\/)|(?:\/youtu\.be\/))([^\?\&\/]{11})/;
 
 /**
  * Indicates if the given URL is for a YouTube video

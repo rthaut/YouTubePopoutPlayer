@@ -7,6 +7,7 @@ export const YOUTUBE_NOCOOKIE_EMBED_URL = `https://www.${YOUTUBE_NOCOOKIE_DOMAIN
 
 export const YOUTUBE_VIDEO_URL_PATTERNS = [
   "*://youtu.be/*",
+  "*://*.youtube.com/live/*",
   "*://*.youtube.com/shorts/*",
   "*://*.youtube.com/watch?*",
 ];
