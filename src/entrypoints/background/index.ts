@@ -8,7 +8,11 @@ import { OpenPopoutBackgroundHelper } from "./popout";
 import { OnInstalled, OnRuntimeMessage } from "./runtime";
 
 export default defineBackground(() => {
-  (browser.action ?? browser.browserAction).onClicked.addListener(() => {
+  (
+    browser.pageAction ??
+    browser.action ??
+    browser.browserAction
+  ).onClicked.addListener(() => {
     if (browser.runtime.openOptionsPage) {
       browser.runtime.openOptionsPage();
     } else {
