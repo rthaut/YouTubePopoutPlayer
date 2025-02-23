@@ -86,6 +86,16 @@ export default defineConfig({
       optional_permissions.push("cookies");
     }
 
+    let browser_specific_settings: UserManifest["browser_specific_settings"];
+    if (browser === "firefox") {
+      browser_specific_settings = {
+        gecko: {
+          id: "{85b42b8f-49cd-4935-aeca-a6b32dd6ac9f}",
+          strict_min_version: "109.0",
+        },
+      };
+    }
+
     return {
       name: "__MSG_ExtensionName__",
       description: "__MSG_ExtensionDescription__",
@@ -117,13 +127,9 @@ export default defineConfig({
         "storage",
       ],
       optional_permissions,
-      minimum_chrome_version: browser === "chrome" ? "90" : "91",
-      browser_specific_settings: {
-        gecko: {
-          id: "{85b42b8f-49cd-4935-aeca-a6b32dd6ac9f}",
-          strict_min_version: "109.0",
-        },
-      },
+      minimum_chrome_version:
+        browser === "firefox" ? undefined : browser === "chrome" ? "90" : "91",
+      browser_specific_settings,
     } satisfies UserManifest;
   },
 });
