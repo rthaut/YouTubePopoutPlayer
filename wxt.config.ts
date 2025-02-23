@@ -65,24 +65,19 @@ export default defineConfig({
       },
     };
 
-    const optional_permissions: UserManifest["optional_permissions"] = [];
-
-    if (mode !== "development") {
-      // the `tabs` and `scripting` permissions are automatically added by `wxt` during development
-      // https://wxt.dev/guide/essentials/config/manifest.html#permissions
-      optional_permissions.push("tabs");
-    }
-
     if (browser === "firefox") {
-      // Chrome is limited to 3 default shortcut keys, so we only provide these for Firefox
+      // Chrome is limited to 3 default shortcut keys, so we only provide these additional defaults for Firefox
       commands["open-popout-force-close-command"].suggested_key = {
         default: "Alt+Shift+PageUp",
       };
       commands["open-popout-no-close-command"].suggested_key = {
         default: "Alt+Shift+PageDown",
       };
+    }
 
-      // Firefox uses the "cookies" permission for multi-account containers support
+    const optional_permissions: UserManifest["optional_permissions"] = ["tabs"];
+    if (browser === "firefox") {
+      // Firefox optionally uses the "cookies" permission for multi-account containers support
       optional_permissions.push("cookies");
     }
 
