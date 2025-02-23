@@ -20,6 +20,24 @@ export default defineConfig({
     },
   },
   manifest: ({ browser, mode }) => {
+    const author_developer =
+      browser === "firefox"
+        ? {
+            // use the "developer" field for Firefox, since it doesn't support the `author.email` format
+            // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/developer
+            developer: {
+              name: "Ryan Thaut",
+              url: "https://ryan.thaut.me",
+            } as UserManifest["developer"],
+          }
+        : {
+            // use the "author" field for Edge and Chrome
+            // https://developer.chrome.com/docs/extensions/reference/manifest/author
+            author: {
+              email: "rthaut@gmail.com",
+            } as UserManifest["author"],
+          };
+
     const commands: UserManifest["commands"] = {
       "open-popout-auto-close-command": {
         suggested_key: {
@@ -73,10 +91,8 @@ export default defineConfig({
       description: "__MSG_ExtensionDescription__",
       short_name: "__MSG_ExtensionShortName__",
       default_locale: "en",
-      author: {
-        email: "rthaut@gmail.com",
-      },
       homepage_url: "https://rthaut.github.io/YouTubePopoutPlayer/",
+      ...author_developer,
       action: {
         default_title: "__MSG_BrowserActionTitle__",
       },
