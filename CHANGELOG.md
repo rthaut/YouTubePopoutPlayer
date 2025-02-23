@@ -1,10 +1,22 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [5.1.0] - 2025-02-23
+
+### New Features
+
+* Added support for Video On Demand (VOD) URLs (re #295)
+
+### Other
+
+* Migrate to Manifest v3
+* Updated to Material UI v5 (and React 18)
 
 ## [5.0.0] - 2024-10-15
 
@@ -20,8 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Fix "Automatically Open on Video Pages" functionality in Chromium browsers
 * Only request optional `cookies` permission in Firefox (for multi-account containers support)
 * Remove default keyboard shortcuts for the following commands in Chromium browsers
-    * "Open popout player and close the current window/tab"
-    * "Open popout player without closing the current window/tab" 
+  * "Open popout player and close the current window/tab"
+  * "Open popout player without closing the current window/tab"
 
 ## [4.4.0] - 2023-06-19
 
@@ -162,9 +174,10 @@ The extension/add-on now supports translations. Currently the only translation o
 
 A new icon has been added to the lower right corner to allow opening the current video in a popout player. This should work for all YouTube videos, both directly on youtube.com and embedded in other web pages.
 
-[Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.1...HEAD
+[Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.1...v5.0.0
-[4.4.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.0...v4.4.1
+[4.4.1]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.0...v4.4.1
 [4.4.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.1.0...v4.2.0
