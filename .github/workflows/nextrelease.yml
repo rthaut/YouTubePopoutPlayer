@@ -16,8 +16,7 @@ jobs:
         fetch-depth: 0
     - uses: actions/setup-node@v2
       with:
-        node-version: '16'
-        registry-url: 'https://registry.npmjs.org'
+        node-version: 'lts/*'
     - uses: dropseed/nextrelease@v1
       with:
         prepare_cmd: |
