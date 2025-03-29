@@ -62,15 +62,33 @@ const OnMenuClicked = async (
   switch (info.menuItemId) {
     case "OpenVideo":
     case "OpenPlaylist":
-      OpenPopoutBackgroundHelper(info.linkUrl, tab?.id, true, false);
+      OpenPopoutBackgroundHelper({
+        url: info.linkUrl,
+        tabId: tab?.id,
+        includeList: info.menuItemId === "OpenPlaylist", // omit playlist when opening video only
+        allowCloseTab: true,
+        allowCloseTabOnAnyDomain: false,
+      });
       break;
 
     case "OpenVideoRotateLeft":
-      OpenPopoutBackgroundHelper(info.linkUrl, tab?.id, true, false, 270);
+      OpenPopoutBackgroundHelper({
+        url: info.linkUrl,
+        tabId: tab?.id,
+        allowCloseTab: true,
+        allowCloseTabOnAnyDomain: false,
+        rotation: 270,
+      });
       break;
 
     case "OpenVideoRotateRight":
-      OpenPopoutBackgroundHelper(info.linkUrl, tab?.id, true, false, 90);
+      OpenPopoutBackgroundHelper({
+        url: info.linkUrl,
+        tabId: tab?.id,
+        allowCloseTab: true,
+        allowCloseTabOnAnyDomain: false,
+        rotation: 90,
+      });
       break;
   }
 };

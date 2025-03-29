@@ -23,22 +23,31 @@ const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it con
 
 /**
  * Helper function to open the popout player from various points in the background script
- * @param {string} url the URL containing a video ID and/or playlist
- * @param {number} [tabId=-1] the ID of the original tab
- * @param {boolean} [allowCloseTab=true] if the original tab can be closed (depending on the user's preference)
- * @param {boolean} [allowCloseTabOnAnyDomain=false] if the original tab can be closed regardless of which domain it is on
- * @param {number} [rotation=0] the initial video rotation amount
+ * @param {object} params
+ * @param {string} params.url the URL containing a video ID and/or playlist
+ * @param {number} [params.tabId=-1] the ID of the original tab
+ * @param {boolean} [params.allowCloseTab=true] if the original tab can be closed (depending on the user's preference)
+ * @param {boolean} [params.allowCloseTabOnAnyDomain=false] if the original tab can be closed regardless of which domain it is on
+ * @param {number} [params.rotation=0] the initial video rotation amount
  * @returns {Promise<boolean>} if the popout player was opened
  */
-export const OpenPopoutBackgroundHelper = async (
-  url: string,
-  tabId: number = -1,
-  allowCloseTab: boolean = true,
-  allowCloseTabOnAnyDomain: boolean = false,
-  rotation: number = 0,
-): Promise<boolean> => {
+export const OpenPopoutBackgroundHelper = async ({
+  url,
+  tabId = -1,
+  includeList = true,
+  allowCloseTab = true,
+  allowCloseTabOnAnyDomain = false,
+  rotation = 0,
+}: {
+  url: string;
+  includeList?: boolean;
+  tabId?: number;
+  allowCloseTab?: boolean;
+  allowCloseTabOnAnyDomain?: boolean;
+  rotation?: number;
+}): Promise<boolean> => {
   const id = GetVideoIDFromURL(url);
-  const list = GetPlaylistIDFromURL(url);
+  const list = includeList ? GetPlaylistIDFromURL(url) : undefined;
 
   if (!(id || list)) {
     console.warn("No video or playlist detected from URL", url);

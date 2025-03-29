@@ -35,7 +35,11 @@ export default defineBackground(() => {
   browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
     if (changeInfo.url && IsVideoURL(changeInfo.url, false)) {
       if (await Options.GetLocalOption("advanced", "autoOpen")) {
-        OpenPopoutBackgroundHelper(changeInfo.url, tabId, false);
+        OpenPopoutBackgroundHelper({
+          url: changeInfo.url,
+          tabId,
+          allowCloseTab: false,
+        });
       }
     }
   });
