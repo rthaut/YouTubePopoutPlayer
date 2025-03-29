@@ -43,7 +43,7 @@
   "browserslist": [
     "chrome >= 90.0",
     "edge >= 91.0",
-    "firefox >= 109.0"
+    "firefox >= 113.0"
   ],
   "dependencies": {
     "@emotion/react": "^11.14.0",

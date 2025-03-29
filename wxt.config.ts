@@ -86,7 +86,7 @@ export default defineConfig({
       browser_specific_settings = {
         gecko: {
           id: "{85b42b8f-49cd-4935-aeca-a6b32dd6ac9f}",
-          strict_min_version: "109.0",
+          strict_min_version: "113.0",
         },
       };
     }
