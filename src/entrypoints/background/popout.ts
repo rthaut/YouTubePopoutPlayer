@@ -34,18 +34,20 @@ const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it con
 export const OpenPopoutBackgroundHelper = async ({
   url,
   tabId = -1,
+  includeList = true,
   allowCloseTab = true,
   allowCloseTabOnAnyDomain = false,
   rotation = 0,
 }: {
   url: string;
+  includeList?: boolean;
   tabId?: number;
   allowCloseTab?: boolean;
   allowCloseTabOnAnyDomain?: boolean;
   rotation?: number;
 }): Promise<boolean> => {
   const id = GetVideoIDFromURL(url);
-  const list = GetPlaylistIDFromURL(url);
+  const list = includeList ? GetPlaylistIDFromURL(url) : undefined;
 
   if (!(id || list)) {
     console.warn("No video or playlist detected from URL", url);
