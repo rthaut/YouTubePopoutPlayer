@@ -65,6 +65,7 @@ const OnMenuClicked = async (
       OpenPopoutBackgroundHelper({
         url: info.linkUrl,
         tabId: tab?.id,
+        includeList: info.menuItemId === "OpenPlaylist", // omit playlist when opening video only
         allowCloseTab: true,
         allowCloseTabOnAnyDomain: false,
       });
