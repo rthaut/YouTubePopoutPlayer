@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.1] - 2025-03-29
+
+### Bug Fixes
+
+* Fix "Open Video in Popout Player" context menu incorrectly attempting to open as a playlist when used on links/videos containing both a video and a list/playlist (re #417)
+
 ## [5.1.0] - 2025-02-23
 
 ### New Features
@@ -174,7 +180,8 @@ The extension/add-on now supports translations. Currently the only translation o
 
 A new icon has been added to the lower right corner to allow opening the current video in a popout player. This should work for all YouTube videos, both directly on youtube.com and embedded in other web pages.
 
-[Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.1.0...HEAD
+[Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.1.1...HEAD
+[5.1.1]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.1...v5.0.0
 [4.4.1]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v4.4.0...v4.4.1
