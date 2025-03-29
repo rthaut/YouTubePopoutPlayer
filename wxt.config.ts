@@ -20,6 +20,24 @@ export default defineConfig({
     },
   },
   manifest: ({ browser, mode }) => {
+    const author_developer =
+      browser === "firefox"
+        ? {
+            // use the "developer" field for Firefox, since it doesn't support the `author.email` format
+            // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/developer
+            developer: {
+              name: "Ryan Thaut",
+              url: "https://ryan.thaut.me",
+            } as UserManifest["developer"],
+          }
+        : {
+            // use the "author" field for Edge and Chrome
+            // https://developer.chrome.com/docs/extensions/reference/manifest/author
+            author: {
+              email: "rthaut@gmail.com",
+            } as UserManifest["author"],
+          };
+
     const commands: UserManifest["commands"] = {
       "open-popout-auto-close-command": {
         suggested_key: {
@@ -47,25 +65,30 @@ export default defineConfig({
       },
     };
 
-    const optional_permissions: UserManifest["optional_permissions"] = [];
-
-    if (mode !== "development") {
-      // the `tabs` and `scripting` permissions are automatically added by `wxt` during development
-      // https://wxt.dev/guide/essentials/config/manifest.html#permissions
-      optional_permissions.push("tabs");
-    }
-
     if (browser === "firefox") {
-      // Chrome is limited to 3 default shortcut keys, so we only provide these for Firefox
+      // Chrome is limited to 3 default shortcut keys, so we only provide these additional defaults for Firefox
       commands["open-popout-force-close-command"].suggested_key = {
         default: "Alt+Shift+PageUp",
       };
       commands["open-popout-no-close-command"].suggested_key = {
         default: "Alt+Shift+PageDown",
       };
+    }
 
-      // Firefox uses the "cookies" permission for multi-account containers support
+    const optional_permissions: UserManifest["optional_permissions"] = ["tabs"];
+    if (browser === "firefox") {
+      // Firefox optionally uses the "cookies" permission for multi-account containers support
       optional_permissions.push("cookies");
+    }
+
+    let browser_specific_settings: UserManifest["browser_specific_settings"];
+    if (browser === "firefox") {
+      browser_specific_settings = {
+        gecko: {
+          id: "{85b42b8f-49cd-4935-aeca-a6b32dd6ac9f}",
+          strict_min_version: "109.0",
+        },
+      };
     }
 
     return {
@@ -73,10 +96,8 @@ export default defineConfig({
       description: "__MSG_ExtensionDescription__",
       short_name: "__MSG_ExtensionShortName__",
       default_locale: "en",
-      author: {
-        email: "rthaut@gmail.com",
-      },
       homepage_url: "https://rthaut.github.io/YouTubePopoutPlayer/",
+      ...author_developer,
       action: {
         default_title: "__MSG_BrowserActionTitle__",
       },
@@ -101,13 +122,9 @@ export default defineConfig({
         "storage",
       ],
       optional_permissions,
-      minimum_chrome_version: browser === "chrome" ? "90" : "91",
-      browser_specific_settings: {
-        gecko: {
-          id: "{85b42b8f-49cd-4935-aeca-a6b32dd6ac9f}",
-          strict_min_version: "109.0",
-        },
-      },
+      minimum_chrome_version:
+        browser === "firefox" ? undefined : browser === "chrome" ? "90" : "91",
+      browser_specific_settings,
     } satisfies UserManifest;
   },
 });
