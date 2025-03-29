@@ -42,11 +42,11 @@ Contributions are always welcome! Even if you aren't comfortable coding, you can
 
 ### Localization/Translation
 
-This extension is setup to be fully localized/translated into multiple languages, but for now English is the only language with full translations. If you are able to help localize/translate, please [check out this guide](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization). All of the text for the extension is stored [here in the `/app/_locales` directory](https://github.com/rthaut/YouTubePopoutPlayer/tree/master/app/_locales).
+This extension is setup to be fully localized/translated into multiple languages, but for now English is the only language with full translations. If you are able to help localize/translate, please [check out this guide](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Internationalization). All of the text for the extension is stored [here in the `/src/public/_locales` directory](https://github.com/rthaut/YouTubePopoutPlayer/tree/master/src/public/_locales).
 
 ### Building the Extension
 
-**This extension uses the [WebExtension Toolbox](https://github.com/webextension-toolbox/webextension-toolbox#usage) for development and build processes.**
+**This extension uses the [WXT](https://wxt.dev/) for development and build processes.**
 
 To build the extension from source code, you will need to use [Node Package Manager (npm)](https://www.npmjs.com/), which handles all of the dependencies needed for this project and is used to execute the various scripts for development/building/packaging/etc.
 
@@ -57,27 +57,20 @@ npm install
 Then you can run the development process (where the extension is auto-reloaded when changes are made) for your browser of choice:
 
 ```sh
-npm run dev <chrome/edge/firefox>
+npm run dev:<chrome|edge|firefox> # ex: npm run dev:chrome
 ```
 
 Or you can generate a production build for your browser of choice:
 
 ```sh
-npm run build <chrome/edge/firefox>
+npm run build:<chrome|edge|firefox> # ex: npm run build:chrome
 ```
 
-### Development Process
-
-To make development easier, you can start up a temporary development profile on [Mozilla Firefox](https://getfirefox.com) with the extension already loaded. Firefox will also automatically detect changes and reload the extension for you (read more about this on the [`web-ext` documentation pages](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Getting_started_with_web-ext)). Use the following commands to re-build the extension and re-load it in Firefox automatically as you make changes:
+To create a release package for all supported browsers, run the following command:
 
 ```sh
-npm run dev firefox
-npm run start:firefox
+npm run zip
 ```
-
-Note you will need 2 terminal instances, one for each of the above commands, as they both remain running until you cancel them (use <kbd>CTRL</kbd> + <kbd>c</kbd> to cancel each process in your terminal(s)).
-
-* * *
 
 [chrome-url]: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
 [chrome-image-version]: https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
