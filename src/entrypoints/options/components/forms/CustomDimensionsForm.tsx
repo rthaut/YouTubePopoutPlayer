@@ -240,7 +240,6 @@ function CustomDimensionsForm() {
           ))}
         </Select>
       </FormControl>
-
       <Grid
         container
         spacing={2}
@@ -248,7 +247,7 @@ function CustomDimensionsForm() {
         justifyContent="flex-start"
         alignItems="center"
       >
-        <Grid item xs>
+        <Grid size="grow">
           <TextField
             required
             fullWidth
@@ -274,7 +273,7 @@ function CustomDimensionsForm() {
             }}
           />
         </Grid>
-        <Grid item xs>
+        <Grid size="grow">
           <TextField
             required
             fullWidth
@@ -301,7 +300,6 @@ function CustomDimensionsForm() {
           />
         </Grid>
       </Grid>
-
       <Box padding={2}>
         <CustomDimensionsInfoTable
           units={units}
@@ -309,7 +307,6 @@ function CustomDimensionsForm() {
           height={height}
         />
       </Box>
-
       <Box paddingX={8}>
         <Button
           variant="contained"

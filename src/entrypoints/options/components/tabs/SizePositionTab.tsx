@@ -1,7 +1,7 @@
 import React from "react";
 import AspectRatioIcon from "@mui/icons-material/AspectRatio";
 import OpenWithIcon from "@mui/icons-material/OpenWith";
-import Alert from "@mui/lab/Alert";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 

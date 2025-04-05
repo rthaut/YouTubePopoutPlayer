@@ -19,8 +19,8 @@ export default function TabPanelHeader({
       justifyContent="flex-start"
       alignItems="center"
     >
-      {icon && <Grid item>{icon}</Grid>}
-      <Grid item xs zeroMinWidth>
+      {icon && <Grid>{icon}</Grid>}
+      <Grid size="grow">
         <Typography variant="h5" component="h2" gutterBottom>
           {title}
         </Typography>
