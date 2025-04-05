@@ -169,6 +169,17 @@
   "AutoplayVideosBlockedTip": {
     "message": "<strong>Note</strong>: Autoplaying videos with sound are commonly blocked by default in modern browsers; you may need to manually enable/allow autoplay through your browser's settings for this to work correctly."
   },
+  "OptionsBehaviorResumePlaybackLabel": {
+    "message": "Resume Playback from Current Timestamp"
+  },
+  "OptionsBehaviorResumePlaybackDescription": {
+    "message": "This setting controls whether or not the video in the popout player resumes playing from the current timestamp when the popout player is opened. <strong>The default for this setting is enabled.</strong><br/><strong>Note</strong>: If the video is $THRESHOLD$ seconds or less into playback, the popout player will start from the beginning instead of resuming from the current timestamp.",
+    "placeholders": {
+      "threshold": {
+        "content": "$1"
+      }
+    }
+  },
   "OptionsBehaviorLoopLabel": {
     "message": "Loop Video(s)"
   },

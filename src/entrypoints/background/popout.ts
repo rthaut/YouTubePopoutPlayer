@@ -147,13 +147,15 @@ export const OpenPopoutPlayer = async ({
       break;
   }
 
-  if (time <= START_THRESHOLD) {
-    console.info(
-      "[Background] OpenPopoutPlayer() :: Popout video will start from beginning",
-    );
-    time = 0;
+  if (behavior.resumePlayback) {
+    if (time <= START_THRESHOLD) {
+      console.info(
+        "[Background] OpenPopoutPlayer() :: Popout video will start from beginning",
+      );
+      time = 0;
+    }
+    params.start = Math.round(time); // param must be an integer for the embedded player
   }
-  params.start = time;
 
   if (list !== undefined && list !== null && list !== "") {
     if (list.toUpperCase() === "WL") {
