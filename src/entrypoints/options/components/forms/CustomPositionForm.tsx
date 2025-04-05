@@ -1,7 +1,7 @@
 import React from "react";
 import SaveIcon from "@mui/icons-material/Save";
 import WarningIcon from "@mui/icons-material/Warning";
-import Alert from "@mui/lab/Alert";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -69,7 +69,7 @@ function CustomPositionForm() {
         justifyContent="flex-start"
         alignItems="center"
       >
-        <Grid item xs>
+        <Grid size="grow">
           <TextField
             required
             fullWidth
@@ -79,18 +79,20 @@ function CustomPositionForm() {
             margin="normal"
             value={parseInt(top, 10)}
             onChange={handlePositionInputChange("top")}
-            InputLabelProps={{}}
-            InputProps={{
-              inputProps: {},
-              endAdornment: (
-                <InputAdornment position="end">
-                  {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                inputProps: {},
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
+                  </InputAdornment>
+                ),
+              },
+              inputLabel: {},
             }}
           />
         </Grid>
-        <Grid item xs>
+        <Grid size="grow">
           <TextField
             required
             fullWidth
@@ -100,19 +102,20 @@ function CustomPositionForm() {
             margin="normal"
             value={parseInt(left, 10)}
             onChange={handlePositionInputChange("left")}
-            InputLabelProps={{}}
-            InputProps={{
-              inputProps: {},
-              endAdornment: (
-                <InputAdornment position="end">
-                  {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                inputProps: {},
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
+                  </InputAdornment>
+                ),
+              },
+              inputLabel: {},
             }}
           />
         </Grid>
       </Grid>
-
       <Box paddingX={8}>
         <Button
           variant="contained"
