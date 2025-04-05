@@ -1,7 +1,6 @@
 import React from "react";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
 
 function ConditionalTooltipWrapper({
   condition,
@@ -34,12 +33,5 @@ function ConditionalTooltipWrapper({
 
   return children;
 }
-
-ConditionalTooltipWrapper.propTypes = {
-  condition: PropTypes.bool.isRequired,
-  html: PropTypes.string.isRequired,
-  placement: PropTypes.string,
-  children: PropTypes.node.isRequired,
-};
 
 export default ConditionalTooltipWrapper;

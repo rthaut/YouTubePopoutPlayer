@@ -7,7 +7,6 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
 
 import { type OptionDomain } from "@/utils/constants";
 
@@ -123,9 +122,3 @@ export function ModeOptionSelectControl({
     </FormControl>
   );
 }
-
-ModeOptionRadioControl.propTypes = ModeOptionSelectControl.propTypes = {
-  domain: PropTypes.string.isRequired,
-  optionName: PropTypes.string.isRequired,
-  values: PropTypes.arrayOf(PropTypes.string).isRequired,
-};
