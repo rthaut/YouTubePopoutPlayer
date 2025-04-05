@@ -20,7 +20,7 @@ function BasicToggleControl({
   label: React.ReactNode;
   description: string;
 }) {
-  const [value, setValue] = useOption(domain as any, optionName);
+  const [value, setValue] = useOption(domain, optionName);
 
   return (
     <FormControl>
