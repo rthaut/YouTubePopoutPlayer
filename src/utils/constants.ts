@@ -26,6 +26,7 @@ export const OPTION_DEFAULTS = {
     reuseWindowsTabs: false,
     controls: "standard",
     autoplay: true,
+    resumePlayback: true,
     loop: false,
     showRotationButtons: true,
     showRotationMenus: false,

@@ -28,7 +28,7 @@ export const GetVideoPlayerInfo = () => {
   const video = GetPageVideo();
   if (video) {
     info = {
-      time: +video.currentTime,
+      time: Math.floor(video.currentTime),
       width: video.clientWidth,
       height: video.clientHeight,
       paused: video.paused,
