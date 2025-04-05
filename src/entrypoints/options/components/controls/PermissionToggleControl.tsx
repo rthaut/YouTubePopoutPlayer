@@ -31,7 +31,13 @@ function PermissionToggleControl({
     setShowPermissionError(false);
 
     if (remove) {
-      await browser.permissions.remove(permissionsRequest);
+      await browser.permissions.remove(permissionsRequest).catch((error) => {
+        console.warn(
+          `Failed to remove permission(s) when disabling the \"${label}\" option:`,
+          error,
+          permissionsRequest,
+        );
+      });
       setValue(false);
       return false;
     }
