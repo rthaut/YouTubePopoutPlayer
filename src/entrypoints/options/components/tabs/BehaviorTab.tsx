@@ -15,6 +15,7 @@ import Typography from "@mui/material/Typography";
 import {
   OPTIONS_BEHAVIOR_CONTROLS_VALUES,
   OPTIONS_BEHAVIOR_TARGET_VALUES,
+  START_THRESHOLD,
 } from "@/utils/constants";
 
 import { useDomainOptions } from "../../hooks/use-options";
@@ -117,6 +118,20 @@ export default function BehaviorTab() {
     );
   }
 
+  function ResumePlaybackControl() {
+    return (
+      <BasicToggleControl
+        domain={DOMAIN}
+        optionName="resumePlayback"
+        label={browser.i18n.getMessage("OptionsBehaviorResumePlaybackLabel")}
+        description={browser.i18n.getMessage(
+          "OptionsBehaviorResumePlaybackDescription",
+          START_THRESHOLD.toLocaleString(),
+        )}
+      />
+    );
+  }
+
   function LoopControl() {
     return (
       <BasicToggleControl
@@ -200,6 +215,10 @@ export default function BehaviorTab() {
       <Divider />
       <Box marginY={2}>
         <AutoplayControl />
+      </Box>
+      <Divider />
+      <Box marginY={2}>
+        <ResumePlaybackControl />
       </Box>
       <Divider />
       <Box marginY={2}>
