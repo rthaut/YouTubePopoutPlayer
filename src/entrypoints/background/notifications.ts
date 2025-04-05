@@ -25,7 +25,7 @@ export const ShowBasicNotification = async (
 
   browser.notifications.create({
     type: "basic",
-    iconUrl: browser.runtime.getURL("/images/icon-48.png"),
+    iconUrl: browser.runtime.getURL("/icons/48.png"),
     title: browser.i18n.getMessage("ExtensionName"),
     ...options,
   });
