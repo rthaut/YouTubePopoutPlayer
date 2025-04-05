@@ -112,7 +112,6 @@ export function ModeOptionSelectControl({
       </Select>
       <Typography
         color="textSecondary"
-        paragraph
         dangerouslySetInnerHTML={{
           __html: browser.i18n.getMessage(
             // TODO: narrow this typing

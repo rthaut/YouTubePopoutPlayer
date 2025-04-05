@@ -85,7 +85,6 @@ export default function BehaviorTab() {
         </Select>
         <Typography
           color="textSecondary"
-          paragraph
           dangerouslySetInnerHTML={{
             __html: browser.i18n.getMessage("BehaviorControlsDescription"),
           }}
