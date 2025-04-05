@@ -1,6 +1,6 @@
 import React from "react";
 import TuneIcon from "@mui/icons-material/Tune";
-import Alert from "@mui/lab/Alert";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";

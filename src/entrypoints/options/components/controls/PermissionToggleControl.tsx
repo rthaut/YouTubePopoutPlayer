@@ -1,6 +1,6 @@
 import type { Permissions } from "wxt/browser";
 import React from "react";
-import Alert from "@mui/lab/Alert";
+import Alert from "@mui/material/Alert";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";

@@ -1,6 +1,6 @@
 import React from "react";
 import CloudOffIcon from "@mui/icons-material/CloudOff";
-import Alert from "@mui/lab/Alert";
+import Alert from "@mui/material/Alert";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";

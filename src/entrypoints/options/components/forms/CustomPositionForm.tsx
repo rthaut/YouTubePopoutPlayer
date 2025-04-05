@@ -1,7 +1,7 @@
 import React from "react";
 import SaveIcon from "@mui/icons-material/Save";
 import WarningIcon from "@mui/icons-material/Warning";
-import Alert from "@mui/lab/Alert";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -69,7 +69,7 @@ function CustomPositionForm() {
         justifyContent="flex-start"
         alignItems="center"
       >
-        <Grid item xs>
+        <Grid size="grow">
           <TextField
             required
             fullWidth
@@ -90,7 +90,7 @@ function CustomPositionForm() {
             }}
           />
         </Grid>
-        <Grid item xs>
+        <Grid size="grow">
           <TextField
             required
             fullWidth
@@ -112,7 +112,6 @@ function CustomPositionForm() {
           />
         </Grid>
       </Grid>
-
       <Box paddingX={8}>
         <Button
           variant="contained"
