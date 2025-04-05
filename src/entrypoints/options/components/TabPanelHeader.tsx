@@ -1,7 +1,6 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
 
 export default function TabPanelHeader({
   title,
@@ -28,8 +27,3 @@ export default function TabPanelHeader({
     </Grid>
   );
 }
-
-TabPanelHeader.propTypes = {
-  title: PropTypes.string.isRequired,
-  icon: PropTypes.node,
-};

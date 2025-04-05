@@ -5,7 +5,6 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
 
 import { type OptionDomain } from "@/utils/constants";
 
@@ -86,15 +85,5 @@ function PermissionToggleControl({
     </FormControl>
   );
 }
-
-PermissionToggleControl.propTypes = {
-  domain: PropTypes.string.isRequired,
-  optionName: PropTypes.string.isRequired,
-  label: PropTypes.node.isRequired,
-  description: PropTypes.string.isRequired,
-  permissionsRequest: PropTypes.shape({
-    permissions: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
-};
 
 export default PermissionToggleControl;

@@ -15,7 +15,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
-import PropTypes from "prop-types";
 import { usePrevious } from "react-use";
 
 import { OPTIONS_SIZE_UNITS_VALUES } from "@/utils/constants";
@@ -87,12 +86,6 @@ function CustomDimensionsInfoTable({
     </Paper>
   );
 }
-
-CustomDimensionsInfoTable.propTypes = {
-  units: PropTypes.oneOf(OPTIONS_SIZE_UNITS_VALUES).isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-};
 
 function CustomDimensionsForm() {
   const { options, setOptions } = useDomainOptions("size");
