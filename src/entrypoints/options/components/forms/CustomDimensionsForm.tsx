@@ -250,19 +250,21 @@ function CustomDimensionsForm() {
             margin="normal"
             value={parseInt(width, 10)}
             onChange={handleDimensionInputChange("width")}
-            InputLabelProps={{}}
-            InputProps={{
-              inputProps: {
-                ...widthRestrictions,
+            slotProps={{
+              input: {
+                inputProps: {
+                  ...widthRestrictions,
+                },
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {browser.i18n.getMessage(
+                      // TODO: using `any` due to casing of `unit` not matching the labels
+                      `DimensionUnits${units}UnitLabel` as any,
+                    )}
+                  </InputAdornment>
+                ),
               },
-              endAdornment: (
-                <InputAdornment position="end">
-                  {browser.i18n.getMessage(
-                    // TODO: using `any` due to casing of `unit` not matching the labels
-                    `DimensionUnits${units}UnitLabel` as any,
-                  )}
-                </InputAdornment>
-              ),
+              inputLabel: {},
             }}
           />
         </Grid>
@@ -276,19 +278,21 @@ function CustomDimensionsForm() {
             margin="normal"
             value={parseInt(height, 10)}
             onChange={handleDimensionInputChange("height")}
-            InputLabelProps={{}}
-            InputProps={{
-              inputProps: {
-                ...heightRestrictions,
+            slotProps={{
+              input: {
+                inputProps: {
+                  ...heightRestrictions,
+                },
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {browser.i18n.getMessage(
+                      // TODO: using `any` due to casing of `unit` not matching the labels
+                      `DimensionUnits${units}UnitLabel` as any,
+                    )}
+                  </InputAdornment>
+                ),
               },
-              endAdornment: (
-                <InputAdornment position="end">
-                  {browser.i18n.getMessage(
-                    // TODO: using `any` due to casing of `unit` not matching the labels
-                    `DimensionUnits${units}UnitLabel` as any,
-                  )}
-                </InputAdornment>
-              ),
+              inputLabel: {},
             }}
           />
         </Grid>

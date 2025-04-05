@@ -79,14 +79,16 @@ function CustomPositionForm() {
             margin="normal"
             value={parseInt(top, 10)}
             onChange={handlePositionInputChange("top")}
-            InputLabelProps={{}}
-            InputProps={{
-              inputProps: {},
-              endAdornment: (
-                <InputAdornment position="end">
-                  {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                inputProps: {},
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
+                  </InputAdornment>
+                ),
+              },
+              inputLabel: {},
             }}
           />
         </Grid>
@@ -100,14 +102,16 @@ function CustomPositionForm() {
             margin="normal"
             value={parseInt(left, 10)}
             onChange={handlePositionInputChange("left")}
-            InputLabelProps={{}}
-            InputProps={{
-              inputProps: {},
-              endAdornment: (
-                <InputAdornment position="end">
-                  {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                inputProps: {},
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {browser.i18n.getMessage("DimensionUnitsPixelsUnitLabel")}
+                  </InputAdornment>
+                ),
+              },
+              inputLabel: {},
             }}
           />
         </Grid>
