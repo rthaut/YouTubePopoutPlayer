@@ -49,15 +49,14 @@ export const WatchForPageChanges = () => {
       .forEach(async (mutation) => {
         for (const node of mutation.addedNodes) {
           if (node.nodeType !== Node.ELEMENT_NODE) continue;
-          switch ((node as HTMLElement).className) {
-            case "ytp-popup ytp-contextmenu":
-              InsertPopoutEntryIntoContextMenu();
-              break;
 
-            case "ytp-right-controls":
-              await InsertPopoutButtonIntoPlayerControls();
-              await InsertRotationButtonsIntoPlayerControls();
-              break;
+          const element = node as HTMLElement;
+          if (element.classList?.contains("ytp-contextmenu")) {
+            InsertPopoutEntryIntoContextMenu();
+          }
+          if (element.classList?.contains("ytp-right-controls-right")) {
+            await InsertPopoutButtonIntoPlayerControls();
+            await InsertRotationButtonsIntoPlayerControls();
           }
         }
       });
@@ -74,7 +73,9 @@ export const WatchForPageChanges = () => {
  */
 const InsertPopoutEntryIntoContextMenu = () => {
   try {
-    const contextmenu = document.getElementsByClassName("ytp-contextmenu")[0];
+    const contextmenu = document.querySelector<HTMLElement>(
+      '[class*="ytp-contextmenu"]',
+    );
     if (!contextmenu) {
       console.warn("Missing context menu");
       return false;
@@ -116,23 +117,21 @@ const InsertPopoutEntryIntoContextMenu = () => {
       false,
     );
 
-    const menu = contextmenu
-      .getElementsByClassName("ytp-panel")[0]
-      .getElementsByClassName("ytp-panel-menu")[0];
-
+    const menu = contextmenu.querySelector<HTMLElement>(".ytp-panel .ytp-panel-menu");
+    if (!menu) {
+      return false;
+    }
     menu.appendChild(menuItem);
 
-    const contextMenus = document.getElementsByClassName("ytp-contextmenu");
-    const contextMenu = contextMenus[contextMenus.length - 1] as HTMLElement;
-    const contextMenuPanel = contextMenu.getElementsByClassName(
-      "ytp-panel",
-    )[0] as HTMLElement;
-    const contextMenuPanelMenu = contextMenuPanel.getElementsByClassName(
-      "ytp-panel-menu",
-    )[0] as HTMLElement;
+    const contextMenuPanel = contextmenu.querySelector<HTMLElement>(".ytp-panel");
+    const contextMenuPanelMenu = contextmenu.querySelector<HTMLElement>(".ytp-panel .ytp-panel-menu");
 
-    const height = contextMenu.offsetHeight + menuItem.offsetHeight;
-    contextMenu.style.height = height + "px";
+    if (!contextMenuPanel || !contextMenuPanelMenu) {
+      return false;
+    }
+
+    const height = contextmenu.offsetHeight + menuItem.offsetHeight;
+    contextmenu.style.height = height + "px";
     contextMenuPanel.style.height = height + "px";
     contextMenuPanelMenu.style.height = height + "px";
   } catch (error) {
@@ -167,28 +166,27 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
   }
 
   try {
-    const controls = document.getElementsByClassName("ytp-right-controls")[0];
+    const fullScreenButton = document.querySelector<HTMLElement>(
+      ".ytp-fullscreen-button",
+    );
+    if (!fullScreenButton) {
+      return false;
+    }
+
+    const controls = fullScreenButton.parentElement;
     if (!controls) {
       console.warn("Missing player controls");
       return false;
     }
 
-    let playerButton = controls.getElementsByClassName(
-      "ytp-popout-button",
-    )[0] as HTMLButtonElement;
+    let playerButton = controls.querySelector<HTMLButtonElement>(
+      ".ytp-popout-button",
+    );
     if (playerButton) {
       console.warn(
         "#popout-player-control-button already exists",
         playerButton,
       );
-      return false;
-    }
-
-    const fullScreenButton = controls.getElementsByClassName(
-      "ytp-fullscreen-button",
-    )[0];
-    if (!fullScreenButton) {
-      console.warn("Missing player controls full screen button");
       return false;
     }
 
@@ -254,7 +252,13 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
   }
 
   try {
-    const controls = document.getElementsByClassName("ytp-right-controls")[0];
+    const firstButton = document.querySelector<HTMLElement>(
+      ".ytp-right-controls-right button",
+    );
+    if (!firstButton) {
+      return false;
+    }
+    const controls = firstButton.parentElement;
     if (!controls) {
       console.warn("Missing player controls");
       return false;
@@ -309,7 +313,7 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
         false,
       );
 
-      controls.insertBefore(button, controls.querySelector("button"));
+      controls.insertBefore(button, firstButton);
     }
   } catch (error) {
     console.error(
@@ -342,9 +346,9 @@ const GetPopoutIconSVG = (
 
   const paths = {
     button: {
-      // paths are inset from edges more and are narrower
-      frame: "m 9,10 v 16 h 18 v -4 h -2 v 2 H 11 V 12 h 3 v -2 z",
-      popout: "M 16,9 V 20 H 28 V 9 Z m 2,2 h 8 v 7 h -8 z",
+      // paths are inset from edges just enough to look good
+      frame: "m 8,9 v 18 h 20 v -5 h -2 v 3 H 10 V 11 h 4 v -2 z",
+      popout: "m 15,8 v 13 h 14 V 8 Z m 2,2 h 10 v 9 H 17 Z",
     },
     menu: {
       // paths are inset from edges less and are wider

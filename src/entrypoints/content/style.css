@@ -30,6 +30,12 @@
             animation: ytp-svg-pop-animation .4s cubic-bezier(.25, .1, .25, 1);
 }
 
+.ytp-popout-button.ytp-button {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
 
 /**
  * Animations for the rotation buttons' icons

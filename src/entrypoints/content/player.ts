@@ -119,6 +119,7 @@ export const PauseVideoPlayer = () => {
   const video = GetPageVideo();
   if (video) {
     video.pause();
+    return true;
   }
   return false;
 };
