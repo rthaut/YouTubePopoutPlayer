@@ -49,15 +49,13 @@ export const WatchForPageChanges = () => {
       .forEach(async (mutation) => {
         for (const node of mutation.addedNodes) {
           if (node.nodeType !== Node.ELEMENT_NODE) continue;
-          switch ((node as HTMLElement).className) {
-            case "ytp-popup ytp-contextmenu":
-              InsertPopoutEntryIntoContextMenu();
-              break;
 
-            case "ytp-right-controls":
-              await InsertPopoutButtonIntoPlayerControls();
-              await InsertRotationButtonsIntoPlayerControls();
-              break;
+          const classes = (node as HTMLElement).classList;
+          if (classes.contains("ytp-contextmenu")) {
+            InsertPopoutEntryIntoContextMenu();
+          } else if (classes.contains("ytp-right-controls")) {
+            await InsertPopoutButtonIntoPlayerControls();
+            await InsertRotationButtonsIntoPlayerControls();
           }
         }
       });
@@ -74,15 +72,13 @@ export const WatchForPageChanges = () => {
  */
 const InsertPopoutEntryIntoContextMenu = () => {
   try {
-    const contextmenu = document.getElementsByClassName("ytp-contextmenu")[0];
-    if (!contextmenu) {
-      console.warn("Missing context menu");
+    const contextMenu = document.querySelector<HTMLElement>(".ytp-contextmenu");
+    if (!contextMenu) {
       return false;
     }
 
     let menuItem = document.getElementById("popout-player-context-menu-item");
     if (menuItem) {
-      console.warn("#popout-player-context-menu-item already exists", menuItem);
       return false;
     }
 
@@ -116,25 +112,19 @@ const InsertPopoutEntryIntoContextMenu = () => {
       false,
     );
 
-    const menu = contextmenu
-      .getElementsByClassName("ytp-panel")[0]
-      .getElementsByClassName("ytp-panel-menu")[0];
+    const panel = contextMenu.querySelector<HTMLElement>(".ytp-panel");
+    const panelMenu = panel?.querySelector<HTMLElement>(".ytp-panel-menu");
+    if (!panel || !panelMenu) {
+      console.warn("Missing context menu panel");
+      return false;
+    }
 
-    menu.appendChild(menuItem);
-
-    const contextMenus = document.getElementsByClassName("ytp-contextmenu");
-    const contextMenu = contextMenus[contextMenus.length - 1] as HTMLElement;
-    const contextMenuPanel = contextMenu.getElementsByClassName(
-      "ytp-panel",
-    )[0] as HTMLElement;
-    const contextMenuPanelMenu = contextMenuPanel.getElementsByClassName(
-      "ytp-panel-menu",
-    )[0] as HTMLElement;
+    panelMenu.appendChild(menuItem);
 
     const height = contextMenu.offsetHeight + menuItem.offsetHeight;
     contextMenu.style.height = height + "px";
-    contextMenuPanel.style.height = height + "px";
-    contextMenuPanelMenu.style.height = height + "px";
+    panel.style.height = height + "px";
+    panelMenu.style.height = height + "px";
   } catch (error) {
     console.error(
       "Failed to insert popout player entry into context menu",
@@ -167,15 +157,23 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
   }
 
   try {
-    const controls = document.getElementsByClassName("ytp-right-controls")[0];
+    let legacyControls = true;
+    let controls = document.querySelector<HTMLElement>(
+      ".ytp-right-controls-right",
+    );
+    if (controls) {
+      legacyControls = false;
+    } else {
+      controls = document.querySelector<HTMLElement>(".ytp-right-controls");
+    }
+
     if (!controls) {
       console.warn("Missing player controls");
       return false;
     }
 
-    let playerButton = controls.getElementsByClassName(
-      "ytp-popout-button",
-    )[0] as HTMLButtonElement;
+    let playerButton =
+      controls.querySelector<HTMLButtonElement>(".ytp-popout-button");
     if (playerButton) {
       console.warn(
         "#popout-player-control-button already exists",
@@ -184,9 +182,9 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
       return false;
     }
 
-    const fullScreenButton = controls.getElementsByClassName(
-      "ytp-fullscreen-button",
-    )[0];
+    const fullScreenButton = controls.querySelector<HTMLButtonElement>(
+      ".ytp-fullscreen-button",
+    );
     if (!fullScreenButton) {
       console.warn("Missing player controls full screen button");
       return false;
@@ -194,16 +192,23 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
 
     playerButton = document.createElement("button");
     playerButton.className = ["ytp-popout-button", "ytp-button"].join(" ");
-    playerButton.setAttribute(
-      "aria-label",
-      browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer"),
-    );
-    playerButton.setAttribute(
-      "title",
-      browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer"),
-    );
+    playerButton.setAttribute("title", "");
+    const attributes = ["aria-label"];
+    if (legacyControls) {
+      attributes.push("title");
+    } else {
+      attributes.push("data-title-no-tooltip", "data-tooltip-title");
+    }
+    attributes.forEach((attribute) => {
+      playerButton.setAttribute(
+        attribute,
+        browser.i18n.getMessage("PlayerControlsButtonTitle_PopoutPlayer"),
+      );
+    });
     playerButton.id = "popout-player-control-button";
-    playerButton.appendChild(GetPopoutIconSVG("button", true));
+    playerButton.appendChild(
+      GetPopoutIconSVG("button", true, legacyControls ? "legacy" : "delhi"),
+    );
     playerButton.addEventListener(
       "click",
       OpenPopoutPlayerControlsClickEventHandler,
@@ -217,7 +222,7 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
       false,
     );
 
-    controls.insertBefore(playerButton, fullScreenButton);
+    fullScreenButton.before(playerButton);
   } catch (error) {
     console.error(
       "Failed to insert popout player button into player controls",
@@ -229,6 +234,11 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
   return true;
 };
 
+/**
+ * Adds the rotation buttons to the YouTube video player controls (in the lower-right corner)
+ * This method checks the configurable "showRotationButtons" option, so the buttons are only inserted when appropriate
+ * NOTE: Rotation buttons are only added within the popout player
+ */
 const InsertRotationButtonsIntoPlayerControls = async () => {
   if (!IsPopoutPlayer(window.location)) {
     console.info(
@@ -254,7 +264,16 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
   }
 
   try {
-    const controls = document.getElementsByClassName("ytp-right-controls")[0];
+    let legacyControls = true;
+    let controls = document.querySelector<HTMLElement>(
+      ".ytp-right-controls-right",
+    );
+    if (controls) {
+      legacyControls = false;
+    } else {
+      controls = document.querySelector<HTMLElement>(".ytp-right-controls");
+    }
+
     if (!controls) {
       console.warn("Missing player controls");
       return false;
@@ -279,20 +298,25 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
         "ytp-rotate-button",
         "ytp-button",
       ].join(" ");
-      button.setAttribute(
-        "aria-label",
-        browser.i18n.getMessage(
-          `PopoutPlayerControls_RotateVideo_${direction as "Left" | "Right"}`,
-        ),
-      );
-      button.setAttribute(
-        "title",
-        browser.i18n.getMessage(
-          `PopoutPlayerControls_RotateVideo_${direction as "Left" | "Right"}`,
-        ),
-      );
+      button.setAttribute("title", "");
+      const attributes = ["aria-label"];
+      if (legacyControls) {
+        attributes.push("title");
+      } else {
+        attributes.push("data-title-no-tooltip", "data-tooltip-title");
+      }
+      attributes.forEach((attribute) => {
+        button.setAttribute(
+          attribute,
+          browser.i18n.getMessage(
+            `PopoutPlayerControls_RotateVideo_${direction as "Left" | "Right"}`,
+          ),
+        );
+      });
       button.id = "ytp-rotate-" + direction + "-button";
-      button.appendChild(GetRotateIconSVG(direction, true));
+      button.appendChild(
+        GetRotateIconSVG(direction, true, legacyControls ? "legacy" : "delhi"),
+      );
       button.addEventListener(
         "click",
         (event) => {
@@ -309,7 +333,7 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
         false,
       );
 
-      controls.insertBefore(button, controls.querySelector("button"));
+      controls.querySelector("button")?.before(button);
     }
   } catch (error) {
     console.error(
@@ -326,18 +350,20 @@ const InsertRotationButtonsIntoPlayerControls = async () => {
  * Gets an SVG element for the requested Popout icon
  * @param {"button" | "menu"} type the type of icon
  * @param {boolean} shadow indicates if the YouTube shadows should be applied to the SVG paths
+ * @param {"legacy" | "delhi"} size the size/style of the icon
  * @returns {HTMLElement}
  */
 const GetPopoutIconSVG = (
   type: "button" | "menu",
   shadow: boolean = false,
+  size: "legacy" | "delhi" = "legacy",
 ): SVGElement => {
   const svgNS = "http://www.w3.org/2000/svg";
 
   const iconSVG = document.createElementNS(svgNS, "svg");
-  iconSVG.setAttribute("width", "100%");
-  iconSVG.setAttribute("height", "100%");
-  iconSVG.setAttribute("viewBox", "0 0 36 36");
+  iconSVG.setAttribute("width", size === "delhi" ? "24" : "100%");
+  iconSVG.setAttribute("height", size === "delhi" ? "24" : "100%");
+  iconSVG.setAttribute("viewBox", size === "delhi" ? "6 6 24 24" : "0 0 36 36");
   iconSVG.setAttribute("version", "1.1");
 
   const paths = {
@@ -381,18 +407,20 @@ const GetPopoutIconSVG = (
  * Gets an SVG element for the requested rotation icon
  * @param {"left" | "right"} direction the direction of icon
  * @param {boolean} shadow indicates if the YouTube shadows should be applied to the SVG paths
+ * @param {"legacy" | "delhi"} size the size/style of the icon
  * @returns {SVGElement}
  */
 const GetRotateIconSVG = (
   direction: "left" | "right",
   shadow: boolean = false,
+  size: "legacy" | "delhi" = "legacy",
 ): SVGElement => {
   const svgNS = "http://www.w3.org/2000/svg";
 
   const iconSVG = document.createElementNS(svgNS, "svg");
-  iconSVG.setAttribute("width", "100%");
-  iconSVG.setAttribute("height", "100%");
-  iconSVG.setAttribute("viewBox", "0 0 1024 1024");
+  iconSVG.setAttribute("width", size === "delhi" ? "24" : "100%");
+  iconSVG.setAttribute("height", size === "delhi" ? "24" : "100%");
+  iconSVG.setAttribute("viewBox", size === "delhi" ? "" : "0 0 1024 1024");
   iconSVG.setAttribute("version", "1.1");
 
   const paths = {
