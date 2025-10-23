@@ -1,6 +1,7 @@
 import type { Tabs } from "wxt/browser";
 
 import {
+  POPOUT_PLAYER_PARAM_NAME,
   YOUTUBE_DOMAINS,
   YOUTUBE_EMBED_URL,
   YOUTUBE_NOCOOKIE_EMBED_URL,
@@ -95,7 +96,7 @@ export const GetPopoutPlayerTabs = async (
     await AddContextualIdentityToDataObject(
       {
         url: [YOUTUBE_EMBED_URL, YOUTUBE_NOCOOKIE_EMBED_URL].map(
-          (url) => url + "*?*popout=1*",
+          (url) => url + `*?*${POPOUT_PLAYER_PARAM_NAME}=1*`,
         ),
       },
       originTabId,

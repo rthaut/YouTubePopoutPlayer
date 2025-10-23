@@ -1,3 +1,5 @@
+export const POPOUT_PLAYER_PARAM_NAME = "__ytpp";
+
 export const YOUTUBE_DOMAIN = "youtube.com";
 export const YOUTUBE_NOCOOKIE_DOMAIN = "youtube-nocookie.com";
 export const YOUTUBE_DOMAINS = [YOUTUBE_DOMAIN, YOUTUBE_NOCOOKIE_DOMAIN];
