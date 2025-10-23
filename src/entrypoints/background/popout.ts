@@ -2,6 +2,7 @@ import type { Windows } from "wxt/browser";
 
 import {
   OPTION_DEFAULTS,
+  POPOUT_PLAYER_PARAM_NAME,
   START_THRESHOLD,
   YOUTUBE_EMBED_URL,
   YOUTUBE_NOCOOKIE_EMBED_URL,
@@ -112,7 +113,7 @@ export const OpenPopoutPlayer = async ({
   const params: Record<string, any> = {};
 
   // custom flag for determining if the embedded player is playing within a popout window/tab
-  params.popout = 1;
+  params[POPOUT_PLAYER_PARAM_NAME] = 1;
 
   const behavior = await Options.GetLocalOptionsForDomain("behavior");
 

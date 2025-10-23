@@ -1,4 +1,5 @@
 import {
+  POPOUT_PLAYER_PARAM_NAME,
   YOUTUBE_EMBED_URL,
   YOUTUBE_NOCOOKIE_EMBED_URL,
 } from "@/utils/constants";
@@ -65,7 +66,7 @@ export const IsPopoutPlayer = (location: Location): boolean => {
     location.href.startsWith(YOUTUBE_NOCOOKIE_EMBED_URL)
   ) {
     const params = new URLSearchParams(location.search.substring(1));
-    if (params.get("popout")) {
+    if (params.get(POPOUT_PLAYER_PARAM_NAME)) {
       return true;
     }
   }
