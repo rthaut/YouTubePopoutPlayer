@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.1] - 2025-10-25
+
+### Bug Fixes
+
+* Fix "Video player configuration error" (Error 153)
+
 ## [5.2.0] - 2025-10-23
 
 ### Bug Fixes
@@ -198,7 +204,8 @@ The extension/add-on now supports translations. Currently the only translation o
 
 A new icon has been added to the lower right corner to allow opening the current video in a popout player. This should work for all YouTube videos, both directly on youtube.com and embedded in other web pages.
 
-[Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.2.0...HEAD
+[Unreleased]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.2.1...HEAD
+[5.2.1]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.2.0...v5.2.1
 [5.2.0]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.1.2...v5.2.0
 [5.1.2]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.1.1...v5.1.2
 [5.1.1]: https://github.com/rthaut/YouTubePopoutPlayer/compare/v5.1.0...v5.1.1
