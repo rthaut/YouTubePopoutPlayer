@@ -1,4 +1,4 @@
-# YouTube Popout Player v5.2.0
+# YouTube Popout Player v5.2.1
 
 [![Chrome Web Store][chrome-image-version]][chrome-url] [![Microsoft Edge Add-on][edge-image-version]][edge-url] [![Mozilla Add-on][firefox-image-version]][firefox-url]
 
