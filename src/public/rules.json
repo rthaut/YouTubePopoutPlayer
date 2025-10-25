@@ -13,7 +13,7 @@
       ]
     },
     "condition": {
-      "urlFilter": "||youtube.com/embed*popout=1",
+      "urlFilter": "||youtube.com/embed*__ytpp=1",
       "resourceTypes": [
         "main_frame",
         "sub_frame"
@@ -34,7 +34,7 @@
       ]
     },
     "condition": {
-      "urlFilter": "||youtube-nocookie.com/embed*popout=1",
+      "urlFilter": "||youtube-nocookie.com/embed*__ytpp=1",
       "resourceTypes": [
         "main_frame",
         "sub_frame"
