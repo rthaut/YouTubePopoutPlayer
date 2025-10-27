@@ -120,6 +120,11 @@ export const OpenPopoutPlayer = async ({
   ["autoplay", "loop"].forEach((param) => {
     params[param] = behavior[param] ? 1 : 0; // convert true/false to 1/0 for URL params
   });
+  
+  // Start muted to allow autoplay, will be unmuted by content script
+  if (behavior.autoplay) {
+    params.mute = 1;
+  }
 
   switch (behavior.controls.toLowerCase()) {
     case "none":
