@@ -105,22 +105,8 @@ export default defineConfig({
         default_title: "__MSG_BrowserActionTitle__",
       },
       commands,
-      declarative_net_request: {
-        rule_resources: [
-          {
-            id: "rules",
-            enabled: true,
-            path: "rules.json",
-          },
-        ],
-      },
       host_permissions: ["*://*.youtube.com/*", "*://*.youtube-nocookie.com/*"],
-      permissions: [
-        "contextMenus",
-        "declarativeNetRequest",
-        "notifications",
-        "storage",
-      ],
+      permissions: ["contextMenus", "notifications", "storage"],
       optional_permissions,
       minimum_chrome_version:
         browser === "firefox" ? undefined : browser === "chrome" ? "90" : "91",
