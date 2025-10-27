@@ -38,6 +38,9 @@ export default defineContentScript({
           parseInt(query.get("rotation") ?? "0", 10).toString(),
         );
       }
+      
+      // Auto-retry on error 153
+      SetupErrorRetry();
     }
   },
 });
@@ -118,6 +121,44 @@ const RegisterEventListeners = () => {
   window.onbeforeunload = () => {
     SendWindowDimensionsAndPosition("popout-closed");
   };
+};
+
+/**
+ * Sets up automatic retry when YouTube error 153 is detected
+ */
+const SetupErrorRetry = () => {
+  console.log("[YouTubePopout] Error retry initialized");
+  
+  const checkForError = () => {
+    const bodyText = document.body.innerText;
+    
+    if (bodyText.includes("Error 153") || bodyText.includes("error 153")) {
+      console.log("[YouTubePopout] Detected error 153, auto-retrying...");
+      
+      if (!sessionStorage.getItem("ytpp_retry_attempted")) {
+        sessionStorage.setItem("ytpp_retry_attempted", "true");
+        console.log("[YouTubePopout] Reloading page...");
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else {
+        console.log("[YouTubePopout] Already retried once, not reloading again");
+      }
+    } else {
+      // Clear retry flag if page loads successfully
+      sessionStorage.removeItem("ytpp_retry_attempted");
+    }
+  };
+
+  // Check after a delay to let the page load
+  setTimeout(checkForError, 2000);
+  
+  // Also watch for DOM changes
+  const observer = new MutationObserver(checkForError);
+  observer.observe(document.body, { 
+    childList: true, 
+    subtree: true 
+  });
 };
 
 const SendWindowDimensionsAndPosition = async (action: string) => {
