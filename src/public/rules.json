@@ -8,7 +8,12 @@
         {
           "header": "Referer",
           "operation": "set",
-          "value": "https://www.youtube.com/"
+          "value": "https://www.youtube-nocookie.com/"
+        },
+        {
+          "header": "Referrer-Policy",
+          "operation": "set",
+          "value": "strict-origin-when-cross-origin"
         }
       ]
     },
@@ -30,6 +35,11 @@
           "header": "Referer",
           "operation": "set",
           "value": "https://www.youtube-nocookie.com/"
+        },
+        {
+          "header": "Referrer-Policy",
+          "operation": "set",
+          "value": "strict-origin-when-cross-origin"
         }
       ]
     },
