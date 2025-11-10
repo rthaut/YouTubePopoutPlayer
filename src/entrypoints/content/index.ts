@@ -38,6 +38,12 @@ export default defineContentScript({
           parseInt(query.get("rotation") ?? "0", 10).toString(),
         );
       }
+      
+      // Auto-retry on error 153
+      SetupErrorRetry();
+      
+      // Setup autoplay
+      SetupAutoplay();
     }
   },
 });
@@ -118,6 +124,94 @@ const RegisterEventListeners = () => {
   window.onbeforeunload = () => {
     SendWindowDimensionsAndPosition("popout-closed");
   };
+};
+
+/**
+ * Sets up automatic retry when YouTube error 153 is detected
+ */
+const SetupErrorRetry = () => {
+  console.log("[YouTubePopout] Error retry initialized");
+  
+  const checkForError = () => {
+    const bodyText = document.body.innerText;
+    
+    if (bodyText.includes("Error 153") || bodyText.includes("error 153")) {
+      console.log("[YouTubePopout] Detected error 153, auto-retrying...");
+      
+      if (!sessionStorage.getItem("ytpp_retry_attempted")) {
+        sessionStorage.setItem("ytpp_retry_attempted", "true");
+        console.log("[YouTubePopout] Reloading page...");
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else {
+        console.log("[YouTubePopout] Already retried once, not reloading again");
+      }
+    } else {
+      // Clear retry flag if page loads successfully
+      sessionStorage.removeItem("ytpp_retry_attempted");
+    }
+  };
+
+  // Check after a delay to let the page load
+  setTimeout(checkForError, 2000);
+  
+  // Also watch for DOM changes
+  const observer = new MutationObserver(checkForError);
+  observer.observe(document.body, { 
+    childList: true, 
+    subtree: true 
+  });
+};
+
+/**
+ * Sets up autoplay by unmuting the video (it starts muted to bypass browser restrictions)
+ */
+const SetupAutoplay = () => {
+  console.log("[YouTubePopout] Autoplay initialized (video starts muted)");
+  
+  const unmuteVideo = () => {
+    const video = document.querySelector('video') as HTMLVideoElement;
+    if (video) {
+      // Check if video is playing (muted autoplay should have started)
+      if (!video.paused) {
+        console.log("[YouTubePopout] Video is playing (muted), unmuting...");
+        video.muted = false;
+        console.log("[YouTubePopout] Video unmuted successfully!");
+        return true;
+      } else {
+        console.log("[YouTubePopout] Video not playing yet");
+      }
+    }
+    return false;
+  };
+  
+  // Try to unmute after delays
+  const delays = [1000, 2000, 3000];
+  delays.forEach(delay => {
+    setTimeout(() => {
+      if (unmuteVideo()) {
+        console.log("[YouTubePopout] Unmute successful at " + delay + "ms");
+      }
+    }, delay);
+  });
+  
+  // Also watch for video to start playing
+  const observer = new MutationObserver(() => {
+    const video = document.querySelector('video');
+    if (video && !video.paused && video.muted) {
+      if (unmuteVideo()) {
+        observer.disconnect();
+      }
+    }
+  });
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+  
+  setTimeout(() => observer.disconnect(), 10000);
 };
 
 const SendWindowDimensionsAndPosition = async (action: string) => {
