@@ -2,12 +2,14 @@ import { defineConfig, type UserManifest } from "wxt";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  runner: {
+  webExt: {
     startUrls: ["https://www.youtube.com/feed/trending"],
     openConsole: true,
   },
   srcDir: "src",
-  modules: ["@wxt-dev/module-react"],
+  // TODO: can/should we drop the webextension-polyfill?
+  publicDir: "src/public",
+  modules: ["@wxt-dev/webextension-polyfill", "@wxt-dev/module-react"],
   hooks: {
     "build:manifestGenerated": (wxt, manifest) => {
       if (manifest.options_ui?.page !== undefined) {

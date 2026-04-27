@@ -1,4 +1,4 @@
-import type { Runtime } from "wxt/browser";
+import type { Browser } from "wxt/browser";
 
 import Options from "@/utils/options";
 import type {
@@ -20,7 +20,7 @@ export const OnInstalled = async (details: { reason: string }) => {
 
 export const OnRuntimeMessage = async (
   message: RuntimeMessage,
-  sender: Runtime.MessageSender,
+  sender: Browser.runtime.MessageSender,
 ) => {
   if (message.action !== undefined && sender.tab?.id !== undefined) {
     switch (message.action.toLowerCase()) {
