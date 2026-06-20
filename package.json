@@ -8,7 +8,7 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "lint": "eslint ./app/",
+    "lint": "eslint ./src/",
     "dev:chrome": "wxt --browser chrome",
     "dev:edge": "wxt --browser edge",
     "dev:firefox": "wxt --browser firefox --mv2",
@@ -56,6 +56,8 @@
     "react-use": "^17.6.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@eslint/json": "^1.2.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
     "@types/chrome": "^0.1.29",
     "@types/react": "^19.2.5",
@@ -67,11 +69,13 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.6.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.6.2",
     "sharp": "^0.34.5",
     "trash-cli": "^7.0.0",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.61.1",
     "web-ext": "^9.1.0",
     "wxt": "^0.19.29"
   }

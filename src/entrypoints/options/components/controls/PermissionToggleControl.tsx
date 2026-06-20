@@ -32,7 +32,7 @@ function PermissionToggleControl({
     if (remove) {
       await browser.permissions.remove(permissionsRequest).catch((error) => {
         console.warn(
-          `Failed to remove permission(s) when disabling the \"${label}\" option:`,
+          `Failed to remove permission(s) when disabling the "${label}" option:`,
           error,
           permissionsRequest,
         );

@@ -1,5 +1,3 @@
-import type { Runtime } from "wxt/browser";
-
 import { debounce, IsPopoutPlayer } from "@/utils/misc";
 import type {
   OpenPopoutData,
@@ -25,8 +23,8 @@ export default defineContentScript({
   async main() {
     InsertControlsAndWatch();
 
-    browser.runtime.onMessage.addListener((message, sender) =>
-      OnRuntimeMessage(message as RuntimeMessage, sender),
+    browser.runtime.onMessage.addListener((message: unknown) =>
+      OnRuntimeMessage(message as RuntimeMessage),
     );
 
     if (IsPopoutPlayer(window.location)) {
@@ -59,10 +57,7 @@ export const CloseTab = async (enforceDomainRestriction: boolean = true) => {
   }
 };
 
-const OnRuntimeMessage = async (
-  message: RuntimeMessage,
-  sender: Runtime.MessageSender,
-) => {
+const OnRuntimeMessage = async (message: RuntimeMessage) => {
   if (message.action !== undefined) {
     switch (message.action.toLowerCase()) {
       case "open-popout-via-command":
@@ -139,7 +134,5 @@ const SendWindowDimensionsAndPosition = async (action: string) => {
       action,
       data,
     })
-    .catch((error: any) => {
-      void error;
-    });
+    .catch(() => {});
 };

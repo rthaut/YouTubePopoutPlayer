@@ -13,6 +13,8 @@ import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import { useDebounce } from "react-use";
 
+import { OPTIONS_BEHAVIOR_TARGET_VALUES } from "@/utils/constants";
+import { GetCaseInsensitiveMessage } from "@/utils/i18n";
 import { IsFirefox } from "@/utils/misc";
 
 import { useDomainOptions, useOption } from "../../hooks/use-options";
@@ -22,11 +24,13 @@ import PermissionToggleControl from "../controls/PermissionToggleControl";
 import TabPanelHeader from "../TabPanelHeader";
 
 export const DOMAIN = "advanced";
+type BehaviorTarget = (typeof OPTIONS_BEHAVIOR_TARGET_VALUES)[number];
 
 export default function AdvancedTab() {
   const { options, setOption } = useDomainOptions(DOMAIN);
 
-  const [popoutPlayerTarget] = useOption("behavior", "target");
+  const [popoutPlayerTargetValue] = useOption("behavior", "target");
+  const popoutPlayerTarget = popoutPlayerTargetValue as BehaviorTarget;
   const [mode] = useOption("size", "mode");
   const canOpenInBackground = mode !== "maximized";
 
@@ -57,6 +61,10 @@ export default function AdvancedTab() {
   }
 
   function BackgroundTabControl() {
+    const targetLabel = GetCaseInsensitiveMessage(
+      `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}`,
+    );
+
     return (
       <FormControl disabled={!canOpenInBackground}>
         <ConditionalTooltipWrapper
@@ -69,10 +77,7 @@ export default function AdvancedTab() {
           <FormControlLabel
             label={browser.i18n.getMessage(
               "OptionsAdvancedOpenInBackgroundLabel",
-              browser.i18n.getMessage(
-                // TODO: narrow this typing, `popoutPlayerTarget` should only ever be "tab" or "window"
-                `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}` as any,
-              ),
+              targetLabel,
             )}
             control={
               <Switch
@@ -91,12 +96,7 @@ export default function AdvancedTab() {
           dangerouslySetInnerHTML={{
             __html: browser.i18n.getMessage(
               "OptionsAdvancedOpenInBackgroundDescription",
-              browser.i18n
-                .getMessage(
-                  // TODO: narrow this typing, `popoutPlayerTarget` should only ever be "tab" or "window"
-                  `OptionsSubstitutionBehaviorTarget${popoutPlayerTarget}` as any,
-                )
-                .toLowerCase(),
+              targetLabel.toLowerCase(),
             ),
           }}
         />

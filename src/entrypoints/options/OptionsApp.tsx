@@ -1,9 +1,9 @@
 import React from "react";
 import CloudOffIcon from "@mui/icons-material/CloudOff";
-import Alert from "@mui/material/Alert";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import Alert from "@mui/material/Alert";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import { blue, red } from "@mui/material/colors";
@@ -21,6 +21,8 @@ import Switch from "@mui/material/Switch";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
+import { GetCaseInsensitiveMessage } from "@/utils/i18n";
 
 import ResetOptions from "./components/ResetOptions";
 import AdvancedTab, {
@@ -52,7 +54,7 @@ export default function OptionsApp() {
         setMode(prefersDarkMode ? "dark" : "light");
         localStorage.removeItem("force-dark-mode");
       }
-    } catch (error) {
+    } catch {
       console.warn("Failed to persist force dark mode to local storage");
     }
   }, [prefersDarkMode, forceDarkMode]);
@@ -85,8 +87,9 @@ export default function OptionsApp() {
     [SizePositionDomain]: <SizePositionTab />,
     [AdvancedDomain]: <AdvancedTab />,
   } as const;
+  const tabNames = Object.keys(tabs) as Array<keyof typeof tabs>;
 
-  const [tabValue, setTabValue] = React.useState(Object.keys(tabs)[0]);
+  const [tabValue, setTabValue] = React.useState(tabNames[0]);
 
   const handleTabChange = (event: React.SyntheticEvent, tabValue: string) => {
     setTabValue(tabValue);
@@ -101,12 +104,10 @@ export default function OptionsApp() {
             <TabContext value={tabValue}>
               <AppBar position="static" color="default">
                 <TabList onChange={handleTabChange} variant="fullWidth">
-                  {Object.keys(tabs).map((tab) => (
+                  {tabNames.map((tab) => (
                     <Tab
-                      label={browser.i18n.getMessage(
-                        // TODO: `tab as keyof typeof tabs` gives us the wrong casing,
-                        // but technically `browser.i18n.getMessage` is case-insensitive
-                        `OptionsTabName${tab as keyof typeof tabs}` as any,
+                      label={GetCaseInsensitiveMessage(
+                        `OptionsTabName${tab}`,
                       )}
                       value={tab}
                       key={tab}

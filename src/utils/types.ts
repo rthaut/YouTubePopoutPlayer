@@ -21,6 +21,12 @@ export interface RotateVideoData {
 }
 
 export interface StoreDimensionsAndPositionData {
-  dimensions: Record<string, any>;
-  position: Record<string, any>;
+  dimensions: {
+    width?: number;
+    height?: number;
+  };
+  position: {
+    top?: number;
+    left?: number;
+  };
 }

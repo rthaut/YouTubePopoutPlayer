@@ -17,15 +17,18 @@ import {
   OPTIONS_BEHAVIOR_TARGET_VALUES,
   START_THRESHOLD,
 } from "@/utils/constants";
+import { GetCaseInsensitiveMessage } from "@/utils/i18n";
 
 import { useDomainOptions } from "../../hooks/use-options";
 import BasicToggleControl from "../controls/BasicToggleControl";
 import TabPanelHeader from "../TabPanelHeader";
 
 export const DOMAIN = "behavior";
+type BehaviorTarget = (typeof OPTIONS_BEHAVIOR_TARGET_VALUES)[number];
 
 export default function BehaviorTab() {
   const { options, setOption } = useDomainOptions(DOMAIN);
+  const target = options["target"] as BehaviorTarget;
 
   function TargetOptionControl() {
     return (
@@ -40,18 +43,16 @@ export default function BehaviorTab() {
               <FormControlLabel
                 value={targetOptionName}
                 control={<Radio color="primary" />}
-                label={browser.i18n.getMessage(
-                  // TODO: using `any` due to casing of `targetOptionName` not matching the labels
-                  `OptionsBehaviorTarget${targetOptionName}Label` as any,
+                label={GetCaseInsensitiveMessage(
+                  `OptionsBehaviorTarget${targetOptionName}Label`,
                 )}
               />
               <Typography
                 color="textSecondary"
                 gutterBottom
                 dangerouslySetInnerHTML={{
-                  __html: browser.i18n.getMessage(
-                    // TODO: using `any` due to casing of `targetOptionName` not matching the labels
-                    `OptionsBehaviorTarget${targetOptionName}Description` as any,
+                  __html: GetCaseInsensitiveMessage(
+                    `OptionsBehaviorTarget${targetOptionName}Description`,
                   ),
                 }}
               />
@@ -77,9 +78,8 @@ export default function BehaviorTab() {
         >
           {OPTIONS_BEHAVIOR_CONTROLS_VALUES.map((option) => (
             <MenuItem value={option} key={option}>
-              {browser.i18n.getMessage(
-                // TODO: using `any` due to casing of `option` not matching the labels
-                `BehaviorControls${option}OptionLabel` as any,
+              {GetCaseInsensitiveMessage(
+                `BehaviorControls${option}OptionLabel`,
               )}
             </MenuItem>
           ))}
@@ -150,19 +150,15 @@ export default function BehaviorTab() {
         optionName="reuseWindowsTabs"
         label={browser.i18n.getMessage(
           "OptionsBehaviorReuseWindowsTabsLabel",
-          browser.i18n.getMessage(
-            // TODO: narrow this typing, `options["target"]` should only ever be "tab" or "window"
-            `OptionsSubstitutionBehaviorTarget${options["target"]}` as any,
+          GetCaseInsensitiveMessage(
+            `OptionsSubstitutionBehaviorTarget${target}`,
           ),
         )}
         description={browser.i18n.getMessage(
           "OptionsBehaviorReuseWindowsTabsDescription",
-          browser.i18n
-            .getMessage(
-              // TODO: narrow this typing, `options["target"]` should only ever be "tab" or "window"
-              `OptionsSubstitutionBehaviorTarget${options["target"]}` as any,
-            )
-            .toLowerCase(),
+          GetCaseInsensitiveMessage(
+            `OptionsSubstitutionBehaviorTarget${target}`,
+          ).toLowerCase(),
         )}
       />
     );

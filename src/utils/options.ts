@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { OPTION_DEFAULTS } from "@/utils/constants";
 
 export type GroupedOptionsType = Record<string, Record<string, any>>;
@@ -102,11 +103,10 @@ const Options = (() => {
 
       const result: GroupedOptionsType = {};
 
-      var domain, opt;
       Object.keys(options).forEach((option) => {
         if (option.includes(".")) {
           // handle options should be stored in the format [domain].[key]
-          [domain, opt] = option.split(".");
+          const [domain, opt] = option.split(".");
 
           if (result[domain] === undefined) {
             result[domain] = {};
