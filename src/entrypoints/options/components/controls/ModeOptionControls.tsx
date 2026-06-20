@@ -8,18 +8,88 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 
-import { type OptionDomain } from "@/utils/constants";
+import type { MessageName } from "@/utils/i18n";
 
 import { useOption } from "../../hooks/use-options";
 
-export function ModeOptionRadioControl({
+// Message names for each mode option, keyed by option domain and value
+const MODE_OPTION_MESSAGES = {
+  size: {
+    current: {
+      label: "OptionsSizeModeCurrentLabel",
+      description: "OptionsSizeModeCurrentDescription",
+    },
+    previous: {
+      label: "OptionsSizeModePreviousLabel",
+      description: "OptionsSizeModePreviousDescription",
+    },
+    maximized: {
+      label: "OptionsSizeModeMaximizedLabel",
+      description: "OptionsSizeModeMaximizedDescription",
+    },
+    custom: {
+      label: "OptionsSizeModeCustomLabel",
+      description: "OptionsSizeModeCustomDescription",
+    },
+  },
+  position: {
+    auto: {
+      label: "OptionsPositionModeAutoLabel",
+      description: "OptionsPositionModeAutoDescription",
+    },
+    previous: {
+      label: "OptionsPositionModePreviousLabel",
+      description: "OptionsPositionModePreviousDescription",
+    },
+    custom: {
+      label: "OptionsPositionModeCustomLabel",
+      description: "OptionsPositionModeCustomDescription",
+    },
+  },
+} as const satisfies Record<
+  string,
+  Record<string, { label: MessageName; description: MessageName }>
+>;
+
+type ModeOptionDomain = keyof typeof MODE_OPTION_MESSAGES;
+type ModeOptionValue<TDomain extends ModeOptionDomain> =
+  keyof (typeof MODE_OPTION_MESSAGES)[TDomain] & string;
+type ModeOptionMessages = {
+  label: MessageName;
+  description: MessageName;
+};
+
+// Message names for each mode select control, keyed by the same option domain
+const MODE_MESSAGES = {
+  size: {
+    label: "SizeModeLabel",
+    description: "SizeModeDescription",
+  },
+  position: {
+    label: "PositionModeLabel",
+    description: "PositionModeDescription",
+  },
+} as const satisfies Record<ModeOptionDomain, ModeOptionMessages>;
+
+// Keeps callers from mixing a mode domain with an option value from another domain
+const GetModeOptionMessages = <TDomain extends ModeOptionDomain>(
+  domain: TDomain,
+  option: ModeOptionValue<TDomain>,
+): ModeOptionMessages =>
+  (MODE_OPTION_MESSAGES[domain] as Record<string, ModeOptionMessages>)[option];
+
+const GetModeMessages = <TDomain extends ModeOptionDomain>(
+  domain: TDomain,
+): ModeOptionMessages => MODE_MESSAGES[domain];
+
+export function ModeOptionRadioControl<const TDomain extends ModeOptionDomain>({
   domain,
   optionName,
   values,
 }: {
-  domain: OptionDomain;
+  domain: TDomain;
   optionName: string;
-  values: string[];
+  values: readonly ModeOptionValue<TDomain>[];
 }) {
   const [value, setValue] = useOption(domain, optionName);
   const [controlValue, setControlValue] = React.useState(value);
@@ -43,8 +113,7 @@ export function ModeOptionRadioControl({
               value={option}
               control={<Radio color="primary" />}
               label={browser.i18n.getMessage(
-                // TODO: narrow this typing
-                `Options${domain}Mode${option}Label` as any,
+                GetModeOptionMessages(domain, option).label,
               )}
             />
             <Typography
@@ -52,8 +121,7 @@ export function ModeOptionRadioControl({
               gutterBottom
               dangerouslySetInnerHTML={{
                 __html: browser.i18n.getMessage(
-                  // TODO: narrow this typing
-                  `Options${domain}Mode${option}Description` as any,
+                  GetModeOptionMessages(domain, option).description,
                 ),
               }}
             />
@@ -64,17 +132,20 @@ export function ModeOptionRadioControl({
   );
 }
 
-export function ModeOptionSelectControl({
+export function ModeOptionSelectControl<
+  const TDomain extends ModeOptionDomain,
+>({
   domain,
   optionName,
   values,
 }: {
-  domain: OptionDomain;
+  domain: TDomain;
   optionName: string;
-  values: string[];
+  values: readonly ModeOptionValue<TDomain>[];
 }) {
   const [value, setValue] = useOption(domain, optionName);
   const [controlValue, setControlValue] = React.useState(value);
+  const modeMessages = GetModeMessages(domain);
 
   React.useEffect(() => {
     if (values.includes(controlValue) && controlValue !== value) {
@@ -85,16 +156,10 @@ export function ModeOptionSelectControl({
   return (
     <FormControl fullWidth>
       <InputLabel id={`${domain}-mode-label`}>
-        {browser.i18n.getMessage(
-          // TODO: narrow this typing
-          `${domain}ModeLabel` as any,
-        )}
+        {browser.i18n.getMessage(modeMessages.label)}
       </InputLabel>
       <Select
-        label={browser.i18n.getMessage(
-          // TODO: narrow this typing
-          `${domain}ModeLabel` as any,
-        )}
+        label={browser.i18n.getMessage(modeMessages.label)}
         labelId={`${domain}-mode-label`}
         id={`${domain}-mode-select`}
         value={controlValue}
@@ -103,8 +168,7 @@ export function ModeOptionSelectControl({
         {values.map((option) => (
           <MenuItem value={option} key={option}>
             {browser.i18n.getMessage(
-              // TODO: narrow this typing
-              `Options${domain}Mode${option}Label` as any,
+              GetModeOptionMessages(domain, option).label,
             )}
           </MenuItem>
         ))}
@@ -112,10 +176,7 @@ export function ModeOptionSelectControl({
       <Typography
         color="textSecondary"
         dangerouslySetInnerHTML={{
-          __html: browser.i18n.getMessage(
-            // TODO: narrow this typing
-            `${domain}ModeDescription` as any,
-          ),
+          __html: browser.i18n.getMessage(modeMessages.description),
         }}
       />
     </FormControl>

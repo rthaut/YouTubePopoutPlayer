@@ -110,7 +110,7 @@ export const OpenPopoutPlayer = async ({
 
   // https://developers.google.com/youtube/player_parameters#Parameters
 
-  const params: Record<string, any> = {};
+  const params: Record<string, number | string> = {};
 
   // custom flag for determining if the embedded player is playing within a popout window/tab
   params[POPOUT_PLAYER_PARAM_NAME] = 1;
@@ -302,7 +302,7 @@ export const OpenPopoutPlayerInWindow = async (
     createData.titlePreface = await Options.GetLocalOption("advanced", "title");
   }
 
-  let window = await browser.windows.create(createData);
+  const window = await browser.windows.create(createData);
 
   if (window.id === undefined) {
     console.warn(
@@ -352,7 +352,7 @@ export const OpenPopoutPlayerInWindow = async (
  */
 export const GetUrlForPopoutPlayer = async (
   id?: string,
-  params?: Record<string, any>,
+  params?: Record<string, number | string>,
 ): Promise<string> => {
   // TODO: if autoplay is disabled, we can omit the video ID from the path; as long as either `playlist` or `list` has a value, the Embedded Player will use it when the user clicks play (for single videos, this will prevent it appearing as a playlist with 2 videos, even though it is just the same video twice)
   // TODO: there may be some other edge cases to consider, like setting the start time with autoplay disabled
@@ -366,7 +366,11 @@ export const GetUrlForPopoutPlayer = async (
   }
 
   if (params !== undefined && params !== null) {
-    url += "?" + new URLSearchParams(params).toString();
+    url +=
+      "?" +
+      new URLSearchParams(
+        Object.entries(params).map(([key, value]) => [key, value.toString()]),
+      ).toString();
   }
 
   return url;

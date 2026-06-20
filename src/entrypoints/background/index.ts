@@ -7,6 +7,11 @@ import { InitMenus } from "./menus";
 import { OpenPopoutBackgroundHelper } from "./popout";
 import { OnInstalled, OnRuntimeMessage } from "./runtime";
 
+type RuntimeMessageListener = Parameters<
+  typeof browser.runtime.onMessage.addListener
+>[0];
+type RuntimeMessageSender = Parameters<RuntimeMessageListener>[1];
+
 export default defineBackground(() => {
   (
     browser.pageAction ??
@@ -28,8 +33,9 @@ export default defineBackground(() => {
 
   browser.runtime.onInstalled.addListener(OnInstalled);
 
-  browser.runtime.onMessage.addListener((message, sender) =>
-    OnRuntimeMessage(message as RuntimeMessage, sender),
+  browser.runtime.onMessage.addListener(
+    (message: unknown, sender: RuntimeMessageSender) =>
+      OnRuntimeMessage(message as RuntimeMessage, sender),
   );
 
   browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {

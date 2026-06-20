@@ -18,12 +18,15 @@ import TextField from "@mui/material/TextField";
 import { usePrevious } from "react-use";
 
 import { OPTIONS_SIZE_UNITS_VALUES } from "@/utils/constants";
+import { GetCaseInsensitiveMessage } from "@/utils/i18n";
 import {
   GetDimensionForScreenPercentage,
   GreatestCommonDenominator,
 } from "@/utils/misc";
 
 import { useDomainOptions } from "../../hooks/use-options";
+
+type SizeUnits = (typeof OPTIONS_SIZE_UNITS_VALUES)[number];
 
 function CustomDimensionsInfoTable({
   units,
@@ -90,7 +93,7 @@ function CustomDimensionsInfoTable({
 function CustomDimensionsForm() {
   const { options, setOptions } = useDomainOptions("size");
 
-  const [units, setUnits] = React.useState(options.units);
+  const [units, setUnits] = React.useState<SizeUnits>(options.units);
   const [width, setWidth] = React.useState(options.width);
   const [height, setHeight] = React.useState(options.height);
 
@@ -221,13 +224,12 @@ function CustomDimensionsForm() {
           labelId="size-units-label"
           id="size-units-select"
           value={units}
-          onChange={(event) => setUnits(event.target.value)}
+          onChange={(event) => setUnits(event.target.value as SizeUnits)}
         >
           {OPTIONS_SIZE_UNITS_VALUES.map((unit) => (
             <MenuItem value={unit} key={unit}>
-              {browser.i18n.getMessage(
-                // TODO: using `any` due to casing of `unit` not matching the labels
-                `DimensionUnits${unit}OptionLabel` as any,
+              {GetCaseInsensitiveMessage(
+                `DimensionUnits${unit}OptionLabel`,
               )}
             </MenuItem>
           ))}
@@ -257,9 +259,8 @@ function CustomDimensionsForm() {
                 },
                 endAdornment: (
                   <InputAdornment position="end">
-                    {browser.i18n.getMessage(
-                      // TODO: using `any` due to casing of `unit` not matching the labels
-                      `DimensionUnits${units}UnitLabel` as any,
+                    {GetCaseInsensitiveMessage(
+                      `DimensionUnits${units}UnitLabel`,
                     )}
                   </InputAdornment>
                 ),
@@ -285,9 +286,8 @@ function CustomDimensionsForm() {
                 },
                 endAdornment: (
                   <InputAdornment position="end">
-                    {browser.i18n.getMessage(
-                      // TODO: using `any` due to casing of `unit` not matching the labels
-                      `DimensionUnits${units}UnitLabel` as any,
+                    {GetCaseInsensitiveMessage(
+                      `DimensionUnits${units}UnitLabel`,
                     )}
                   </InputAdornment>
                 ),

@@ -96,27 +96,31 @@ export const GreatestCommonDenominator = (a: number, b: number): number =>
 
 /**
  * Returns a debounced version of the given function
- * @param {Function} func the function to debounce
+ * @param {function} func the function to debounce
  * @param {number} wait the delay before executing the function
  * @param {boolean} [immediate=false] whether or not the function should execute immediately (and then debounce)
  * @returns the debounced function
  */
-export function debounce(
-  func: Function,
+export function debounce<TThis, TArgs extends unknown[]>(
+  func: (this: TThis, ...args: TArgs) => void,
   wait: number,
   immediate: boolean = false,
 ) {
-  var timeout: NodeJS.Timeout | undefined;
-  return function () {
-    // @ts-expect-error - `this` is any
-    var thisArg = this,
-      args = arguments;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  return function (this: TThis, ...args: TArgs) {
     clearTimeout(timeout);
-    timeout = setTimeout(function () {
+    timeout = setTimeout(() => {
       timeout = undefined;
-      if (!immediate) func.apply(thisArg, args);
+
+      if (!immediate) {
+        func.apply(this, args);
+      }
     }, wait);
-    if (immediate && !timeout) func.apply(thisArg, args);
+
+    if (immediate && !timeout) {
+      func.apply(this, args);
+    }
   };
 }
 
@@ -128,7 +132,7 @@ export function debounce(
  */
 export const GetParamFromURL = (param: string, url: string): string | null => {
   if (url.includes("?")) {
-    let params = new URLSearchParams(url.split("?")[1]);
+    const params = new URLSearchParams(url.split("?")[1]);
     if (params.has(param)) {
       return params.get(param);
     }
