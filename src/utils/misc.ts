@@ -39,8 +39,12 @@ export const IsFirefox = async (): Promise<boolean> => {
   let isFirefox = false;
 
   try {
-    if (typeof browser.runtime.getBrowserInfo === "function") {
-      const info = await browser.runtime.getBrowserInfo();
+    const runtime = browser.runtime as typeof browser.runtime & {
+      getBrowserInfo?: () => Promise<{ name?: string } | undefined>;
+    };
+    const getBrowserInfo = runtime.getBrowserInfo;
+    if (typeof getBrowserInfo === "function") {
+      const info = await getBrowserInfo.call(runtime);
 
       if (info !== undefined && info !== null) {
         if (info.name !== undefined && info.name.toLowerCase() === "firefox") {

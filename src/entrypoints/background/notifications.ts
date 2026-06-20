@@ -1,4 +1,4 @@
-import type { Notifications } from "wxt/browser";
+import type { Browser } from "wxt/browser";
 
 /**
  * Show a basic notification
@@ -7,7 +7,7 @@ import type { Notifications } from "wxt/browser";
  */
 export const ShowBasicNotification = async (
   options: Omit<
-    Notifications.CreateNotificationOptions,
+    Browser.notifications.NotificationCreateOptions,
     "type" | "iconUrl" | "title"
   >,
   onClick: (notificationId: string) => void = () => {},
@@ -24,9 +24,9 @@ export const ShowBasicNotification = async (
   browser.notifications.onClicked.addListener(onNotificationClicked);
 
   browser.notifications.create({
+    ...options,
     type: "basic",
     iconUrl: browser.runtime.getURL("/icons/48.png"),
     title: browser.i18n.getMessage("ExtensionName"),
-    ...options,
   });
 };

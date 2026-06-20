@@ -1,4 +1,4 @@
-import type { Windows } from "wxt/browser";
+import type { Browser } from "wxt/browser";
 
 import {
   OPTION_DEFAULTS,
@@ -292,35 +292,45 @@ export const OpenPopoutPlayerInWindow = async (
       state: "normal",
       type: "popup",
       ...dimensions,
-    } as Windows.CreateCreateDataType,
+    } as Browser.windows.CreateData,
     originTabId,
   );
 
   const isFirefox = await IsFirefox();
 
   if (isFirefox) {
-    createData.titlePreface = await Options.GetLocalOption("advanced", "title");
+    (createData as Browser.windows.CreateData & { titlePreface?: string }).titlePreface =
+      await Options.GetLocalOption("advanced", "title");
   }
 
-  const window = await browser.windows.create(createData);
+  const createdWindow = await browser.windows.create(createData);
 
-  if (window.id === undefined) {
+  if (createdWindow === undefined) {
+    console.warn(
+      "[Background] OpenPopoutPlayerInWindow() :: windows.create() returned no window",
+    );
+    return {};
+  }
+
+  if (createdWindow.id === undefined) {
     console.warn(
       "[Background] OpenPopoutPlayerInWindow() :: Unable to resize/reposition created window",
     );
-    return window;
+    return createdWindow;
   }
+
+  const windowId = createdWindow.id;
 
   // IMPORTANT: the `top` and `left` position values are set here via `windows.update()`
   // (instead of earlier in this function via `windows.create()`) due to a bug in Firefox
   // (see https://bugzilla.mozilla.org/show_bug.cgi?id=1271047)
   const position = await GetPositionForPopoutPlayerWindow();
   if (position?.top !== undefined && position?.left !== undefined) {
-    await browser.windows.update(window.id, position);
+    await browser.windows.update(windowId, position);
   }
 
   if ((await Options.GetLocalOption("size", "mode")) === "maximized") {
-    await browser.windows.update(window.id, {
+    await browser.windows.update(windowId, {
       state: "maximized",
     });
   } else if (openInBackground) {
@@ -334,14 +344,14 @@ export const OpenPopoutPlayerInWindow = async (
       }
     } else {
       // fallback: minimize the popout player window
-      await browser.windows.update(window.id, {
+      await browser.windows.update(windowId, {
         focused: false,
         state: "minimized",
       });
     }
   }
 
-  return window;
+  return createdWindow;
 };
 
 /**

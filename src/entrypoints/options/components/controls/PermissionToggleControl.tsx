@@ -1,4 +1,4 @@
-import type { Permissions } from "wxt/browser";
+import type { Browser } from "wxt/browser";
 import React from "react";
 import Alert from "@mui/material/Alert";
 import FormControl from "@mui/material/FormControl";
@@ -21,7 +21,7 @@ function PermissionToggleControl({
   optionName: string;
   label: React.ReactNode;
   description: string;
-  permissionsRequest: Permissions.Permissions;
+  permissionsRequest: Browser.permissions.Permissions;
 }) {
   const [value, setValue] = useOption(domain, optionName);
   const [showPermissionError, setShowPermissionError] = React.useState(false);

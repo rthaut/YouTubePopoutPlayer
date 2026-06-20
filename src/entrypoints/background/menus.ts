@@ -1,4 +1,4 @@
-import type { Menus, Tabs } from "wxt/browser";
+import type { Browser } from "wxt/browser";
 
 import {
   YOUTUBE_PLAYLIST_URL_PATTERNS,
@@ -9,7 +9,7 @@ import Options from "@/utils/options";
 import { OpenPopoutBackgroundHelper } from "./popout";
 
 const GetMenus = async () => {
-  const menus: Menus.CreateCreatePropertiesType[] = [
+  const menus: Browser.contextMenus.CreateProperties[] = [
     {
       id: "OpenVideo",
       title: browser.i18n.getMessage("LinkContextMenuEntry_OpenVideo_Text"),
@@ -52,8 +52,8 @@ const GetMenus = async () => {
 };
 
 const OnMenuClicked = async (
-  info: Menus.OnClickData,
-  tab: Tabs.Tab | undefined,
+  info: Browser.contextMenus.OnClickData,
+  tab: Browser.tabs.Tab | undefined,
 ) => {
   if (!info.linkUrl) {
     return;

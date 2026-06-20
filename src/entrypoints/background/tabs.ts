@@ -1,4 +1,4 @@
-import type { Tabs } from "wxt/browser";
+import type { Browser } from "wxt/browser";
 
 import {
   POPOUT_PLAYER_PARAM_NAME,
@@ -76,7 +76,7 @@ export const SendMessageToActiveTab = async (
  * Gets the active browser tab
  * @returns {Promise<Tabs.Tab | null>} the active browser tab
  */
-export const GetActiveTab = async (): Promise<Tabs.Tab | null> => {
+export const GetActiveTab = async (): Promise<Browser.tabs.Tab | null> => {
   const tabs = await browser.tabs.query({
     currentWindow: true,
     active: true,
@@ -91,7 +91,7 @@ export const GetActiveTab = async (): Promise<Tabs.Tab | null> => {
  */
 export const GetPopoutPlayerTabs = async (
   originTabId = -1,
-): Promise<Tabs.Tab[]> =>
+): Promise<Browser.tabs.Tab[]> =>
   browser.tabs.query(
     await AddContextualIdentityToDataObject(
       {
@@ -124,17 +124,19 @@ export const GetCookieStoreIDForTab = async (
     return;
   }
 
-  return tab.cookieStoreId;
+  return (tab as Browser.tabs.Tab & { cookieStoreId?: string }).cookieStoreId;
 };
 
 /**
  * Adds the contextual identify properties to the given window/tab data object (if appropriate)
- * @param {Tabs.QueryQueryInfoType} data an object for use in a window/tab function
+ * @param data an object for use in a window/tab function
  * @param {number} originTabId the original tab ID (of which to match the contextual identify)
- * @returns {Promise<Tabs.QueryQueryInfoType>} modified window/tab data object
+ * @returns modified window/tab data object
  */
 export const AddContextualIdentityToDataObject = async <
-  T extends Tabs.QueryQueryInfoType | Tabs.CreateCreatePropertiesType,
+  T extends (Browser.tabs.QueryInfo | Browser.tabs.CreateProperties) & {
+    cookieStoreId?: string;
+  },
 >(
   data: T,
   originTabId: number = -1,
