@@ -113,6 +113,8 @@ export function debounce<TThis, TArgs extends unknown[]>(
   let timeout: ReturnType<typeof setTimeout> | undefined;
 
   return function (this: TThis, ...args: TArgs) {
+    const callNow = immediate && timeout === undefined;
+
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       timeout = undefined;
@@ -122,7 +124,7 @@ export function debounce<TThis, TArgs extends unknown[]>(
       }
     }, wait);
 
-    if (immediate && !timeout) {
+    if (callNow) {
       func.apply(this, args);
     }
   };

@@ -1,10 +1,20 @@
 import { GetParamFromURL } from "@/utils/misc";
 
-export const VideoIDRegEx =
-  /(?:(?:v=)|(?:\/live\/)|(?:\/shorts\/))([^?&/]{11})/;
+const VIDEO_ID_PATTERN = String.raw`([^?&/#]{11})(?=$|[?&/#])`;
+const YOUTUBE_HOST_PATTERN = String.raw`(?:[a-z0-9-]+\.)*youtube\.com`;
+const YOUTUBE_LINK_OR_EMBED_HOST_PATTERN = String.raw`(?:(?:[a-z0-9-]+\.)*youtube(?:-nocookie)?\.com|(?:www\.)?youtu\.be)`;
+const URL_PREFIX_PATTERN = String.raw`^(?:https?:\/\/)?`;
+const WATCH_PARAM_PATTERN = String.raw`watch\?(?:[^#&]*&)*v=`;
 
-export const VideoLinkOrEmbedRegEx =
-  /(?:(?:v=)|(?:\/embed\/)|(?:\/live\/)|(?:\/shorts\/)|(?:\/youtu\.be\/))([^?&/]{11})/;
+export const VideoIDRegEx = new RegExp(
+  String.raw`${URL_PREFIX_PATTERN}${YOUTUBE_HOST_PATTERN}\/(?:(?:${WATCH_PARAM_PATTERN})|(?:live\/)|(?:shorts\/))${VIDEO_ID_PATTERN}`,
+  "i",
+);
+
+export const VideoLinkOrEmbedRegEx = new RegExp(
+  String.raw`${URL_PREFIX_PATTERN}(?:(?:${YOUTUBE_LINK_OR_EMBED_HOST_PATTERN}\/(?:(?:${WATCH_PARAM_PATTERN})|(?:embed\/)|(?:live\/)|(?:shorts\/)))|(?:(?:www\.)?youtu\.be\/))${VIDEO_ID_PATTERN}`,
+  "i",
+);
 
 /**
  * Indicates if the given URL is for a YouTube video
