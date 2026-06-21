@@ -36,6 +36,19 @@ order: 4
 
 <div class="divider"></div>
 
+<section id="private-incognito" class="section scrollspy">
+    <h4 class="hide">Private and Incognito Windows</h4>
+    <h5><i class="material-icons">question_answer</i> Does the popout player work in Private or Incognito windows?</h5>
+
+    <p>Usually, but browser support has some important limits. Browsers only expose Private or Incognito tabs to extensions after the extension is allowed to run in private browsing. Firefox and Chromium also handle private extension contexts differently: Firefox uses the default <a class="red-text" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/incognito" rel="nofollow">spanning private browsing model</a>, while Chrome recommends <a class="red-text" href="https://developer.chrome.com/docs/extensions/reference/manifest/incognito" rel="nofollow">split incognito behavior</a> for extensions that need to load tabs in an Incognito browser.</p>
+
+    <p>In Firefox, Multi-Account Containers support depends on the browser's <a class="red-text" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Work_with_contextual_identities" rel="nofollow">contextual identities</a> and <a class="red-text" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/tabs/create" rel="nofollow">cookie store</a> APIs. Firefox also lets extensions request whether a new popup window should be private through <a class="red-text" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/windows/create" rel="nofollow"><code>windows.create()</code></a>. YouTube Popout Player now passes both the original tab's Private Window state and, when enabled, its cookie store to Firefox when opening a popup window.</p>
+
+    <p>If Firefox still opens the popout player outside the Private window or fails to open it when Multi-Account Containers support is enabled, configure YouTube Popout Player to open in a tab instead of a popup window, or disable Multi-Account Containers support for popup-window use. The extension will show a notification when the browser reports an opening failure or when a private popup window is not preserved.</p>
+</section>
+
+<div class="divider"></div>
+
 <section id="multi-monitor" class="section scrollspy">
     <h4 class="hide">Second Monitor/Screen</h4>
     <h5><i class="material-icons">question_answer</i> Can I open the popout player on a second display/monitor/screen? <span class="badge red white-text">New!</span></h5>

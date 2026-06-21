@@ -9,6 +9,24 @@ import {
 import { IsFirefox } from "@/utils/misc";
 import Options from "@/utils/options";
 
+export type OriginTabContext = {
+  cookieStoreId?: string;
+  incognito?: boolean;
+  windowId?: number;
+};
+
+export type TabContextOptions = {
+  includeCookieStoreId?: boolean;
+  includeIncognito?: boolean;
+  includeWindowId?: boolean;
+};
+
+type ContextDataObject = {
+  cookieStoreId?: string;
+  incognito?: boolean;
+  windowId?: number;
+};
+
 /**
  * Closes the specified tab
  * @param {number} tabId the ID of the tab to close
@@ -128,36 +146,96 @@ export const GetCookieStoreIDForTab = async (
 };
 
 /**
+ * Gets the relevant window/privacy/container context for the specified tab.
+ * @param {number} tabId the ID of the tab
+ * @returns tab context values, or an empty object if unavailable
+ */
+export const GetOriginTabContext = async (
+  tabId: number,
+): Promise<OriginTabContext> => {
+  if (isNaN(tabId) || +tabId <= 0) {
+    return {};
+  }
+
+  let tab: Browser.tabs.Tab;
+  try {
+    tab = await browser.tabs.get(tabId);
+  } catch (error) {
+    console.warn(
+      "[Background] GetOriginTabContext() :: Failed to get original tab",
+      error,
+    );
+    return {};
+  }
+
+  const context: OriginTabContext = {
+    incognito: tab.incognito,
+    windowId: tab.windowId,
+  };
+
+  if (Object.prototype.hasOwnProperty.call(tab, "cookieStoreId")) {
+    context.cookieStoreId = (
+      tab as Browser.tabs.Tab & { cookieStoreId?: string }
+    ).cookieStoreId;
+  }
+
+  return context;
+};
+
+/**
+ * Adds selected context values from an origin tab to browser tab/window creation data.
+ */
+export const ApplyOriginTabContextToDataObject = <T extends object>(
+  data: T,
+  context: OriginTabContext,
+  options: TabContextOptions = {},
+): T & ContextDataObject => {
+  const dataWithContext = data as T & ContextDataObject;
+
+  if (options.includeCookieStoreId && context.cookieStoreId) {
+    dataWithContext.cookieStoreId = context.cookieStoreId;
+  }
+
+  if (options.includeIncognito && typeof context.incognito === "boolean") {
+    dataWithContext.incognito = context.incognito;
+  }
+
+  if (options.includeWindowId && typeof context.windowId === "number") {
+    dataWithContext.windowId = context.windowId;
+  }
+
+  return dataWithContext;
+};
+
+/**
  * Adds the contextual identify properties to the given window/tab data object (if appropriate)
  * @param data an object for use in a window/tab function
  * @param {number} originTabId the original tab ID (of which to match the contextual identify)
  * @returns modified window/tab data object
  */
-export const AddContextualIdentityToDataObject = async <
-  T extends (Browser.tabs.QueryInfo | Browser.tabs.CreateProperties) & {
-    cookieStoreId?: string;
-  },
->(
+export const AddContextualIdentityToDataObject = async <T extends object>(
   data: T,
   originTabId: number = -1,
-): Promise<T> => {
+  options: Omit<TabContextOptions, "includeCookieStoreId"> = {},
+): Promise<T & ContextDataObject> => {
   try {
     const isFirefox = await IsFirefox();
     const useContextualIdentity = await Options.GetLocalOption(
       "advanced",
       "contextualIdentity",
     );
+    const context = await GetOriginTabContext(originTabId);
 
-    if (isFirefox && useContextualIdentity) {
-      const cookieStoreId = await GetCookieStoreIDForTab(originTabId);
-      if (cookieStoreId) {
-        data.cookieStoreId = cookieStoreId;
-      } else {
-        console.warn(
-          "[Background] AddContextualIdentityToObjectData() :: Failed to get cookie store ID from original tab",
-        );
-      }
+    if (isFirefox && useContextualIdentity && !context.cookieStoreId) {
+      console.warn(
+        "[Background] AddContextualIdentityToObjectData() :: Failed to get cookie store ID from original tab",
+      );
     }
+
+    return ApplyOriginTabContextToDataObject(data, context, {
+      ...options,
+      includeCookieStoreId: isFirefox && useContextualIdentity,
+    });
   } catch (error) {
     console.error(
       "Failed to add contextual identity to window/tab data object",
@@ -165,5 +243,5 @@ export const AddContextualIdentityToDataObject = async <
     );
   }
 
-  return data;
+  return data as T & ContextDataObject;
 };
