@@ -1,5 +1,3 @@
-import type { Browser } from "wxt/browser";
-
 import {
   OPTION_DEFAULTS,
   POPOUT_PLAYER_PARAM_NAME,
@@ -13,14 +11,37 @@ import { GetPlaylistIDFromURL, GetVideoIDFromURL } from "@/utils/youtube";
 
 import { ShowBasicNotification } from "./notifications";
 import {
-  AddContextualIdentityToDataObject,
+  ApplyOriginTabContextToDataObject,
   CloseTab,
   GetActiveTab,
+  GetOriginTabContext,
   GetPopoutPlayerTabs,
+  type FirefoxTabCreateProperties,
+  type FirefoxWindowCreateData,
 } from "./tabs";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
+
+const ShowPopoutOpenFailureNotification = async (error?: unknown) => {
+  if (error !== undefined) {
+    console.error("[Background] Failed to open popout player", error);
+  } else {
+    console.error("[Background] Failed to open popout player");
+  }
+
+  const message = browser.i18n.getMessage(
+    "Notification_Error_PopoutOpenFailed",
+  );
+  await ShowBasicNotification({ message });
+};
+
+const ShowPrivateWindowNotPreservedNotification = async () => {
+  const message = browser.i18n.getMessage(
+    "Notification_Warning_PrivateWindowNotPreserved",
+  );
+  await ShowBasicNotification({ message });
+};
 
 /**
  * Helper function to open the popout player from various points in the background script
@@ -55,12 +76,16 @@ export const OpenPopoutBackgroundHelper = async ({
     return false;
   }
 
-  const result = await OpenPopoutPlayer({
-    id,
-    list,
-    rotation,
-    originTabId: tabId,
-  });
+  if (
+    (await OpenPopoutPlayer({
+      id,
+      list,
+      rotation,
+      originTabId: tabId,
+    })) === null
+  ) {
+    return false;
+  }
 
   // we can't do anything if a tab ID wasn't given, as the "active" tab will now likely be the popout
   // (unless the user has configured it to open in the background, but checking for that is not guaranteed)
@@ -76,7 +101,7 @@ export const OpenPopoutBackgroundHelper = async ({
     }
   }
 
-  return result !== undefined && result !== null;
+  return true;
 };
 
 /**
@@ -252,17 +277,22 @@ export const OpenPopoutPlayerInTab = async (
   url: string,
   active: boolean = true,
   originTabId: number = -1,
-): Promise<object> => {
-  const createData = await AddContextualIdentityToDataObject(
-    {
-      url,
-      active,
-    },
-    originTabId,
+): Promise<object | null> => {
+  const createData: FirefoxTabCreateProperties = { url, active };
+  ApplyOriginTabContextToDataObject(
+    createData,
+    await GetOriginTabContext(originTabId, {
+      notifyOnMissingContextualIdentity: true,
+    }),
+    { includeCookieStoreId: true, includeWindowId: true },
   );
 
-  const tab = await browser.tabs.create(createData);
-  return tab;
+  try {
+    return await browser.tabs.create(createData);
+  } catch (error) {
+    await ShowPopoutOpenFailureNotification(error);
+    return null;
+  }
 };
 
 /**
@@ -280,79 +310,102 @@ export const OpenPopoutPlayerInWindow = async (
   originTabId: number = -1,
   originalVideoWidth: number = OPTION_DEFAULTS.size.width,
   originalVideoHeight: number = OPTION_DEFAULTS.size.height,
-): Promise<object> => {
+): Promise<object | null> => {
   const dimensions = await GetDimensionsForPopoutPlayerWindow(
     originalVideoWidth,
     originalVideoHeight,
   );
-
-  const createData = await AddContextualIdentityToDataObject(
-    {
-      url,
-      state: "normal",
-      type: "popup",
-      ...dimensions,
-    } as Browser.windows.CreateData,
-    originTabId,
-  );
+  const originContext = await GetOriginTabContext(originTabId, {
+    notifyOnMissingContextualIdentity: true,
+  });
+  const createData: FirefoxWindowCreateData = {
+    url,
+    state: "normal",
+    type: "popup",
+    ...dimensions,
+  };
+  ApplyOriginTabContextToDataObject(createData, originContext, {
+    includeCookieStoreId: true,
+    includeIncognito: true,
+  });
 
   const isFirefox = await IsFirefox();
 
   if (isFirefox) {
-    (
-      createData as Browser.windows.CreateData & { titlePreface?: string }
-    ).titlePreface = await Options.GetLocalOption("advanced", "title");
+    createData.titlePreface = await Options.GetLocalOption("advanced", "title");
   }
 
-  const createdWindow = await browser.windows.create(createData);
+  try {
+    const createdWindow = await browser.windows.create(createData);
+    if (createdWindow === undefined) {
+      throw new Error(
+        "[Background] OpenPopoutPlayerInWindow() :: windows.create() returned no window",
+      );
+    }
 
-  if (createdWindow === undefined) {
-    console.warn(
-      "[Background] OpenPopoutPlayerInWindow() :: windows.create() returned no window",
-    );
-    return {};
-  }
+    if (originContext.incognito === true && createdWindow.incognito !== true) {
+      console.warn(
+        "[Background] OpenPopoutPlayerInWindow() :: Created window did not preserve private browsing context",
+      );
+      await ShowPrivateWindowNotPreservedNotification();
+      if (createdWindow.id !== undefined) {
+        try {
+          await browser.windows.remove(createdWindow.id);
+        } catch (error) {
+          console.warn(
+            "[Background] OpenPopoutPlayerInWindow() :: Unable to close non-private popout window",
+            error,
+          );
+        }
+      }
+      return null;
+    }
 
-  if (createdWindow.id === undefined) {
-    console.warn(
-      "[Background] OpenPopoutPlayerInWindow() :: Unable to resize/reposition created window",
-    );
-    return createdWindow;
-  }
+    if (createdWindow.id === undefined) {
+      console.warn(
+        "[Background] OpenPopoutPlayerInWindow() :: Unable to resize/reposition created window",
+      );
+      return createdWindow;
+    }
 
-  const windowId = createdWindow.id;
+    const windowId = createdWindow.id;
 
-  // IMPORTANT: the `top` and `left` position values are set here via `windows.update()`
-  // (instead of earlier in this function via `windows.create()`) due to a bug in Firefox
-  // (see https://bugzilla.mozilla.org/show_bug.cgi?id=1271047)
-  const position = await GetPositionForPopoutPlayerWindow();
-  if (position?.top !== undefined && position?.left !== undefined) {
-    await browser.windows.update(windowId, position);
-  }
+    // IMPORTANT: the `top` and `left` position values are set here via `windows.update()`
+    // (instead of earlier in this function via `windows.create()`) due to a bug in Firefox
+    // (see https://bugzilla.mozilla.org/show_bug.cgi?id=1271047)
+    const position = await GetPositionForPopoutPlayerWindow();
+    if (position?.top !== undefined && position?.left !== undefined) {
+      await browser.windows.update(windowId, position);
+    }
 
-  if ((await Options.GetLocalOption("size", "mode")) === "maximized") {
-    await browser.windows.update(windowId, {
-      state: "maximized",
-    });
-  } else if (openInBackground) {
-    if (!isNaN(originTabId) && +originTabId > 0) {
-      // try to move the original window back to the foreground
-      const { windowId: originWindowId } = await browser.tabs.get(originTabId);
-      if (originWindowId !== undefined) {
-        await browser.windows.update(originWindowId, {
-          focused: true,
+    if ((await Options.GetLocalOption("size", "mode")) === "maximized") {
+      await browser.windows.update(windowId, {
+        state: "maximized",
+      });
+    } else if (openInBackground) {
+      if (!isNaN(originTabId) && +originTabId > 0) {
+        // try to move the original window back to the foreground
+        const { windowId: originWindowId } =
+          await browser.tabs.get(originTabId);
+        if (originWindowId !== undefined) {
+          await browser.windows.update(originWindowId, {
+            focused: true,
+          });
+        }
+      } else {
+        // fallback: minimize the popout player window
+        await browser.windows.update(windowId, {
+          focused: false,
+          state: "minimized",
         });
       }
-    } else {
-      // fallback: minimize the popout player window
-      await browser.windows.update(windowId, {
-        focused: false,
-        state: "minimized",
-      });
     }
-  }
 
-  return createdWindow;
+    return createdWindow;
+  } catch (error) {
+    await ShowPopoutOpenFailureNotification(error);
+    return null;
+  }
 };
 
 /**
