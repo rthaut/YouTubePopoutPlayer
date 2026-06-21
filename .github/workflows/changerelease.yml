@@ -17,8 +17,8 @@ jobs:
     if: ${{ github.event_name != 'push' || github.ref_type == 'tag' || !startsWith(github.event.head_commit.message, 'Release version ') }}
     runs-on: ubuntu-latest
     steps:
-    - uses: dropseed/changerelease@v1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        tag_prefix: v
-        changelog: CHANGELOG.md
+      - uses: dropseed/changerelease@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: v
+          changelog: CHANGELOG.md

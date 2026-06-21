@@ -4,7 +4,7 @@
 
 > This browser extension provides simple ways to open any YouTube video or playlist (including videos and playlists embedded in other sites/pages) in a configurable "popout" window that can be freely sized and/or positioned.
 
-* * *
+---
 
 ## Overview
 
@@ -12,19 +12,19 @@
 
 ### Features
 
-* Open any YouTube video (including playlists) in a popout player, either as a new browser window or a new tab in your current browser window.
-* Open links to YouTube videos and/or playlists from any website in the popout player with a convenient right-click option.
-* Show or hide the video player controls in the popout player.
-* Automatically resume playback of the video when the popout player opens.
-* Loop videos (both single videos and playlists) in the popout player.
-* Multiple ways to customize the size and position of the popout player, with support for multiple displays/monitors/screens.
-* Optionally close the original video when the popout player opens.
-* Configurable keyboard shortcuts for opening the popout player.
-* ... ***and much more!***
+- Open any YouTube video (including playlists) in a popout player, either as a new browser window or a new tab in your current browser window.
+- Open links to YouTube videos and/or playlists from any website in the popout player with a convenient right-click option.
+- Show or hide the video player controls in the popout player.
+- Automatically resume playback of the video when the popout player opens.
+- Loop videos (both single videos and playlists) in the popout player.
+- Multiple ways to customize the size and position of the popout player, with support for multiple displays/monitors/screens.
+- Optionally close the original video when the popout player opens.
+- Configurable keyboard shortcuts for opening the popout player.
+- ... **_and much more!_**
 
 #### For more information, head to the [YouTube Popout Player website](https://rthaut.github.io/YouTubePopoutPlayer/).
 
-* * *
+---
 
 ## Installation
 
@@ -34,7 +34,7 @@
 | Microsoft Edge  | [![Microsoft Edge Add-on][edge-image-version]][edge-url] [![Microsoft Edge Add-on][edge-image-users]][edge-url] |
 | Mozilla Firefox | [![Mozilla Add-on][firefox-image-version]][firefox-url] [![Mozilla Add-on][firefox-image-users]][firefox-url]   |
 
-* * *
+---
 
 ## Contributing
 
@@ -72,7 +72,21 @@ To create a release package for all supported browsers, run the following comman
 npm run zip
 ```
 
-### Linting GitHub Actions Workflows
+### Code Quality Checks
+
+To run the source and workflow lint checks locally:
+
+```sh
+npm run lint
+npm run lint:styles
+npm run lint:workflows
+```
+
+To apply automatic ESLint fixes where possible:
+
+```sh
+npm run lint:fix
+```
 
 This repo uses [github-actionlint](https://www.npmjs.com/package/github-actionlint) to run the upstream [actionlint](https://github.com/rhysd/actionlint) binary from npm-managed tooling. After `npm install`, lint all workflow files with:
 
@@ -82,14 +96,28 @@ npm run lint:workflows
 
 The script disables actionlint's optional ShellCheck and pyflakes integrations so local Windows runs and GitHub Actions runs use the same npm-managed dependency set.
 
+To format source, tests, root configuration, helper scripts, and GitHub YAML files:
+
+```sh
+npm run format
+```
+
+Use `npm run format:check` to verify that same file set without writing changes. The formatter scripts intentionally use positive globs for non-doc files and do not include `docs/**`, because the Jekyll site contains Liquid/HTML that is not covered by this Prettier setup.
+
+Area-specific formatter commands are also available:
+
+```sh
+npm run format:source
+npm run format:config
+npm run format:workflows
+```
+
 [chrome-url]: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
 [chrome-image-version]: https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
 [chrome-image-users]: https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
-
 [edge-url]: https://microsoftedge.microsoft.com/addons/detail/youtube-popout-player/mdhpmdbgkogobnebpgfbnnnbjfohiiee
 [edge-image-version]: https://img.shields.io/badge/dynamic/json?logo=microsoftedge&style=for-the-badge&label=edge%20add-on&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fmdhpmdbgkogobnebpgfbnnnbjfohiiee
 [edge-image-users]: https://img.shields.io/badge/dynamic/json?logo=microsoftedge&style=for-the-badge&label=users&query=%24.activeInstallCount&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Fmdhpmdbgkogobnebpgfbnnnbjfohiiee
-
 [firefox-url]: https://addons.mozilla.org/firefox/addon/youtube-popout-player/
 [firefox-image-version]: https://img.shields.io/amo/v/youtube-popout-player?color=blue&logo=firefox&style=for-the-badge
 [firefox-image-users]: https://img.shields.io/amo/users/youtube-popout-player?color=blue&logo=firefox&style=for-the-badge

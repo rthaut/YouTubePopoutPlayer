@@ -1,20 +1,18 @@
 {
-    "version": "0.1",
-    "language": "en",
-    "words": [
-        "autoplay",
-        "dismissible",
-        "fullscreen",
-        "nocookie",
-        "polyfill",
-        "popout",
-        "userscript",
-        "userscripts",
-        "webextension",
-        "webextensions",
-        "youtube"
-    ],
-    "flagWords": [
-        "hte"
-    ]
+  "version": "0.1",
+  "language": "en",
+  "words": [
+    "autoplay",
+    "dismissible",
+    "fullscreen",
+    "nocookie",
+    "polyfill",
+    "popout",
+    "userscript",
+    "userscripts",
+    "webextension",
+    "webextensions",
+    "youtube"
+  ],
+  "flagWords": ["hte"]
 }

@@ -228,9 +228,7 @@ function CustomDimensionsForm() {
         >
           {OPTIONS_SIZE_UNITS_VALUES.map((unit) => (
             <MenuItem value={unit} key={unit}>
-              {GetCaseInsensitiveMessage(
-                `DimensionUnits${unit}OptionLabel`,
-              )}
+              {GetCaseInsensitiveMessage(`DimensionUnits${unit}OptionLabel`)}
             </MenuItem>
           ))}
         </Select>

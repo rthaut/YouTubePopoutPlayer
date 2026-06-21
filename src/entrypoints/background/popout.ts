@@ -299,8 +299,9 @@ export const OpenPopoutPlayerInWindow = async (
   const isFirefox = await IsFirefox();
 
   if (isFirefox) {
-    (createData as Browser.windows.CreateData & { titlePreface?: string }).titlePreface =
-      await Options.GetLocalOption("advanced", "title");
+    (
+      createData as Browser.windows.CreateData & { titlePreface?: string }
+    ).titlePreface = await Options.GetLocalOption("advanced", "title");
   }
 
   const createdWindow = await browser.windows.create(createData);
