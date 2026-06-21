@@ -18,6 +18,7 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       - run: npm run lint:workflows
+      - run: npm run lint:styles
       - run: npm run compile
       - run: npm run lint
       - run: npm run test:unit

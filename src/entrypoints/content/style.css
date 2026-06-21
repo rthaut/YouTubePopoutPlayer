@@ -4,29 +4,17 @@
  */
 #ytp-svg-pop-arrow,
 #ytp-svg-pop-popout {
-  -webkit-transform: none;
-  -moz-transform: none;
-  -ms-transform: none;
-  -o-transform: none;
   transform: none;
 }
 
 @keyframes ytp-svg-pop-animation {
   50% {
-    -webkit-transform: translate(1px, -1px);
-    -moz-transform: translate(1px, -1px);
-    -ms-transform: translate(1px, -1px);
-    -o-transform: translate(1px, -1px);
     transform: translate(1px, -1px);
   }
 }
 
 .ytp-popout-button:hover #ytp-svg-pop-arrow,
 .ytp-popout-button:hover #ytp-svg-pop-popout {
-  -webkit-animation: ytp-svg-pop-animation 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-  -moz-animation: ytp-svg-pop-animation 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-  -ms-animation: ytp-svg-pop-animation 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-  -o-animation: ytp-svg-pop-animation 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
   animation: ytp-svg-pop-animation 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
@@ -34,54 +22,26 @@
  * Animations for the rotation buttons' icons
  */
 button.ytp-rotate-button svg {
-  -webkit-transform: none;
-  -moz-transform: none;
-  -ms-transform: none;
-  -o-transform: none;
   transform: none;
 }
 
 @keyframes ytp-svg-rotate-left-animation {
   100% {
-    -webkit-transform: rotate(-30deg);
-    -moz-transform: rotate(-30deg);
-    -ms-transform: rotate(-30deg);
-    -o-transform: rotate(-30deg);
     transform: rotate(-30deg);
   }
 }
 
 button.ytp-rotate-button.ytp-rotate-left-button:hover svg {
-  -webkit-animation: ytp-svg-rotate-left-animation 0.4s
-    cubic-bezier(0.25, 0.1, 0.25, 1);
-  -moz-animation: ytp-svg-rotate-left-animation 0.4s
-    cubic-bezier(0.25, 0.1, 0.25, 1);
-  -ms-animation: ytp-svg-rotate-left-animation 0.4s
-    cubic-bezier(0.25, 0.1, 0.25, 1);
-  -o-animation: ytp-svg-rotate-left-animation 0.4s
-    cubic-bezier(0.25, 0.1, 0.25, 1);
   animation: ytp-svg-rotate-left-animation 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 @keyframes ytp-svg-rotate-right-animation {
   100% {
-    -webkit-transform: rotate(30deg);
-    -moz-transform: rotate(30deg);
-    -ms-transform: rotate(30deg);
-    -o-transform: rotate(30deg);
     transform: rotate(30deg);
   }
 }
 
 button.ytp-rotate-button.ytp-rotate-right-button:hover svg {
-  -webkit-animation: ytp-svg-rotate-right-animation 0.4s
-    cubic-bezier(0.25, 0.1, 0.25, 1);
-  -moz-animation: ytp-svg-rotate-right-animation 0.4s
-    cubic-bezier(0.25, 0.1, 0.25, 1);
-  -ms-animation: ytp-svg-rotate-right-animation 0.4s
-    cubic-bezier(0.25, 0.1, 0.25, 1);
-  -o-animation: ytp-svg-rotate-right-animation 0.4s
-    cubic-bezier(0.25, 0.1, 0.25, 1);
   animation: ytp-svg-rotate-right-animation 0.4s
     cubic-bezier(0.25, 0.1, 0.25, 1);
 }

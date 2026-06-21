@@ -78,6 +78,7 @@ To run the source and workflow lint checks locally:
 
 ```sh
 npm run lint
+npm run lint:styles
 npm run lint:workflows
 ```
 
