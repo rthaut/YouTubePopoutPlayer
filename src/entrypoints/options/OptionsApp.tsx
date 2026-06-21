@@ -106,9 +106,7 @@ export default function OptionsApp() {
                 <TabList onChange={handleTabChange} variant="fullWidth">
                   {tabNames.map((tab) => (
                     <Tab
-                      label={GetCaseInsensitiveMessage(
-                        `OptionsTabName${tab}`,
-                      )}
+                      label={GetCaseInsensitiveMessage(`OptionsTabName${tab}`)}
                       value={tab}
                       key={tab}
                     />
