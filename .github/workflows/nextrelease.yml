@@ -11,12 +11,13 @@ jobs:
     if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' && github.head_ref == 'nextrelease' }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v5
       with:
         node-version: 'lts/*'
+        package-manager-cache: false
     - uses: dropseed/nextrelease@v1
       with:
         prepare_cmd: |
