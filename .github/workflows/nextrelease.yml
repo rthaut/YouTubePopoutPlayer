@@ -6,9 +6,14 @@ on:
     branches: [master]
     types: [labeled, unlabeled, edited, synchronize]
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 jobs:
   sync:
-    if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' && github.head_ref == 'nextrelease' }}
+    if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.head_ref == 'nextrelease') }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
@@ -28,3 +33,10 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         tag_prefix: v
         next_branch: nextrelease
+    - name: Sync GitHub release from changelog
+      if: ${{ github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Release version ') }}
+      uses: dropseed/changerelease@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        tag_prefix: v
+        changelog: CHANGELOG.md
