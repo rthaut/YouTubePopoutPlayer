@@ -72,6 +72,16 @@ To create a release package for all supported browsers, run the following comman
 npm run zip
 ```
 
+### Linting GitHub Actions Workflows
+
+This repo uses [github-actionlint](https://www.npmjs.com/package/github-actionlint) to run the upstream [actionlint](https://github.com/rhysd/actionlint) binary from npm-managed tooling. After `npm install`, lint all workflow files with:
+
+```sh
+npm run lint:workflows
+```
+
+The script disables actionlint's optional ShellCheck and pyflakes integrations so local Windows runs and GitHub Actions runs use the same npm-managed dependency set.
+
 [chrome-url]: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
 [chrome-image-version]: https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
 [chrome-image-users]: https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
