@@ -1,4 +1,5 @@
 import { IsVisible } from "@/utils/misc";
+import type { VideoPlayerInfo } from "@/utils/types";
 import { GetPlaylistIDFromURL, GetVideoIDFromURL } from "@/utils/youtube";
 
 /**
@@ -22,8 +23,8 @@ export const GetPageVideo = (): HTMLVideoElement | undefined => {
   return undefined;
 };
 
-export const GetVideoPlayerInfo = () => {
-  let info;
+export const GetVideoPlayerInfo = (): VideoPlayerInfo | undefined => {
+  let info: VideoPlayerInfo | undefined;
 
   const video = GetPageVideo();
   if (video) {
