@@ -1,3 +1,5 @@
+import type { Browser } from "wxt/browser";
+
 import {
   OPTION_DEFAULTS,
   POPOUT_PLAYER_PARAM_NAME,
@@ -11,14 +13,19 @@ import { GetPlaylistIDFromURL, GetVideoIDFromURL } from "@/utils/youtube";
 
 import { ShowBasicNotification } from "./notifications";
 import {
-  ApplyOriginTabContextToDataObject,
   CloseTab,
   GetActiveTab,
-  GetOriginTabContext,
+  GetPopoutOriginContext,
   GetPopoutPlayerTabs,
-  type FirefoxTabCreateProperties,
-  type FirefoxWindowCreateData,
+  TabMatchesPopoutOriginContext,
+  UpdatePopoutPlayerTab,
 } from "./tabs";
+import type {
+  PopoutOriginContext,
+  PopoutTabCreateData,
+  PopoutWindowCreateData,
+} from "./types";
+import { CloseWindow } from "./windows";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
@@ -36,11 +43,41 @@ const ShowPopoutOpenFailureNotification = async (error?: unknown) => {
   await ShowBasicNotification({ message });
 };
 
-const ShowPrivateWindowNotPreservedNotification = async () => {
+const ShowPopoutContextNotPreservedNotification = async () => {
   const message = browser.i18n.getMessage(
     "Notification_Warning_PrivateWindowNotPreserved",
   );
   await ShowBasicNotification({ message });
+};
+
+const AddOriginContextToTabCreateData = (
+  createData: PopoutTabCreateData,
+  originContext: PopoutOriginContext | null,
+) => {
+  if (originContext?.cookieStoreId !== undefined) {
+    createData.cookieStoreId = originContext.cookieStoreId;
+  }
+
+  if (typeof originContext?.windowId === "number") {
+    createData.windowId = originContext.windowId;
+  }
+
+  return createData;
+};
+
+const AddOriginContextToWindowCreateData = (
+  createData: PopoutWindowCreateData,
+  originContext: PopoutOriginContext | null,
+) => {
+  if (originContext?.cookieStoreId !== undefined) {
+    createData.cookieStoreId = originContext.cookieStoreId;
+  }
+
+  if (typeof originContext?.incognito === "boolean") {
+    createData.incognito = originContext.incognito;
+  }
+
+  return createData;
 };
 
 /**
@@ -230,23 +267,23 @@ export const OpenPopoutPlayer = async ({
     "behavior",
     "reuseWindowsTabs",
   );
+  const openInBackground = await Options.GetLocalOption(
+    "advanced",
+    "background",
+  );
+  const target = behavior.target.toLowerCase();
 
   if (reuseExistingWindowsTabs) {
-    const tabs = await GetPopoutPlayerTabs(originTabId);
+    const tabs = await GetPopoutPlayerTabs(originTabId, target === "tab");
     if (tabs.length > 0) {
       result = await Promise.all(
-        tabs.map((tab) => browser.tabs.update(tab.id, { url })),
+        tabs.map((tab) => UpdatePopoutPlayerTab(tab, url, !openInBackground)),
       );
       return result;
     }
   }
 
-  const openInBackground = await Options.GetLocalOption(
-    "advanced",
-    "background",
-  );
-
-  switch (behavior.target.toLowerCase()) {
+  switch (target) {
     case "tab":
       result = await OpenPopoutPlayerInTab(url, !openInBackground, originTabId);
       break;
@@ -271,28 +308,49 @@ export const OpenPopoutPlayer = async ({
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {boolean} [active] indicates if the tab should become the active tab in the window
  * @param {number} originTabId the ID of the tab from which the request to open the popout player originated
- * @returns {Promise<object>}
+ * @returns {Promise<object|null>}
  */
 export const OpenPopoutPlayerInTab = async (
   url: string,
   active: boolean = true,
   originTabId: number = -1,
 ): Promise<object | null> => {
-  const createData: FirefoxTabCreateProperties = { url, active };
-  ApplyOriginTabContextToDataObject(
-    createData,
-    await GetOriginTabContext(originTabId, {
-      notifyOnMissingContextualIdentity: true,
-    }),
-    { includeCookieStoreId: true, includeWindowId: true },
+  const originContext = await GetPopoutOriginContext(originTabId);
+  const createData = AddOriginContextToTabCreateData(
+    { url, active },
+    originContext,
   );
 
+  let createdTab: Browser.tabs.Tab | undefined;
+
   try {
-    return await browser.tabs.create(createData);
+    createdTab = await browser.tabs.create(createData);
   } catch (error) {
     await ShowPopoutOpenFailureNotification(error);
     return null;
   }
+
+  if (createdTab === undefined) {
+    await ShowPopoutOpenFailureNotification(
+      new Error(
+        "[Background] OpenPopoutPlayerInTab() :: tabs.create() returned no tab",
+      ),
+    );
+    return null;
+  }
+
+  if (!TabMatchesPopoutOriginContext(createdTab, originContext, true)) {
+    console.warn(
+      "[Background] OpenPopoutPlayerInTab() :: Created tab did not preserve original browser context",
+    );
+    await ShowPopoutContextNotPreservedNotification();
+    if (createdTab.id !== undefined) {
+      await CloseTab(createdTab.id);
+    }
+    return null;
+  }
+
+  return createdTab;
 };
 
 /**
@@ -302,7 +360,7 @@ export const OpenPopoutPlayerInTab = async (
  * @param {number} originTabId the ID of the tab from which the request to open the popout player originated
  * @param {object} originalVideoWidth the width of the original video player
  * @param {boolean} originalVideoHeight the height of the original video player
- * @returns {Promise<object>}
+ * @returns {Promise<object|null>}
  */
 export const OpenPopoutPlayerInWindow = async (
   url: string,
@@ -315,19 +373,16 @@ export const OpenPopoutPlayerInWindow = async (
     originalVideoWidth,
     originalVideoHeight,
   );
-  const originContext = await GetOriginTabContext(originTabId, {
-    notifyOnMissingContextualIdentity: true,
-  });
-  const createData: FirefoxWindowCreateData = {
-    url,
-    state: "normal",
-    type: "popup",
-    ...dimensions,
-  };
-  ApplyOriginTabContextToDataObject(createData, originContext, {
-    includeCookieStoreId: true,
-    includeIncognito: true,
-  });
+  const originContext = await GetPopoutOriginContext(originTabId);
+  const createData = AddOriginContextToWindowCreateData(
+    {
+      url,
+      state: "normal",
+      type: "popup",
+      ...dimensions,
+    },
+    originContext,
+  );
 
   const isFirefox = await IsFirefox();
 
@@ -335,41 +390,44 @@ export const OpenPopoutPlayerInWindow = async (
     createData.titlePreface = await Options.GetLocalOption("advanced", "title");
   }
 
+  let createdWindow: Browser.windows.Window | undefined;
+
   try {
-    const createdWindow = await browser.windows.create(createData);
+    createdWindow = await browser.windows.create(createData);
     if (createdWindow === undefined) {
       throw new Error(
-        "[Background] OpenPopoutPlayerInWindow() :: windows.create() returned no window",
+        "windows.create() did not return a created Window object",
       );
     }
+  } catch (error) {
+    await ShowPopoutOpenFailureNotification(error);
+    return null;
+  }
 
-    if (originContext.incognito === true && createdWindow.incognito !== true) {
-      console.warn(
-        "[Background] OpenPopoutPlayerInWindow() :: Created window did not preserve private browsing context",
-      );
-      await ShowPrivateWindowNotPreservedNotification();
-      if (createdWindow.id !== undefined) {
-        try {
-          await browser.windows.remove(createdWindow.id);
-        } catch (error) {
-          console.warn(
-            "[Background] OpenPopoutPlayerInWindow() :: Unable to close non-private popout window",
-            error,
-          );
-        }
-      }
-      return null;
+  if (
+    typeof originContext?.incognito === "boolean" &&
+    createdWindow.incognito !== originContext.incognito
+  ) {
+    console.warn(
+      "[Background] OpenPopoutPlayerInWindow() :: Created window did not preserve original browsing context",
+    );
+    await ShowPopoutContextNotPreservedNotification();
+    if (createdWindow.id !== undefined) {
+      await CloseWindow(createdWindow.id);
     }
+    return null;
+  }
 
-    if (createdWindow.id === undefined) {
-      console.warn(
-        "[Background] OpenPopoutPlayerInWindow() :: Unable to resize/reposition created window",
-      );
-      return createdWindow;
-    }
+  if (createdWindow.id === undefined) {
+    console.warn(
+      "[Background] OpenPopoutPlayerInWindow() :: Unable to resize/reposition created window",
+    );
+    return createdWindow;
+  }
 
-    const windowId = createdWindow.id;
+  const windowId = createdWindow.id;
 
+  try {
     // IMPORTANT: the `top` and `left` position values are set here via `windows.update()`
     // (instead of earlier in this function via `windows.create()`) due to a bug in Firefox
     // (see https://bugzilla.mozilla.org/show_bug.cgi?id=1271047)
@@ -377,7 +435,14 @@ export const OpenPopoutPlayerInWindow = async (
     if (position?.top !== undefined && position?.left !== undefined) {
       await browser.windows.update(windowId, position);
     }
+  } catch (error) {
+    console.warn(
+      "[Background] OpenPopoutPlayerInWindow() :: Unable to position created window",
+      error,
+    );
+  }
 
+  try {
     if ((await Options.GetLocalOption("size", "mode")) === "maximized") {
       await browser.windows.update(windowId, {
         state: "maximized",
@@ -400,12 +465,14 @@ export const OpenPopoutPlayerInWindow = async (
         });
       }
     }
-
-    return createdWindow;
   } catch (error) {
-    await ShowPopoutOpenFailureNotification(error);
-    return null;
+    console.warn(
+      "[Background] OpenPopoutPlayerInWindow() :: Unable to update created window focus or state",
+      error,
+    );
   }
+
+  return createdWindow;
 };
 
 /**

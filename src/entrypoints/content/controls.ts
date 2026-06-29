@@ -2,11 +2,7 @@ import { IsPopoutPlayer } from "@/utils/misc";
 import Options from "@/utils/options";
 
 import { CloseTab } from ".";
-import {
-  OpenPopoutForPageVideo,
-  RotateVideoPlayer,
-  ShouldCloseTabAfterPopoutOpen,
-} from "./player";
+import { OpenPopoutForPageVideo, RotateVideoPlayer } from "./player";
 
 /**
  * Click event handler for the context menu entry and the controls button
@@ -17,12 +13,7 @@ const OpenPopoutPlayerControlsClickEventHandler = async (event: MouseEvent) => {
 
   const opened = await OpenPopoutForPageVideo();
 
-  if (
-    ShouldCloseTabAfterPopoutOpen(
-      opened,
-      await Options.GetLocalOption("advanced", "close"),
-    )
-  ) {
+  if (opened && (await Options.GetLocalOption("advanced", "close"))) {
     await CloseTab(true);
   }
 };

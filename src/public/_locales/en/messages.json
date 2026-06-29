@@ -64,16 +64,12 @@
     "description": "The text used for the notification that is displayed when the popout player cannot be opened."
   },
   "Notification_Error_PopoutOpenFailed": {
-    "message": "The popout player could not be opened. If this happened in a Private or Incognito window, try opening in a tab or disabling Multi-Account Containers support if enabled.",
+    "message": "The popout player could not be opened.",
     "description": "The text used for the notification that is displayed when the browser fails to open the popout player."
   },
   "Notification_Warning_PrivateWindowNotPreserved": {
-    "message": "The browser opened the popout player outside the original Private or Incognito window, so the popout was closed. Try opening in a tab, or disable Multi-Account Containers support for popup windows if enabled.",
-    "description": "The text used for the notification that is displayed when the browser does not preserve the private window context."
-  },
-  "Notification_Warning_ContextualIdentityNotPreserved": {
-    "message": "Multi-Account Containers support is enabled, but the original container could not be detected. The popout player may open outside the original container.",
-    "description": "The text used for the notification that is displayed when the browser cannot preserve the contextual identity."
+    "message": "The browser opened the popout player outside the original Private, Incognito, or container context, so the popout was closed. Try opening in a tab, or disable Multi-Account Containers support for popup windows if enabled.",
+    "description": "The text used for the notification that is displayed when the browser does not preserve the original private or container context."
   },
   "PopoutPlayerControls_RotateVideo_Left": {
     "message": "Rotate video left by 90 degrees",

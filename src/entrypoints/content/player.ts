@@ -52,7 +52,7 @@ export const OpenPopoutFromContentScript = async (
       data,
     });
 
-    return DidBackgroundOpenPopout(result);
+    return result !== undefined && result !== null && result !== false;
   } catch (error) {
     console.error(
       "[Content] YouTubePopoutPlayer OpenPopoutFromContentScript() :: Error",
@@ -62,14 +62,6 @@ export const OpenPopoutFromContentScript = async (
 
   return false;
 };
-
-export const DidBackgroundOpenPopout = (result: unknown): boolean =>
-  result !== undefined && result !== null && result !== false;
-
-export const ShouldCloseTabAfterPopoutOpen = (
-  opened: boolean,
-  closeEnabled: boolean,
-): boolean => opened && closeEnabled;
 
 /**
  * Opens the popout player (via a request to the background script)

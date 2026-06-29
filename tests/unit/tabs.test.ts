@@ -1,27 +1,32 @@
 import type { Browser } from "wxt/browser";
-import { OpenPopoutPlayerInWindow } from "@/entrypoints/background/popout";
 import {
-  ApplyOriginTabContextToDataObject,
-  GetOriginTabContext,
+  GetPopoutPlayerTabs,
+  UpdatePopoutPlayerTab,
 } from "@/entrypoints/background/tabs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { OPTION_DEFAULTS } from "@/utils/constants";
+import {
+  OPTION_DEFAULTS,
+  POPOUT_PLAYER_PARAM_NAME,
+  YOUTUBE_EMBED_URL,
+  YOUTUBE_NOCOOKIE_EMBED_URL,
+} from "@/utils/constants";
 
 type TestTab = Browser.tabs.Tab & { cookieStoreId?: string };
 
 const CreateTab = (overrides: Partial<TestTab> = {}): TestTab => ({
-  active: true,
+  active: false,
   autoDiscardable: true,
   discarded: false,
   frozen: false,
   groupId: -1,
-  highlighted: true,
+  highlighted: false,
+  id: 123,
   incognito: false,
   index: 0,
   pinned: false,
-  selected: true,
-  windowId: 1,
+  selected: false,
+  windowId: 456,
   ...overrides,
 });
 
@@ -36,59 +41,49 @@ const CreateFlatDefaultOptions = () =>
   );
 
 const StubBrowser = ({
-  browserName = "Firefox",
+  browserName = "Chrome",
   optionOverrides = {},
-  tab = CreateTab(),
-  window,
+  originTab = CreateTab(),
+  queryTabs = [],
 }: {
   browserName?: string;
   optionOverrides?: Record<string, unknown>;
-  tab?: TestTab;
-  window?: Browser.windows.Window;
+  originTab?: TestTab;
+  queryTabs?: TestTab[];
 } = {}) => {
-  const notificationsCreate = vi.fn();
-  const windowsCreate = vi.fn().mockResolvedValue(window);
-  const tabsGet = vi.fn().mockResolvedValue(tab);
   const storageValues = {
     ...CreateFlatDefaultOptions(),
     ...optionOverrides,
   };
+  const tabsGet = vi.fn().mockResolvedValue(originTab);
+  const tabsQuery = vi.fn().mockResolvedValue(queryTabs);
+  const tabsUpdate = vi.fn().mockResolvedValue(CreateTab());
+  const windowsUpdate = vi.fn().mockResolvedValue({ id: 456 });
 
   vi.stubGlobal("browser", {
-    i18n: {
-      getMessage: vi.fn((messageName: string) => messageName),
-    },
-    notifications: {
-      clear: vi.fn(),
-      create: notificationsCreate,
-      onClicked: {
-        addListener: vi.fn(),
-        hasListener: vi.fn().mockReturnValue(false),
-        removeListener: vi.fn(),
-      },
-    },
     runtime: {
       getBrowserInfo: vi.fn().mockResolvedValue({ name: browserName }),
-      getURL: vi.fn((url: string) => url),
     },
     storage: {
       local: {
-        get: vi.fn().mockImplementation(async () => storageValues),
+        get: vi.fn().mockResolvedValue(storageValues),
       },
     },
     tabs: {
       get: tabsGet,
+      query: tabsQuery,
+      update: tabsUpdate,
     },
     windows: {
-      create: windowsCreate,
-      update: vi.fn(),
+      update: windowsUpdate,
     },
   });
 
   return {
-    notificationsCreate,
     tabsGet,
-    windowsCreate,
+    tabsQuery,
+    tabsUpdate,
+    windowsUpdate,
   };
 };
 
@@ -97,146 +92,129 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("ApplyOriginTabContextToDataObject", () => {
-  it("adds selected private window and cookie store context", () => {
-    const data = ApplyOriginTabContextToDataObject(
-      { url: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-      {
-        cookieStoreId: "firefox-private",
-        incognito: true,
-        windowId: 123,
-      },
-      {
-        includeCookieStoreId: true,
-        includeIncognito: true,
-        includeWindowId: true,
-      },
-    );
-
-    expect(data).toEqual({
-      url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+describe("GetPopoutPlayerTabs", () => {
+  it("filters reusable popout tabs to the same private container and origin window", async () => {
+    const matchingTab = CreateTab({
       cookieStoreId: "firefox-private",
+      id: 101,
       incognito: true,
-      windowId: 123,
+      windowId: 1,
     });
-  });
-
-  it("only adds explicitly requested context values", () => {
-    const data = ApplyOriginTabContextToDataObject(
-      { url: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-      {
-        cookieStoreId: "firefox-container-1",
-        incognito: false,
-        windowId: 456,
-      },
-      {
-        includeCookieStoreId: true,
-      },
-    );
-
-    expect(data).toEqual({
-      url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      cookieStoreId: "firefox-container-1",
-    });
-  });
-});
-
-describe("GetOriginTabContext", () => {
-  it("includes Firefox cookie store context when contextual identity is enabled", async () => {
-    StubBrowser({
-      optionOverrides: {
-        "advanced.contextualIdentity": true,
-      },
-      tab: CreateTab({
-        cookieStoreId: "firefox-container-1",
-        incognito: true,
-        windowId: 123,
-      }),
-    });
-
-    await expect(GetOriginTabContext(42)).resolves.toEqual({
-      cookieStoreId: "firefox-container-1",
+    const otherPrivateWindowTab = CreateTab({
+      cookieStoreId: "firefox-private",
+      id: 102,
       incognito: true,
-      windowId: 123,
+      windowId: 2,
     });
-  });
-
-  it("shows a localized warning when enabled contextual identity cannot be attached", async () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const { notificationsCreate } = StubBrowser({
-      optionOverrides: {
-        "advanced.contextualIdentity": true,
-      },
-      tab: CreateTab(),
-    });
-
-    await expect(
-      GetOriginTabContext(42, {
-        notifyOnMissingContextualIdentity: true,
-      }),
-    ).resolves.toEqual({
+    const normalTab = CreateTab({
+      cookieStoreId: "firefox-default",
+      id: 103,
       incognito: false,
       windowId: 1,
     });
-
-    expect(warn).toHaveBeenCalledWith(
-      "[Background] GetOriginTabContext() :: Failed to get cookie store ID from original tab",
-    );
-    expect(notificationsCreate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: "Notification_Warning_ContextualIdentityNotPreserved",
-      }),
-    );
-  });
-
-  it("does not warn for missing contextual identity when no origin tab is available", async () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const { notificationsCreate, tabsGet } = StubBrowser({
+    const otherContainerTab = CreateTab({
+      cookieStoreId: "firefox-container-2",
+      id: 104,
+      incognito: true,
+      windowId: 1,
+    });
+    const { tabsQuery } = StubBrowser({
+      browserName: "Firefox",
       optionOverrides: {
         "advanced.contextualIdentity": true,
       },
+      originTab: CreateTab({
+        cookieStoreId: "firefox-private",
+        incognito: true,
+        windowId: 1,
+      }),
+      queryTabs: [
+        matchingTab,
+        otherPrivateWindowTab,
+        normalTab,
+        otherContainerTab,
+      ],
     });
 
-    await expect(
-      GetOriginTabContext(-1, {
-        notifyOnMissingContextualIdentity: true,
-      }),
-    ).resolves.toEqual({});
+    await expect(GetPopoutPlayerTabs(42, true)).resolves.toEqual([matchingTab]);
+    expect(tabsQuery).toHaveBeenCalledWith({
+      url: [YOUTUBE_EMBED_URL, YOUTUBE_NOCOOKIE_EMBED_URL].map(
+        (url) => url + `*?*${POPOUT_PLAYER_PARAM_NAME}=1*`,
+      ),
+    });
+  });
 
-    expect(tabsGet).not.toHaveBeenCalled();
-    expect(warn).not.toHaveBeenCalled();
-    expect(notificationsCreate).not.toHaveBeenCalled();
+  it("allows same-context popup-window tabs from another window", async () => {
+    const matchingTab = CreateTab({
+      cookieStoreId: "firefox-private",
+      id: 101,
+      incognito: true,
+      windowId: 1,
+    });
+    const otherPrivateWindowTab = CreateTab({
+      cookieStoreId: "firefox-private",
+      id: 102,
+      incognito: true,
+      windowId: 2,
+    });
+    StubBrowser({
+      browserName: "Firefox",
+      optionOverrides: {
+        "advanced.contextualIdentity": true,
+      },
+      originTab: CreateTab({
+        cookieStoreId: "firefox-private",
+        incognito: true,
+        windowId: 1,
+      }),
+      queryTabs: [
+        matchingTab,
+        otherPrivateWindowTab,
+        CreateTab({
+          cookieStoreId: "firefox-default",
+          id: 103,
+          incognito: false,
+          windowId: 1,
+        }),
+      ],
+    });
+
+    await expect(GetPopoutPlayerTabs(42, false)).resolves.toEqual([
+      matchingTab,
+      otherPrivateWindowTab,
+    ]);
   });
 });
 
-describe("OpenPopoutPlayerInWindow", () => {
-  it("logs an error and notifies when window creation returns no window", async () => {
-    const error = vi.spyOn(console, "error").mockImplementation(() => {});
-    const { notificationsCreate, windowsCreate } = StubBrowser({
-      browserName: "Chrome",
-      tab: CreateTab({
-        incognito: false,
-        windowId: 123,
-      }),
+describe("UpdatePopoutPlayerTab", () => {
+  it("activates the reused tab and focuses its window when active", async () => {
+    const { tabsUpdate, windowsUpdate } = StubBrowser();
+
+    await UpdatePopoutPlayerTab(
+      CreateTab({ id: 123, windowId: 456 }),
+      "https://www.youtube.com/embed/dQw4w9WgXcQ?__ytpp=1",
+      true,
+    );
+
+    expect(tabsUpdate).toHaveBeenCalledWith(123, {
+      active: true,
+      url: "https://www.youtube.com/embed/dQw4w9WgXcQ?__ytpp=1",
     });
+    expect(windowsUpdate).toHaveBeenCalledWith(456, { focused: true });
+  });
 
-    await expect(
-      OpenPopoutPlayerInWindow("https://www.youtube.com/embed/dQw4w9WgXcQ"),
-    ).resolves.toBeNull();
+  it("updates the reused tab in the background without changing focus", async () => {
+    const { tabsUpdate, windowsUpdate } = StubBrowser();
 
-    expect(windowsCreate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      }),
+    await UpdatePopoutPlayerTab(
+      CreateTab({ id: 123, windowId: 456 }),
+      "https://www.youtube.com/embed/dQw4w9WgXcQ?__ytpp=1",
+      false,
     );
-    expect(error).toHaveBeenCalledWith(
-      "[Background] Failed to open popout player",
-      expect.any(Error),
-    );
-    expect(notificationsCreate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: "Notification_Error_PopoutOpenFailed",
-      }),
-    );
+
+    expect(tabsUpdate).toHaveBeenCalledWith(123, {
+      url: "https://www.youtube.com/embed/dQw4w9WgXcQ?__ytpp=1",
+    });
+    expect(windowsUpdate).not.toHaveBeenCalled();
   });
 });

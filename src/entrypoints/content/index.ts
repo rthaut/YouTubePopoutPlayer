@@ -12,7 +12,6 @@ import {
   OpenPopoutForPageVideo,
   PauseVideoPlayer,
   RotateVideoPlayer,
-  ShouldCloseTabAfterPopoutOpen,
 } from "./player";
 
 import "./style.css";
@@ -70,7 +69,7 @@ const OnRuntimeMessage = async (message: RuntimeMessage) => {
         } = (message.data as OpenPopoutData) ?? {};
         // eslint-disable-next-line no-case-declarations
         const opened = await OpenPopoutForPageVideo(data);
-        if (ShouldCloseTabAfterPopoutOpen(opened, closeTab)) {
+        if (opened && closeTab) {
           await CloseTab(enforceDomainRestriction);
         }
         break;
