@@ -13,14 +13,72 @@ import { GetPlaylistIDFromURL, GetVideoIDFromURL } from "@/utils/youtube";
 
 import { ShowBasicNotification } from "./notifications";
 import {
-  AddContextualIdentityToDataObject,
   CloseTab,
   GetActiveTab,
+  GetPopoutOriginContext,
   GetPopoutPlayerTabs,
+  TabMatchesPopoutOriginContext,
+  UpdatePopoutPlayerTab,
 } from "./tabs";
+import type {
+  PopoutOriginContext,
+  PopoutTabCreateData,
+  PopoutWindowCreateData,
+} from "./types";
+import { CloseWindow } from "./windows";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
+
+const ShowPopoutOpenFailureNotification = async (error?: unknown) => {
+  if (error !== undefined) {
+    console.error("[Background] Failed to open popout player", error);
+  } else {
+    console.error("[Background] Failed to open popout player");
+  }
+
+  const message = browser.i18n.getMessage(
+    "Notification_Error_PopoutOpenFailed",
+  );
+  await ShowBasicNotification({ message });
+};
+
+const ShowPopoutContextNotPreservedNotification = async () => {
+  const message = browser.i18n.getMessage(
+    "Notification_Warning_PrivateWindowNotPreserved",
+  );
+  await ShowBasicNotification({ message });
+};
+
+const AddOriginContextToTabCreateData = (
+  createData: PopoutTabCreateData,
+  originContext: PopoutOriginContext | null,
+) => {
+  if (originContext?.cookieStoreId !== undefined) {
+    createData.cookieStoreId = originContext.cookieStoreId;
+  }
+
+  if (typeof originContext?.windowId === "number") {
+    createData.windowId = originContext.windowId;
+  }
+
+  return createData;
+};
+
+const AddOriginContextToWindowCreateData = (
+  createData: PopoutWindowCreateData,
+  originContext: PopoutOriginContext | null,
+) => {
+  if (originContext?.cookieStoreId !== undefined) {
+    createData.cookieStoreId = originContext.cookieStoreId;
+  }
+
+  if (typeof originContext?.incognito === "boolean") {
+    createData.incognito = originContext.incognito;
+  }
+
+  return createData;
+};
 
 /**
  * Helper function to open the popout player from various points in the background script
@@ -55,12 +113,16 @@ export const OpenPopoutBackgroundHelper = async ({
     return false;
   }
 
-  const result = await OpenPopoutPlayer({
-    id,
-    list,
-    rotation,
-    originTabId: tabId,
-  });
+  if (
+    (await OpenPopoutPlayer({
+      id,
+      list,
+      rotation,
+      originTabId: tabId,
+    })) === null
+  ) {
+    return false;
+  }
 
   // we can't do anything if a tab ID wasn't given, as the "active" tab will now likely be the popout
   // (unless the user has configured it to open in the background, but checking for that is not guaranteed)
@@ -76,7 +138,7 @@ export const OpenPopoutBackgroundHelper = async ({
     }
   }
 
-  return result !== undefined && result !== null;
+  return true;
 };
 
 /**
@@ -205,23 +267,23 @@ export const OpenPopoutPlayer = async ({
     "behavior",
     "reuseWindowsTabs",
   );
+  const openInBackground = await Options.GetLocalOption(
+    "advanced",
+    "background",
+  );
+  const target = behavior.target.toLowerCase();
 
   if (reuseExistingWindowsTabs) {
-    const tabs = await GetPopoutPlayerTabs(originTabId);
+    const tabs = await GetPopoutPlayerTabs(originTabId, target === "tab");
     if (tabs.length > 0) {
       result = await Promise.all(
-        tabs.map((tab) => browser.tabs.update(tab.id, { url })),
+        tabs.map((tab) => UpdatePopoutPlayerTab(tab, url, !openInBackground)),
       );
       return result;
     }
   }
 
-  const openInBackground = await Options.GetLocalOption(
-    "advanced",
-    "background",
-  );
-
-  switch (behavior.target.toLowerCase()) {
+  switch (target) {
     case "tab":
       result = await OpenPopoutPlayerInTab(url, !openInBackground, originTabId);
       break;
@@ -246,23 +308,49 @@ export const OpenPopoutPlayer = async ({
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {boolean} [active] indicates if the tab should become the active tab in the window
  * @param {number} originTabId the ID of the tab from which the request to open the popout player originated
- * @returns {Promise<object>}
+ * @returns {Promise<object|null>}
  */
 export const OpenPopoutPlayerInTab = async (
   url: string,
   active: boolean = true,
   originTabId: number = -1,
-): Promise<object> => {
-  const createData = await AddContextualIdentityToDataObject(
-    {
-      url,
-      active,
-    },
-    originTabId,
+): Promise<object | null> => {
+  const originContext = await GetPopoutOriginContext(originTabId);
+  const createData = AddOriginContextToTabCreateData(
+    { url, active },
+    originContext,
   );
 
-  const tab = await browser.tabs.create(createData);
-  return tab;
+  let createdTab: Browser.tabs.Tab | undefined;
+
+  try {
+    createdTab = await browser.tabs.create(createData);
+  } catch (error) {
+    await ShowPopoutOpenFailureNotification(error);
+    return null;
+  }
+
+  if (createdTab === undefined) {
+    await ShowPopoutOpenFailureNotification(
+      new Error(
+        "[Background] OpenPopoutPlayerInTab() :: tabs.create() returned no tab",
+      ),
+    );
+    return null;
+  }
+
+  if (!TabMatchesPopoutOriginContext(createdTab, originContext, true)) {
+    console.warn(
+      "[Background] OpenPopoutPlayerInTab() :: Created tab did not preserve original browser context",
+    );
+    await ShowPopoutContextNotPreservedNotification();
+    if (createdTab.id !== undefined) {
+      await CloseTab(createdTab.id);
+    }
+    return null;
+  }
+
+  return createdTab;
 };
 
 /**
@@ -272,7 +360,7 @@ export const OpenPopoutPlayerInTab = async (
  * @param {number} originTabId the ID of the tab from which the request to open the popout player originated
  * @param {object} originalVideoWidth the width of the original video player
  * @param {boolean} originalVideoHeight the height of the original video player
- * @returns {Promise<object>}
+ * @returns {Promise<object|null>}
  */
 export const OpenPopoutPlayerInWindow = async (
   url: string,
@@ -280,37 +368,54 @@ export const OpenPopoutPlayerInWindow = async (
   originTabId: number = -1,
   originalVideoWidth: number = OPTION_DEFAULTS.size.width,
   originalVideoHeight: number = OPTION_DEFAULTS.size.height,
-): Promise<object> => {
+): Promise<object | null> => {
   const dimensions = await GetDimensionsForPopoutPlayerWindow(
     originalVideoWidth,
     originalVideoHeight,
   );
-
-  const createData = await AddContextualIdentityToDataObject(
+  const originContext = await GetPopoutOriginContext(originTabId);
+  const createData = AddOriginContextToWindowCreateData(
     {
       url,
       state: "normal",
       type: "popup",
       ...dimensions,
-    } as Browser.windows.CreateData,
-    originTabId,
+    },
+    originContext,
   );
 
   const isFirefox = await IsFirefox();
 
   if (isFirefox) {
-    (
-      createData as Browser.windows.CreateData & { titlePreface?: string }
-    ).titlePreface = await Options.GetLocalOption("advanced", "title");
+    createData.titlePreface = await Options.GetLocalOption("advanced", "title");
   }
 
-  const createdWindow = await browser.windows.create(createData);
+  let createdWindow: Browser.windows.Window | undefined;
 
-  if (createdWindow === undefined) {
+  try {
+    createdWindow = await browser.windows.create(createData);
+    if (createdWindow === undefined) {
+      throw new Error(
+        "windows.create() did not return a created Window object",
+      );
+    }
+  } catch (error) {
+    await ShowPopoutOpenFailureNotification(error);
+    return null;
+  }
+
+  if (
+    typeof originContext?.incognito === "boolean" &&
+    createdWindow.incognito !== originContext.incognito
+  ) {
     console.warn(
-      "[Background] OpenPopoutPlayerInWindow() :: windows.create() returned no window",
+      "[Background] OpenPopoutPlayerInWindow() :: Created window did not preserve original browsing context",
     );
-    return {};
+    await ShowPopoutContextNotPreservedNotification();
+    if (createdWindow.id !== undefined) {
+      await CloseWindow(createdWindow.id);
+    }
+    return null;
   }
 
   if (createdWindow.id === undefined) {
@@ -322,34 +427,49 @@ export const OpenPopoutPlayerInWindow = async (
 
   const windowId = createdWindow.id;
 
-  // IMPORTANT: the `top` and `left` position values are set here via `windows.update()`
-  // (instead of earlier in this function via `windows.create()`) due to a bug in Firefox
-  // (see https://bugzilla.mozilla.org/show_bug.cgi?id=1271047)
-  const position = await GetPositionForPopoutPlayerWindow();
-  if (position?.top !== undefined && position?.left !== undefined) {
-    await browser.windows.update(windowId, position);
+  try {
+    // IMPORTANT: the `top` and `left` position values are set here via `windows.update()`
+    // (instead of earlier in this function via `windows.create()`) due to a bug in Firefox
+    // (see https://bugzilla.mozilla.org/show_bug.cgi?id=1271047)
+    const position = await GetPositionForPopoutPlayerWindow();
+    if (position?.top !== undefined && position?.left !== undefined) {
+      await browser.windows.update(windowId, position);
+    }
+  } catch (error) {
+    console.warn(
+      "[Background] OpenPopoutPlayerInWindow() :: Unable to position created window",
+      error,
+    );
   }
 
-  if ((await Options.GetLocalOption("size", "mode")) === "maximized") {
-    await browser.windows.update(windowId, {
-      state: "maximized",
-    });
-  } else if (openInBackground) {
-    if (!isNaN(originTabId) && +originTabId > 0) {
-      // try to move the original window back to the foreground
-      const { windowId: originWindowId } = await browser.tabs.get(originTabId);
-      if (originWindowId !== undefined) {
-        await browser.windows.update(originWindowId, {
-          focused: true,
+  try {
+    if ((await Options.GetLocalOption("size", "mode")) === "maximized") {
+      await browser.windows.update(windowId, {
+        state: "maximized",
+      });
+    } else if (openInBackground) {
+      if (!isNaN(originTabId) && +originTabId > 0) {
+        // try to move the original window back to the foreground
+        const { windowId: originWindowId } =
+          await browser.tabs.get(originTabId);
+        if (originWindowId !== undefined) {
+          await browser.windows.update(originWindowId, {
+            focused: true,
+          });
+        }
+      } else {
+        // fallback: minimize the popout player window
+        await browser.windows.update(windowId, {
+          focused: false,
+          state: "minimized",
         });
       }
-    } else {
-      // fallback: minimize the popout player window
-      await browser.windows.update(windowId, {
-        focused: false,
-        state: "minimized",
-      });
     }
+  } catch (error) {
+    console.warn(
+      "[Background] OpenPopoutPlayerInWindow() :: Unable to update created window focus or state",
+      error,
+    );
   }
 
   return createdWindow;
