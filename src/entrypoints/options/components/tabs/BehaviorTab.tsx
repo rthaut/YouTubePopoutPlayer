@@ -105,7 +105,7 @@ export default function BehaviorTab() {
             "OptionsBehaviorAutoplayDescription",
           )}
         />
-        <Box mt={1}>
+        <Box sx={{ mt: 1 }}>
           <Alert severity="warning" icon={false}>
             <Typography
               dangerouslySetInnerHTML={{
@@ -197,31 +197,31 @@ export default function BehaviorTab() {
         icon={<TuneIcon />}
         title={browser.i18n.getMessage("OptionsHeadingBehavior")}
       />
-      <Box marginTop={1} marginBottom={2}>
+      <Box sx={{ mt: 1, mb: 2 }}>
         <TargetOptionControl />
       </Box>
       <Divider />
-      <Box marginY={2}>
+      <Box sx={{ my: 2 }}>
         <ReuseExistingOptionControl />
       </Box>
       <Divider />
-      <Box marginY={2}>
+      <Box sx={{ my: 2 }}>
         <ShowControlsOptionControl />
       </Box>
       <Divider />
-      <Box marginY={2}>
+      <Box sx={{ my: 2 }}>
         <AutoplayControl />
       </Box>
       <Divider />
-      <Box marginY={2}>
+      <Box sx={{ my: 2 }}>
         <ResumePlaybackControl />
       </Box>
       <Divider />
-      <Box marginY={2}>
+      <Box sx={{ my: 2 }}>
         <LoopControl />
       </Box>
       <Divider />
-      <Box marginY={2}>
+      <Box sx={{ my: 2 }}>
         <RotationControls />
       </Box>
     </Box>
