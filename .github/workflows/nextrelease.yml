@@ -16,10 +16,10 @@ jobs:
     if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.head_ref == 'nextrelease') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
           package-manager-cache: false
