@@ -120,7 +120,7 @@ export default function OptionsApp() {
               ))}
             </TabContext>
           </Paper>
-          <Box marginTop={1} marginBottom={2} marginX={1}>
+          <Box sx={{ mt: 1, mb: 2, mx: 1 }}>
             <Alert
               severity="info"
               icon={<CloudOffIcon color="primary" fontSize="inherit" />}
@@ -133,14 +133,13 @@ export default function OptionsApp() {
               />
             </Alert>
           </Box>
-          <Box marginTop={2} marginBottom={1}>
+          <Box sx={{ mt: 2, mb: 1 }}>
             <Stack
               direction={{
                 xs: "column",
                 sm: "row",
               }}
-              justifyContent="space-between"
-              alignItems="center"
+              sx={{ justifyContent: "space-between", alignItems: "center" }}
             >
               <ResetOptions />
               <FormControlLabel

@@ -214,7 +214,7 @@ function CustomDimensionsForm() {
     height !== options["height"];
 
   return (
-    <Box padding={2}>
+    <Box sx={{ p: 2 }}>
       <FormControl fullWidth>
         <InputLabel id="size-units-label">
           {browser.i18n.getMessage("DimensionUnitsLabel")}
@@ -237,8 +237,7 @@ function CustomDimensionsForm() {
         container
         spacing={2}
         direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
+        sx={{ justifyContent: "flex-start", alignItems: "center" }}
       >
         <Grid size="grow">
           <TextField
@@ -295,14 +294,14 @@ function CustomDimensionsForm() {
           />
         </Grid>
       </Grid>
-      <Box padding={2}>
+      <Box sx={{ p: 2 }}>
         <CustomDimensionsInfoTable
           units={units}
           width={width}
           height={height}
         />
       </Box>
-      <Box paddingX={8}>
+      <Box sx={{ px: 8 }}>
         <Button
           variant="contained"
           color="primary"
