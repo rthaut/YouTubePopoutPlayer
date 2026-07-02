@@ -7,6 +7,16 @@ export const YOUTUBE_DOMAINS = [YOUTUBE_DOMAIN, YOUTUBE_NOCOOKIE_DOMAIN];
 export const YOUTUBE_EMBED_URL = `https://www.${YOUTUBE_DOMAIN}/embed/`;
 export const YOUTUBE_NOCOOKIE_EMBED_URL = `https://www.${YOUTUBE_NOCOOKIE_DOMAIN}/embed/`;
 
+// Context menu and tab-query APIs require match patterns rather than concrete URL bases.
+export const YOUTUBE_EMBED_URL_PATTERNS = [
+  "*://*.youtube.com/embed/*",
+  "*://*.youtube-nocookie.com/embed/*",
+] as const;
+export const YOUTUBE_POPOUT_PLAYER_URL_PATTERNS =
+  YOUTUBE_EMBED_URL_PATTERNS.flatMap((pattern) => [
+    pattern + `?*${POPOUT_PLAYER_PARAM_NAME}=*`,
+    pattern + `&*${POPOUT_PLAYER_PARAM_NAME}=*`,
+  ]);
 export const YOUTUBE_VIDEO_URL_PATTERNS = [
   "*://youtu.be/*",
   "*://*.youtube.com/live/*",
