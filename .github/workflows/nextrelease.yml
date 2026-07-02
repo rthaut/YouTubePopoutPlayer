@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: "lts/*"
           package-manager-cache: false
-      - uses: dropseed/nextrelease@v1
+      - uses: dropseed/nextrelease@v2
         with:
           prepare_cmd: |
             sed -i -e "s/v$LAST_VERSION/v$NEXT_VERSION/g" README.md
