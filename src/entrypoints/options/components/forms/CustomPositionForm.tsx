@@ -51,7 +51,7 @@ function CustomPositionForm() {
     top !== options["top"] || left !== options["left"];
 
   return (
-    <Box padding={2}>
+    <Box sx={{ p: 2 }}>
       <Alert
         severity="info"
         icon={<WarningIcon color="secondary" fontSize="inherit" />}
@@ -66,8 +66,7 @@ function CustomPositionForm() {
         container
         spacing={2}
         direction="row"
-        justifyContent="flex-start"
-        alignItems="center"
+        sx={{ justifyContent: "flex-start", alignItems: "center" }}
       >
         <Grid size="grow">
           <TextField
@@ -116,7 +115,7 @@ function CustomPositionForm() {
           />
         </Grid>
       </Grid>
-      <Box paddingX={8}>
+      <Box sx={{ px: 8 }}>
         <Button
           variant="contained"
           color="primary"

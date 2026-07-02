@@ -15,8 +15,7 @@ export default function TabPanelHeader({
       wrap="nowrap"
       spacing={1}
       direction="row"
-      justifyContent="flex-start"
-      alignItems="center"
+      sx={{ justifyContent: "flex-start", alignItems: "center" }}
     >
       {icon && <Grid>{icon}</Grid>}
       <Grid size="grow">

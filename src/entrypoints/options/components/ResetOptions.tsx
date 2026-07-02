@@ -41,7 +41,7 @@ export default function ResetOptions() {
 
   return (
     <>
-      <Box mx={2}>
+      <Box sx={{ mx: 2 }}>
         <Button
           variant="contained"
           color="secondary"
