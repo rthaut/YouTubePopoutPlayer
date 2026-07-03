@@ -43,32 +43,64 @@
     "message": "Popout Player",
     "description": "The title for the player controls button that opens the popout player."
   },
-  "LinkContextMenuEntry_OpenVideo_Text": {
+  "ContextMenuEntry_Open_Text": {
     "message": "Open Video in Popout Player",
-    "description": "The text for the context menu entry added to video links."
+    "description": "The text for the context menu entry added to YouTube video links to open only the selected video."
   },
   "LinkContextMenuEntry_OpenPlaylist_Text": {
     "message": "Open Playlist in Popout Player",
     "description": "The text for the context menu entry added to playlist links."
   },
-  "LinkContextMenuEntry_OpenVideoRotateLeft_Text": {
-    "message": "Open Video in Popout Player (Rotated Left)",
-    "description": "The text for the context menu entry added to video links to open the video rotated left by 90 degrees."
+  "FrameContextMenuEntry_Open_Text": {
+    "message": "Open Embedded Video in Popout Player",
+    "description": "The text for the context menu entry added to embedded YouTube player frames."
   },
-  "LinkContextMenuEntry_OpenVideoRotateRight_Text": {
-    "message": "Open Video in Popout Player (Rotated Right)",
-    "description": "The text for the context menu entry added to video links to open the video rotated right by 90 degrees."
+  "LinkContextMenuEntry_RotateAndOpen_Text": {
+    "message": "Rotate and Open Link in Popout Player",
+    "description": "The text for the context menu entry that contains rotation options for YouTube video and playlist links."
+  },
+  "FrameContextMenuEntry_RotateAndOpen_Text": {
+    "message": "Rotate and Open Embedded Video in Popout Player",
+    "description": "The text for the context menu entry that contains rotation options for embedded YouTube player frames."
+  },
+  "ContextMenuEntry_RotatePopoutVideo_Text": {
+    "message": "Rotate Popout Player Video",
+    "description": "The text for the context menu entry that contains rotation options for the current popout player video."
+  },
+  "ContextMenuEntry_OpenRotatedLeft_Text": {
+    "message": "Open Video Rotated Left",
+    "description": "The text for the context menu entry added to YouTube video links to open the player rotated left by 90 degrees."
+  },
+  "ContextMenuEntry_OpenRotatedRight_Text": {
+    "message": "Open Video Rotated Right",
+    "description": "The text for the context menu entry added to YouTube video links to open the player rotated right by 90 degrees."
+  },
+  "LinkContextMenuEntry_OpenPlaylistRotatedLeft_Text": {
+    "message": "Open Playlist Rotated Left",
+    "description": "The text for the context menu entry added to playlist links to open the player rotated left by 90 degrees."
+  },
+  "LinkContextMenuEntry_OpenPlaylistRotatedRight_Text": {
+    "message": "Open Playlist Rotated Right",
+    "description": "The text for the context menu entry added to playlist links to open the player rotated right by 90 degrees."
+  },
+  "FrameContextMenuEntry_OpenRotatedLeft_Text": {
+    "message": "Open Embedded Video Rotated Left",
+    "description": "The text for the context menu entry added to embedded YouTube player frames to open the player rotated left by 90 degrees."
+  },
+  "FrameContextMenuEntry_OpenRotatedRight_Text": {
+    "message": "Open Embedded Video Rotated Right",
+    "description": "The text for the context menu entry added to embedded YouTube player frames to open the player rotated right by 90 degrees."
   },
   "Notification_Error_FailedToOpen": {
     "message": "Failed to determine the video and/or playlist to open. The popout player will not be opened.",
     "description": "The text used for the notification that is displayed when the popout player cannot be opened."
   },
   "PopoutPlayerControls_RotateVideo_Left": {
-    "message": "Rotate video left by 90 degrees",
+    "message": "Rotate Video Left by 90 Degrees",
     "description": "The title for the player controls button that rotates the video in the popout player to the left by 90 degrees."
   },
   "PopoutPlayerControls_RotateVideo_Right": {
-    "message": "Rotate video right by 90 degrees",
+    "message": "Rotate Video Right by 90 Degrees",
     "description": "The title for the player controls button that rotates the video in the popout player to the right by 90 degrees."
   },
   "OptionsPageTitle": {
@@ -196,7 +228,7 @@
     "message": "Show Rotation Menu Items"
   },
   "OptionsBehaviorShowRotationMenusDescription": {
-    "message": "This setting controls whether or not context (right-click) menu options to open the popout player initially rotated left or right are shown on video links. <strong>The default for this setting is disabled.</strong>"
+    "message": "This setting controls whether or not context (right-click) menu options to open the popout player initially rotated left or right are shown on video links and embedded videos. It also controls whether or not menu options to rotate the video are shown in the popout player. <strong>The default for this setting is disabled.</strong>"
   },
   "OptionsSettingDisabled": {
     "message": "This setting is not available when the following setting(s) are enabled: <strong>$SETTINGS$</strong>",

@@ -27,9 +27,14 @@ const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it con
  * @param {object} params
  * @param {string} params.url the URL containing a video ID and/or playlist
  * @param {number} [params.tabId=-1] the ID of the original tab
+ * @param {boolean} [params.includeList=true] if playlist context should be preserved
  * @param {boolean} [params.allowCloseTab=true] if the original tab can be closed (depending on the user's preference)
  * @param {boolean} [params.allowCloseTabOnAnyDomain=false] if the original tab can be closed regardless of which domain it is on
+ * @param {number} [params.time=0] playback time to resume from
+ * @param {number} [params.originalVideoWidth] the original video player's width, if known
+ * @param {number} [params.originalVideoHeight] the original video player's height, if known
  * @param {number} [params.rotation=0] the initial video rotation amount
+ * @param {number} [params.contentFrameId] the specific frame to message after opening the popout player
  * @returns {Promise<boolean>} if the popout player was opened
  */
 export const OpenPopoutBackgroundHelper = async ({
@@ -38,14 +43,22 @@ export const OpenPopoutBackgroundHelper = async ({
   includeList = true,
   allowCloseTab = true,
   allowCloseTabOnAnyDomain = false,
+  time = 0,
+  originalVideoWidth = undefined,
+  originalVideoHeight = undefined,
   rotation = 0,
+  contentFrameId = undefined,
 }: {
   url: string;
   includeList?: boolean;
   tabId?: number;
   allowCloseTab?: boolean;
   allowCloseTabOnAnyDomain?: boolean;
+  time?: number;
+  originalVideoWidth?: number;
+  originalVideoHeight?: number;
   rotation?: number;
+  contentFrameId?: number;
 }): Promise<boolean> => {
   const id = GetVideoIDFromURL(url);
   const list = includeList ? GetPlaylistIDFromURL(url) : undefined;
@@ -58,6 +71,9 @@ export const OpenPopoutBackgroundHelper = async ({
   const result = await OpenPopoutPlayer({
     id,
     list,
+    time,
+    originalVideoWidth,
+    originalVideoHeight,
     rotation,
     originTabId: tabId,
   });
@@ -70,9 +86,13 @@ export const OpenPopoutBackgroundHelper = async ({
       await CloseTab(tabId, !allowCloseTabOnAnyDomain);
     } else {
       // pause the video player (if there is one) in the tab
-      await browser.tabs.sendMessage(tabId, {
-        action: "pause-video-player",
-      });
+      await browser.tabs.sendMessage(
+        tabId,
+        {
+          action: "pause-video-player",
+        },
+        contentFrameId !== undefined ? { frameId: contentFrameId } : undefined,
+      );
     }
   }
 
