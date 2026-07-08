@@ -21,6 +21,7 @@ import {
   UpdatePopoutPlayerTab,
 } from "./tabs";
 import type {
+  PopoutOpenResult,
   PopoutOriginContext,
   PopoutTabCreateData,
   PopoutWindowCreateData,
@@ -31,12 +32,10 @@ const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it conf
 const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it configurable)
 
 const ShowPopoutOpenFailureNotification = async (error?: unknown) => {
-  if (error !== undefined) {
-    console.error("[Background] Failed to open popout player", error);
-  } else {
-    console.error("[Background] Failed to open popout player");
-  }
-
+  console.error(
+    "[Background] Failed to open popout player",
+    error ?? "An unknown error occurred",
+  );
   const message = browser.i18n.getMessage(
     "Notification_Error_PopoutOpenFailed",
   );
@@ -80,6 +79,40 @@ const AddOriginContextToWindowCreateData = (
   return createData;
 };
 
+const BuildTabsOpenResult = (
+  tabs: (Browser.tabs.Tab | undefined)[],
+  target: "tab" | "window",
+  reused: boolean,
+): PopoutOpenResult => {
+  const definedTabs = tabs.filter(
+    (tab): tab is Browser.tabs.Tab => tab !== undefined,
+  );
+
+  return {
+    target,
+    reused,
+    tabIds: definedTabs
+      .map((tab) => tab.id)
+      .filter((id): id is number => id !== undefined),
+    windowIds: [
+      ...new Set(
+        definedTabs
+          .map((tab) => tab.windowId)
+          .filter((id): id is number => id !== undefined),
+      ),
+    ],
+  };
+};
+
+const BuildWindowOpenResult = (
+  window: Browser.windows.Window,
+): PopoutOpenResult => ({
+  target: "window",
+  reused: false,
+  tabIds: [],
+  windowIds: window.id !== undefined ? [window.id] : [],
+});
+
 /**
  * Helper function to open the popout player from various points in the background script
  * @param {object} params
@@ -113,19 +146,20 @@ export const OpenPopoutBackgroundHelper = async ({
     return false;
   }
 
-  if (
-    (await OpenPopoutPlayer({
-      id,
-      list,
-      rotation,
-      originTabId: tabId,
-    })) === null
-  ) {
+  const result = await OpenPopoutPlayer({
+    id,
+    list,
+    rotation,
+    originTabId: tabId,
+  });
+
+  if (result === undefined || result === null) {
     return false;
   }
 
-  // we can't do anything if a tab ID wasn't given, as the "active" tab will now likely be the popout
-  // (unless the user has configured it to open in the background, but checking for that is not guaranteed)
+  // NOTE: we can only act on the origin tab here (close it or pause its video); we cannot touch the
+  // popout itself because `OpenPopoutPlayer()` does not return the created window/tab ID(s) in a usable form
+  // TODO: have `OpenPopoutPlayer()` return the created window/tab ID(s) so callers can act on the popout directly (see the return-type cleanup TODO on `OpenPopoutPlayer()`)
   if (+tabId > 0) {
     if (allowCloseTab && (await Options.GetLocalOption("advanced", "close"))) {
       // close the tab if allowed and configured
@@ -143,7 +177,7 @@ export const OpenPopoutBackgroundHelper = async ({
 
 /**
  * Opens the popout player
- * @returns {Promise<object|null>} the opened window/tab
+ * @returns {Promise<PopoutOpenResult|null>} a normalized description of the opened popout, or null if it was not opened
  */
 export const OpenPopoutPlayer = async ({
   id = "",
@@ -161,9 +195,7 @@ export const OpenPopoutPlayer = async ({
   originalVideoHeight?: number;
   rotation?: number;
   originTabId?: number;
-}): Promise<object | null> => {
-  let result;
-
+}): Promise<PopoutOpenResult | null> => {
   // if the origin tab ID wasn't explicitly provided, assume it was the active tab
   if (isNaN(originTabId) || +originTabId <= 0) {
     console.warn("Invalid or missing origin tab ID", originTabId);
@@ -273,34 +305,43 @@ export const OpenPopoutPlayer = async ({
   );
   const target = behavior.target.toLowerCase();
 
+  const normalizedTarget = target === "tab" ? "tab" : "window";
+
   if (reuseExistingWindowsTabs) {
+    // NOTE: these tabs are already filtered to the origin context by `GetPopoutPlayerTabs()`, so the
+    // "context not preserved" verification below (for freshly created tabs/windows) is intentionally skipped here
     const tabs = await GetPopoutPlayerTabs(originTabId, target === "tab");
     if (tabs.length > 0) {
-      result = await Promise.all(
+      // TODO: maybe this should just modify the first tab (or most recent tab) instead of all of them?
+      const updatedTabs = await Promise.all(
         tabs.map((tab) => UpdatePopoutPlayerTab(tab, url, !openInBackground)),
       );
-      return result;
+      return BuildTabsOpenResult(updatedTabs, normalizedTarget, true);
     }
   }
 
   switch (target) {
-    case "tab":
-      result = await OpenPopoutPlayerInTab(url, !openInBackground, originTabId);
-      break;
+    case "tab": {
+      const tab = await OpenPopoutPlayerInTab(
+        url,
+        !openInBackground,
+        originTabId,
+      );
+      return tab === null ? null : BuildTabsOpenResult([tab], "tab", false);
+    }
 
     case "window":
-    default:
-      result = await OpenPopoutPlayerInWindow(
+    default: {
+      const window = await OpenPopoutPlayerInWindow(
         url,
         openInBackground,
         originTabId,
         originalVideoWidth,
         originalVideoHeight,
       );
-      break;
+      return window === null ? null : BuildWindowOpenResult(window);
+    }
   }
-
-  return result;
 };
 
 /**
@@ -308,13 +349,13 @@ export const OpenPopoutPlayer = async ({
  * @param {string} url the URL of the Embedded Player to open in a new window
  * @param {boolean} [active] indicates if the tab should become the active tab in the window
  * @param {number} originTabId the ID of the tab from which the request to open the popout player originated
- * @returns {Promise<object|null>}
+ * @returns {Promise<Browser.tabs.Tab|null>} the created tab, or null if it was not opened (or the origin context was not preserved)
  */
 export const OpenPopoutPlayerInTab = async (
   url: string,
   active: boolean = true,
   originTabId: number = -1,
-): Promise<object | null> => {
+): Promise<Browser.tabs.Tab | null> => {
   const originContext = await GetPopoutOriginContext(originTabId);
   const createData = AddOriginContextToTabCreateData(
     { url, active },
@@ -360,7 +401,7 @@ export const OpenPopoutPlayerInTab = async (
  * @param {number} originTabId the ID of the tab from which the request to open the popout player originated
  * @param {object} originalVideoWidth the width of the original video player
  * @param {boolean} originalVideoHeight the height of the original video player
- * @returns {Promise<object|null>}
+ * @returns {Promise<Browser.windows.Window|null>} the created window, or null if it was not opened (or the origin context was not preserved)
  */
 export const OpenPopoutPlayerInWindow = async (
   url: string,
@@ -368,7 +409,7 @@ export const OpenPopoutPlayerInWindow = async (
   originTabId: number = -1,
   originalVideoWidth: number = OPTION_DEFAULTS.size.width,
   originalVideoHeight: number = OPTION_DEFAULTS.size.height,
-): Promise<object | null> => {
+): Promise<Browser.windows.Window | null> => {
   const dimensions = await GetDimensionsForPopoutPlayerWindow(
     originalVideoWidth,
     originalVideoHeight,
@@ -404,6 +445,9 @@ export const OpenPopoutPlayerInWindow = async (
     return null;
   }
 
+  // NOTE: we can only verify the incognito state here; a `windows.Window` does not expose `cookieStoreId`,
+  // so a popup that opens in the wrong Firefox container (but the correct incognito state) cannot be detected.
+  // Container preservation for popup windows is therefore best-effort only (see the FAQ / PR notes for the known limitation).
   if (
     typeof originContext?.incognito === "boolean" &&
     createdWindow.incognito !== originContext.incognito

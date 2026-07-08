@@ -1,5 +1,6 @@
 import type { Browser } from "wxt/browser";
 import {
+  OpenPopoutPlayer,
   OpenPopoutPlayerInTab,
   OpenPopoutPlayerInWindow,
 } from "@/entrypoints/background/popout";
@@ -55,6 +56,7 @@ const StubBrowser = ({
   originTab = CreateTab(),
   createdTab = CreateTab(),
   createdWindow = CreateWindow(),
+  queryTabs = [],
   tabsCreateError,
   windowsCreateError,
   windowsUpdateError,
@@ -64,6 +66,7 @@ const StubBrowser = ({
   originTab?: TestTab;
   createdTab?: TestTab | undefined;
   createdWindow?: Browser.windows.Window | undefined;
+  queryTabs?: TestTab[];
   tabsCreateError?: Error;
   windowsCreateError?: Error;
   windowsUpdateError?: Error;
@@ -75,7 +78,14 @@ const StubBrowser = ({
   const notificationsCreate = vi.fn();
   const tabsCreate = vi.fn();
   const tabsGet = vi.fn().mockResolvedValue(originTab);
+  const tabsQuery = vi.fn().mockResolvedValue(queryTabs);
   const tabsRemove = vi.fn().mockResolvedValue(undefined);
+  const tabsUpdate = vi
+    .fn()
+    .mockImplementation(async (tabId: number, props: { url: string }) => {
+      const match = queryTabs.find((tab) => tab.id === tabId) ?? CreateTab();
+      return { ...match, ...props };
+    });
   const windowsCreate = vi.fn();
   const windowsRemove = vi.fn().mockResolvedValue(undefined);
   const windowsUpdate = vi.fn().mockImplementation(async () => {
@@ -122,7 +132,9 @@ const StubBrowser = ({
     tabs: {
       create: tabsCreate,
       get: tabsGet,
+      query: tabsQuery,
       remove: tabsRemove,
+      update: tabsUpdate,
     },
     windows: {
       create: windowsCreate,
@@ -134,7 +146,9 @@ const StubBrowser = ({
   return {
     notificationsCreate,
     tabsCreate,
+    tabsQuery,
     tabsRemove,
+    tabsUpdate,
     windowsCreate,
     windowsRemove,
     windowsUpdate,
@@ -292,6 +306,77 @@ describe("OpenPopoutPlayerInTab", () => {
     expect(notificationsCreate).toHaveBeenCalledWith(
       expect.objectContaining({
         message: "Notification_Warning_PrivateWindowNotPreserved",
+      }),
+    );
+  });
+});
+
+describe("OpenPopoutPlayer", () => {
+  it("returns a normalized result for a newly opened window", async () => {
+    StubBrowser({
+      createdWindow: CreateWindow({ id: 789 }),
+    });
+
+    await expect(
+      OpenPopoutPlayer({ id: "dQw4w9WgXcQ", originTabId: 42 }),
+    ).resolves.toEqual({
+      target: "window",
+      reused: false,
+      tabIds: [],
+      windowIds: [789],
+    });
+  });
+
+  it("returns a normalized result for a newly opened tab", async () => {
+    StubBrowser({
+      optionOverrides: {
+        "behavior.target": "tab",
+      },
+      createdTab: CreateTab({ id: 123, windowId: 456 }),
+    });
+
+    await expect(
+      OpenPopoutPlayer({ id: "dQw4w9WgXcQ", originTabId: 42 }),
+    ).resolves.toEqual({
+      target: "tab",
+      reused: false,
+      tabIds: [123],
+      windowIds: [456],
+    });
+  });
+
+  it("returns a reused result when an existing popout tab is updated", async () => {
+    const { tabsCreate, tabsUpdate } = StubBrowser({
+      optionOverrides: {
+        "behavior.target": "tab",
+        "behavior.reuseWindowsTabs": true,
+      },
+      queryTabs: [CreateTab({ id: 555, windowId: 456 })],
+    });
+
+    await expect(
+      OpenPopoutPlayer({ id: "dQw4w9WgXcQ", originTabId: 42 }),
+    ).resolves.toEqual({
+      target: "tab",
+      reused: true,
+      tabIds: [555],
+      windowIds: [456],
+    });
+    expect(tabsUpdate).toHaveBeenCalledWith(555, expect.objectContaining({}));
+    expect(tabsCreate).not.toHaveBeenCalled();
+  });
+
+  it("returns null when neither a video nor a playlist can be opened", async () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { notificationsCreate, tabsCreate, windowsCreate } = StubBrowser();
+
+    await expect(OpenPopoutPlayer({ originTabId: 42 })).resolves.toBeNull();
+
+    expect(tabsCreate).not.toHaveBeenCalled();
+    expect(windowsCreate).not.toHaveBeenCalled();
+    expect(notificationsCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Notification_Error_FailedToOpen",
       }),
     );
   });
