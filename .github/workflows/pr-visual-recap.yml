@@ -3,10 +3,18 @@ name: PR Visual Recap
 # Visual code review: a coding agent runs the repo's visual-recap skill over the
 # PR diff, publishes a plan, and upserts one sticky comment with a screenshot.
 # Plain `pull_request` (NOT `pull_request_target`) so fork code never sees secrets.
+#
+# Cost policy: recaps auto-run only for LARGE changes — at least
+# VISUAL_RECAP_MIN_FILES changed files OR VISUAL_RECAP_MIN_LINES changed lines
+# (defaults 20 / 600, overridable via repo variables). Smaller PRs skip
+# silently in the gate job, BEFORE any model invocation or spend. Adding the
+# `visual-recap` label forces a run at any size; remove and re-add the label
+# to regenerate. `synchronize` is intentionally NOT a trigger (no regeneration
+# on every push), and `closed` was removed with it (no regeneration on merge).
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review, closed]
+    types: [opened, reopened, ready_for_review, labeled]
 
 permissions:
   contents: read
@@ -27,14 +35,17 @@ jobs:
     # Hard gate, evaluated before any step runs: only same-repository branches
     # from trusted authors (OWNER/MEMBER/COLLABORATOR) start this workflow.
     # Fork PRs, bot PRs (Dependabot etc.), and drafts are skipped entirely —
-    # no secrets, no comments, no red checks. The gate step below additionally
+    # no secrets, no comments, no red checks. For `labeled` events, only the
+    # `visual-recap` label starts the job — every other label addition skips
+    # the whole workflow with zero noise. The gate step below additionally
     # no-ops gracefully while the recap secrets are not yet configured, so this
     # file can merge before any API key exists.
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association) &&
       github.event.pull_request.user.type != 'Bot' &&
-      github.event.pull_request.draft == false
+      github.event.pull_request.draft == false &&
+      (github.event.action != 'labeled' || github.event.label.name == 'visual-recap')
     # A custom plain-label runner is allowed only for trusted same-repo authors.
     # Fork and untrusted PRs are forced onto GitHub-hosted ubuntu-latest before
     # any step starts. The only fromJSON input is this static association list.
@@ -62,6 +73,9 @@ jobs:
           VISUAL_RECAP_MODEL: ${{ vars.VISUAL_RECAP_MODEL }}
           VISUAL_RECAP_RUNS_ON: ${{ vars.VISUAL_RECAP_RUNS_ON || '"ubuntu-latest"' }}
           VISUAL_RECAP_SKILL_SOURCE: ${{ env.VISUAL_RECAP_SKILL_SOURCE }}
+          # Auto-run size thresholds (cost gate). Overridable via repo variables.
+          VISUAL_RECAP_MIN_FILES: ${{ vars.VISUAL_RECAP_MIN_FILES || '20' }}
+          VISUAL_RECAP_MIN_LINES: ${{ vars.VISUAL_RECAP_MIN_LINES || '600' }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         with:
           script: |
@@ -70,8 +84,31 @@ jobs:
 
             if (!pr) reasons.push('no pull_request payload');
             if (pr && pr.draft) reasons.push('draft PR');
-            if (pr && context.payload.action === 'closed' && !pr.merged) {
-              reasons.push('closed without merge');
+
+            // Cost gate: auto-run only for large changes. The `visual-recap`
+            // label forces a run at any size (labeled events reach this job
+            // only for that exact label, per the job-level if — re-adding the
+            // label after removing it re-fires this workflow and regenerates
+            // the recap). Thresholds come from repo variables
+            // VISUAL_RECAP_MIN_FILES / VISUAL_RECAP_MIN_LINES (defaults
+            // 20 files / 600 changed lines). Size stats are the raw GitHub PR
+            // numbers from the event payload (lockfiles included) — no API
+            // call, no checkout, and the recap job (and every model
+            // invocation) is skipped entirely when the gate says no.
+            const parseThreshold = (raw, fallback) => {
+              const value = Number.parseInt(String(raw == null ? '' : raw).trim(), 10);
+              return Number.isInteger(value) && value >= 0 ? value : fallback;
+            };
+            const minFiles = parseThreshold(process.env.VISUAL_RECAP_MIN_FILES, 20);
+            const minLines = parseThreshold(process.env.VISUAL_RECAP_MIN_LINES, 600);
+            const labelNames = ((pr && pr.labels) || []).map((l) => ((l && l.name) || '').toLowerCase());
+            const hasRecapLabel = labelNames.includes('visual-recap');
+            const changedFiles = (pr && pr.changed_files) || 0;
+            const changedLines = ((pr && pr.additions) || 0) + ((pr && pr.deletions) || 0);
+            let skippedBySize = false;
+            if (pr && !hasRecapLabel && changedFiles < minFiles && changedLines < minLines) {
+              skippedBySize = true;
+              reasons.push(`below auto-run size threshold (${changedFiles} files / ${changedLines} changed lines; auto-runs at >= ${minFiles} files or >= ${minLines} lines) — add the "visual-recap" label to generate a recap anyway`);
             }
 
             // Fork PRs only receive repo secrets when the org/repo opts into
@@ -195,8 +232,11 @@ jobs:
             }
 
             // When skipping, upsert a sticky recap comment with a short skip
-            // line so the PR always explains why the recap job did not run.
-            if (!run && pr) {
+            // line so the PR explains why the recap job did not run — EXCEPT
+            // when the size gate skipped it: size skips are the expected
+            // outcome for most PRs, so they stay silent (notice annotation
+            // only, no comment spam on every small PR).
+            if (!run && pr && !skippedBySize) {
               try {
                 const MARKER = '<!-- pr-visual-recap -->';
                 const { data: comments } = await github.rest.issues.listComments({
