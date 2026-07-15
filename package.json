@@ -90,7 +90,7 @@
     "prettier": "^3.6.2",
     "sharp": "^0.34.5",
     "stylelint": "^17.14.0",
-    "trash-cli": "^7.0.0",
+    "trash-cli": "^7.2.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.61.1",
     "vitest": "^4.1.9",
