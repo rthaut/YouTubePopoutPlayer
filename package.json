@@ -92,7 +92,7 @@
     "stylelint": "^17.14.0",
     "trash-cli": "^7.2.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.61.1",
+    "typescript-eslint": "^8.65.0",
     "vitest": "^4.1.9",
     "web-ext": "^10.4.0",
     "webextension-polyfill": "^0.12.0",
