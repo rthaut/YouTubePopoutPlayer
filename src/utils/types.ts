@@ -30,3 +30,10 @@ export interface StoreDimensionsAndPositionData {
     left?: number;
   };
 }
+
+export interface VideoPlayerInfo {
+  time?: number;
+  width?: number;
+  height?: number;
+  paused?: boolean;
+}
