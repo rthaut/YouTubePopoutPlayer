@@ -1,3 +1,5 @@
+// Shared message payload types used across extension entrypoints.
+
 export interface RuntimeMessage {
   action: string;
   data:

@@ -47,12 +47,12 @@ export const OpenPopoutFromContentScript = async (
   data: object,
 ): Promise<boolean> => {
   try {
-    await browser.runtime.sendMessage({
+    const result = await browser.runtime.sendMessage({
       action: "open-popout",
       data,
     });
 
-    return true;
+    return result !== undefined && result !== null && result !== false;
   } catch (error) {
     console.error(
       "[Content] YouTubePopoutPlayer OpenPopoutFromContentScript() :: Error",
