@@ -17,6 +17,7 @@ import {
   CloseTab,
   GetActiveTab,
   GetPopoutPlayerTabs,
+  UpdatePopoutPlayerTab,
 } from "./tabs";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
@@ -205,21 +206,20 @@ export const OpenPopoutPlayer = async ({
     "behavior",
     "reuseWindowsTabs",
   );
+  const openInBackground = await Options.GetLocalOption(
+    "advanced",
+    "background",
+  );
 
   if (reuseExistingWindowsTabs) {
     const tabs = await GetPopoutPlayerTabs(originTabId);
     if (tabs.length > 0) {
       result = await Promise.all(
-        tabs.map((tab) => browser.tabs.update(tab.id, { url })),
+        tabs.map((tab) => UpdatePopoutPlayerTab(tab, url, !openInBackground)),
       );
       return result;
     }
   }
-
-  const openInBackground = await Options.GetLocalOption(
-    "advanced",
-    "background",
-  );
 
   switch (behavior.target.toLowerCase()) {
     case "tab":
