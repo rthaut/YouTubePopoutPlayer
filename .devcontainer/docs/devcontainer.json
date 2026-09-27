@@ -1,0 +1,19 @@
+{
+  "name": "Docs (GitHub Pages)",
+  "build": {
+    "dockerfile": "../../docs/Dockerfile",
+    "context": "../../docs"
+  },
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}/docs",
+  "forwardPorts": [4000, 35729],
+  "portsAttributes": {
+    "4000": { "label": "Jekyll", "onAutoForward": "openBrowser" },
+    "35729": { "label": "LiveReload", "onAutoForward": "silent" }
+  },
+  "postCreateCommand": "bundle install",
+  "customizations": {
+    "vscode": {
+      "extensions": ["Shopify.ruby-lsp", "sissel.shopify-liquid"]
+    }
+  }
+}
