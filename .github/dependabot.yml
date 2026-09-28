@@ -12,6 +12,14 @@ updates:
           - version-update:semver-major
     groups:
       npm-minor-patch:
+        patterns:
+          - "*"
+        # 0.x packages can ship breaking changes in minor releases, so these
+        # get their own PRs.
+        exclude-patterns:
+          - wxt
+          - "@types/chrome"
+          - sharp
         update-types:
           - minor
           - patch
