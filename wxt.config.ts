@@ -69,10 +69,10 @@ export default defineConfig({
 
     if (browser === "firefox") {
       // Chrome is limited to 3 default shortcut keys, so we only provide these additional defaults for Firefox
-      commands["open-popout-force-close-command"].suggested_key = {
+      commands["open-popout-force-close-command"]!.suggested_key = {
         default: "Alt+Shift+PageUp",
       };
-      commands["open-popout-no-close-command"].suggested_key = {
+      commands["open-popout-no-close-command"]!.suggested_key = {
         default: "Alt+Shift+PageDown",
       };
     }

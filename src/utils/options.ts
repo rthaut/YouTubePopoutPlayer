@@ -76,9 +76,9 @@ const Options = (() => {
 
       const result: OptionsType = {};
 
-      Object.keys(options).forEach((domain) => {
-        Object.keys(options[domain]).forEach((name) => {
-          result[`${domain}.${name}`] = options[domain][name];
+      Object.entries(options).forEach(([domain, domainOptions]) => {
+        Object.entries(domainOptions).forEach(([name, value]) => {
+          result[`${domain}.${name}`] = value;
         });
       });
 
@@ -106,7 +106,7 @@ const Options = (() => {
       Object.keys(options).forEach((option) => {
         if (option.includes(".")) {
           // handle options should be stored in the format [domain].[key]
-          const [domain, opt] = option.split(".");
+          const [domain, opt] = option.split(".") as [string, string];
 
           if (result[domain] === undefined) {
             result[domain] = {};
