@@ -1,4 +1,4 @@
-import { IsPopoutPlayer } from "@/utils/misc";
+import { IsPopoutPlayerURL } from "@/utils/misc";
 import Options from "@/utils/options";
 
 import { CloseTab } from ".";
@@ -71,6 +71,10 @@ export const WatchForPageChanges = () => {
  * Appends a new entry to the context (right-click) menu of the YouTube video player
  */
 const InsertPopoutEntryIntoContextMenu = () => {
+  if (IsPopoutPlayerURL(window.location.href)) {
+    return false;
+  }
+
   try {
     const contextMenu = document.querySelector<HTMLElement>(".ytp-contextmenu");
     if (!contextMenu) {
@@ -141,7 +145,7 @@ const InsertPopoutEntryIntoContextMenu = () => {
  * This method checks the configurable "controls" option, so the button is only inserted when appropriate
  */
 const InsertPopoutButtonIntoPlayerControls = async () => {
-  if (IsPopoutPlayer(window.location)) {
+  if (IsPopoutPlayerURL(window.location.href)) {
     try {
       const controls = await Options.GetLocalOption("behavior", "controls");
       if (controls.toLowerCase() !== "extended") {
@@ -240,7 +244,7 @@ const InsertPopoutButtonIntoPlayerControls = async () => {
  * NOTE: Rotation buttons are only added within the popout player
  */
 const InsertRotationButtonsIntoPlayerControls = async () => {
-  if (!IsPopoutPlayer(window.location)) {
+  if (!IsPopoutPlayerURL(window.location.href)) {
     console.info(
       "Video player rotation controls are currently only supported within the popout player",
     );

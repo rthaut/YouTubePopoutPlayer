@@ -1,8 +1,4 @@
-import {
-  POPOUT_PLAYER_PARAM_NAME,
-  YOUTUBE_EMBED_URL,
-  YOUTUBE_NOCOOKIE_EMBED_URL,
-} from "@/utils/constants";
+import { POPOUT_PLAYER_PARAM_NAME, YOUTUBE_DOMAINS } from "@/utils/constants";
 
 /**
  * Returns the number of pixels a given percentage is for the screen (in the specified dimension)
@@ -60,22 +56,27 @@ export const IsFirefox = async (): Promise<boolean> => {
 };
 
 /**
- * Determines if the given `Location` is for a popout player
- * @param {Location} location window/document `Location`
- * @returns {boolean} whether or not the given `Location` is a popout player
+ * Determines if the given URL is for a popout player
+ * @param {string} url the URL to check
+ * @returns {boolean} whether or not the URL is for a popout player
  */
-export const IsPopoutPlayer = (location: Location): boolean => {
-  if (
-    location.href.startsWith(YOUTUBE_EMBED_URL) ||
-    location.href.startsWith(YOUTUBE_NOCOOKIE_EMBED_URL)
-  ) {
-    const params = new URLSearchParams(location.search.substring(1));
-    if (params.get(POPOUT_PLAYER_PARAM_NAME)) {
-      return true;
-    }
-  }
+export const IsPopoutPlayerURL = (url: string): boolean => {
+  try {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.toLowerCase();
+    const isYouTubeDomain = YOUTUBE_DOMAINS.some(
+      (domain) => hostname === domain || hostname.endsWith(`.${domain}`),
+    );
 
-  return false;
+    return (
+      isYouTubeDomain &&
+      parsed.pathname.startsWith("/embed/") &&
+      parsed.searchParams.has(POPOUT_PLAYER_PARAM_NAME)
+    );
+  } catch (error) {
+    console.warn("Failed to parse URL while checking popout player", error);
+    return false;
+  }
 };
 
 /**
