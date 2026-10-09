@@ -76,7 +76,12 @@ const GetModeOptionMessages = <TDomain extends ModeOptionDomain>(
   domain: TDomain,
   option: ModeOptionValue<TDomain>,
 ): ModeOptionMessages =>
-  (MODE_OPTION_MESSAGES[domain] as Record<string, ModeOptionMessages>)[option];
+  (
+    MODE_OPTION_MESSAGES[domain] as Record<
+      ModeOptionValue<TDomain>,
+      ModeOptionMessages
+    >
+  )[option];
 
 const GetModeMessages = <TDomain extends ModeOptionDomain>(
   domain: TDomain,

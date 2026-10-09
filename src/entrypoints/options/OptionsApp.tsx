@@ -89,7 +89,7 @@ export default function OptionsApp() {
   } as const;
   const tabNames = Object.keys(tabs) as Array<keyof typeof tabs>;
 
-  const [tabValue, setTabValue] = React.useState(tabNames[0]);
+  const [tabValue, setTabValue] = React.useState<string>(tabNames[0]!);
 
   const handleTabChange = (event: React.SyntheticEvent, tabValue: string) => {
     setTabValue(tabValue);
