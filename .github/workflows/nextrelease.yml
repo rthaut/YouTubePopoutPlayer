@@ -15,6 +15,8 @@ jobs:
   sync:
     if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed' && github.head_ref == 'nextrelease') }}
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
     steps:
       # A run queued by a release PR update can start after the PR is merged.
       # nextrelease would then open an empty release PR, so skip those runs.
@@ -54,6 +56,17 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: v
           changelog: CHANGELOG.md
+      - name: Read the released version
+        id: release
+        if: ${{ github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Release version ') }}
+        run: echo "tag=v$(node -p 'require("./package.json").version')" >> "$GITHUB_OUTPUT"
+
+  release-assets:
+    needs: sync
+    if: ${{ needs.sync.outputs.tag != '' }}
+    uses: ./.github/workflows/release-assets.yml
+    with:
+      tag: ${{ needs.sync.outputs.tag }}
 
   reset-nextrelease-branch:
     if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.head_ref == 'nextrelease' }}
