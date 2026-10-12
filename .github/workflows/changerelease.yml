@@ -11,9 +11,8 @@ permissions:
 
 jobs:
   sync:
-    # nextrelease creates the semver tag after the release commit lands. Let
-    # nextrelease run changerelease after that point so this branch-triggered
-    # workflow does not fail while the tag is still missing.
+    # The release commit's tag does not exist yet when this runs, so the
+    # nextrelease workflow syncs that release after it pushes the tag.
     if: ${{ github.event_name != 'push' || github.ref_type == 'tag' || !startsWith(github.event.head_commit.message, 'Release version ') }}
     runs-on: ubuntu-latest
     steps:
