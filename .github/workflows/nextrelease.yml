@@ -15,15 +15,29 @@ jobs:
   sync:
     if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed' && github.head_ref == 'nextrelease') }}
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
     steps:
+      # A run queued by a release PR update can start after the PR is merged.
+      # nextrelease would then open an empty release PR, so skip those runs.
+      - name: Check the release PR is still open
+        id: release-pr
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: echo "state=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json state --jq .state)" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v7
+        if: ${{ github.event_name == 'push' || steps.release-pr.outputs.state == 'OPEN' }}
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v7
+        if: ${{ github.event_name == 'push' || steps.release-pr.outputs.state == 'OPEN' }}
         with:
           node-version: "lts/*"
           package-manager-cache: false
       - uses: dropseed/nextrelease@v1
+        if: ${{ github.event_name == 'push' || steps.release-pr.outputs.state == 'OPEN' }}
         with:
           prepare_cmd: |
             sed -i -e "s/v$LAST_VERSION/v$NEXT_VERSION/g" README.md
@@ -33,6 +47,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: v
           next_branch: nextrelease
+      # nextrelease pushes the version tag with GITHUB_TOKEN, which does not
+      # trigger the changerelease workflow, so sync the release notes here.
       - name: Sync GitHub release from changelog
         if: ${{ github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Release version ') }}
         uses: dropseed/changerelease@v1
@@ -40,6 +56,17 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: v
           changelog: CHANGELOG.md
+      - name: Read the released version
+        id: release
+        if: ${{ github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Release version ') }}
+        run: echo "tag=v$(node -p 'require("./package.json").version')" >> "$GITHUB_OUTPUT"
+
+  release-assets:
+    needs: sync
+    if: ${{ needs.sync.outputs.tag != '' }}
+    uses: ./.github/workflows/release-assets.yml
+    with:
+      tag: ${{ needs.sync.outputs.tag }}
 
   reset-nextrelease-branch:
     if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.head_ref == 'nextrelease' }}
