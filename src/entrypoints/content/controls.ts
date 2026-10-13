@@ -11,9 +11,9 @@ import { OpenPopoutForPageVideo, RotateVideoPlayer } from "./player";
 const OpenPopoutPlayerControlsClickEventHandler = async (event: MouseEvent) => {
   event.preventDefault();
 
-  await OpenPopoutForPageVideo();
+  const opened = await OpenPopoutForPageVideo();
 
-  if (await Options.GetLocalOption("advanced", "close")) {
+  if (opened && (await Options.GetLocalOption("advanced", "close"))) {
     await CloseTab(true);
   }
 };
