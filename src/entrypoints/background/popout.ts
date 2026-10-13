@@ -17,6 +17,7 @@ import {
   CloseTab,
   GetActiveTab,
   GetPopoutPlayerTabs,
+  UpdatePopoutPlayerTab,
 } from "./tabs";
 
 const WIDTH_PADDING = 16; // TODO: find a way to calculate this (or make it configurable)
@@ -205,21 +206,23 @@ export const OpenPopoutPlayer = async ({
     "behavior",
     "reuseWindowsTabs",
   );
-
-  if (reuseExistingWindowsTabs) {
-    const tabs = await GetPopoutPlayerTabs(originTabId);
-    if (tabs.length > 0) {
-      result = await Promise.all(
-        tabs.map((tab) => browser.tabs.update(tab.id, { url })),
-      );
-      return result;
-    }
-  }
-
   const openInBackground = await Options.GetLocalOption(
     "advanced",
     "background",
   );
+
+  if (reuseExistingWindowsTabs) {
+    const tabs = await GetPopoutPlayerTabs(originTabId);
+    if (tabs.length > 0) {
+      // only the first tab is brought to the foreground, so the focused tab does not depend on update order
+      result = await Promise.all(
+        tabs.map((tab, index) =>
+          UpdatePopoutPlayerTab(tab, url, !openInBackground && index === 0),
+        ),
+      );
+      return result;
+    }
+  }
 
   switch (behavior.target.toLowerCase()) {
     case "tab":

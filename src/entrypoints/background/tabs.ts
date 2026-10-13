@@ -104,6 +104,39 @@ export const GetPopoutPlayerTabs = async (
   );
 
 /**
+ * Updates an existing popout player tab with the given URL.
+ * @param {Browser.tabs.Tab} tab the existing popout player tab
+ * @param {string} url the updated popout player URL
+ * @param {boolean} [active] indicates if the tab should become active and its window focused (focus is best-effort)
+ * @returns {Promise<Browser.tabs.Tab | undefined>}
+ */
+export const UpdatePopoutPlayerTab = async (
+  tab: Browser.tabs.Tab,
+  url: string,
+  active: boolean = true,
+): Promise<Browser.tabs.Tab | undefined> => {
+  const updatedTab = await browser.tabs.update(tab.id, {
+    ...(active ? { active: true } : {}),
+    url,
+  });
+
+  if (active && tab.windowId !== undefined) {
+    try {
+      await browser.windows.update(tab.windowId, {
+        focused: true,
+      });
+    } catch (error) {
+      console.warn(
+        "[Background] UpdatePopoutPlayerTab() :: Failed to focus window",
+        error,
+      );
+    }
+  }
+
+  return updatedTab;
+};
+
+/**
  * Gets the value of the `cookieStoreId` property of the specified tab
  * @param {number} tabId the ID of the tab
  * @returns {Promise<string | undefined>} the `cookieStoreId` property value or `undefined` if unavailable
