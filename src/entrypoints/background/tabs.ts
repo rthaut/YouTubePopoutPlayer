@@ -107,7 +107,7 @@ export const GetPopoutPlayerTabs = async (
  * Updates an existing popout player tab with the given URL.
  * @param {Browser.tabs.Tab} tab the existing popout player tab
  * @param {string} url the updated popout player URL
- * @param {boolean} [active] indicates if the tab should become active
+ * @param {boolean} [active] indicates if the tab should become active and its window focused (focus is best-effort)
  * @returns {Promise<Browser.tabs.Tab | undefined>}
  */
 export const UpdatePopoutPlayerTab = async (
@@ -121,9 +121,16 @@ export const UpdatePopoutPlayerTab = async (
   });
 
   if (active && tab.windowId !== undefined) {
-    await browser.windows.update(tab.windowId, {
-      focused: true,
-    });
+    try {
+      await browser.windows.update(tab.windowId, {
+        focused: true,
+      });
+    } catch (error) {
+      console.warn(
+        "[Background] UpdatePopoutPlayerTab() :: Failed to focus window",
+        error,
+      );
+    }
   }
 
   return updatedTab;

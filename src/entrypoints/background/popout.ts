@@ -214,8 +214,11 @@ export const OpenPopoutPlayer = async ({
   if (reuseExistingWindowsTabs) {
     const tabs = await GetPopoutPlayerTabs(originTabId);
     if (tabs.length > 0) {
+      // only the first tab is brought to the foreground, so the focused tab does not depend on update order
       result = await Promise.all(
-        tabs.map((tab) => UpdatePopoutPlayerTab(tab, url, !openInBackground)),
+        tabs.map((tab, index) =>
+          UpdatePopoutPlayerTab(tab, url, !openInBackground && index === 0),
+        ),
       );
       return result;
     }

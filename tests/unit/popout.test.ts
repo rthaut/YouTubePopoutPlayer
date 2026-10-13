@@ -36,6 +36,7 @@ const createTab = (id: number): Browser.tabs.Tab => ({
   id,
   incognito: false,
   index: 0,
+  lastAccessed: 0,
   pinned: false,
   selected: false,
   windowId: 456,
@@ -50,11 +51,12 @@ describe("OpenPopoutPlayer", () => {
     { openInBackground: false, expectedActive: true },
     { openInBackground: true, expectedActive: false },
   ])(
-    "updates reused popout tabs with active=$expectedActive when openInBackground=$openInBackground",
+    "updates the first reused popout tab with active=$expectedActive when openInBackground=$openInBackground",
     async ({ openInBackground, expectedActive }) => {
       const tabs = [createTab(123), createTab(124)];
       mocks.getLocalOptionsForDomain.mockResolvedValue({
         ...OPTION_DEFAULTS.behavior,
+        target: "tab",
         reuseWindowsTabs: true,
       });
       mocks.getLocalOption.mockImplementation(
@@ -77,9 +79,8 @@ describe("OpenPopoutPlayer", () => {
       mocks.getPopoutPlayerTabs.mockResolvedValue(tabs);
       mocks.updatePopoutPlayerTab.mockResolvedValue({ id: 123 });
 
-      const { OpenPopoutPlayer } = await import(
-        "@/entrypoints/background/popout"
-      );
+      const { OpenPopoutPlayer } =
+        await import("@/entrypoints/background/popout");
 
       await OpenPopoutPlayer({
         id: "dQw4w9WgXcQ",
@@ -88,13 +89,16 @@ describe("OpenPopoutPlayer", () => {
 
       expect(mocks.getPopoutPlayerTabs).toHaveBeenCalledWith(99);
       expect(mocks.updatePopoutPlayerTab).toHaveBeenCalledTimes(2);
-      for (const tab of tabs) {
-        expect(mocks.updatePopoutPlayerTab).toHaveBeenCalledWith(
-          tab,
-          expect.stringContaining("https://www.youtube.com/embed/dQw4w9WgXcQ?"),
-          expectedActive,
-        );
-      }
+      expect(mocks.updatePopoutPlayerTab).toHaveBeenCalledWith(
+        tabs[0],
+        expect.stringContaining("https://www.youtube.com/embed/dQw4w9WgXcQ?"),
+        expectedActive,
+      );
+      expect(mocks.updatePopoutPlayerTab).toHaveBeenCalledWith(
+        tabs[1],
+        expect.stringContaining("https://www.youtube.com/embed/dQw4w9WgXcQ?"),
+        false,
+      );
     },
   );
 });

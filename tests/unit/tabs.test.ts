@@ -12,6 +12,7 @@ const createTab = (): Browser.tabs.Tab => ({
   id: 123,
   incognito: false,
   index: 0,
+  lastAccessed: 0,
   pinned: false,
   selected: false,
   windowId: 456,
@@ -70,5 +71,28 @@ describe("UpdatePopoutPlayerTab", () => {
       url: "https://www.youtube.com/embed/dQw4w9WgXcQ?popout=1",
     });
     expect(updateWindow).not.toHaveBeenCalled();
+  });
+
+  it("resolves with the updated tab when focusing its window fails", async () => {
+    const updateTab = vi.fn().mockResolvedValue({ id: 123, active: true });
+    const updateWindow = vi.fn().mockRejectedValue(new Error("No window"));
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.stubGlobal("browser", {
+      tabs: {
+        update: updateTab,
+      },
+      windows: {
+        update: updateWindow,
+      },
+    });
+
+    await expect(
+      UpdatePopoutPlayerTab(
+        createTab(),
+        "https://www.youtube.com/embed/dQw4w9WgXcQ?popout=1",
+        true,
+      ),
+    ).resolves.toEqual({ id: 123, active: true });
+    expect(updateWindow).toHaveBeenCalledWith(456, { focused: true });
   });
 });
