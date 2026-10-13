@@ -8,8 +8,10 @@ import Options from "@/utils/options";
 
 import { OpenPopoutBackgroundHelper } from "./popout";
 
+type MenuProperties = Parameters<typeof browser.contextMenus.create>[0];
+
 const GetMenus = async () => {
-  const menus: Browser.contextMenus.CreateProperties[] = [
+  const menus: MenuProperties[] = [
     {
       id: "OpenVideo",
       title: browser.i18n.getMessage("LinkContextMenuEntry_OpenVideo_Text"),

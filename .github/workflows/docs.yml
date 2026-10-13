@@ -1,0 +1,35 @@
+name: docs
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "docs/**"
+      - ".devcontainer/docs/**"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    branches: [master]
+    paths:
+      - "docs/**"
+      - ".devcontainer/docs/**"
+      - ".github/workflows/docs.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build the docs image
+        run: docker build --tag ytpp-docs docs
+      - name: Build the site in the container
+        run: >-
+          docker run --rm
+          --env JEKYLL_GITHUB_TOKEN
+          --volume "$PWD/docs:/srv/jekyll"
+          ytpp-docs
+          bundle exec jekyll build --trace
+        env:
+          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

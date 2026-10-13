@@ -30,3 +30,10 @@ links:
 
 share_tweet_text: Power up your YouTube browsing experience with the free YouTube Popout Player browser extension by @rthaut.
 share_tweet_url: https://rthaut.github.io/YouTubePopoutPlayer/
+
+exclude:
+  - Dockerfile
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor

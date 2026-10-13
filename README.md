@@ -112,6 +112,34 @@ npm run format:config
 npm run format:workflows
 ```
 
+### Working on the Docs Site
+
+The [project site](https://rthaut.github.io/YouTubePopoutPlayer/) lives in `docs/` and is published by GitHub Pages with the [`github-pages` gem](https://github.com/github/pages-gem). `docs/Dockerfile` pins the Ruby version that GitHub Pages uses (see [pages.github.com/versions.json](https://pages.github.com/versions.json)), so a local build matches production without installing Ruby.
+
+With Docker, build the image and serve the site with live reload at <http://localhost:4000/>:
+
+```sh
+docker build --tag ytpp-docs docs
+docker run --rm -it -p 4000:4000 -p 35729:35729 -v "$PWD/docs:/srv/jekyll" ytpp-docs
+```
+
+Run any other Jekyll command in the same container, for example a one-off build or a verbose build that shows stack traces:
+
+```sh
+docker run --rm -v "$PWD/docs:/srv/jekyll" ytpp-docs bundle exec jekyll build
+docker run --rm -v "$PWD/docs:/srv/jekyll" ytpp-docs bundle exec jekyll build --trace --verbose
+```
+
+Set `JEKYLL_GITHUB_TOKEN` (pass it with `--env JEKYLL_GITHUB_TOKEN`) to avoid GitHub API rate-limit warnings from `jekyll-github-metadata`.
+
+With VS Code or GitHub Codespaces, open the repo in the **Docs (GitHub Pages)** dev container (`.devcontainer/docs/devcontainer.json`). It builds from the same Dockerfile, opens in `docs/`, and forwards ports 4000 and 35729. Inside the container, run:
+
+```sh
+bundle exec jekyll serve --host 0.0.0.0 --livereload --force_polling
+```
+
+The `docs` workflow builds the site in this container for every change to `docs/`, so a broken build fails CI. To update the Pages gem set, run `bundle update github-pages` in the container, and update the Ruby version in `docs/Dockerfile` when GitHub Pages changes it.
+
 [chrome-url]: https://chrome.google.com/webstore/detail/youtube-popout-player/kmfikkopdhmbdbkndkamabamlkkgkpod
 [chrome-image-version]: https://img.shields.io/chrome-web-store/v/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
 [chrome-image-users]: https://img.shields.io/chrome-web-store/d/kmfikkopdhmbdbkndkamabamlkkgkpod?logo=googlechrome&style=for-the-badge
