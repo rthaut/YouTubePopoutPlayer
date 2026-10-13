@@ -102,7 +102,7 @@ export const OptionsProvider: React.FC<{ children: React.ReactNode }> = ({
 };
 
 export const useOptionsContext = (): OptionsContextType => {
-  const context = useContext(OptionsContext);
+  const context = React.useContext(OptionsContext);
   if (!context) {
     throw new Error("useOptionsContext must be used within an OptionsProvider");
   }
@@ -110,7 +110,7 @@ export const useOptionsContext = (): OptionsContextType => {
 };
 
 export const useOption = (domain: OptionDomain, name: string): OptionHook => {
-  const context = useContext(OptionsContext);
+  const context = React.useContext(OptionsContext);
   if (!context) {
     throw new Error("useOption must be used within an OptionsProvider");
   }
@@ -118,7 +118,7 @@ export const useOption = (domain: OptionDomain, name: string): OptionHook => {
 };
 
 export const useDomainOptions = (domain: OptionDomain): DomainOptionsHook => {
-  const context = useContext(OptionsContext);
+  const context = React.useContext(OptionsContext);
   if (!context) {
     throw new Error("useDomainOptions must be used within an OptionsProvider");
   }
