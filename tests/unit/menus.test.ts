@@ -1,5 +1,6 @@
 import {
   GetYouTubeURLFromMenuInfo,
+  InitMenus,
   OnMenuClicked,
 } from "@/entrypoints/background/menus";
 import { ShowBasicNotification } from "@/entrypoints/background/notifications";
@@ -23,17 +24,30 @@ const mockedOpenPopoutBackgroundHelper = vi.mocked(OpenPopoutBackgroundHelper);
 const mockedShowBasicNotification = vi.mocked(ShowBasicNotification);
 
 const VIDEO_ID = "dQw4w9WgXcQ";
+const PLAYING_VIDEO_ID = "YuMdsHIXatY";
 const videoUrl = `https://www.youtube.com/embed/${VIDEO_ID}`;
+const videoUrlWithPlaylist = `${videoUrl}?list=PL123`;
 const playlistUrl = "https://www.youtube.com/embed/videoseries?list=PL123";
 const popoutUrl = `${videoUrl}?${POPOUT_PLAYER_PARAM_NAME}=1`;
 const videoWatchUrl = `https://www.youtube.com/watch?v=${VIDEO_ID}`;
 const videoWatchUrlWithPlaylist = `${videoWatchUrl}&list=PL123`;
+const otherVideoWatchUrl = `https://www.youtube.com/watch?v=${PLAYING_VIDEO_ID}`;
 
 const menuInfo = (info: Partial<ContextMenuClickData>): ContextMenuClickData =>
   info as ContextMenuClickData;
 
 const tab = (tabInfo: Partial<ContextMenuClickTab>): ContextMenuClickTab =>
   tabInfo as ContextMenuClickTab;
+
+const stubFramePlayerInfo = (playerInfo: object | undefined) => {
+  const sendMessage = vi.fn(async () => playerInfo);
+  vi.stubGlobal("browser", {
+    tabs: {
+      sendMessage,
+    },
+  });
+  return sendMessage;
+};
 
 beforeEach(() => {
   mockedOpenPopoutBackgroundHelper.mockResolvedValue(true);
@@ -46,41 +60,34 @@ afterEach(() => {
 });
 
 describe("context menu URL selection", () => {
-  it("uses the embedded frame URL when a YouTube video frame is selected", () => {
-    expect(GetYouTubeURLFromMenuInfo(menuInfo({ frameUrl: videoUrl }))).toBe(
-      videoUrl,
-    );
+  it("uses the embedded frame URL for frame actions", () => {
+    expect(
+      GetYouTubeURLFromMenuInfo(
+        menuInfo({ frameUrl: playlistUrl, linkUrl: otherVideoWatchUrl }),
+        "frame",
+      ),
+    ).toBe(playlistUrl);
   });
 
-  it("uses the embedded frame URL when a YouTube playlist frame is selected", () => {
-    expect(GetYouTubeURLFromMenuInfo(menuInfo({ frameUrl: playlistUrl }))).toBe(
-      playlistUrl,
-    );
+  it("uses the clicked link URL for link actions inside an embedded frame", () => {
+    expect(
+      GetYouTubeURLFromMenuInfo(
+        menuInfo({ frameUrl: videoUrl, linkUrl: otherVideoWatchUrl }),
+        "link",
+      ),
+    ).toBe(otherVideoWatchUrl);
   });
 
-  it("uses the first supported URL from the context menu data", () => {
+  it("ignores URLs that do not identify a video or playlist", () => {
     expect(
       GetYouTubeURLFromMenuInfo(
         menuInfo({
-          linkUrl: "https://example.com/video",
           frameUrl: videoUrl,
-          pageUrl: `https://www.youtube.com/watch?v=${VIDEO_ID}`,
+          linkUrl: "https://example.com/video",
         }),
+        "link",
       ),
-    ).toBe(videoUrl);
-  });
-
-  it("prefers the frame URL when both frame and link URLs are available", () => {
-    const frameUrl = `${videoUrl}?list=PL123`;
-
-    expect(
-      GetYouTubeURLFromMenuInfo(
-        menuInfo({
-          frameUrl,
-          linkUrl: `https://www.youtube.com/watch?v=${VIDEO_ID}`,
-        }),
-      ),
-    ).toBe(frameUrl);
+    ).toBeUndefined();
   });
 
   it("allows popout player URLs to open a new popout player", () => {
@@ -90,6 +97,7 @@ describe("context menu URL selection", () => {
           frameUrl: popoutUrl,
           pageUrl: "https://example.com/page",
         }),
+        "frame",
       ),
     ).toBe(popoutUrl);
   });
@@ -132,44 +140,143 @@ describe("context menu click handling", () => {
     );
   });
 
-  it("opens embedded video actions without playlist context when requested", async () => {
-    const frameUrl = `${videoUrl}?list=PL123`;
+  it("opens the clicked link rather than the containing embedded frame", async () => {
+    const sendMessage = stubFramePlayerInfo({ time: 42 });
 
     await OnMenuClicked(
       menuInfo({
-        menuItemId: "OpenVideoRotateLeft",
-        frameUrl,
-        linkUrl: videoWatchUrlWithPlaylist,
+        menuItemId: "OpenVideo",
+        frameUrl: videoUrl,
+        frameId: 3,
+        linkUrl: otherVideoWatchUrl,
       }),
       tab({ id: 1 }),
     );
 
+    expect(sendMessage).not.toHaveBeenCalled();
     expect(mockedOpenPopoutBackgroundHelper).toHaveBeenCalledWith(
       expect.objectContaining({
-        url: frameUrl,
-        includeList: false,
-        rotation: 270,
+        url: otherVideoWatchUrl,
+        allowCloseTab: true,
+        contentFrameId: undefined,
       }),
     );
   });
 
-  it("opens embedded playlist actions with playlist context when requested", async () => {
-    const frameUrl = `${videoUrl}?list=PL123`;
+  it("opens embedded video actions without playlist context", async () => {
+    stubFramePlayerInfo({ id: VIDEO_ID, time: 42 });
 
     await OnMenuClicked(
       menuInfo({
-        menuItemId: "OpenPlaylistRotateRight",
-        frameUrl,
-        linkUrl: videoWatchUrlWithPlaylist,
+        menuItemId: "OpenEmbeddedVideoRotateLeft",
+        frameUrl: videoUrlWithPlaylist,
+        frameId: 3,
       }),
       tab({ id: 1 }),
     );
 
     expect(mockedOpenPopoutBackgroundHelper).toHaveBeenCalledWith(
       expect.objectContaining({
-        url: frameUrl,
+        url: videoUrlWithPlaylist,
+        includeList: false,
+        allowCloseTab: false,
+        rotation: 270,
+        contentFrameId: 3,
+      }),
+    );
+  });
+
+  it("opens embedded playlist actions with playlist context", async () => {
+    stubFramePlayerInfo({ id: VIDEO_ID, time: 42 });
+
+    await OnMenuClicked(
+      menuInfo({
+        menuItemId: "OpenEmbeddedPlaylistRotateRight",
+        frameUrl: videoUrlWithPlaylist,
+        frameId: 3,
+      }),
+      tab({ id: 1 }),
+    );
+
+    expect(mockedOpenPopoutBackgroundHelper).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: videoUrlWithPlaylist,
         includeList: true,
         rotation: 90,
+      }),
+    );
+  });
+
+  it("opens the video playing in an embedded playlist at its current time", async () => {
+    const sendMessage = stubFramePlayerInfo({
+      id: PLAYING_VIDEO_ID,
+      time: 42,
+      width: 640,
+      height: 360,
+    });
+
+    await OnMenuClicked(
+      menuInfo({
+        menuItemId: "OpenEmbeddedPlaylist",
+        frameUrl: playlistUrl,
+        frameId: 3,
+      }),
+      tab({ id: 1 }),
+    );
+
+    expect(sendMessage).toHaveBeenCalledWith(
+      1,
+      { action: "get-video-player-info" },
+      { frameId: 3 },
+    );
+    expect(mockedOpenPopoutBackgroundHelper).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: playlistUrl,
+        videoId: PLAYING_VIDEO_ID,
+        time: 42,
+        originalVideoWidth: 640,
+        originalVideoHeight: 360,
+      }),
+    );
+  });
+
+  it("does not resume an embedded playlist when the playing video is unknown", async () => {
+    stubFramePlayerInfo({ time: 42 });
+
+    await OnMenuClicked(
+      menuInfo({
+        menuItemId: "OpenEmbeddedPlaylist",
+        frameUrl: videoUrlWithPlaylist,
+        frameId: 3,
+      }),
+      tab({ id: 1 }),
+    );
+
+    expect(mockedOpenPopoutBackgroundHelper).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: videoUrlWithPlaylist,
+        videoId: undefined,
+        time: undefined,
+      }),
+    );
+  });
+
+  it("resumes a single embedded video when the player does not report its ID", async () => {
+    stubFramePlayerInfo({ time: 42 });
+
+    await OnMenuClicked(
+      menuInfo({
+        menuItemId: "OpenEmbeddedVideo",
+        frameUrl: videoUrl,
+        frameId: 3,
+      }),
+      tab({ id: 1 }),
+    );
+
+    expect(mockedOpenPopoutBackgroundHelper).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: videoUrl,
+        time: 42,
       }),
     );
   });
@@ -215,5 +322,32 @@ describe("context menu click handling", () => {
     expect(mockedShowBasicNotification).toHaveBeenCalledWith({
       message: "Failed to open popout player",
     });
+  });
+});
+
+describe("InitMenus", () => {
+  it("registers the click listener before menus are rebuilt", () => {
+    const addListener = vi.fn();
+    vi.stubGlobal("browser", {
+      contextMenus: {
+        // never resolves, so anything registered after it would not run
+        removeAll: vi.fn(() => new Promise(() => {})),
+        create: vi.fn(),
+        onClicked: {
+          addListener,
+        },
+      },
+      storage: {
+        local: {
+          onChanged: {
+            addListener: vi.fn(),
+          },
+        },
+      },
+    });
+
+    InitMenus();
+
+    expect(addListener).toHaveBeenCalledWith(OnMenuClicked);
   });
 });

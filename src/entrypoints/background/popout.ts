@@ -26,6 +26,7 @@ const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it con
  * Helper function to open the popout player from various points in the background script
  * @param {object} params
  * @param {string} params.url the URL containing a video ID and/or playlist
+ * @param {string} [params.videoId] the video ID to open instead of the one in the URL
  * @param {number} [params.tabId=-1] the ID of the original tab
  * @param {boolean} [params.includeList=true] if playlist context should be preserved
  * @param {boolean} [params.allowCloseTab=true] if the original tab can be closed (depending on the user's preference)
@@ -39,6 +40,7 @@ const HEIGHT_PADDING = 40; // TODO: find a way to calculate this (or make it con
  */
 export const OpenPopoutBackgroundHelper = async ({
   url,
+  videoId = undefined,
   tabId = -1,
   includeList = true,
   allowCloseTab = true,
@@ -50,6 +52,7 @@ export const OpenPopoutBackgroundHelper = async ({
   contentFrameId = undefined,
 }: {
   url: string;
+  videoId?: string;
   includeList?: boolean;
   tabId?: number;
   allowCloseTab?: boolean;
@@ -60,7 +63,7 @@ export const OpenPopoutBackgroundHelper = async ({
   rotation?: number;
   contentFrameId?: number;
 }): Promise<boolean> => {
-  const id = GetVideoIDFromURL(url);
+  const id = videoId ?? GetVideoIDFromURL(url);
   const list = includeList ? GetPlaylistIDFromURL(url) : undefined;
 
   if (!(id || list)) {

@@ -1,4 +1,5 @@
 import {
+  YOUTUBE_EMBED_PLAYLIST_URL_PATTERNS,
   YOUTUBE_EMBED_URL_PATTERNS,
   YOUTUBE_PLAYLIST_URL_PATTERNS,
   YOUTUBE_POPOUT_PLAYER_URL_PATTERNS,
@@ -17,6 +18,7 @@ type ContextMenuClickListener = Parameters<
 >[0];
 type ContextMenuClickData = Parameters<ContextMenuClickListener>[0];
 type ContextMenuClickTab = Parameters<ContextMenuClickListener>[1];
+type ContextMenuTarget = "link" | "frame";
 
 const MENU_IDS = {
   openVideo: "OpenVideo",
@@ -31,6 +33,9 @@ const MENU_IDS = {
   openEmbeddedVideo: "OpenEmbeddedVideo",
   openEmbeddedVideoRotateLeft: "OpenEmbeddedVideoRotateLeft",
   openEmbeddedVideoRotateRight: "OpenEmbeddedVideoRotateRight",
+  openEmbeddedPlaylist: "OpenEmbeddedPlaylist",
+  openEmbeddedPlaylistRotateLeft: "OpenEmbeddedPlaylistRotateLeft",
+  openEmbeddedPlaylistRotateRight: "OpenEmbeddedPlaylistRotateRight",
   rotatePopoutVideoLeft: "RotatePopoutVideoLeft",
   rotatePopoutVideoRight: "RotatePopoutVideoRight",
 } as const;
@@ -59,6 +64,12 @@ const GetMenus = async () => {
       title: browser.i18n.getMessage("FrameContextMenuEntry_Open_Text"),
       contexts: ["frame"],
       documentUrlPatterns: Array.from(YOUTUBE_EMBED_URL_PATTERNS),
+    },
+    {
+      id: MENU_IDS.openEmbeddedPlaylist,
+      title: browser.i18n.getMessage("FrameContextMenuEntry_OpenPlaylist_Text"),
+      contexts: ["frame"],
+      documentUrlPatterns: Array.from(YOUTUBE_EMBED_PLAYLIST_URL_PATTERNS),
     },
   ];
 
@@ -133,6 +144,24 @@ const GetMenus = async () => {
       documentUrlPatterns: Array.from(YOUTUBE_EMBED_URL_PATTERNS),
     });
     menus.push({
+      id: MENU_IDS.openEmbeddedPlaylistRotateLeft,
+      parentId: MENU_IDS.frameRotationParent,
+      title: browser.i18n.getMessage(
+        "FrameContextMenuEntry_OpenPlaylistRotatedLeft_Text",
+      ),
+      contexts: ["frame"],
+      documentUrlPatterns: Array.from(YOUTUBE_EMBED_PLAYLIST_URL_PATTERNS),
+    });
+    menus.push({
+      id: MENU_IDS.openEmbeddedPlaylistRotateRight,
+      parentId: MENU_IDS.frameRotationParent,
+      title: browser.i18n.getMessage(
+        "FrameContextMenuEntry_OpenPlaylistRotatedRight_Text",
+      ),
+      contexts: ["frame"],
+      documentUrlPatterns: Array.from(YOUTUBE_EMBED_PLAYLIST_URL_PATTERNS),
+    });
+    menus.push({
       id: MENU_IDS.popoutRotationParent,
       title: browser.i18n.getMessage("ContextMenuEntry_RotatePopoutVideo_Text"),
       contexts: ["page", "video"],
@@ -161,10 +190,6 @@ const CreateMenus = async (reset = true) => {
   try {
     if (reset) {
       await browser.contextMenus.removeAll();
-    }
-
-    if (!browser.contextMenus.onClicked.hasListener(OnMenuClicked)) {
-      browser.contextMenus.onClicked.addListener(OnMenuClicked);
     }
 
     const menus = await GetMenus();
@@ -219,6 +244,18 @@ export const OnMenuClicked = async (
       success = await OpenEmbeddedVideo(info, tab, 90);
       break;
 
+    case MENU_IDS.openEmbeddedPlaylist:
+      success = await OpenEmbeddedPlaylist(info, tab);
+      break;
+
+    case MENU_IDS.openEmbeddedPlaylistRotateLeft:
+      success = await OpenEmbeddedPlaylist(info, tab, 270);
+      break;
+
+    case MENU_IDS.openEmbeddedPlaylistRotateRight:
+      success = await OpenEmbeddedPlaylist(info, tab, 90);
+      break;
+
     case MENU_IDS.rotatePopoutVideoLeft:
       success = await RotatePopoutVideo(tab, -90);
       break;
@@ -237,6 +274,8 @@ export const OnMenuClicked = async (
  * Initializes menus and event handlers
  */
 export const InitMenus = async () => {
+  // listeners must be registered synchronously so clicks that wake the service worker are not missed
+  browser.contextMenus.onClicked.addListener(OnMenuClicked);
   CreateMenus();
   browser.storage.local.onChanged.addListener((changes) => {
     if (Object.keys(changes).includes("behavior.showRotationMenus")) {
@@ -247,9 +286,10 @@ export const InitMenus = async () => {
 
 export const GetYouTubeURLFromMenuInfo = (
   info: ContextMenuClickData,
+  target: ContextMenuTarget,
 ): string | undefined => {
-  const candidates = [info.frameUrl, info.linkUrl, info.srcUrl, info.pageUrl];
-  return candidates.find(IsSupportedYouTubeOpenURL);
+  const url = target === "frame" ? info.frameUrl : info.linkUrl;
+  return IsSupportedYouTubeOpenURL(url) ? url : undefined;
 };
 
 const IsSupportedYouTubeOpenURL = (url: string | undefined): boolean => {
@@ -284,12 +324,25 @@ const GetPlayerInfoFromFrame = async (
   }
 };
 
-const OpenEmbeddedVideo = async (
+const OpenEmbeddedVideo = (
   info: ContextMenuClickData,
   tab: ContextMenuClickTab,
   rotation: number = 0,
 ): Promise<boolean> => {
   return OpenMenuPopout(info, tab, {
+    target: "frame",
+    includeList: false,
+    rotation,
+  });
+};
+
+const OpenEmbeddedPlaylist = (
+  info: ContextMenuClickData,
+  tab: ContextMenuClickTab,
+  rotation: number = 0,
+): Promise<boolean> => {
+  return OpenMenuPopout(info, tab, {
+    target: "frame",
     includeList: true,
     rotation,
   });
@@ -301,6 +354,7 @@ const OpenVideo = (
   rotation: number = 0,
 ): Promise<boolean> => {
   return OpenMenuPopout(info, tab, {
+    target: "link",
     includeList: false,
     rotation,
   });
@@ -312,6 +366,7 @@ const OpenPlaylist = (
   rotation: number = 0,
 ): Promise<boolean> => {
   return OpenMenuPopout(info, tab, {
+    target: "link",
     includeList: true,
     rotation,
   });
@@ -321,31 +376,38 @@ const OpenMenuPopout = async (
   info: ContextMenuClickData,
   tab: ContextMenuClickTab,
   {
+    target,
     includeList,
     rotation = 0,
   }: {
+    target: ContextMenuTarget;
     includeList: boolean;
     rotation?: number;
   },
 ): Promise<boolean> => {
-  const url = GetYouTubeURLFromMenuInfo(info);
+  const url = GetYouTubeURLFromMenuInfo(info, target);
   if (!url) {
     console.warn("No video or playlist detected from context menu", info);
     return false;
   }
 
-  const isEmbeddedFrame = IsSupportedYouTubeOpenURL(info.frameUrl);
+  const isEmbeddedFrame = target === "frame";
   const playerInfo = isEmbeddedFrame
     ? await GetPlayerInfoFromFrame(tab?.id, info.frameId)
     : undefined;
 
+  // a playlist frame URL may not identify the playing video, so only resume when the player reports which video it is
+  const canResume =
+    playerInfo?.id !== undefined || GetPlaylistIDFromURL(url) === undefined;
+
   return await OpenPopoutBackgroundHelper({
     url,
+    videoId: playerInfo?.id,
     tabId: tab?.id,
     includeList,
     allowCloseTab: !isEmbeddedFrame,
     allowCloseTabOnAnyDomain: false,
-    time: playerInfo?.time,
+    time: canResume ? playerInfo?.time : undefined,
     originalVideoWidth: playerInfo?.width,
     originalVideoHeight: playerInfo?.height,
     rotation,

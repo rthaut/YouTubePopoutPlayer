@@ -38,7 +38,8 @@ export const GetVideoIDFromURL = (
   let id = undefined;
 
   const result = (external ? VideoLinkOrEmbedRegEx : VideoIDRegEx).exec(url);
-  if (result && result[1]) {
+  // playlist embeds use the 11 character `videoseries` path segment in place of a video ID
+  if (result && result[1] && result[1] !== "videoseries") {
     id = result[1];
   }
 

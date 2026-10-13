@@ -40,6 +40,10 @@ describe("YouTube URL utilities", () => {
       ["too short", `https://www.youtube.com/watch?v=${VIDEO_ID.slice(0, 10)}`],
       ["too long", `https://www.youtube.com/watch?v=${VIDEO_ID}x`],
       ["playlist only", "https://www.youtube.com/playlist?list=PL123"],
+      [
+        "playlist embed URL",
+        "https://www.youtube.com/embed/videoseries?list=PL123",
+      ],
       ["non-YouTube watch URL", `https://example.com/watch?v=${VIDEO_ID}`],
       ["non-YouTube live URL", `https://example.com/live/${VIDEO_ID}`],
       [

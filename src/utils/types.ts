@@ -32,6 +32,7 @@ export interface StoreDimensionsAndPositionData {
 }
 
 export interface VideoPlayerInfo {
+  id?: string;
   time?: number;
   width?: number;
   height?: number;

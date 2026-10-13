@@ -55,6 +55,10 @@
     "message": "Open Embedded Video in Popout Player",
     "description": "The text for the context menu entry added to embedded YouTube player frames."
   },
+  "FrameContextMenuEntry_OpenPlaylist_Text": {
+    "message": "Open Embedded Playlist in Popout Player",
+    "description": "The text for the context menu entry added to embedded YouTube player frames that include a playlist."
+  },
   "LinkContextMenuEntry_RotateAndOpen_Text": {
     "message": "Rotate and Open Link in Popout Player",
     "description": "The text for the context menu entry that contains rotation options for YouTube video and playlist links."
@@ -90,6 +94,14 @@
   "FrameContextMenuEntry_OpenRotatedRight_Text": {
     "message": "Open Embedded Video Rotated Right",
     "description": "The text for the context menu entry added to embedded YouTube player frames to open the player rotated right by 90 degrees."
+  },
+  "FrameContextMenuEntry_OpenPlaylistRotatedLeft_Text": {
+    "message": "Open Embedded Playlist Rotated Left",
+    "description": "The text for the context menu entry added to embedded YouTube player frames that include a playlist to open the player rotated left by 90 degrees."
+  },
+  "FrameContextMenuEntry_OpenPlaylistRotatedRight_Text": {
+    "message": "Open Embedded Playlist Rotated Right",
+    "description": "The text for the context menu entry added to embedded YouTube player frames that include a playlist to open the player rotated right by 90 degrees."
   },
   "Notification_Error_FailedToOpen": {
     "message": "Failed to determine the video and/or playlist to open. The popout player will not be opened.",

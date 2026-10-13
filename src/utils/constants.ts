@@ -12,6 +12,8 @@ export const YOUTUBE_EMBED_URL_PATTERNS = [
   "*://*.youtube.com/embed/*",
   "*://*.youtube-nocookie.com/embed/*",
 ] as const;
+export const YOUTUBE_EMBED_PLAYLIST_URL_PATTERNS =
+  YOUTUBE_EMBED_URL_PATTERNS.map((pattern) => pattern + "list=*");
 export const YOUTUBE_POPOUT_PLAYER_URL_PATTERNS =
   YOUTUBE_EMBED_URL_PATTERNS.flatMap((pattern) => [
     pattern + `?*${POPOUT_PLAYER_PARAM_NAME}=*`,
