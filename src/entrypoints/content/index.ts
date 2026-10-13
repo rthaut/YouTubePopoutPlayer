@@ -1,4 +1,4 @@
-import { debounce, IsPopoutPlayer } from "@/utils/misc";
+import { debounce, IsPopoutPlayerURL } from "@/utils/misc";
 import type {
   OpenPopoutData,
   RotateVideoData,
@@ -27,7 +27,7 @@ export default defineContentScript({
       OnRuntimeMessage(message as RuntimeMessage),
     );
 
-    if (IsPopoutPlayer(window.location)) {
+    if (IsPopoutPlayerURL(window.location.href)) {
       RegisterEventListeners();
       const query = new URLSearchParams(window.location.search);
       if (query.has("rotation")) {
@@ -83,7 +83,7 @@ const OnRuntimeMessage = async (message: RuntimeMessage) => {
         return PauseVideoPlayer();
 
       case "rotate-video-player":
-        if (IsPopoutPlayer(window.location)) {
+        if (IsPopoutPlayerURL(window.location.href)) {
           return RotateVideoPlayer(
             (message.data as RotateVideoData).rotationAmount,
           );

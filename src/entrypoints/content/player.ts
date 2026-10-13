@@ -1,4 +1,5 @@
 import { IsVisible } from "@/utils/misc";
+import type { VideoPlayerInfo } from "@/utils/types";
 import { GetPlaylistIDFromURL, GetVideoIDFromURL } from "@/utils/youtube";
 
 /**
@@ -22,12 +23,24 @@ export const GetPageVideo = (): HTMLVideoElement | undefined => {
   return undefined;
 };
 
-export const GetVideoPlayerInfo = () => {
-  let info;
+/**
+ * Gets the ID of the video loaded in the player, which can differ from the page URL in playlist embeds
+ * @returns {string | undefined}
+ */
+export const GetPlayerVideoID = (): string | undefined => {
+  const titleLink = document.querySelector<HTMLAnchorElement>(
+    ".ytp-title-link[href]",
+  );
+  return titleLink ? GetVideoIDFromURL(titleLink.href) : undefined;
+};
+
+export const GetVideoPlayerInfo = (): VideoPlayerInfo | undefined => {
+  let info: VideoPlayerInfo | undefined;
 
   const video = GetPageVideo();
   if (video) {
     info = {
+      id: GetPlayerVideoID(),
       time: Math.floor(video.currentTime),
       width: video.clientWidth,
       height: video.clientHeight,
