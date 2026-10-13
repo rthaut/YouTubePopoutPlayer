@@ -1,0 +1,37 @@
+name: release-assets
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to build and attach the zips to, like v1.2.3
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "lts/*"
+          cache: npm
+      - run: npm ci
+      - run: npm run zip:chrome
+      - run: npm run zip:edge
+      - run: npm run zip:firefox
+      - name: Attach the zips to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: gh release upload "$TAG" .output/*.zip --clobber

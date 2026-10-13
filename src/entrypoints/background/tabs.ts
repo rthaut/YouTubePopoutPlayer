@@ -82,7 +82,7 @@ export const GetActiveTab = async (): Promise<Browser.tabs.Tab | null> => {
     active: true,
   });
 
-  return tabs.length > 0 ? tabs[0] : null;
+  return tabs[0] ?? null;
 };
 
 /**

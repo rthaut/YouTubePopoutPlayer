@@ -62,7 +62,7 @@ export const OptionsProvider: React.FC<{ children: React.ReactNode }> = ({
   const useOption = React.useCallback(
     (domain: OptionDomain, name: string) => {
       return [
-        optionsState[domain][name],
+        optionsState[domain]![name],
         (value: any) => Options.SetLocalOption(domain, name, value),
       ] as const;
     },
@@ -77,7 +77,7 @@ export const OptionsProvider: React.FC<{ children: React.ReactNode }> = ({
   const useDomainOptions = React.useCallback(
     (domain: OptionDomain) => {
       return {
-        options: optionsState[domain],
+        options: optionsState[domain]!,
         setOption: (key: string, value: any) =>
           Options.SetLocalOption(domain, key, value),
         setOptions: (options: Partial<OptionsType>) =>

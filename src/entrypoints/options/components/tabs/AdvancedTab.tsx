@@ -213,31 +213,31 @@ export default function AdvancedTab() {
         icon={<SettingsIcon />}
         title={browser.i18n.getMessage("OptionsHeadingAdvanced")}
       />
-      <Box marginTop={1} marginBottom={2}>
+      <Box sx={{ mt: 1, mb: 2 }}>
         <CloseOptionControl />
       </Box>
       <Divider />
-      <Box marginY={2}>
+      <Box sx={{ my: 2 }}>
         <BackgroundTabControl />
       </Box>
       <Divider />
-      <Box marginY={2}>
+      <Box sx={{ my: 2 }}>
         <YouTubeNoCookieDomainControl />
       </Box>
       {isFirefox && (
         <>
           <Divider />
-          <Box marginY={2}>
+          <Box sx={{ my: 2 }}>
             <TitleOptionControl />
           </Box>
           <Divider />
-          <Box marginY={2}>
+          <Box sx={{ my: 2 }}>
             <ContextualIdentitySupportControl />
           </Box>
         </>
       )}
       <Divider />
-      <Box marginY={2}>
+      <Box sx={{ my: 2 }}>
         <AutoOpenControl />
       </Box>
     </Box>

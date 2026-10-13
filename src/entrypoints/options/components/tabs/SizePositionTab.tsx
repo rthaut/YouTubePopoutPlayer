@@ -52,14 +52,14 @@ export default function SizePositionTab() {
           title={browser.i18n.getMessage("OptionsHeadingSize")}
         />
         {targetIsTab ? (
-          <Box marginY={1}>
+          <Box sx={{ my: 1 }}>
             <Alert severity="warning">
               {browser.i18n.getMessage("OptionsSettingsNotAvailableForTab")}
             </Alert>
           </Box>
         ) : (
           <>
-            <Box marginY={1}>
+            <Box sx={{ my: 1 }}>
               <SizeModeOptionControl />
             </Box>
             {sizeMode === "custom" && <CustomDimensionsForm />}
@@ -67,20 +67,20 @@ export default function SizePositionTab() {
         )}
       </Box>
       <Divider />
-      <Box marginTop={2}>
+      <Box sx={{ mt: 2 }}>
         <TabPanelHeader
           icon={<OpenWithIcon />}
           title={browser.i18n.getMessage("OptionsHeadingPosition")}
         />
         {targetIsTab ? (
-          <Box marginY={1}>
+          <Box sx={{ my: 1 }}>
             <Alert severity="warning">
               {browser.i18n.getMessage("OptionsSettingsNotAvailableForTab")}
             </Alert>
           </Box>
         ) : (
           <>
-            <Box marginY={1}>
+            <Box sx={{ my: 1 }}>
               <PositionModeOptionControl />
             </Box>
             {positionMode === "custom" && <CustomPositionForm />}
